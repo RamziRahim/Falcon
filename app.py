@@ -37,6 +37,9 @@ from scoring.scoring_engine import scoring_engine
 # Fundamental Analysis (ROCE / Revenue YoY / Debt-to-Equity, cached)
 from fundamental_analysis.fundamental_cache import get_fundamentals
 
+# Candidate Table Assembly (Phase 4 pattern data -> display-ready grid rows)
+from technical_analysis.candidate_table_builder import build_candidate_table
+
 # ─── MASTER WINDOW CONFIGURATION ──────────────────────────────────────────────
 st.set_page_config(
     page_title="Falcon Workstation",
@@ -97,39 +100,7 @@ if is_new_scan_triggered:
             ]
             
             # (Your downstream Phase 3, 4, 5 and 6 pipeline triggers integrate here)
-            consolidated_records = []
-            for ticker in ticker_universe:
-                pattern_path = os.path.join("data/patterns", f"{ticker}.parquet")
-                if os.path.exists(pattern_path):
-                    df_metrics = pd.read_parquet(pattern_path)
-                    if not df_metrics.empty:
-                        last_row = df_metrics.iloc[-1]
-                        consolidated_records.append({
-                            "Symbol": ticker,
-                            "Price": round(last_row.get("Close", 0.0), 2),
-                            "Trend_State": last_row.get("Trend_State", "UNKNOWN"),
-                            "VCP_Score": round(last_row.get("VCP_Score", 0.0), 1),
-                            "Status": "Breakout" if last_row.get("Is_VCP_Breakout", False) else ("Pullback" if last_row.get("Is_Liquidity_Sweep", False) else "Strong Trend"),
-                            # Table-wide fundamentals are a fast-follow (Task 2.5 wires only the
-                            # detail panel below); until then the grid shows an honest "not
-                            # computed" dash rather than a fabricated number.
-                            "ROCE": "—", "YoY_Rev": "—", "D_E": "—",
-                            "Is_Mock_Row": False,
-                        })
-
-            # If no physical parquets exist yet, use this compliant fallback data
-            if not consolidated_records:
-                for ticker in ticker_universe[:5]:
-                    consolidated_records.append({
-                        # TODO(cleanup 2026-07-15): fully synthetic placeholder row — no real data
-                        # exists yet for this ticker (pattern engine hasn't run). Flagged via
-                        # Is_Mock_Row so the UI can visibly mark it instead of showing it as real.
-                        "Symbol": ticker, "Price": 1250.00, "Trend_State": "UPTREND", "VCP_Score": 88.5,
-                        "Status": "Breakout", "ROCE": "—", "YoY_Rev": "—", "D_E": "—",
-                        "Is_Mock_Row": True,
-                    })
-
-            records_df = pd.DataFrame(consolidated_records)
+            records_df = build_candidate_table(ticker_universe)
 
             # ─── SCORING ENGINE: RS RATING / RS vs NIFTY / REL VOL / SECTOR ─────
             if not records_df.empty:
