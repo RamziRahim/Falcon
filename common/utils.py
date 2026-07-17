@@ -103,3 +103,15 @@ def remove_columns(df, columns):
 def merge_results(master_df, result_df):
     """Merge results into Screener by Symbol."""
     return master_df.merge(result_df, on="Symbol", how="left")
+
+
+# Internal-only signal strings (e.g. fundamental_analysis' "DATA_GAP", used
+# when a required data row can't be located) that must never reach the UI
+# as literal text.
+SENTINEL_DISPLAY_MAP = {"DATA_GAP": "N/A", "N/A": "N/A"}
+
+
+def sentinel_to_display(raw) -> str:
+    """Maps internal-only sentinel strings to user-facing display text."""
+    raw_str = str(raw)
+    return SENTINEL_DISPLAY_MAP.get(raw_str, raw_str)

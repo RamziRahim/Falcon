@@ -25,7 +25,7 @@ if current_dir not in sys.path:
 
 # UI Module imports directly matching your folder structure
 from ui.sidebar import render as render_sidebar
-from ui.header import render as render_header
+from ui.header import render as render_header, get_market_status
 from ui.summary_cards import render as render_summary_cards, DashboardStats
 from ui.chart_panel import ChartPanel
 from ui.candidate_grid import render as render_candidate_grid
@@ -36,6 +36,9 @@ from scoring.scoring_engine import scoring_engine
 
 # Fundamental Analysis (ROCE / Revenue YoY / Debt-to-Equity, cached)
 from fundamental_analysis.fundamental_cache import get_fundamentals
+
+# Internal-sentinel-to-display mapping (e.g. "DATA_GAP" -> "N/A")
+from common.utils import sentinel_to_display
 
 # Candidate Table Assembly (Phase 4 pattern data -> display-ready grid rows)
 from technical_analysis.candidate_table_builder import build_candidate_table
@@ -121,7 +124,7 @@ active_kpis = DashboardStats(
     breakouts=len(st.session_state.screener_records[st.session_state.screener_records["Status"] == "Breakout"]) if not st.session_state.screener_records.empty else 0,
     pullbacks=len(st.session_state.screener_records[st.session_state.screener_records["Status"] == "Pullback"]) if not st.session_state.screener_records.empty else 0,
     strong_trends=len(st.session_state.screener_records[st.session_state.screener_records["Status"] == "Strong Trend"]) if not st.session_state.screener_records.empty else 0,
-    market_status="OPEN",
+    market_status=get_market_status(),
     scan_duration=st.session_state.scan_time_elapsed
 )
 render_summary_cards(active_kpis)
@@ -161,9 +164,9 @@ if not st.session_state.screener_records.empty:
         # Detail panel gets real, cached fundamentals for the selected symbol only
         # (table-wide fundamentals are a fast-follow — see the candidate loop above).
         active_fundamentals = get_fundamentals(active_sym)
-        roce_str = str(active_fundamentals.get("roce", "N/A"))
-        yoy_rev_str = str(active_fundamentals.get("revenue_yoy_quarterly_growth", "DATA_GAP"))
-        de_str = str(active_fundamentals.get("debt_to_equity", "N/A"))
+        roce_str = sentinel_to_display(active_fundamentals.get("roce", "N/A"))
+        yoy_rev_str = sentinel_to_display(active_fundamentals.get("revenue_yoy_quarterly_growth", "N/A"))
+        de_str = sentinel_to_display(active_fundamentals.get("debt_to_equity", "N/A"))
         status_str = str(row_data["Status"])
         
         # HTML strings are shifted completely to the left margin to bypass Markdown's 4-space indent rules
