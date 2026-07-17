@@ -64,6 +64,7 @@ from common.logger import get_logger
 
 from market_data.exceptions import (
     DownloadError,
+    MarketDataError,
     ProviderError,
 )
 
@@ -154,6 +155,38 @@ class YahooProvider(BaseProvider):
     ) -> pd.DataFrame:
 
         raise NotImplementedError()
+
+    def get_quote(self, symbol: str) -> dict:
+        """
+        Returns {'last_price', 'previous_close', 'change_pct'} using
+        yfinance's fast_info — a lightweight current-price snapshot,
+        not a full OHLC history download.
+        """
+
+        try:
+
+            ticker = yf.Ticker(symbol)
+
+            info = ticker.fast_info
+
+            last = info.get("last_price")
+            prev_close = info.get("previous_close")
+
+        except Exception as ex:
+
+            raise ProviderError(str(ex)) from ex
+
+        if last is None or prev_close is None or prev_close == 0:
+
+            raise MarketDataError(f"Incomplete quote data for {symbol}")
+
+        change_pct = ((last - prev_close) / prev_close) * 100
+
+        return {
+            "last_price": last,
+            "previous_close": prev_close,
+            "change_pct": change_pct,
+        }
 
     # ------------------------------------------------------------------ #
     # Company Information

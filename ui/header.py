@@ -7,9 +7,67 @@ Module : header.py
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, time
 
+import pytz
 import streamlit as st
+
+from config import NIFTY50, NIFTY_MIDCAP_150, NIFTY_SMALLCAP_250
+
+from common.logger import get_logger
+from market_data.providers.yahoo_provider import market_provider
+
+logger = get_logger(__name__)
+
+IST = pytz.timezone("Asia/Kolkata")
+
+MARKET_OPEN_TIME = time(9, 15)
+MARKET_CLOSE_TIME = time(15, 30)
+
+INDEX_SYMBOLS = [
+    ("NIFTY 50", NIFTY50),
+    ("NIFTY MIDCAP 150", NIFTY_MIDCAP_150),
+    ("NIFTY SMALLCAP 250", NIFTY_SMALLCAP_250),
+]
+
+
+@st.cache_data(ttl=90)  # fresh enough to feel live, not hammering Yahoo on every rerun
+def get_index_quotes() -> dict[str, dict | None]:
+    """
+    Returns a quote dict per index label, or None where the fetch failed.
+    """
+
+    quotes: dict[str, dict | None] = {}
+
+    for label, symbol in INDEX_SYMBOLS:
+
+        try:
+
+            quotes[label] = market_provider.get_quote(symbol)
+
+        except Exception as ex:
+
+            logger.warning("Quote fetch failed for %s: %s", symbol, ex)
+            quotes[label] = None
+
+    return quotes
+
+
+def get_market_status(now: datetime | None = None) -> str:
+    """
+    Returns NSE market status from trading hours (9:15-15:30 IST, Mon-Fri).
+
+    Known limitation: does not account for NSE holidays (Diwali, Republic
+    Day, etc.) — will incorrectly show OPEN on a weekday holiday.
+    """
+
+    if now is None:
+        now = datetime.now(IST)
+
+    is_weekday = now.weekday() < 5
+    is_trading_hours = MARKET_OPEN_TIME <= now.time() <= MARKET_CLOSE_TIME
+
+    return "🟢 OPEN" if (is_weekday and is_trading_hours) else "🔴 CLOSED"
 
 
 def render() -> bool:
@@ -59,7 +117,7 @@ Scan markets. Find leaders. Ride the trend.
 
             st.metric(
                 "Market",
-                "🟢 OPEN",
+                get_market_status(),
             )
 
         with c2:
@@ -86,31 +144,22 @@ Scan markets. Find leaders. Ride the trend.
     # Market Snapshot
     # ------------------------------------------------------------------
 
-    i1, i2, i3 = st.columns(3)
+    quotes = get_index_quotes()
 
-    with i1:
+    for column, (label, _symbol) in zip(st.columns(3), INDEX_SYMBOLS):
 
-        st.metric(
-            "NIFTY 50",
-            "24,801.16",
-            "+0.88%",
-        )
+        with column:
 
-    with i2:
+            q = quotes.get(label)
 
-        st.metric(
-            "NIFTY MIDCAP 150",
-            "19,186.45",
-            "+0.74%",
-        )
-
-    with i3:
-
-        st.metric(
-            "NIFTY SMALLCAP 250",
-            "15,832.20",
-            "+1.02%",
-        )
+            if q:
+                st.metric(
+                    label,
+                    f"{q['last_price']:,.2f}",
+                    f"{q['change_pct']:+.2f}%",
+                )
+            else:
+                st.metric(label, "—", "data unavailable")
 
     st.divider()
 

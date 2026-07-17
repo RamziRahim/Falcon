@@ -12,6 +12,7 @@ google-generativeai
 pytest
 nselib
 growwapi
+pytz
 
 # Needed by pandas for reading/writing .parquet and .xlsx files, even though
 # nothing imports them directly by name.
