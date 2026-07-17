@@ -85,7 +85,18 @@ class VCPDetector:
 
         latest_close = df["Close"].iloc[-1]
         resistance_pivot = contractions[-1].swing_high_price
-        is_breakout = latest_close > resistance_pivot
+
+        latest_volume = df["Volume"].iloc[-1]
+        volume_baseline = df["Volume_SMA_20"].iloc[-1] if "Volume_SMA_20" in df.columns \
+            else df["Volume"].rolling(window=20).mean().iloc[-1]
+
+        price_crossed_pivot = latest_close > resistance_pivot
+        breakout_volume_confirmed = (
+            not pd.isna(volume_baseline) and volume_baseline > 0
+            and latest_volume >= (volume_baseline * 1.5)
+        )
+
+        is_breakout = price_crossed_pivot and breakout_volume_confirmed
 
         return {
             "is_vcp_setup": True,
@@ -94,6 +105,8 @@ class VCPDetector:
             "vdu_confirmed": vdu_confirmed,
             "vcp_score": vcp_score,
             "is_vcp_breakout": is_breakout,
+            "price_crossed_pivot": price_crossed_pivot,
+            "breakout_volume_confirmed": breakout_volume_confirmed,
             "pivot_level": resistance_pivot,
             "invalidated_reason": None,
         }

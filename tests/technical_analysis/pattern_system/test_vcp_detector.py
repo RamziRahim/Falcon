@@ -58,7 +58,7 @@ class TestTrendContextGate:
         self, detector, synthetic_vcp_uptrend_pivots, synthetic_vcp_uptrend_df
     ):
         result = detector.analyze_vcp(synthetic_vcp_uptrend_df, synthetic_vcp_uptrend_pivots, "UPTREND")
-        assert result["is_vcp_setup"] is True
+        assert result["is_vcp_setup"] == True
         assert result["contractions_count"] == 3
         assert result.get("invalidated_reason") is None
 
@@ -66,7 +66,7 @@ class TestTrendContextGate:
         self, detector, synthetic_vcp_downtrend_pivots, synthetic_vcp_uptrend_df
     ):
         result = detector.analyze_vcp(synthetic_vcp_uptrend_df, synthetic_vcp_downtrend_pivots, "DOWNTREND")
-        assert result["is_vcp_setup"] is False
+        assert result["is_vcp_setup"] == False
         assert result["invalidated_reason"] == "NOT_IN_UPTREND", (
             "A stock in DOWNTREND must never be flagged as a VCP setup, "
             "and must say why via invalidated_reason."
@@ -76,7 +76,7 @@ class TestTrendContextGate:
         self, detector, synthetic_vcp_downtrend_pivots, synthetic_vcp_uptrend_df
     ):
         result = detector.analyze_vcp(synthetic_vcp_uptrend_df, synthetic_vcp_downtrend_pivots, "CHOPPY")
-        assert result["is_vcp_setup"] is False
+        assert result["is_vcp_setup"] == False
         assert result["invalidated_reason"] == "NOT_IN_UPTREND"
 
     def test_gate_short_circuits_before_touching_df(self, detector, synthetic_vcp_uptrend_pivots):
@@ -85,7 +85,7 @@ class TestTrendContextGate:
         need to read it in that branch."""
         empty_df = pd.DataFrame({"Date": [], "Close": [], "Volume": []})
         result = detector.analyze_vcp(empty_df, synthetic_vcp_uptrend_pivots, "DOWNTREND")
-        assert result["is_vcp_setup"] is False
+        assert result["is_vcp_setup"] == False
         assert result["invalidated_reason"] == "NOT_IN_UPTREND"
 
 
@@ -95,7 +95,7 @@ class TestContractionShapeValidation:
         self, detector, synthetic_widening_waves_pivots, synthetic_widening_waves_df
     ):
         result = detector.analyze_vcp(synthetic_widening_waves_df, synthetic_widening_waves_pivots, "UPTREND")
-        assert result["is_vcp_setup"] is False, (
+        assert result["is_vcp_setup"] == False, (
             "Waves widening 8% -> 15% -> 25% are not a VCP even in an uptrend."
         )
         assert result.get("invalidated_reason") is not None
@@ -133,7 +133,7 @@ class TestEdgeCases:
         ]
         df = pd.DataFrame({"Date": [], "Close": [], "Volume": []})
         result = detector.analyze_vcp(df, pivots, "UPTREND")
-        assert result["is_vcp_setup"] is False
+        assert result["is_vcp_setup"] == False
         assert result["contractions_count"] == 0
         assert result.get("invalidated_reason") is not None
 
@@ -144,7 +144,7 @@ class TestEdgeCases:
         result = detector.analyze_vcp(synthetic_breakout_with_volume_df, synthetic_breakout_pivots, "UPTREND")
         # Falls back to df["Volume"].rolling(20).mean() -- confirmed working,
         # not raising a KeyError, and producing a sane confirmed breakout.
-        assert result["is_vcp_breakout"] is True
+        assert result["is_vcp_breakout"] == True
 
     def test_explicit_volume_sma_20_column_is_preferred_over_recompute(
         self, detector, synthetic_breakout_pivots, synthetic_breakout_explicit_volume_sma_df
@@ -152,7 +152,7 @@ class TestEdgeCases:
         result = detector.analyze_vcp(
             synthetic_breakout_explicit_volume_sma_df, synthetic_breakout_pivots, "UPTREND"
         )
-        assert result["breakout_volume_confirmed"] is True, (
+        assert result["breakout_volume_confirmed"] == True, (
             "A naive rolling(20).mean() recompute of Volume would NOT confirm "
             "here -- only reading the existing Volume_SMA_20 column does."
         )
@@ -165,20 +165,20 @@ class TestBreakoutVolumeConfirmation:
         self, detector, synthetic_breakout_pivots, synthetic_breakout_with_volume_df
     ):
         result = detector.analyze_vcp(synthetic_breakout_with_volume_df, synthetic_breakout_pivots, "UPTREND")
-        assert result["price_crossed_pivot"] is True
-        assert result["breakout_volume_confirmed"] is True
-        assert result["is_vcp_breakout"] is True
+        assert result["price_crossed_pivot"] == True
+        assert result["breakout_volume_confirmed"] == True
+        assert result["is_vcp_breakout"] == True
 
     def test_price_cross_without_volume_expansion_does_not_confirm(
         self, detector, synthetic_breakout_pivots, synthetic_breakout_no_volume_df
     ):
         result = detector.analyze_vcp(synthetic_breakout_no_volume_df, synthetic_breakout_pivots, "UPTREND")
-        assert result["price_crossed_pivot"] is True, (
+        assert result["price_crossed_pivot"] == True, (
             "Price genuinely crossed the resistance pivot in both fixtures -- "
             "only volume should differ."
         )
-        assert result["breakout_volume_confirmed"] is False
-        assert result["is_vcp_breakout"] is False, (
+        assert result["breakout_volume_confirmed"] == False
+        assert result["is_vcp_breakout"] == False, (
             "A price crossing with normal (non-expansion) volume must not "
             "count as a confirmed breakout."
         )
