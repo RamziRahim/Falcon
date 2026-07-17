@@ -54,7 +54,7 @@ class PatternEngine:
 
             # 2. Extract Institutional Variables
             struct = market_structure_engine.analyze_structure(df, macro_pivots)
-            vcp = vcp_detector.analyze_vcp(df, micro_pivots)
+            vcp = vcp_detector.analyze_vcp(df, micro_pivots, struct["trend_state"])
             fvg = fvg_detector.detect_fvgs(df)
 
             if struct["trend_state"] == "UPTREND":

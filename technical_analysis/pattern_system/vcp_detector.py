@@ -15,18 +15,29 @@ class VCPDetector:
         self.min_contractions = min_contractions
         self.max_contractions = max_contractions
 
-    def analyze_vcp(self, df: pd.DataFrame, micro_pivots: list[SwingPoint]) -> dict:
+    def analyze_vcp(self, df: pd.DataFrame, micro_pivots: list[SwingPoint], trend_state: str) -> dict:
         """Processes tightening cycles and tracks volume dry-up to find VCP formations."""
+        if trend_state != "UPTREND":
+            return {
+                "is_vcp_setup": False, "contractions_count": 0,
+                "vcp_score": 0.0, "is_vcp_breakout": False,
+                "invalidated_reason": "NOT_IN_UPTREND",
+            }
+
         if len(micro_pivots) < (self.min_contractions * 2):
-            return {"is_vcp_setup": False, "contractions_count": 0, "vcp_score": 0.0, "is_vcp_breakout": False}
+            return {
+                "is_vcp_setup": False, "contractions_count": 0,
+                "vcp_score": 0.0, "is_vcp_breakout": False,
+                "invalidated_reason": "INSUFFICIENT_PIVOTS",
+            }
 
         contractions = []
         wave_idx = 1
-        
+
         for i in range(len(micro_pivots) - 1):
             p1 = micro_pivots[i]
             p2 = micro_pivots[i + 1]
-            
+
             if p1.type == "HIGH" and p2.type == "LOW":
                 depth = ((p1.price - p2.price) / p1.price) * 100
                 contractions.append(VCPContraction(
@@ -37,9 +48,13 @@ class VCPDetector:
                 wave_idx += 1
 
         contractions = contractions[-self.max_contractions:]
-        
+
         if len(contractions) < self.min_contractions:
-            return {"is_vcp_setup": False, "contractions_count": 0, "vcp_score": 0.0, "is_vcp_breakout": False}
+            return {
+                "is_vcp_setup": False, "contractions_count": 0,
+                "vcp_score": 0.0, "is_vcp_breakout": False,
+                "invalidated_reason": "INSUFFICIENT_CONTRACTIONS",
+            }
 
         # Check that each sequential wave depth is smaller than the last
         is_contracting = True
@@ -49,7 +64,11 @@ class VCPDetector:
                 break
 
         if not is_contracting:
-            return {"is_vcp_setup": False, "contractions_count": len(contractions), "vcp_score": 0.0, "is_vcp_breakout": False}
+            return {
+                "is_vcp_setup": False, "contractions_count": len(contractions),
+                "vcp_score": 0.0, "is_vcp_breakout": False,
+                "invalidated_reason": "NOT_CONTRACTING",
+            }
 
         # Volume Dry-Up Verification (VDU)
         df = df.sort_values(by="Date", ascending=True).reset_index(drop=True)
@@ -75,7 +94,8 @@ class VCPDetector:
             "vdu_confirmed": vdu_confirmed,
             "vcp_score": vcp_score,
             "is_vcp_breakout": is_breakout,
-            "pivot_level": resistance_pivot
+            "pivot_level": resistance_pivot,
+            "invalidated_reason": None,
         }
     
 vcp_detector = VCPDetector()
