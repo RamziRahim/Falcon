@@ -18,6 +18,17 @@ from datetime import datetime
 import streamlit as st
 import pandas as pd
 
+# Several engines (indicator_engine.py, pattern_engine.py) print Unicode
+# console-dashboard output (arrows, emoji) meant for direct CLI runs. On
+# Windows, Streamlit's process stdout defaults to the system codepage
+# (cp1252), not UTF-8 -- those prints crash the whole app the moment New
+# Scan actually invokes those engines. Reconfigure once, here, at the real
+# process entry point, rather than touching every engine's print calls.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 # ─── ROBUST SYS PATH INJECTION FOR BLUEPRINT IMPORTS ──────────────────────────
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
@@ -31,17 +42,15 @@ from ui.chart_panel import ChartPanel
 from ui.candidate_grid import render as render_candidate_grid
 from ui.sector_ranking_panel import SectorRankingPanel
 
-# Scoring Engine (RS Rating / RS vs Nifty / Relative Volume / Sector)
-from scoring.scoring_engine import scoring_engine
-
 # Fundamental Analysis (ROCE / Revenue YoY / Debt-to-Equity, cached)
 from fundamental_analysis.fundamental_cache import get_fundamentals
 
 # Internal-sentinel-to-display mapping (e.g. "DATA_GAP" -> "N/A")
 from common.utils import sentinel_to_display
 
-# Candidate Table Assembly (Phase 4 pattern data -> display-ready grid rows)
-from technical_analysis.candidate_table_builder import build_candidate_table
+# New Scan pipeline orchestration (Phase 3 data collection -> Phase 4 -> Phase 5)
+from services.scan_pipeline_service import run_new_scan_pipeline
+from ui.scan_warnings import render as render_scan_warnings
 
 # ─── MASTER WINDOW CONFIGURATION ──────────────────────────────────────────────
 st.set_page_config(
@@ -102,16 +111,14 @@ if is_new_scan_triggered:
                 for sym in master_candidates_df["Symbol"].tolist()
             ]
             
-            # (Your downstream Phase 3, 4, 5 and 6 pipeline triggers integrate here)
-            records_df = build_candidate_table(ticker_universe)
+            # ─── PHASE 3-5: MARKET DATA -> INDICATORS -> PATTERNS -> CANDIDATE TABLE ─
+            progress_placeholder = st.empty()
+            scan_result = run_new_scan_pipeline(ticker_universe, on_stage=progress_placeholder.info)
+            progress_placeholder.empty()
 
-            # ─── SCORING ENGINE: RS RATING / RS vs NIFTY / REL VOL / SECTOR ─────
-            if not records_df.empty:
-                scored_df = scoring_engine.score_universe(symbols=records_df["Symbol"].tolist())
-                if not scored_df.empty:
-                    records_df = records_df.merge(scored_df, on="Symbol", how="left")
+            render_scan_warnings(scan_result.collection_result, scan_result.indicator_result)
 
-            st.session_state.screener_records = records_df
+            st.session_state.screener_records = scan_result.records_df
             
         st.session_state.scan_time_elapsed = (datetime.now() - start_time).total_seconds()
         if not st.session_state.screener_records.empty:

@@ -59,3 +59,30 @@ class TestSentinelNeverLeaksToDisplay:
         # through as a bare default value.
         for var_name in ("roce_str", "yoy_rev_str", "de_str"):
             assert '"DATA_GAP"' not in self._assignment_line(var_name)
+
+
+class TestNewScanRunsFullPipeline:
+    """
+    New Scan used to jump straight from candidate generation to
+    build_candidate_table(), reading whatever pattern data already existed
+    on disk -- never actually running market data collection or pattern
+    detection for newly-found candidates. Pins the fix in place: app.py
+    must delegate to the pipeline service (whose own call-order is tested
+    in tests/services/test_scan_pipeline_service.py) rather than reading
+    stale data/patterns/ files directly.
+    """
+
+    def test_delegates_to_scan_pipeline_service(self):
+        assert "from services.scan_pipeline_service import run_new_scan_pipeline" in APP_SOURCE
+        assert "run_new_scan_pipeline(ticker_universe" in APP_SOURCE
+
+    def test_renders_scan_warnings(self):
+        assert "from ui.scan_warnings import render as render_scan_warnings" in APP_SOURCE
+        assert "render_scan_warnings(" in APP_SOURCE
+
+    def test_no_longer_calls_build_candidate_table_directly(self):
+        # build_candidate_table() now lives inside scan_pipeline_service --
+        # app.py calling it directly again would silently reintroduce the
+        # exact gap this task fixed (skipping Phase 3/4/5 for new tickers).
+        assert "build_candidate_table(ticker_universe)" not in APP_SOURCE
+        assert "from technical_analysis.candidate_table_builder import" not in APP_SOURCE
