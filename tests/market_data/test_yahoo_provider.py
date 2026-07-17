@@ -4,6 +4,7 @@ fast_info-based quote snapshot for the header's live index feed (Falcon spec).
 """
 from __future__ import annotations
 
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -12,9 +13,16 @@ from market_data.exceptions import MarketDataError
 from market_data.providers.yahoo_provider import YahooProvider
 
 
-def _mock_ticker(fast_info: dict) -> MagicMock:
+def _mock_ticker(**fast_info_attrs) -> MagicMock:
+    """
+    Mimics yfinance's real FastInfo access pattern: attributes only, no
+    .get() method. A plain dict would let a broken `info.get("last_price")`
+    implementation pass silently (dict.get works fine) even though the real
+    FastInfo.get() only recognizes its camelCase keys and always misses on
+    snake_case ones — see get_quote()'s getattr()-based fix.
+    """
     ticker = MagicMock()
-    ticker.fast_info = fast_info
+    ticker.fast_info = SimpleNamespace(**fast_info_attrs)
     return ticker
 
 
@@ -23,7 +31,7 @@ class TestGetQuoteMath:
     def test_change_pct_known_answer(self):
         with patch("market_data.providers.yahoo_provider.yf.Ticker") as mock_ticker_cls:
             mock_ticker_cls.return_value = _mock_ticker(
-                {"last_price": 105, "previous_close": 100}
+                last_price=105, previous_close=100
             )
             result = YahooProvider().get_quote("^NSEI")
             assert result["last_price"] == 105
@@ -35,20 +43,20 @@ class TestGetQuoteMissingData:
 
     def test_missing_last_price_raises(self):
         with patch("market_data.providers.yahoo_provider.yf.Ticker") as mock_ticker_cls:
-            mock_ticker_cls.return_value = _mock_ticker({"previous_close": 100})
+            mock_ticker_cls.return_value = _mock_ticker(previous_close=100)
             with pytest.raises(MarketDataError):
                 YahooProvider().get_quote("^NSEI")
 
     def test_missing_previous_close_raises(self):
         with patch("market_data.providers.yahoo_provider.yf.Ticker") as mock_ticker_cls:
-            mock_ticker_cls.return_value = _mock_ticker({"last_price": 105})
+            mock_ticker_cls.return_value = _mock_ticker(last_price=105)
             with pytest.raises(MarketDataError):
                 YahooProvider().get_quote("^NSEI")
 
     def test_zero_previous_close_raises_not_divides(self):
         with patch("market_data.providers.yahoo_provider.yf.Ticker") as mock_ticker_cls:
             mock_ticker_cls.return_value = _mock_ticker(
-                {"last_price": 105, "previous_close": 0}
+                last_price=105, previous_close=0
             )
             with pytest.raises(MarketDataError):
                 YahooProvider().get_quote("^NSEI")

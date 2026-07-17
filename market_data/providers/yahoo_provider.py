@@ -169,8 +169,11 @@ class YahooProvider(BaseProvider):
 
             info = ticker.fast_info
 
-            last = info.get("last_price")
-            prev_close = info.get("previous_close")
+            # FastInfo.get() only recognizes its camelCase public keys (e.g.
+            # "lastPrice") — snake_case keys like "last_price" always miss and
+            # silently return the default. Attribute access resolves both.
+            last = getattr(info, "last_price", None)
+            prev_close = getattr(info, "previous_close", None)
 
         except Exception as ex:
 
