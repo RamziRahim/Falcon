@@ -50,17 +50,20 @@ class FVGDetector:
         latest_close = df["Close"].iloc[-1]
         valid_fvg = None
 
+        # Suffix-min of Low, so "did any candle after index j dip to/below X"
+        # is an O(1) lookup instead of an O(n) inner scan per FVG.
+        suffix_min_low = df["Low"].iloc[::-1].cummin().iloc[::-1]
+
         # Check from the most recent FVG backward
         for fvg in reversed(active_fvgs):
             fvg_index = fvg["index"]
-            mitigated = False
-            
-            # Look at all candles after the FVG creation to check for fills
-            for j in range(fvg_index + 2, df_len):
-                if df.loc[j, "Low"] <= fvg["bottom"]:
-                    mitigated = True
-                    break
-            
+            scan_start = fvg_index + 2
+
+            mitigated = (
+                scan_start < df_len
+                and suffix_min_low.iloc[scan_start] <= fvg["bottom"]
+            )
+
             if not mitigated:
                 valid_fvg = fvg
                 break

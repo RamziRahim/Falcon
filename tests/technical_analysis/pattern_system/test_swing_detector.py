@@ -43,16 +43,27 @@ class TestKnownPivotShape:
 class TestBoundaryTieBreak:
     """A tied high/low at adjacent bars must be handled consistently on both
     sides of the fractal window -- not accept a tie on the right while
-    rejecting the identical tie on the left."""
+    rejecting the identical tie on the left. The chosen rule (strict '>'/'<'
+    on both sides) treats a tie as not disqualifying either bar, so both
+    members of a tied pair are valid pivots -- previously only the first
+    was (the left side's old '>=' rejected the second bar's tie, the right
+    side's '>' let the first bar's tie through)."""
 
-    def test_tied_adjacent_highs_are_both_rejected(self, detector, synthetic_tied_high_df):
+    def test_tied_adjacent_highs_are_both_accepted(self, detector, synthetic_tied_high_df):
         pivots = detector.detect_swings(synthetic_tied_high_df)
         highs = [p for p in pivots if p.type == "HIGH"]
-        assert highs == [], (
-            "Two adjacent bars tied at the peak (100, 100) are not a strict "
-            "fractal extreme on either side -- neither should be flagged as "
-            "a HIGH. A prior asymmetric >=/<= vs >/< comparison used to let "
-            "exactly one of the tied pair through."
+        assert [p.index for p in highs] == [4, 5], (
+            "Both bars tied at the peak (100, 100) should be flagged as HIGH "
+            "pivots under a consistent strict '>' rule on both sides."
+        )
+
+    def test_second_tied_high_is_not_is_higher(self, detector, synthetic_tied_high_df):
+        pivots = detector.detect_swings(synthetic_tied_high_df)
+        highs = [p for p in pivots if p.type == "HIGH"]
+        assert highs[0].is_higher == True, "First HIGH ever seen defaults to is_higher=True."
+        assert highs[1].is_higher == False, (
+            "A tie (100 vs prior HIGH of 100) is not strictly higher -- "
+            "is_higher must be False, not True."
         )
 
 
