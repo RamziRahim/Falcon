@@ -76,12 +76,18 @@ class VCPDetector:
         vol_baseline = df["Volume_SMA_20"].iloc[-1] if "Volume_SMA_20" in df.columns else df["Volume"].rolling(window=20).mean().iloc[-1]
         vdu_confirmed = recent_vol_avg < vol_baseline
 
-        # Score generation
-        vcp_score = 50.0
-        if vdu_confirmed:
-            vcp_score += 25.0
-        if contractions[-1].depth_percentage < 6.0:
-            vcp_score += 25.0
+        # Continuous score: tightness (0-40) + volume dry-up (0-30) + wave count (0-30)
+        first_depth = contractions[0].depth_percentage
+        last_depth = contractions[-1].depth_percentage
+        tightness_ratio = max(0.0, 1 - (last_depth / first_depth)) if first_depth > 0 else 0.0
+        tightness_score = tightness_ratio * 40
+
+        vdu_ratio = max(0.0, 1 - (recent_vol_avg / vol_baseline)) if vol_baseline > 0 else 0.0
+        vdu_score = min(vdu_ratio, 1.0) * 30
+
+        wave_score = (len(contractions) / self.max_contractions) * 30
+
+        vcp_score = round(tightness_score + vdu_score + wave_score, 1)
 
         latest_close = df["Close"].iloc[-1]
         resistance_pivot = contractions[-1].swing_high_price
