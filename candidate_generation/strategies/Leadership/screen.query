@@ -1,0 +1,10 @@
+Current price > DMA 50 AND
+Current price > DMA 200 AND
+DMA 50 > DMA 200 AND
+Up from 52w low > 30 AND
+Down from 52w high < 25 AND
+YOY Quarterly sales growth  > 20 AND 
+YOY Quarterly profit growth  > 25 AND 
+Market Capitalization > 10000 AND 
+Debt to equity < 0.33 AND
+Volume 1week average > 100000
