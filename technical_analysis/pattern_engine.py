@@ -15,6 +15,36 @@ from technical_analysis.pattern_system.swing_detector import SwingDetector
 from technical_analysis.pattern_system.market_structure import market_structure_engine
 from technical_analysis.pattern_system.vcp_detector import vcp_detector
 from technical_analysis.pattern_system.fvg_detector import fvg_detector
+from technical_analysis.pattern_system.flat_base_detector import flat_base_detector
+from technical_analysis.pattern_system.cup_handle_detector import cup_handle_detector
+from technical_analysis.pattern_system.ascending_triangle_detector import ascending_triangle_detector
+from technical_analysis.pattern_system.bull_flag_detector import bull_flag_detector
+
+def aggregate_confirmed_patterns(pattern_results: list[tuple[str, dict]]) -> dict:
+    """
+    Aggregates which continuation pattern(s) actually confirmed a breakout
+    across the five detectors (VCP + the four new continuation patterns).
+    These aren't mutually exclusive -- a stock could satisfy more than one
+    shape at once.
+
+    Parameters
+    ----------
+    pattern_results : list of (pattern_name, detector_result_dict) pairs.
+
+    Returns
+    -------
+    dict with keys: pattern_type (str | None, comma-joined confirmed
+    names), any_breakout_confirmed (bool), multiple_patterns_confirmed (bool).
+    """
+
+    confirmed_patterns = [name for name, result in pattern_results if result.get("is_breakout_confirmed")]
+
+    return {
+        "pattern_type": ", ".join(confirmed_patterns) if confirmed_patterns else None,
+        "any_breakout_confirmed": len(confirmed_patterns) > 0,
+        "multiple_patterns_confirmed": len(confirmed_patterns) > 1,
+    }
+
 
 class PatternEngine:
     def __init__(self, src_dir: str = "data/technical", dest_dir: str = "data/patterns"):
@@ -37,7 +67,11 @@ class PatternEngine:
             print(f"[ERROR] No parquet datasets found inside {self.src_dir}. Please run Phase 4 first.")
             return
 
-        metrics = {"total": 0, "uptrends": 0, "vcp": 0, "bos": 0, "sweeps": 0, "fvgs": 0}
+        metrics = {
+            "total": 0, "uptrends": 0, "vcp": 0, "bos": 0, "sweeps": 0, "fvgs": 0,
+            "flat_base": 0, "cup_handle": 0, "ascending_triangle": 0, "bull_flag": 0,
+            "any_breakout": 0, "multiple_patterns": 0,
+        }
 
         for file_path in files:
             ticker = os.path.basename(file_path).replace(".parquet", "")
@@ -57,6 +91,17 @@ class PatternEngine:
             vcp = vcp_detector.analyze_vcp(df, micro_pivots, struct["trend_state"])
             fvg = fvg_detector.detect_fvgs(df)
 
+            # Continuation patterns -- all four require the same UPTREND
+            # trend-gate as VCP, for the same methodology reason: only
+            # valid setups within an existing advance, not standalone
+            # shapes. Flat Base and Ascending Triangle reuse macro_pivots
+            # (same multi-week timeframe as market structure); Bull Flag
+            # operates on raw price/volume over a much shorter window.
+            flat_base = flat_base_detector.analyze_flat_base(df, macro_pivots, struct["trend_state"])
+            cup_handle = cup_handle_detector.analyze_cup_handle(df, struct["trend_state"])
+            triangle = ascending_triangle_detector.analyze_ascending_triangle(df, macro_pivots, struct["trend_state"])
+            bull_flag = bull_flag_detector.analyze_bull_flag(df, struct["trend_state"])
+
             if struct["trend_state"] == "UPTREND":
                 metrics["uptrends"] += 1
             if struct["is_break_of_structure"]:
@@ -67,9 +112,34 @@ class PatternEngine:
                 metrics["vcp"] += 1
             if fvg["has_active_fvg"]:
                 metrics["fvgs"] += 1
+            if flat_base.get("is_flat_base_setup"):
+                metrics["flat_base"] += 1
+            if cup_handle.get("is_cup_handle_setup"):
+                metrics["cup_handle"] += 1
+            if triangle.get("is_ascending_triangle_setup"):
+                metrics["ascending_triangle"] += 1
+            if bull_flag.get("is_bull_flag_setup"):
+                metrics["bull_flag"] += 1
+
+            # Aggregate which pattern(s) actually confirmed a breakout --
+            # these aren't mutually exclusive, a stock could satisfy more
+            # than one shape at once.
+            pattern_results = [
+                ("VCP", vcp), ("Flat_Base", flat_base), ("Cup_Handle", cup_handle),
+                ("Ascending_Triangle", triangle), ("Bull_Flag", bull_flag),
+            ]
+            aggregated = aggregate_confirmed_patterns(pattern_results)
+            pattern_type = aggregated["pattern_type"]
+            any_breakout_confirmed = aggregated["any_breakout_confirmed"]
+            multiple_patterns_confirmed = aggregated["multiple_patterns_confirmed"]
+
+            if any_breakout_confirmed:
+                metrics["any_breakout"] += 1
+            if multiple_patterns_confirmed:
+                metrics["multiple_patterns"] += 1
 
             # Console logging dashboard for strategic confluences
-            if vcp["is_vcp_setup"] or struct["is_liquidity_sweep"] or fvg["is_price_in_fvg"]:
+            if vcp["is_vcp_setup"] or struct["is_liquidity_sweep"] or fvg["is_price_in_fvg"] or any_breakout_confirmed:
                 print(f"\n[TARGET TICKER] {ticker} -> Structure: {struct['trend_state']}")
                 if struct['is_liquidity_sweep']:
                     print(f"  ↳ ⚠️ Institutional {struct['sweep_type']} Sweep Found within 10 days!")
@@ -79,6 +149,8 @@ class PatternEngine:
                         print("    ⚡ Tactics: Price is currently cooling down inside the FVG buy zone.")
                 if vcp['is_vcp_setup']:
                     print(f"  ↳ 🔥 VCP Setup (Score: {vcp['vcp_score']}% | Breakout: {vcp['is_vcp_breakout']})")
+                if any_breakout_confirmed:
+                    print(f"  ↳ 🚀 Pattern Breakout Confirmed: {pattern_type}")
 
             # 3. Append Data and Save Parquet
             df["Trend_State"] = struct["trend_state"]
@@ -89,6 +161,17 @@ class PatternEngine:
             df["VCP_Score"] = vcp["vcp_score"]
             df["Is_VCP_Breakout"] = vcp["is_vcp_breakout"]
             df["Has_Active_FVG"] = fvg["has_active_fvg"]
+            df["Is_Flat_Base_Setup"] = flat_base.get("is_flat_base_setup", False)
+            df["Is_Flat_Base_Breakout"] = flat_base.get("is_breakout_confirmed", False)
+            df["Is_Cup_Handle_Setup"] = cup_handle.get("is_cup_handle_setup", False)
+            df["Is_Cup_Handle_Breakout"] = cup_handle.get("is_breakout_confirmed", False)
+            df["Is_Ascending_Triangle_Setup"] = triangle.get("is_ascending_triangle_setup", False)
+            df["Is_Ascending_Triangle_Breakout"] = triangle.get("is_breakout_confirmed", False)
+            df["Is_Bull_Flag_Setup"] = bull_flag.get("is_bull_flag_setup", False)
+            df["Is_Bull_Flag_Breakout"] = bull_flag.get("is_breakout_confirmed", False)
+            df["Pattern_Type"] = pattern_type
+            df["Any_Breakout_Confirmed"] = any_breakout_confirmed
+            df["Multiple_Patterns_Confirmed"] = multiple_patterns_confirmed
             df["Price_In_FVG"] = fvg["is_price_in_fvg"]
 
             df.to_parquet(os.path.join(self.dest_dir, f"{ticker}.parquet"))
@@ -99,6 +182,12 @@ class PatternEngine:
         print(f" TOTAL TICKERS PROCESSED      : {metrics['total']}")
         print(f" BULLISH UPTRENDS IDENTIFIED  : {metrics['uptrends']}")
         print(f" ACTIVE VCP SETUPS FOUND      : {metrics['vcp']}")
+        print(f" FLAT BASE SETUPS FOUND       : {metrics['flat_base']}")
+        print(f" CUP-WITH-HANDLE SETUPS FOUND : {metrics['cup_handle']}")
+        print(f" ASCENDING TRIANGLE SETUPS    : {metrics['ascending_triangle']}")
+        print(f" BULL FLAG SETUPS FOUND       : {metrics['bull_flag']}")
+        print(f" ANY PATTERN BREAKOUT CONFIRMED : {metrics['any_breakout']}")
+        print(f" MULTIPLE PATTERNS CONFIRMED  : {metrics['multiple_patterns']}")
         print(f" BREAKS OF STRUCTURE (BOS)    : {metrics['bos']}")
         print(f" LIQUIDITY SWEEPS DETECTED    : {metrics['sweeps']}")
         print(f" ACTIVE UNMITIGATED FVGS MAP  : {metrics['fvgs']}")

@@ -111,6 +111,10 @@ class VCPDetector:
             "vdu_confirmed": vdu_confirmed,
             "vcp_score": vcp_score,
             "is_vcp_breakout": is_breakout,
+            # Alias so pattern_engine.py's cross-pattern aggregation (Pattern_Type,
+            # Any_Breakout_Confirmed) can treat all five continuation detectors
+            # uniformly via the same "is_breakout_confirmed" key.
+            "is_breakout_confirmed": is_breakout,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "pivot_level": resistance_pivot,
