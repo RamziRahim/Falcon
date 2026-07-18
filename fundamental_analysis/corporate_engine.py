@@ -29,7 +29,10 @@ class CorporateEngine:
             "revenue_yoy_quarterly_growth": "DATA_GAP",
             "revenue_qoq_growth": "DATA_GAP",
             "net_income_yoy_quarterly_growth": "DATA_GAP",
-            "net_income_qoq_growth": "DATA_GAP"
+            "net_income_qoq_growth": "DATA_GAP",
+            "net_margin_pct": "DATA_GAP",
+            "margin_trend_qoq": "DATA_GAP",
+            "margin_trend_yoy": "DATA_GAP"
         }
 
         try:
@@ -92,6 +95,30 @@ class CorporateEngine:
                 rev_yoy = "DATA_GAP"
                 net_yoy = "DATA_GAP"
 
+            # Net Margin Trend (QoQ + YoY) -- revenue growth alone can mask a
+            # company growing sales while margins erode (discounting, rising
+            # input costs). Reuses revenue_series/net_income_series already
+            # extracted above -- no new data fetch.
+            margin_q0 = self._safe_margin_pct(net_q0, rev_q0)
+            margin_q1 = self._safe_margin_pct(net_q1, rev_q1)
+
+            net_margin_pct = "DATA_GAP"
+            margin_trend_qoq = "DATA_GAP"
+            margin_trend_yoy = "DATA_GAP"
+
+            if pd.notna(margin_q0) and pd.notna(margin_q1):
+                net_margin_pct = f"{margin_q0:.2f}%"
+                margin_trend_qoq = self._classify_margin_trend(margin_q0, margin_q1)
+
+            # YoY margin trend is the more reliable comparison for judging
+            # genuine expansion/contraction -- QoQ alone can be noisy from
+            # pure seasonality, same reasoning already applied to revenue/
+            # net-income growth above.
+            if cols_count >= 5 and pd.notna(margin_q0):
+                margin_y4 = self._safe_margin_pct(net_income_series.iloc[4], revenue_series.iloc[4])
+                if pd.notna(margin_y4):
+                    margin_trend_yoy = self._classify_margin_trend(margin_q0, margin_y4)
+
             # 3. EARNINGS RUNWAY RADAR TIMING LAYER
             next_earnings_date = "UNKNOWN"
             days_to_earnings = 999
@@ -124,7 +151,10 @@ class CorporateEngine:
                 "revenue_yoy_quarterly_growth": rev_yoy,
                 "revenue_qoq_growth": rev_qoq,
                 "net_income_yoy_quarterly_growth": net_yoy,
-                "net_income_qoq_growth": net_qoq
+                "net_income_qoq_growth": net_qoq,
+                "net_margin_pct": net_margin_pct,
+                "margin_trend_qoq": margin_trend_qoq,
+                "margin_trend_yoy": margin_trend_yoy
             }
 
         except IndexError as ie:
@@ -139,12 +169,35 @@ class CorporateEngine:
         try:
             if pd.isna(current_val) or pd.isna(historical_val) or historical_val == 0:
                 return "UNKNOWN"
-            
+
             growth_pct = ((current_val - historical_val) / abs(historical_val)) * 100
             prefix = "+" if growth_pct >= 0 else ""
             return f"{prefix}{growth_pct:.2f}%"
         except Exception:
             return "UNKNOWN"
+
+    def _safe_margin_pct(self, net_income: float, revenue: float) -> float:
+        """
+        Returns net margin % (net_income / revenue * 100), or NaN if
+        revenue is missing/zero/negative -- a zero-revenue quarter (data
+        glitch) or negative revenue (nonsensical) can't produce a
+        meaningful margin ratio, and must not crash the whole fetch.
+        """
+        try:
+            if pd.isna(net_income) or pd.isna(revenue) or revenue <= 0:
+                return float("nan")
+
+            return (net_income / revenue) * 100
+        except Exception:
+            return float("nan")
+
+    def _classify_margin_trend(self, current: float, prior: float) -> str:
+        """Classifies margin direction between two quarters."""
+        if current > prior:
+            return "EXPANDING"
+        if current < prior:
+            return "CONTRACTING"
+        return "FLAT"
 
 # Global stateless engine singleton instance
 corporate_engine = CorporateEngine()
