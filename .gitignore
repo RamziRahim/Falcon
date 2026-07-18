@@ -18,6 +18,8 @@ data/raw/
 data/sector_map.json
 data/fundamentals_cache.json
 data/nse_holidays_cache.json
+data/vix_cache.json
+data/pe_snapshot_cache/
 output/
 master_watchlist.xlsx
 logs/
