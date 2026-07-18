@@ -139,7 +139,12 @@ class NSEProvider(BaseProvider):
                 "High": ["high", "highprice"],
                 "Low": ["low", "lowprice"],
                 "Close": ["close", "closeprice", "lastprice"],
-                "Volume": ["volume", "totaltradedquantity", "ttltrdqty", "tradedqty"]
+                "Volume": ["volume", "totaltradedquantity", "ttltrdqty", "tradedqty"],
+                # Optional -- degrade gracefully if absent rather than failing.
+                # Not wired into any decision logic yet; just made available
+                # on the dataframe for whatever consumes it later.
+                "Deliverable_Qty": ["deliverableqty"],
+                "Delivery_Pct": ["%dlyqttotradedqty", "dlyqttotradedqty"],
             }
 
             mapped_columns = {}
@@ -149,21 +154,18 @@ class NSEProvider(BaseProvider):
                         mapped_columns[clean_name] = norm_map[key]
                         break
 
-            missing_keys = [k for k in target_keys.keys() if k not in mapped_columns]
+            # Only Date/OHLCV are required -- a future payload shape change to
+            # the delivery columns specifically can't break basic ingestion.
+            required_keys = ["Date", "Open", "High", "Low", "Close", "Volume"]
+            missing_keys = [k for k in required_keys if k not in mapped_columns]
             if missing_keys:
                 raise ProviderError(f"Required structural columns missing from payload index: {missing_keys}")
 
-            # 3. Filter down to required technical structure
-            df = df_raw[[
-                mapped_columns["Date"],
-                mapped_columns["Open"],
-                mapped_columns["High"],
-                mapped_columns["Low"],
-                mapped_columns["Close"],
-                mapped_columns["Volume"]
-            ]].copy()
-
-            df.columns = ["Date", "Open", "High", "Low", "Close", "Volume"]
+            # 3. Build output with whatever was successfully mapped -- core
+            # columns guaranteed, delivery columns included only if present.
+            available_cols = [c for c in target_keys.keys() if c in mapped_columns]
+            df = df_raw[[mapped_columns[c] for c in available_cols]].copy()
+            df.columns = available_cols
 
             # 4. Data Cleaning Pipeline
             # Format text strings to numeric objects, removing thousand separators
@@ -173,6 +175,14 @@ class NSEProvider(BaseProvider):
 
             df["Volume"] = df["Volume"].astype(str).str.replace(",", "")
             df["Volume"] = pd.to_numeric(df["Volume"], errors="coerce").astype("int64")
+
+            if "Deliverable_Qty" in df.columns:
+                df["Deliverable_Qty"] = df["Deliverable_Qty"].astype(str).str.replace(",", "")
+                df["Deliverable_Qty"] = pd.to_numeric(df["Deliverable_Qty"], errors="coerce")
+
+            if "Delivery_Pct" in df.columns:
+                df["Delivery_Pct"] = df["Delivery_Pct"].astype(str).str.replace(",", "")
+                df["Delivery_Pct"] = pd.to_numeric(df["Delivery_Pct"], errors="coerce")
 
             # Parse strings into true timezone-naive pandas Timestamps
             df["Date"] = pd.to_datetime(df["Date"], errors="coerce")

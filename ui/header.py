@@ -15,6 +15,7 @@ import streamlit as st
 from config import NIFTY50, NIFTY_MIDCAP_150, NIFTY_SMALLCAP_250
 
 from common.logger import get_logger
+from market_data.holiday_calendar import get_nse_holidays
 from market_data.providers.yahoo_provider import market_provider
 
 logger = get_logger(__name__)
@@ -55,10 +56,8 @@ def get_index_quotes() -> dict[str, dict | None]:
 
 def get_market_status(now: datetime | None = None) -> str:
     """
-    Returns NSE market status from trading hours (9:15-15:30 IST, Mon-Fri).
-
-    Known limitation: does not account for NSE holidays (Diwali, Republic
-    Day, etc.) — will incorrectly show OPEN on a weekday holiday.
+    Returns NSE market status from trading hours (9:15-15:30 IST, Mon-Fri)
+    and the NSE equity holiday calendar (Diwali, Republic Day, etc.).
     """
 
     if now is None:
@@ -66,8 +65,9 @@ def get_market_status(now: datetime | None = None) -> str:
 
     is_weekday = now.weekday() < 5
     is_trading_hours = MARKET_OPEN_TIME <= now.time() <= MARKET_CLOSE_TIME
+    is_holiday = now.date() in get_nse_holidays()
 
-    return "🟢 OPEN" if (is_weekday and is_trading_hours) else "🔴 CLOSED"
+    return "🟢 OPEN" if (is_weekday and is_trading_hours and not is_holiday) else "🔴 CLOSED"
 
 
 def render() -> bool:
