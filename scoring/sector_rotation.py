@@ -50,7 +50,7 @@ def rank_sectors(scored_universe: pd.DataFrame) -> pd.DataFrame:
     """
 
     empty_result = pd.DataFrame(
-        columns=["Avg_RS_Rating", "Ticker_Count", "Rank"]
+        columns=["Avg_RS_Rating", "Ticker_Count", "Rank", "Pct_Uptrend"]
     )
 
     try:
@@ -68,6 +68,31 @@ def rank_sectors(scored_universe: pd.DataFrame) -> pd.DataFrame:
 
         grouped = grouped.sort_values("Avg_RS_Rating", ascending=False)
         grouped["Rank"] = range(1, len(grouped) + 1)
+
+        # Breadth alongside the existing magnitude-based ranking:
+        # Avg_RS_Rating measures average momentum *strength*, Pct_Uptrend
+        # measures *breadth of participation* -- a sector can have one very
+        # strong stock (high avg RS) while only a fraction of its names are
+        # actually trending up. Both together are more informative than
+        # either alone. Computed from the full scored_universe (not
+        # `working`, which is filtered to rows with valid RS_Rating) so a
+        # ticker missing RS data but with a known Trend_State still counts
+        # toward its sector's breadth.
+        if "Trend_State" in scored_universe.columns:
+
+            valid = scored_universe.dropna(subset=["Sector", "Trend_State"])
+
+            uptrend_pct = (
+                valid.assign(is_uptrend=valid["Trend_State"] == "UPTREND")
+                .groupby("Sector")["is_uptrend"]
+                .mean() * 100
+            ).round(1)
+
+            grouped["Pct_Uptrend"] = grouped.index.map(uptrend_pct).fillna(0.0)
+
+        else:
+
+            grouped["Pct_Uptrend"] = 0.0
 
         logger.info(
             "Ranked %d sectors from %d tickers.",
