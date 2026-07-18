@@ -76,6 +76,9 @@ st.markdown("""
     .info-val { color: #FFFFFF; font-size: 14px; font-weight: 600; }
     .section-header { font-size: 14px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin: 18px 0 8px 0; }
     .txt-green { color: #10B981; }
+    [data-testid="stMetricLabel"] { color: #9CA3AF !important; }
+    [data-testid="stMetricValue"] { color: #FFFFFF !important; font-weight: 600 !important; }
+    [data-testid="stMetricDelta"] { color: #10B981 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -192,39 +195,39 @@ if not st.session_state.screener_records.empty:
 """, unsafe_allow_html=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
-        
+
         # AI Control Panel Module
-        st.markdown('<div class="panel-box-ai">', unsafe_allow_html=True)
-        st.markdown("<h4 style='margin-top:0; font-size:15px; color:#FFFFFF;'>Falcon AI Engine Guidance</h4>", unsafe_allow_html=True)
-        
-        if active_sym not in st.session_state.ai_synthesis_runs:
-            st.warning("AI Generation awaiting explicit request link.")
-            if st.button("🧠 Generate AI Plan", use_container_width=True):
-                # TODO(cleanup 2026-07-15): This does NOT call ai/synthesis_engine.py or the
-                # Gemini provider at all. Every number below is derived from a fixed multiplier
-                # on Price (e.g. SL = Price * 0.94), not from any AI inference. The score "88"
-                # and R:R "1 : 2.6" are hardcoded constants. Wire this button to
-                # ai.synthesis_engine.AISynthesisEngine before treating this as real AI output.
-                st.session_state.ai_synthesis_runs[active_sym] = {
-                    "score": "88", "zone": f"₹{row_data['Price']} — ₹{round(row_data['Price']*1.01, 2)}",
-                    "targets": f"₹{round(row_data['Price']*1.08, 2)} / ₹{round(row_data['Price']*1.15, 2)}",
-                    "sl": f"₹{round(row_data['Price']*0.94, 2)}", "rr": "1 : 2.6",
-                    "is_simulated": True,
-                }
-                st.rerun()
-        else:
-            ai = st.session_state.ai_synthesis_runs[active_sym]
-            ai_score_val = str(ai["score"])
-            ai_zone_val = str(ai["zone"])
-            ai_targets_val = str(ai["targets"])
-            ai_sl_val = str(ai["sl"])
-            ai_rr_val = str(ai["rr"])
-            
-            if ai.get("is_simulated"):
-                st.error("⚠️ SIMULATED — this plan is calculated from a fixed price multiplier, "
-                         "not from the Falcon AI / Gemini engine. Do not trade on this yet.")
-            
-            st.markdown(f"""
+        with st.container(border=True):
+            st.markdown("<h4 style='margin-top:0; font-size:15px; color:#FFFFFF;'>Falcon AI Engine Guidance</h4>", unsafe_allow_html=True)
+
+            if active_sym not in st.session_state.ai_synthesis_runs:
+                st.warning("AI Generation awaiting explicit request link.")
+                if st.button("🧠 Generate AI Plan", use_container_width=True):
+                    # TODO(cleanup 2026-07-15): This does NOT call ai/synthesis_engine.py or the
+                    # Gemini provider at all. Every number below is derived from a fixed multiplier
+                    # on Price (e.g. SL = Price * 0.94), not from any AI inference. The score "88"
+                    # and R:R "1 : 2.6" are hardcoded constants. Wire this button to
+                    # ai.synthesis_engine.AISynthesisEngine before treating this as real AI output.
+                    st.session_state.ai_synthesis_runs[active_sym] = {
+                        "score": "88", "zone": f"₹{row_data['Price']} — ₹{round(row_data['Price']*1.01, 2)}",
+                        "targets": f"₹{round(row_data['Price']*1.08, 2)} / ₹{round(row_data['Price']*1.15, 2)}",
+                        "sl": f"₹{round(row_data['Price']*0.94, 2)}", "rr": "1 : 2.6",
+                        "is_simulated": True,
+                    }
+                    st.rerun()
+            else:
+                ai = st.session_state.ai_synthesis_runs[active_sym]
+                ai_score_val = str(ai["score"])
+                ai_zone_val = str(ai["zone"])
+                ai_targets_val = str(ai["targets"])
+                ai_sl_val = str(ai["sl"])
+                ai_rr_val = str(ai["rr"])
+
+                if ai.get("is_simulated"):
+                    st.error("⚠️ SIMULATED — this plan is calculated from a fixed price multiplier, "
+                             "not from the Falcon AI / Gemini engine. Do not trade on this yet.")
+
+                st.markdown(f"""
 <div style="display:flex; align-items:baseline; margin-bottom:10px;">
 <span style="font-size:32px; font-weight:800; color:#10B981; margin-right:5px;">{ai_score_val}</span>
 <span style="color:#6B7280; font-size:13px; margin-right:15px;">/ 100</span>
@@ -235,7 +238,6 @@ if not st.session_state.screener_records.empty:
 <div class="info-row"><span class="info-label">Stop Loss Invalidation</span><span class="info-val" style="color:#EF4444;"><b>{ai_sl_val}</b></span></div>
 <div class="info-row"><span class="info-label">Risk Reward Ratio</span><span class="info-val">{ai_rr_val}</span></div>
 """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -248,9 +250,8 @@ if not st.session_state.screener_records.empty:
     st.markdown("<br>", unsafe_allow_html=True)
 
     # 6. Render Key Insights: Sector RS Ranking Panel
-    st.markdown('<div class="panel-box">', unsafe_allow_html=True)
-    SectorRankingPanel.render(st.session_state.screener_records)
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        SectorRankingPanel.render(st.session_state.screener_records)
 else:
     st.markdown("""
 <div style="background-color:#111827; border:1px dashed #1F2937; padding:40px; border-radius:12px; text-align:center;">

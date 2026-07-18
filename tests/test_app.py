@@ -15,9 +15,30 @@ regression back to a hardcoded literal or an unmapped sentinel.
 """
 from __future__ import annotations
 
+import ast
 from pathlib import Path
 
 APP_SOURCE = (Path(__file__).resolve().parent.parent / "app.py").read_text(encoding="utf-8")
+
+
+def _container_with_line_ranges(tree: ast.Module) -> list[tuple[int, int]]:
+    """Line ranges of every `with st.container(...):` block in the module."""
+    ranges = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.With):
+            for item in node.items:
+                ctx = item.context_expr
+                if (
+                    isinstance(ctx, ast.Call)
+                    and isinstance(ctx.func, ast.Attribute)
+                    and ctx.func.attr == "container"
+                ):
+                    ranges.append((node.lineno, node.end_lineno))
+    return ranges
+
+
+def _line_in_any_range(lineno: int, ranges: list[tuple[int, int]]) -> bool:
+    return any(start <= lineno <= end for start, end in ranges)
 
 
 class TestMarketStatusSingleSourceOfTruth:
@@ -86,3 +107,61 @@ class TestNewScanRunsFullPipeline:
         # exact gap this task fixed (skipping Phase 3/4/5 for new tickers).
         assert "build_candidate_table(ticker_universe)" not in APP_SOURCE
         assert "from technical_analysis.candidate_table_builder import" not in APP_SOURCE
+
+
+class TestContainerNestingFix:
+    """
+    #4: st.markdown('<div class="panel-box">') opened in one call, followed
+    by a separately-called SectorRankingPanel.render()/AI panel content,
+    then a closing </div> in a third call, does NOT nest in Streamlit --
+    each call renders as an independent sibling. The div rendered as its
+    own empty bordered block; the real content rendered separately below
+    it. Fixed with `with st.container(border=True):`, which genuinely
+    nests -- verified here via AST line-range containment rather than
+    string matching, since a regression back to sibling calls is still
+    syntactically valid Python and wouldn't be caught by a simple substring
+    check.
+    """
+
+    def test_sector_ranking_panel_renders_inside_a_container_block(self):
+        tree = ast.parse(APP_SOURCE)
+        ranges = _container_with_line_ranges(tree)
+        assert ranges, "Expected at least one `with st.container(...):` block in app.py"
+
+        render_calls = [
+            node for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and node.func.attr == "render"
+            and isinstance(node.func.value, ast.Name)
+            and node.func.value.id == "SectorRankingPanel"
+        ]
+        assert render_calls, "Expected a SectorRankingPanel.render(...) call in app.py"
+
+        for call in render_calls:
+            assert _line_in_any_range(call.lineno, ranges), (
+                "SectorRankingPanel.render(...) must be called inside a "
+                "`with st.container(...):` block, not as a sibling after a "
+                "separately-opened <div> -- that leaves an empty bordered "
+                "block with the real chart rendered separately below it."
+            )
+
+    def test_ai_panel_heading_renders_inside_a_container_block(self):
+        tree = ast.parse(APP_SOURCE)
+        ranges = _container_with_line_ranges(tree)
+
+        heading_strings = [
+            node for node in ast.walk(tree)
+            if isinstance(node, ast.Constant)
+            and isinstance(node.value, str)
+            and "Falcon AI Engine Guidance" in node.value
+        ]
+        assert heading_strings, "Expected the AI panel heading string in app.py"
+
+        for node in heading_strings:
+            assert _line_in_any_range(node.lineno, ranges), (
+                "The AI panel heading must render inside a "
+                "`with st.container(...):` block -- previously this bug made "
+                "the AI panel show as a thin, empty green-bordered strip "
+                "with no visible content."
+            )

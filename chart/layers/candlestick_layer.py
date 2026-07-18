@@ -78,6 +78,19 @@ class CandlestickLayer(BaseLayer):
             ],     
         )
 
+        has_volume = "Volume" in dataframe.columns
+
+        hovertemplate = (
+            "<b>%{x}</b><br>"
+            "Open : %{open:.2f}<br>"
+            "High : %{high:.2f}<br>"
+            "Low : %{low:.2f}<br>"
+            "Close : %{close:.2f}"
+        )
+        if has_volume:
+            hovertemplate += "<br>Volume : %{customdata:,.0f}"
+        hovertemplate += "<extra></extra>"
+
         fig.add_trace(
             go.Candlestick(
                 x=dataframe.index,
@@ -86,6 +99,7 @@ class CandlestickLayer(BaseLayer):
                 low=dataframe["Low"],
                 close=dataframe["Close"],
                 name="Price",
+                customdata=dataframe["Volume"] if has_volume else None,
                 increasing=dict(
                     fillcolor=self.INCREASING,
                     line=dict(
@@ -100,14 +114,7 @@ class CandlestickLayer(BaseLayer):
                         width=1,
                     ),
                 ),
-                hovertemplate=(
-                    "<b>%{x}</b><br>"
-                    "Open : %{open:.2f}<br>"
-                    "High : %{high:.2f}<br>"
-                    "Low : %{low:.2f}<br>"
-                    "Close : %{close:.2f}"
-                    "<extra></extra>"
-                ),
+                hovertemplate=hovertemplate,
             ),
             row=row,
             col=col,

@@ -38,6 +38,12 @@ class SectorRankingPanel:
             "<h4 style='margin-top:0; font-size:15px; color:#FFFFFF;'>Key Insights — Sector RS Ranking</h4>",
             unsafe_allow_html=True,
         )
+        st.caption(
+            "Each bar averages the RS Rating of tickers currently in that sector "
+            "within your tracked universe — not the full market. Higher = "
+            "relatively stronger momentum among the stocks you're tracking right "
+            "now, not an absolute market-wide ranking."
+        )
 
         ranking = rank_sectors(scored_universe)
 
@@ -47,11 +53,15 @@ class SectorRankingPanel:
 
         # Ascending so the strongest sector renders at the top of the horizontal bar chart
         ranking = ranking.sort_values("Avg_RS_Rating", ascending=True)
+        bar_labels = [
+            f"{sector} ({int(count)})"
+            for sector, count in zip(ranking.index, ranking["Ticker_Count"])
+        ]
 
         fig = go.Figure(
             go.Bar(
                 x=ranking["Avg_RS_Rating"],
-                y=ranking.index,
+                y=bar_labels,
                 orientation="h",
                 marker_color="#3B82F6",
                 text=ranking["Avg_RS_Rating"].round(1),

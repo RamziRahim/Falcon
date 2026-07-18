@@ -95,7 +95,7 @@ class ChartPanel:
         options = ChartRenderOptions(
             mode=ChartMode.DASHBOARD,
             timeframe=TimeFrame.DAILY,
-            height=440,
+            height=900,  # was 440 -- roughly matches the right column's real height
             show_legend=False,
             enable_crosshair=True
         )

@@ -29,6 +29,7 @@ from typing import Optional
 
 import pandas as pd
 import streamlit as st
+from streamlit.errors import StreamlitAPIException
 
 
 DISPLAY_COLUMNS = [
@@ -49,6 +50,36 @@ DISPLAY_COLUMNS = [
 ]
 
 
+def _render_selectable_grid(display_df: pd.DataFrame):
+    """
+    Renders the grid with row-click selection, preferring
+    "single-row-required" (always keeps exactly one row highlighted --
+    the nicer UX, closer to a radio button) and falling back to
+    "single-row" on Streamlit versions too old to support it.
+    """
+
+    try:
+        return st.dataframe(
+            display_df,
+            use_container_width=True,
+            hide_index=True,
+            height=350,
+            key="candidate_grid_selection",
+            on_select="rerun",
+            selection_mode="single-row-required",
+        )
+    except StreamlitAPIException:
+        return st.dataframe(
+            display_df,
+            use_container_width=True,
+            hide_index=True,
+            height=350,
+            key="candidate_grid_selection",
+            on_select="rerun",
+            selection_mode="single-row",
+        )
+
+
 def render(
     candidates: pd.DataFrame,
 ) -> Optional[str]:
@@ -65,10 +96,9 @@ def render(
     Selected symbol or None.
     """
 
-    st.subheader("Swing Candidates")
-
     if candidates.empty:
 
+        st.subheader("Swing Candidates")
         st.info("No swing candidates available.")
 
         return None
@@ -78,19 +108,14 @@ def render(
         [c for c in DISPLAY_COLUMNS if c in candidates.columns]
     ].copy()
 
-    # Display dataframe
-    st.dataframe(
-        display_df,
-        use_container_width=True,
-        hide_index=True,
-        height=350,
-    )
+    st.subheader(f"Swing Candidates ({len(display_df)})")
 
-    # Symbol selector (temporary)
-    symbol = st.selectbox(
-        "Select Stock",
-        options=display_df["Symbol"].tolist(),
-        index=0,
-    )
+    # Row click selects the ticker directly -- no separate dropdown needed.
+    event = _render_selectable_grid(display_df)
 
-    return symbol
+    selected_rows = event.selection.rows if event and event.selection else []
+
+    if selected_rows:
+        return display_df.iloc[selected_rows[0]]["Symbol"]
+
+    return None
