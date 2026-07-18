@@ -9,6 +9,9 @@ Package     : Fundamental Analysis
 from __future__ import annotations
 import yfinance as yf
 
+from candidate_generation.session import SourceSession
+from candidate_generation.sources.shareholding_scraper import get_shareholding_trend
+
 class InstitutionalEngine:
     def get_shareholding_profile(self, ticker: str) -> dict:
         """
@@ -47,8 +50,26 @@ class InstitutionalEngine:
 
         except Exception as e:
             print(f"[INSTITUTIONAL ENGINE WARNING] Could not resolve shareholding data arrays for {ticker}: {e}")
-            
+
         return results
+
+    def get_shareholding_profile_with_trend(self, ticker: str, session: SourceSession) -> dict:
+        """
+        Supplements get_shareholding_profile()'s Yahoo-sourced snapshot with
+        a Screener.in-scraped QoQ trend for Promoter/FII/DII stake --
+        catches a case the static snapshot alone can't: a promoter could
+        still hold 60% while visibly reducing it quarter over quarter.
+
+        session must already be authenticated (candidate_generation.auth.login()
+        + session.create_session()) -- this reuses that Playwright session
+        rather than opening a new one per ticker.
+        """
+        base = self.get_shareholding_profile(ticker)
+
+        company_slug = ticker.upper().replace(".NS", "")
+        trend = get_shareholding_trend(session, company_slug)
+
+        return {**base, **trend}
 
 # Global stateless instance
 institutional_engine = InstitutionalEngine()
