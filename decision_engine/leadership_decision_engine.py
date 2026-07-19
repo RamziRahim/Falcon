@@ -127,11 +127,19 @@ def _is_top_half_sector(sector_row: dict) -> bool:
     return rank <= total / 2
 
 
+# `is None or` on each numeric check: candidate_assembler.py's
+# _parse_formatted_percentage() legitimately returns None for a
+# non-numeric upstream sentinel (e.g. corporate_engine.py's D_E can come
+# back as "DEBT_FREE" instead of a number) -- direct `s["ROCE"] < 10.0`
+# would raise TypeError comparing None to a float the first time real
+# data hit this path. Missing/unparseable fundamental data fails closed
+# (disqualifies) rather than silently passing a quality gate whose whole
+# point is to filter on that same data.
 DISQUALIFIERS = [
     lambda s: s["Trend_State"] != "UPTREND",
-    lambda s: s["Rel_Vol"] < 0.5,
-    lambda s: s["D_E"] > 0.5,
-    lambda s: s["ROCE"] < 10.0,
+    lambda s: s["Rel_Vol"] is None or s["Rel_Vol"] < 0.5,
+    lambda s: s["D_E"] is None or s["D_E"] > 0.5,
+    lambda s: s["ROCE"] is None or s["ROCE"] < 10.0,
 ]
 
 INDEPENDENT_CAPS = [
@@ -217,29 +225,43 @@ def compute_score(candidate: dict, sector_row: dict) -> float:
         score -= 10
     if sector_row.get("Pct_Uptrend", 100) < 30:
         score -= 15
-    if candidate.get("Delivery_Pct") and candidate["Delivery_Pct"] < candidate.get("Delivery_Pct_20d_avg", 100):
+    if _is_low_delivery_conviction(candidate):
         score -= 15
 
     return round(max(0.0, min(100.0, score)), 1)
+
+
+def _is_low_delivery_conviction(candidate: dict) -> bool:
+    """True when Delivery_Pct is genuinely below its own 20-day average.
+    Both values can legitimately be None (Delivery_Pct_20d_avg isn't
+    persisted anywhere in the pipeline yet -- see candidate_assembler.py's
+    docstring) -- `.get(key, default)` only falls back to `default` when
+    the key is *absent*, not when it's present but None, so a naive
+    `candidate.get("Delivery_Pct_20d_avg", 100)` still returns None here
+    and crashes the comparison the first time real assembled data hits
+    this path (confirmed by tracing a real candidate through categorize()
+    end-to-end)."""
+    delivery_pct = candidate.get("Delivery_Pct")
+    delivery_avg = candidate.get("Delivery_Pct_20d_avg")
+    return delivery_pct is not None and delivery_avg is not None and delivery_pct < delivery_avg
 
 
 def get_fakeout_risk_flags(candidate: dict, sector_row: dict) -> list[str]:
     """Surfaces *why* something might be a fakeout as named flags, not
     just a quieter score.
 
-    WEAK_VOLUME_CONFIRMATION is deliberately absent: pattern_engine.py
-    only persists the combined Is_X_Setup/Is_X_Breakout booleans per
-    pattern, not the granular price_crossed_pivot/breakout_volume_confirmed
-    sub-fields each detector computes internally -- so there's currently
-    no way to distinguish "shape qualified, price crossed, but volume was
-    weak" from "shape never qualified at all" downstream of
-    pattern_engine.py. Adding Price_Crossed_Pivot/Breakout_Volume_Confirmed
-    columns there (for whichever pattern wins selection) is a small,
-    contained fast-follow, not part of this task.
+    WEAK_VOLUME_CONFIRMATION is still absent here even though
+    pattern_engine.py now persists the granular Price_Crossed_Pivot/
+    Breakout_Volume_Confirmed columns per pattern (the fast-follow this
+    docstring used to flag as missing) -- computing it needs to know
+    *which* pattern was selected (get_best_pattern_points) and read that
+    specific pattern's sub-fields, which candidate_assembler.py doesn't
+    yet flatten onto `candidate`. Wiring that through is the remaining
+    fast-follow, not solved here.
     """
     flags = []
 
-    if candidate.get("Delivery_Pct") and candidate["Delivery_Pct"] < candidate.get("Delivery_Pct_20d_avg", 100):
+    if _is_low_delivery_conviction(candidate):
         flags.append("LOW_DELIVERY_CONVICTION")
     if sector_row.get("Pct_Uptrend", 100) < 30.0:
         flags.append("ISOLATED_MOVE_NO_SECTOR_TAILWIND")

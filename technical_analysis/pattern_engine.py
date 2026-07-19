@@ -174,6 +174,39 @@ class PatternEngine:
             df["Multiple_Patterns_Confirmed"] = multiple_patterns_confirmed
             df["Price_In_FVG"] = fvg["is_price_in_fvg"]
 
+            # Granular per-pattern breakout sub-fields -- needed for
+            # WEAK_VOLUME_CONFIRMATION (can't be computed today from just
+            # the combined Is_X_Breakout booleans above) and for the
+            # backtest replay engine to reconstruct a decision from
+            # parquet alone, without re-running the detectors.
+            df["VCP_Price_Crossed_Pivot"] = vcp.get("price_crossed_pivot", False)
+            df["VCP_Breakout_Volume_Confirmed"] = vcp.get("breakout_volume_confirmed", False)
+            df["Flat_Base_Price_Crossed_Pivot"] = flat_base.get("price_crossed_pivot", False)
+            df["Flat_Base_Breakout_Volume_Confirmed"] = flat_base.get("breakout_volume_confirmed", False)
+            df["Cup_Handle_Price_Crossed_Pivot"] = cup_handle.get("price_crossed_pivot", False)
+            df["Cup_Handle_Breakout_Volume_Confirmed"] = cup_handle.get("breakout_volume_confirmed", False)
+            df["Ascending_Triangle_Price_Crossed_Pivot"] = triangle.get("price_crossed_pivot", False)
+            df["Ascending_Triangle_Breakout_Volume_Confirmed"] = triangle.get("breakout_volume_confirmed", False)
+            df["Bull_Flag_Price_Crossed_Pivot"] = bull_flag.get("price_crossed_pivot", False)
+            df["Bull_Flag_Breakout_Volume_Confirmed"] = bull_flag.get("breakout_volume_confirmed", False)
+
+            # Pivot level and structural low per pattern -- needed for a
+            # real (non-ATR-fallback) stop-loss/target, and for the
+            # backtest replay engine to price historical trades off each
+            # pattern's own structure instead of a generic ATR multiple.
+            # None (not 0.0) when a pattern never confirmed a setup at
+            # all, since these fields are only meaningful in that context.
+            df["VCP_Pivot_Level"] = vcp.get("pivot_level")
+            df["VCP_Structural_Low"] = vcp.get("final_contraction_low")
+            df["Flat_Base_Pivot_Level"] = flat_base.get("pivot_level")
+            df["Flat_Base_Low"] = flat_base.get("base_low")
+            df["Cup_Handle_Pivot_Level"] = cup_handle.get("pivot_level")
+            df["Cup_Handle_Low"] = cup_handle.get("handle_low")
+            df["Ascending_Triangle_Pivot_Level"] = triangle.get("pivot_level")
+            df["Ascending_Triangle_Support"] = triangle.get("most_recent_rising_low")
+            df["Bull_Flag_Pivot_Level"] = bull_flag.get("pivot_level")
+            df["Bull_Flag_Low"] = bull_flag.get("flag_low")
+
             df.to_parquet(os.path.join(self.dest_dir, f"{ticker}.parquet"))
 
         print("\n============================================================")

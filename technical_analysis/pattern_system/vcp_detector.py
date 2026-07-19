@@ -118,6 +118,9 @@ class VCPDetector:
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "pivot_level": resistance_pivot,
+            # The low of the final (tightest) contraction wave -- needed
+            # for a real, non-ATR-fallback stop-loss/target.
+            "final_contraction_low": contractions[-1].swing_low_price,
             "invalidated_reason": None,
         }
     

@@ -102,6 +102,9 @@ class CupHandleDetector:
             "cup_depth_pct": round(depth_pct, 1),
             "handle_depth_pct": round(handle_depth_pct, 1),
             "pivot_level": handle_high,
+            # Structural low of the handle -- needed for a real, non-ATR-
+            # fallback stop-loss/target.
+            "handle_low": handle_low,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_cup_handle_setup and price_crossed_pivot and breakout_volume_confirmed,

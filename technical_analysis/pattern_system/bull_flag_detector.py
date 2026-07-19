@@ -81,6 +81,9 @@ class BullFlagDetector:
             "is_bull_flag_setup": is_bull_flag_setup,
             "flagpole_gain_pct": round(pole_gain_pct, 1),
             "pivot_level": flag_high,
+            # Structural low of the flag -- needed for a real, non-ATR-
+            # fallback stop-loss/target.
+            "flag_low": flag_low,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_bull_flag_setup and price_crossed_pivot and breakout_volume_confirmed,

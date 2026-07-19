@@ -76,6 +76,9 @@ class FlatBaseDetector:
             "is_flat_base_setup": is_flat_base_setup,
             "base_depth_pct": round(depth_pct, 1),
             "pivot_level": base_high,
+            # Structural low of the base -- needed for a real, non-ATR-
+            # fallback stop-loss/target.
+            "base_low": base_low,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_flat_base_setup and price_crossed_pivot and breakout_volume_confirmed,
