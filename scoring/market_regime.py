@@ -137,6 +137,58 @@ def get_current_vix() -> dict | None:
         return None
 
 
+def get_vix_history(from_date: str, to_date: str) -> pd.DataFrame | None:
+    """
+    Fetches India VIX daily closes over an explicit historical range --
+    unlike get_current_vix() (always the latest value, 24h-cached), this
+    is for backtesting/replay_engine.py's point-in-time replay, which
+    needs the VIX regime as of an arbitrary past date, not just today's.
+    Confirmed live that nselib's india_vix_data() accepts a real
+    from_date/to_date range (not just the 'period' shorthand).
+
+    Parameters
+    ----------
+    from_date, to_date : str
+        'dd-mm-YYYY', nselib's own date format.
+
+    Returns
+    -------
+    pd.DataFrame | None
+        Sorted ascending by Date, columns Date/VIX_Level/VIX_Regime (the
+        same LOW/NORMAL/ELEVATED buckets as get_current_vix(), via
+        _classify_vix_regime). None if the fetch fails -- callers should
+        treat that as "regime unknown for this range," not crash, same
+        convention as get_current_vix().
+
+    Deliberately not cached to a file: get_current_vix() caches because
+    it's called repeatedly during live scans. This is meant to be called
+    once per backtest run for the whole replay period and then truncated
+    locally per replay date -- a persistent cache would be unnecessary
+    complexity for a single-fetch-per-run access pattern.
+    """
+
+    try:
+
+        raw = capital_market.india_vix_data(from_date=from_date, to_date=to_date)
+
+        if raw is None or raw.empty:
+            return None
+
+        result = pd.DataFrame({
+            "Date": pd.to_datetime(raw["TIMESTAMP"], format="%d-%b-%Y"),
+            "VIX_Level": raw["CLOSE_INDEX_VAL"].astype(float),
+        }).sort_values("Date").reset_index(drop=True)
+
+        result["VIX_Regime"] = result["VIX_Level"].apply(_classify_vix_regime)
+
+        return result
+
+    except Exception as ex:
+
+        logger.warning("India VIX history fetch failed for %s to %s: %s", from_date, to_date, ex)
+        return None
+
+
 def count_distribution_days(benchmark_df: pd.DataFrame, lookback: int = 25) -> int | None:
     """
     Counts days in the last `lookback` trading days where the benchmark

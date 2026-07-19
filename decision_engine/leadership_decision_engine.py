@@ -127,6 +127,21 @@ def _is_top_half_sector(sector_row: dict) -> bool:
     return rank <= total / 2
 
 
+# Split so backtesting/replay_engine.py can genuinely disable the
+# fundamental half rather than fail closed on it (see
+# disable_fundamental_signals below) -- current fundamental data is a
+# live snapshot, not point-in-time, so applying today's ROCE/D_E to
+# judge a trade from 2 years ago would be lookahead bias. That's a
+# different situation from the live path, where missing/unparseable data
+# should fail closed (see the `is None or` note below) rather than
+# silently pass a quality gate whose whole point is to filter on that
+# data -- backtesting mode needs the check skipped entirely, not made to
+# fail one particular way.
+TECHNICAL_DISQUALIFIERS = [
+    lambda s: s["Trend_State"] != "UPTREND",
+    lambda s: s["Rel_Vol"] is None or s["Rel_Vol"] < 0.5,
+]
+
 # `is None or` on each numeric check: candidate_assembler.py's
 # _parse_formatted_percentage() legitimately returns None for a
 # non-numeric upstream sentinel (e.g. corporate_engine.py's D_E can come
@@ -135,13 +150,17 @@ def _is_top_half_sector(sector_row: dict) -> bool:
 # data hit this path. Missing/unparseable fundamental data fails closed
 # (disqualifies) rather than silently passing a quality gate whose whole
 # point is to filter on that same data.
-DISQUALIFIERS = [
-    lambda s: s["Trend_State"] != "UPTREND",
-    lambda s: s["Rel_Vol"] is None or s["Rel_Vol"] < 0.5,
+FUNDAMENTAL_DISQUALIFIERS = [
     lambda s: s["D_E"] is None or s["D_E"] > 0.5,
     lambda s: s["ROCE"] is None or s["ROCE"] < 10.0,
 ]
 
+DISQUALIFIERS = TECHNICAL_DISQUALIFIERS + FUNDAMENTAL_DISQUALIFIERS
+
+# days_to_earnings has the same live-snapshot problem as ROCE/D_E above --
+# corporate_engine.py's earnings calendar is a live-only fetch, no
+# point-in-time historical reconstruction exists yet -- so this cap is
+# fundamental too and gets skipped under disable_fundamental_signals.
 INDEPENDENT_CAPS = [
     (lambda s: s["days_to_earnings"] <= 7, "EARNINGS_PROXIMITY"),
 ]
@@ -184,10 +203,18 @@ def get_best_pattern_points(candidate: dict) -> tuple[int, str | None]:
     return 0, None
 
 
-def compute_score(candidate: dict, sector_row: dict) -> float:
+def compute_score(candidate: dict, sector_row: dict, disable_fundamental_signals: bool = False) -> float:
     """0-100 base score (clamped), computed once the cascade ceiling from
     Steps 1-2 is already known -- the final category is always the lower
-    of this score and that ceiling, never the score in isolation."""
+    of this score and that ceiling, never the score in isolation.
+
+    disable_fundamental_signals=True skips every institutional/fundamental
+    modifier below (institutional sponsorship, buy-side deal activity,
+    FII/DII/promoter trend, margin trend) -- for backtesting/replay_engine.py,
+    where today's fundamentals can't legitimately judge a trade from years
+    ago. Technical/regime signals (pattern points, FVG, liquidity sweep,
+    RS_Rating, sector breadth, RSI, delivery conviction) are unaffected.
+    """
     score = 0.0
 
     best_points, _ = get_best_pattern_points(candidate)
@@ -200,28 +227,30 @@ def compute_score(candidate: dict, sector_row: dict) -> float:
 
     score += (candidate.get("RS_Rating", 0) / 100) * 20
 
-    if candidate.get("institutional_sponsorship_pct", 0) >= 20:
-        score += 10
     if _is_top_half_sector(sector_row):
         score += 10
-    if candidate.get("has_buy_activity"):
-        score += 10
 
-    # Skip-if-absent: None means "not yet scraped," not "flat" -- applying
-    # neither bonus nor penalty keeps the score honest about what it
-    # actually knows.
-    if candidate.get("fii_trend") == "INCREASING":
-        score += 15
-    if candidate.get("dii_trend") == "INCREASING":
-        score += 8
-    if candidate.get("promoter_trend") == "INCREASING":
-        score += 5
-    if candidate.get("promoter_trend") == "DECREASING":
-        score -= 15
+    if not disable_fundamental_signals:
+        if candidate.get("institutional_sponsorship_pct", 0) >= 20:
+            score += 10
+        if candidate.get("has_buy_activity"):
+            score += 10
+
+        # Skip-if-absent: None means "not yet scraped," not "flat" --
+        # applying neither bonus nor penalty keeps the score honest about
+        # what it actually knows.
+        if candidate.get("fii_trend") == "INCREASING":
+            score += 15
+        if candidate.get("dii_trend") == "INCREASING":
+            score += 8
+        if candidate.get("promoter_trend") == "INCREASING":
+            score += 5
+        if candidate.get("promoter_trend") == "DECREASING":
+            score -= 15
+        if candidate.get("margin_trend_yoy") == "CONTRACTING":
+            score -= 10
 
     if candidate.get("RSI_14", 0) > 70:
-        score -= 10
-    if candidate.get("margin_trend_yoy") == "CONTRACTING":
         score -= 10
     if sector_row.get("Pct_Uptrend", 100) < 30:
         score -= 15
@@ -248,9 +277,14 @@ def _is_low_delivery_conviction(candidate: dict) -> bool:
     return delivery_pct is not None and delivery_avg is not None and delivery_pct < delivery_avg
 
 
-def get_fakeout_risk_flags(candidate: dict, sector_row: dict) -> list[str]:
+def get_fakeout_risk_flags(candidate: dict, sector_row: dict, disable_fundamental_signals: bool = False) -> list[str]:
     """Surfaces *why* something might be a fakeout as named flags, not
     just a quieter score.
+
+    disable_fundamental_signals=True skips the two fundamental-sourced
+    flags (MARGIN_QUALITY_CONCERN, PROMOTER_STAKE_DECLINING) -- same
+    lookahead-bias reason as compute_score's flag. The technical flags
+    (delivery conviction, sector breadth, RSI) are unaffected.
 
     WEAK_VOLUME_CONFIRMATION is still absent here even though
     pattern_engine.py now persists the granular Price_Crossed_Pivot/
@@ -269,10 +303,12 @@ def get_fakeout_risk_flags(candidate: dict, sector_row: dict) -> list[str]:
         flags.append("ISOLATED_MOVE_NO_SECTOR_TAILWIND")
     if candidate.get("RSI_14", 0) > 70:
         flags.append("TECHNICALLY_OVEREXTENDED")
-    if candidate.get("margin_trend_yoy") == "CONTRACTING":
-        flags.append("MARGIN_QUALITY_CONCERN")
-    if candidate.get("promoter_trend") == "DECREASING":
-        flags.append("PROMOTER_STAKE_DECLINING")
+
+    if not disable_fundamental_signals:
+        if candidate.get("margin_trend_yoy") == "CONTRACTING":
+            flags.append("MARGIN_QUALITY_CONCERN")
+        if candidate.get("promoter_trend") == "DECREASING":
+            flags.append("PROMOTER_STAKE_DECLINING")
 
     return flags
 
@@ -306,16 +342,34 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
     }
 
 
-def categorize(candidate: dict, sector_row: dict, market_verdict: str, pattern_details: dict | None = None) -> dict:
+def categorize(
+    candidate: dict,
+    sector_row: dict,
+    market_verdict: str,
+    pattern_details: dict | None = None,
+    disable_fundamental_signals: bool = False,
+) -> dict:
     """Full Leadership-strategy decision: disqualifiers first (AVOID
     immediately, regardless of market/sector/score), then the cascade
     ceiling from market + sector verdicts, then the 0-100 score -- the
     final category is always the lower of the score-based result and
     that ceiling, never the score alone.
+
+    disable_fundamental_signals=True is for backtesting/replay_engine.py:
+    it genuinely skips the ROCE/D_E disqualifiers, the EARNINGS_PROXIMITY
+    cap, and every fundamental-sourced score modifier/flag, rather than
+    letting them fail closed on data that was never fetched for a
+    historical replay date. This is different from the live path's
+    "missing data fails closed" behavior (see FUNDAMENTAL_DISQUALIFIERS'
+    own comment) -- here the checks are deliberately not run at all, not
+    run and made to fail one particular way. Default False preserves the
+    exact live-path behavior.
     """
     pattern_details = pattern_details or {}
 
-    for check in DISQUALIFIERS:
+    disqualifiers = TECHNICAL_DISQUALIFIERS if disable_fundamental_signals else DISQUALIFIERS
+
+    for check in disqualifiers:
         if check(candidate):
             return {
                 "symbol": candidate.get("symbol"),
@@ -334,11 +388,12 @@ def categorize(candidate: dict, sector_row: dict, market_verdict: str, pattern_d
     sector_verdict = get_sector_health_verdict(sector_row)
     ceiling = get_ceiling(market_verdict, sector_verdict)
 
-    caps_applied = [name for check, name in INDEPENDENT_CAPS if check(candidate)]
+    independent_caps = [] if disable_fundamental_signals else INDEPENDENT_CAPS
+    caps_applied = [name for check, name in independent_caps if check(candidate)]
     if caps_applied:
         ceiling = min(ceiling, "ALERT_WATCHLIST", key=lambda c: CATEGORY_RANK[c])
 
-    score = compute_score(candidate, sector_row)
+    score = compute_score(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals)
 
     if score < 40:
         score_based_category = "AVOID"
@@ -364,7 +419,7 @@ def categorize(candidate: dict, sector_row: dict, market_verdict: str, pattern_d
         "sector_health_verdict": sector_verdict,
         "confidence_score": score,
         "caps_applied": caps_applied,
-        "fakeout_risk_flags": get_fakeout_risk_flags(candidate, sector_row),
+        "fakeout_risk_flags": get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals),
         "multiple_patterns_confirmed": candidate.get("Multiple_Patterns_Confirmed", False),
         "entry": entry,
         "stop_loss": stop_loss,
