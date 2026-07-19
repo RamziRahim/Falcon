@@ -27,7 +27,7 @@ import pytest
 from technical_analysis.pattern_engine import PatternEngine
 
 
-def _uptrend_flat_base_breakout_df() -> pd.DataFrame:
+def _uptrend_flat_base_breakout_df(include_delivery_pct: bool = False) -> pd.DataFrame:
     wave1_down = np.linspace(90, 70, 10)
     wave1_up = np.linspace(71, 95, 10)
     wave2_down = np.linspace(94, 80, 10)
@@ -40,11 +40,18 @@ def _uptrend_flat_base_breakout_df() -> pd.DataFrame:
     n = len(closes)
     volumes = [100_000] * (n - 1) + [300_000]
 
-    return pd.DataFrame({
+    df = pd.DataFrame({
         "Date": pd.date_range("2024-01-01", periods=n, freq="D"),
         "Open": closes, "High": closes * 1.001, "Low": closes * 0.999, "Close": closes,
         "Volume": volumes, "Volume_SMA_20": [100_000] * n,
     })
+
+    if include_delivery_pct:
+        # Deterministic ramp (0, 1, 2, ..., n-1) so the last row's trailing
+        # 20-day mean is hand-computable: mean(n-20 .. n-1).
+        df["Delivery_Pct"] = np.arange(n, dtype=float)
+
+    return df
 
 
 NEW_COLUMNS = [
@@ -95,3 +102,42 @@ class TestPersistedGranularPatternColumns:
         assert last_row["Is_Cup_Handle_Setup"] == False
         assert pd.isna(last_row["Cup_Handle_Pivot_Level"])
         assert pd.isna(last_row["Cup_Handle_Low"])
+
+
+class TestDeliveryPct20dAvg:
+
+    def test_rolling_mean_matches_hand_computed_value(self, tmp_path):
+        src_dir = tmp_path / "technical"
+        dest_dir = tmp_path / "patterns"
+        src_dir.mkdir()
+
+        df = _uptrend_flat_base_breakout_df(include_delivery_pct=True)
+        df.to_parquet(src_dir / "TESTCO.NS.parquet")
+
+        engine = PatternEngine(src_dir=str(src_dir), dest_dir=str(dest_dir))
+        engine.execute_pipeline()
+
+        output = pd.read_parquet(dest_dir / "TESTCO.NS.parquet")
+        last_row = output.iloc[-1]
+
+        # Delivery_Pct is arange(72) = 0..71; the trailing 20-day window
+        # at the last row is 52..71, mean = 61.5 -- hand-computed, not
+        # asserted against pandas' own rolling() output.
+        assert last_row["Delivery_Pct_20d_avg"] == pytest.approx(61.5)
+
+    def test_none_not_crash_when_delivery_pct_column_absent(self, tmp_path):
+        src_dir = tmp_path / "technical"
+        dest_dir = tmp_path / "patterns"
+        src_dir.mkdir()
+
+        # No Delivery_Pct column at all -- e.g. NSE wasn't the active
+        # data source for this fetch.
+        df = _uptrend_flat_base_breakout_df(include_delivery_pct=False)
+        assert "Delivery_Pct" not in df.columns
+        df.to_parquet(src_dir / "TESTCO.NS.parquet")
+
+        engine = PatternEngine(src_dir=str(src_dir), dest_dir=str(dest_dir))
+        engine.execute_pipeline()  # must not raise
+
+        output = pd.read_parquet(dest_dir / "TESTCO.NS.parquet")
+        assert pd.isna(output.iloc[-1]["Delivery_Pct_20d_avg"])

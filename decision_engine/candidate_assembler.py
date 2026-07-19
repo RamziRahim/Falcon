@@ -38,17 +38,10 @@ Expected upstream shapes (confirmed real, not guessed)
 `scoring_row` : dict -- one row from scoring.scoring_engine.score_universe()
     (or score_ticker()): Rel_Vol, RS_Rating, Sector.
 
--------------------------------------------------------------------------
-Known gap NOT solved here: Delivery_Pct_20d_avg
--------------------------------------------------------------------------
-leadership_decision_engine.py's own contract calls this "caller-computed
-... not yet a persisted column anywhere in the pipeline." That's still
-true after this module -- assemble_candidate() reads it straight off
-pattern_row (so it works if some future caller adds it there), but
-nothing in this codebase computes it yet. A real fast-follow: persist a
-Delivery_Pct_20d_avg column in pattern_engine.py the same way Volume_SMA_20
-already exists, rather than leaving every caller to roll their own
-rolling average.
+Delivery_Pct_20d_avg is now a real persisted column (pattern_engine.py
+computes it via a rolling 20-day mean of Delivery_Pct, same defensive
+pattern as Volume_SMA_20) -- assemble_candidate() reads it straight off
+pattern_row like everything else here, no special handling needed.
 ===============================================================================
 """
 from __future__ import annotations

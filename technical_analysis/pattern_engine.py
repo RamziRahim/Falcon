@@ -174,6 +174,17 @@ class PatternEngine:
             df["Multiple_Patterns_Confirmed"] = multiple_patterns_confirmed
             df["Price_In_FVG"] = fvg["is_price_in_fvg"]
 
+            # Rolling 20-day delivery-% baseline -- same defensive pattern
+            # already used for Volume_SMA_20 elsewhere (computed inline,
+            # not itself a persisted column). Without this,
+            # leadership_decision_engine.py's LOW_DELIVERY_CONVICTION
+            # check silently compares against its hardcoded 100 fallback
+            # in real usage, since nothing computed a real average before.
+            df["Delivery_Pct_20d_avg"] = (
+                df["Delivery_Pct"].rolling(window=20).mean()
+                if "Delivery_Pct" in df.columns else None
+            )
+
             # Granular per-pattern breakout sub-fields -- needed for
             # WEAK_VOLUME_CONFIRMATION (can't be computed today from just
             # the combined Is_X_Breakout booleans above) and for the

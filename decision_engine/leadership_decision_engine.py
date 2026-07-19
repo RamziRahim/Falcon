@@ -56,8 +56,8 @@ Expected `candidate` keys:
     RSI_14: float                              (real field -- technical_analysis/indicators/momentum.py)
     ATR_14: float                              (real field -- technical_analysis/indicators/volatility.py)
     Delivery_Pct: float                        (real field -- market_data/providers/nse_provider.py)
-    Delivery_Pct_20d_avg: float                (caller-computed rolling average; not yet a
-                                                 persisted column anywhere in the pipeline)
+    Delivery_Pct_20d_avg: float                (real field -- pattern_engine.py, rolling
+                                                 20-day mean of Delivery_Pct)
     margin_trend_yoy: str | None               ("EXPANDING"/"CONTRACTING"/"FLAT" -- real field,
                                                  fundamental_analysis/corporate_engine.py)
     days_to_earnings: int                      (real field -- corporate_engine.py, default 999)
@@ -233,14 +233,16 @@ def compute_score(candidate: dict, sector_row: dict) -> float:
 
 def _is_low_delivery_conviction(candidate: dict) -> bool:
     """True when Delivery_Pct is genuinely below its own 20-day average.
-    Both values can legitimately be None (Delivery_Pct_20d_avg isn't
-    persisted anywhere in the pipeline yet -- see candidate_assembler.py's
-    docstring) -- `.get(key, default)` only falls back to `default` when
-    the key is *absent*, not when it's present but None, so a naive
+    Delivery_Pct can be None whenever NSE wasn't the active data source
+    for that fetch -- `.get(key, default)` only falls back to `default`
+    when the key is *absent*, not when it's present but None, so a naive
     `candidate.get("Delivery_Pct_20d_avg", 100)` still returns None here
-    and crashes the comparison the first time real assembled data hits
-    this path (confirmed by tracing a real candidate through categorize()
-    end-to-end)."""
+    and crashes the comparison (confirmed by tracing a real candidate
+    through categorize() end-to-end). Separately, Delivery_Pct_20d_avg
+    can be NaN (not None) during a ticker's first 19 bars of history,
+    where pandas' rolling(20) hasn't filled yet -- that case doesn't need
+    an explicit guard, since any comparison against NaN returns False
+    rather than raising, so it safely just never fires the flag."""
     delivery_pct = candidate.get("Delivery_Pct")
     delivery_avg = candidate.get("Delivery_Pct_20d_avg")
     return delivery_pct is not None and delivery_avg is not None and delivery_pct < delivery_avg
