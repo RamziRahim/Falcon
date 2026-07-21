@@ -137,6 +137,12 @@ def run_backtest(
                 "days_held": outcome["days_held"],
                 "target_pct": ((decision["target"] - entry_price) / entry_price) * 100,
                 "stop_pct": ((entry_price - decision["stop_loss"]) / entry_price) * 100,
+                # categorize() already computes both of these for every
+                # decision -- without them, an ALERT_WATCHLIST row is
+                # indistinguishable from "genuinely scored low" vs "strong
+                # score, capped by the regime/sector ceiling."
+                "confidence_score": decision["confidence_score"],
+                "caps_applied": ",".join(decision["caps_applied"]),
             })
 
     return pd.DataFrame(trade_records)
