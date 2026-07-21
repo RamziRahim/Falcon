@@ -41,13 +41,18 @@ build_scored_universe_as_of() does this once per date; run_backtest.py
 (Part D) reuses that result across every ticker sampled on the same date
 rather than recomputing it once per ticker.
 
-India VIX has no locally cached historical time series in this codebase
-(scoring.market_regime.get_current_vix() only ever fetches "now," 24h-
-cached) -- unlike benchmark_history, which genuinely is historical and
-truncatable. scoring.market_regime.get_vix_history() was added to fetch a
-real historical VIX range once per backtest run; this module truncates
-that result locally per replay date, mirroring how benchmark_history
-already works for distribution days.
+Market regime is trend-based, not VIX-based: NIFTY's own Trend_State
+(same market_structure_engine already used per-stock, applied to
+benchmark_history) replaced VIX as the regime signal -- validated first
+via backtesting/regime_threshold_calibration.py's
+analyze_trend_state_vs_forward_returns() (UPTREND/CHOPPY/DOWNTREND showed
+the correct monotonic ordering; VIX's own validation showed the opposite
+direction at a 20-day horizon). See
+leadership_decision_engine.get_market_regime_verdict()'s own docstring
+for the full reasoning. vix_history is still threaded through this
+module's signature (fetched by callers, no longer read here) -- VIX
+isn't discarded, just no longer the regime signal itself; flagged as a
+candidate input elsewhere (e.g. stop-loss width) in a future task.
 ===============================================================================
 """
 from __future__ import annotations
@@ -102,15 +107,6 @@ def _trend_state_of_truncated(df: pd.DataFrame) -> str:
         return "UNKNOWN"
     macro_pivots = macro_swing_detector.detect_swings(df)
     return market_structure_engine.analyze_structure(df, macro_pivots)["trend_state"]
-
-
-def _vix_regime_as_of(vix_history: pd.DataFrame | None, as_of_date: pd.Timestamp) -> str | None:
-    if vix_history is None or vix_history.empty:
-        return None
-    truncated = vix_history[vix_history["Date"] <= as_of_date]
-    if truncated.empty:
-        return None
-    return truncated.iloc[-1]["VIX_Regime"]
 
 
 def build_scored_universe_as_of(
@@ -181,10 +177,10 @@ def replay_decision_as_of(
         ticker in the tracked Leadership universe, including `ticker`
         itself -- needed because RS Rating is a percentile rank against
         the whole universe, not this ticker in isolation.
-    vix_history : scoring.market_regime.get_vix_history()'s output
-        (or None if that fetch failed -- degrades to a conservative
-        UNFAVORABLE regime verdict rather than crashing or guessing
-        FAVORABLE).
+    vix_history : scoring.market_regime.get_vix_history()'s output. No
+        longer read for the regime verdict itself (trend-based now, see
+        module docstring) -- kept in the signature since it's still
+        fetched by callers and may back a future stop-loss-width use.
     precomputed_universe_scoring : optional (scored_universe, sector_ranking,
         rs_ratings) tuple from build_scored_universe_as_of(), so callers
         replaying many tickers at the same as_of_date don't each
@@ -222,19 +218,24 @@ def replay_decision_as_of(
         ),
     }
 
-    # 3. Market regime (VIX + distribution days), truncated the same way.
+    # 3. Market regime -- NIFTY's own Trend_State (trend-based, not VIX-based;
+    # see get_market_regime_verdict()'s own docstring for why VIX was
+    # replaced) plus distribution days, truncated the same way. vix_history
+    # is no longer used for the regime verdict itself -- kept as a
+    # parameter for now since it's still fetched by callers and may back a
+    # future stop-loss-width use, per the redesign's own scope note.
     truncated_benchmark = _truncate(benchmark_history, as_of_date)
     distribution_days = count_distribution_days(truncated_benchmark)
-    vix_regime = _vix_regime_as_of(vix_history, as_of_date)
+    nifty_trend_state = _trend_state_of_truncated(truncated_benchmark)
 
-    if vix_regime is not None and distribution_days is not None:
-        market_verdict = get_market_regime_verdict(vix_regime, distribution_days)
+    if nifty_trend_state != "UNKNOWN" and distribution_days is not None:
+        market_verdict = get_market_regime_verdict(nifty_trend_state, distribution_days)
     else:
         # Conservative default when regime can't be determined for this
-        # date (missing VIX history or too little benchmark history)
-        # rather than silently defaulting to FAVORABLE -- same
-        # fail-closed philosophy as the live path's missing-fundamentals
-        # handling, applied here to missing-regime-data instead.
+        # date (too little benchmark history) rather than silently
+        # defaulting to FAVORABLE -- same fail-closed philosophy as the
+        # live path's missing-fundamentals handling, applied here to
+        # missing-regime-data instead.
         market_verdict = "UNFAVORABLE"
 
     # 4. Scoring -- RS Rating + sector breadth, from the whole truncated

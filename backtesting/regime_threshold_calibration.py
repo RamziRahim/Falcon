@@ -113,6 +113,43 @@ def analyze_distribution_days_vs_forward_returns(
     )
 
 
+MIN_TREND_STATE_ROWS = 20  # same floor get_market_trend_state() itself uses
+
+
+def analyze_trend_state_vs_forward_returns(
+    benchmark_history: pd.DataFrame, forward_days: int = FORWARD_DAYS_DEFAULT
+) -> pd.DataFrame:
+    """
+    For every trading day, NIFTY's own Trend_State AS OF that day (computed
+    via get_market_trend_state() against the history truncated up to that
+    day only -- not the single "current" trend state, which would leak
+    future structure into every earlier day) vs NIFTY's forward return
+    from that day. Same structure as analyze_vix_vs_forward_returns,
+    bucketed by UPTREND/DOWNTREND/CHOPPY instead of VIX decile.
+
+    This is the validation gate for the trend-based regime redesign: if
+    trend state doesn't show a real relationship here either, that's a
+    more fundamental finding worth stopping for, not something to wire
+    into the cascade anyway.
+    """
+    from scoring.market_regime import get_market_trend_state
+
+    df = _normalize_dates(benchmark_history).sort_values("Date").reset_index(drop=True)
+    df["forward_return_pct"] = (df["Close"].shift(-forward_days) / df["Close"] - 1) * 100
+
+    trend_states = [None] * len(df)
+    for i in range(MIN_TREND_STATE_ROWS - 1, len(df)):
+        trend_states[i] = get_market_trend_state(df.iloc[: i + 1])
+    df["trend_state"] = trend_states
+
+    df = df.dropna(subset=["forward_return_pct", "trend_state"])
+
+    return df.groupby("trend_state").agg(
+        avg_forward_return=("forward_return_pct", "mean"),
+        n_days=("forward_return_pct", "count"),
+    )
+
+
 if __name__ == "__main__":
     from scoring.benchmark import get_benchmark_history
     from scoring.market_regime import get_vix_history
@@ -125,3 +162,6 @@ if __name__ == "__main__":
 
     print("\n=== Distribution-day bucket vs 20-day forward NIFTY return ===")
     print(analyze_distribution_days_vs_forward_returns(benchmark_history).to_string())
+
+    print("\n=== NIFTY Trend_State vs 20-day forward NIFTY return ===")
+    print(analyze_trend_state_vs_forward_returns(benchmark_history).to_string())

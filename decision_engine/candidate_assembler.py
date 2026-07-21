@@ -136,15 +136,25 @@ def assemble_candidate(pattern_row: dict, fundamentals: dict, scoring_row: dict,
     return candidate
 
 
-def assemble_sector_row(sector_ranking_df, ticker_sector: str) -> dict:
+def assemble_sector_row(sector_ranking_df, ticker_sector: str, sector_index_trend: str | None = None) -> dict:
     """One row from scoring.sector_rotation.rank_sectors(), plus
     Total_Sectors -- confirmed missing from rank_sectors() itself (each
     row only knows its own Rank, not how many sectors exist in total),
     and required by leadership_decision_engine.py's "top half of ranking"
     check.
+
+    sector_index_trend : optional UPTREND/DOWNTREND/CHOPPY from
+        scoring.sector_indices.get_sector_index_trend() (the real
+        sector-index-based signal, not the Pct_Uptrend/Avg_RS_Rating
+        breadth proxy already in sector_ranking_df). Passed through as
+        Sector_Index_Trend for get_sector_health_verdict() to combine
+        with the metrics -- omitted (None) when the caller hasn't wired
+        scoring.sector_indices in yet, which get_sector_health_verdict()
+        already handles by falling back to its metrics-only verdict.
     """
     row = sector_ranking_df.loc[ticker_sector].to_dict()
     row["Total_Sectors"] = len(sector_ranking_df)  # NOT the candidate's own Rank
+    row["Sector_Index_Trend"] = sector_index_trend
     return row
 
 

@@ -94,26 +94,90 @@ from __future__ import annotations
 CATEGORY_RANK = {"AVOID": 0, "ALERT_WATCHLIST": 1, "EXECUTE": 2}
 
 
-def get_market_regime_verdict(vix_regime: str, distribution_day_count: int) -> str:
+def get_market_regime_verdict(nifty_trend_state: str, distribution_day_count: int) -> str:
     """Returns FAVORABLE / CAUTION / UNFAVORABLE.
 
-    Thresholds are reasonable starting points, not yet backtested -- same
-    caveat as everywhere else in this project.
+    Trend-based, not VIX-based: backtesting/regime_threshold_calibration.py's
+    analyze_vix_vs_forward_returns() found (9.5 years, COVID-excluded) that
+    high VIX does NOT precede worse NIFTY forward returns at a 20-day
+    horizon -- if anything, mildly the opposite. VIX measures fear/
+    volatility, a related but different concept from what O'Neil/Minervini
+    "market health" actually means: trend direction. Conflating the two
+    was the likely root cause, not a threshold calibration error.
+
+    Replaced with NIFTY's own Trend_State (scoring.market_regime.get_market_trend_state(),
+    the same market_structure_engine already used per-stock, applied to the
+    benchmark). Validated first via analyze_trend_state_vs_forward_returns()
+    before wiring in: UPTREND averaged +1.19% forward return, CHOPPY +0.95%,
+    DOWNTREND +0.53% -- the correct monotonic ordering, unlike VIX.
+
+    Distribution days kept as a secondary modifier -- its flat result
+    checked alone doesn't necessarily mean it adds nothing combined with
+    trend state, just that it doesn't work alone; worth re-testing this
+    specific combination before the next full backtest, not assumed here.
+
+    VIX itself isn't discarded -- flagged as a candidate input elsewhere
+    (e.g. stop-loss width) in a future task, not part of this one.
     """
-    if vix_regime == "ELEVATED" or distribution_day_count >= 6:
+    if nifty_trend_state == "DOWNTREND":
         return "UNFAVORABLE"
-    if distribution_day_count >= 3:
+    if nifty_trend_state == "CHOPPY" or distribution_day_count >= 3:
         return "CAUTION"
     return "FAVORABLE"
 
 
-def get_sector_health_verdict(sector_row: dict) -> str:
-    """Returns STRONG / NEUTRAL / WEAK for the candidate's sector."""
+def _metrics_based_sector_verdict(sector_row: dict) -> str:
     if sector_row["Pct_Uptrend"] >= 60 and sector_row["Avg_RS_Rating"] >= 60:
         return "STRONG"
     if sector_row["Pct_Uptrend"] < 30 or sector_row["Avg_RS_Rating"] < 40:
         return "WEAK"
     return "NEUTRAL"
+
+
+def get_sector_health_verdict(sector_row: dict) -> str:
+    """Returns STRONG / NEUTRAL / WEAK for the candidate's sector.
+
+    Combines the real sector index's own trend state
+    (scoring.sector_indices.get_sector_index_trend() -- UPTREND/DOWNTREND/CHOPPY
+    against the sector's actual NSE index, e.g. NIFTY IT) with the existing
+    Pct_Uptrend/Avg_RS_Rating breadth metrics (computed from Falcon's own
+    tracked-candidate universe, not the sector's real constituents) --
+    kept both rather than replacing one with the other. Pct_Uptrend still
+    carries information (breadth among the specific candidates being
+    screened) even though it isn't true sector-wide breadth, so the two
+    are combined rather than letting one unconditionally win:
+      - real index DOWNTREND caps at WEAK regardless of the metrics --
+        a small-sample proxy showing strength would be misleading if the
+        sector itself is actually falling.
+      - real index UPTREND + metrics STRONG confirms STRONG.
+      - real index UPTREND + metrics WEAK is a genuine disagreement
+        between the real index and tracked-candidate breadth -- softened
+        to NEUTRAL rather than confidently picking a side.
+      - CHOPPY, or any other combination, defers to the metrics-only
+        verdict unchanged.
+
+    sector_row["Sector_Index_Trend"] is optional -- absent (None) when
+    the caller hasn't wired scoring.sector_indices in yet, or the sector
+    has no real index mapping (see SECTOR_INDEX_MAP). Falls back to the
+    metrics-only verdict in that case, same as before this combination
+    existed.
+    """
+    metrics_verdict = _metrics_based_sector_verdict(sector_row)
+    sector_index_trend = sector_row.get("Sector_Index_Trend")
+
+    if sector_index_trend is None:
+        return metrics_verdict
+
+    if sector_index_trend == "DOWNTREND":
+        return "WEAK"
+
+    if sector_index_trend == "UPTREND" and metrics_verdict == "STRONG":
+        return "STRONG"
+
+    if sector_index_trend == "UPTREND" and metrics_verdict == "WEAK":
+        return "NEUTRAL"
+
+    return metrics_verdict
 
 
 def _is_top_half_sector(sector_row: dict) -> bool:

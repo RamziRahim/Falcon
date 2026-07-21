@@ -8,10 +8,12 @@ Package     : Scoring
 
 Purpose
 -------
-Market-regime awareness: India VIX level/bucket (A1) and O'Neil-style
-distribution-day counting on the benchmark index (A2). Cheap, standalone
-data -- not wired into any decision logic yet (deferred to the Tier 1/2
-decision layer).
+Market-regime awareness: NIFTY 50's own trend state (get_market_trend_state,
+the primary regime signal as of the trend-based redesign -- see its own
+docstring for why this replaced VIX), O'Neil-style distribution-day
+counting on the benchmark index, and India VIX level/bucket (kept for
+other future uses, e.g. stop-loss width -- no longer the regime signal
+itself).
 
 India VIX columns confirmed via a live call to nselib's
 capital_market.india_vix_data() and against nselib/constants.py's
@@ -187,6 +189,45 @@ def get_vix_history(from_date: str, to_date: str) -> pd.DataFrame | None:
 
         logger.warning("India VIX history fetch failed for %s to %s: %s", from_date, to_date, ex)
         return None
+
+
+MIN_TREND_STATE_ROWS = 20  # same floor pattern_engine.py/backtesting use -- a
+                           # shorter view can't support real fractal detection
+
+
+def get_market_trend_state(benchmark_history: pd.DataFrame) -> str:
+    """
+    Runs the existing market_structure_engine against NIFTY 50's own price
+    history -- the same code already computing Trend_State for every
+    individual stock, just applied to the benchmark instead. Returns
+    UPTREND / DOWNTREND / CHOPPY, the same three values already used
+    everywhere else, no new vocabulary.
+
+    Replaces India VIX as the market-regime signal: confirmed via
+    backtesting/regime_threshold_calibration.py (9.5 years, COVID-excluded)
+    that high VIX does NOT precede worse NIFTY forward returns at a
+    20-day horizon in this data -- if anything, mildly the opposite. VIX
+    measures fear/volatility, a related but different concept from what
+    O'Neil/Minervini "market health" actually means: trend direction.
+    Conflating the two was the likely root cause, not a threshold
+    calibration error. VIX itself isn't discarded -- flagged as a
+    candidate input elsewhere (e.g. stop-loss width) in a future task,
+    not part of this one.
+
+    Local imports (not module-level) deliberately: this module stays
+    lightweight for callers that only need VIX/distribution-day data,
+    without pulling in pattern_engine.py's full detector-import chain.
+    """
+    from technical_analysis.pattern_engine import macro_swing_detector
+    from technical_analysis.pattern_system.market_structure import market_structure_engine
+
+    if benchmark_history is None or len(benchmark_history) < MIN_TREND_STATE_ROWS:
+        return "CHOPPY"  # honestly-unknown default -- same as market_structure_engine's
+                          # own fallback when it can't determine a real trend
+
+    macro_pivots = macro_swing_detector.detect_swings(benchmark_history)
+    structure = market_structure_engine.analyze_structure(benchmark_history, macro_pivots)
+    return structure["trend_state"]
 
 
 def count_distribution_days(benchmark_df: pd.DataFrame, lookback: int = 25) -> int | None:

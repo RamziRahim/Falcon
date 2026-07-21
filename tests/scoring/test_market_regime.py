@@ -13,7 +13,7 @@ import pandas as pd
 import pytest
 
 import scoring.market_regime as market_regime
-from scoring.market_regime import count_distribution_days, get_current_vix
+from scoring.market_regime import count_distribution_days, get_current_vix, get_market_trend_state
 
 
 def _vix_response(level: float, change_pct: float = 1.0) -> pd.DataFrame:
@@ -166,3 +166,49 @@ class TestDistributionDayCount:
 
     def test_empty_dataframe_returns_none_not_crash(self):
         assert count_distribution_days(pd.DataFrame()) is None
+
+
+class TestGetMarketTrendState:
+    """get_market_trend_state() is a thin wrapper around the already-tested
+    market_structure_engine -- no new detection logic here, just confirming
+    the wrapper correctly passes through whatever trend_state the engine
+    reports. Patched at the engine's own module (technical_analysis.pattern_system.market_structure),
+    since get_market_trend_state() imports it locally inside the function,
+    not at scoring.market_regime's module level."""
+
+    def _benchmark_df(self, n: int = 30) -> pd.DataFrame:
+        return pd.DataFrame({
+            "Date": pd.date_range("2024-01-01", periods=n, freq="D"),
+            "Open": [100.0] * n, "High": [101.0] * n, "Low": [99.0] * n,
+            "Close": [100.0] * n, "Volume": [100_000] * n,
+        })
+
+    def test_passes_through_uptrend_from_the_engine(self):
+        with patch(
+            "technical_analysis.pattern_system.market_structure.market_structure_engine.analyze_structure",
+            return_value={"trend_state": "UPTREND"},
+        ):
+            assert get_market_trend_state(self._benchmark_df()) == "UPTREND"
+
+    def test_passes_through_downtrend_from_the_engine(self):
+        with patch(
+            "technical_analysis.pattern_system.market_structure.market_structure_engine.analyze_structure",
+            return_value={"trend_state": "DOWNTREND"},
+        ):
+            assert get_market_trend_state(self._benchmark_df()) == "DOWNTREND"
+
+    def test_passes_through_choppy_from_the_engine(self):
+        with patch(
+            "technical_analysis.pattern_system.market_structure.market_structure_engine.analyze_structure",
+            return_value={"trend_state": "CHOPPY"},
+        ):
+            assert get_market_trend_state(self._benchmark_df()) == "CHOPPY"
+
+    def test_insufficient_history_returns_choppy_without_calling_the_engine(self):
+        short_df = self._benchmark_df(n=5)  # under MIN_TREND_STATE_ROWS
+        with patch(
+            "technical_analysis.pattern_system.market_structure.market_structure_engine.analyze_structure"
+        ) as mock_analyze:
+            result = get_market_trend_state(short_df)
+        assert result == "CHOPPY"
+        mock_analyze.assert_not_called()
