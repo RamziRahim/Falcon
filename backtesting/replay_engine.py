@@ -81,6 +81,7 @@ NO_DATA_RESULT_TEMPLATE = {
     "confidence_score": 0.0,
     "caps_applied": [],
     "fakeout_risk_flags": [],
+    "contributing_factors": [],
     "entry": None,
     "stop_loss": None,
     "target": None,
@@ -264,8 +265,14 @@ def replay_decision_as_of(
 
     # 5. candidate_assembler + leadership_decision_engine, called exactly
     # as they would be live -- fundamentals deliberately empty/disabled
-    # per this module's scope decision (see module docstring).
-    candidate = assemble_candidate(pattern_row, fundamentals={}, scoring_row=scoring_row, symbol=ticker)
+    # per this module's scope decision (see module docstring). enriched
+    # is the truncated, indicator-computed history already built in step
+    # 1 -- passed through so MACD signal detection sees the same
+    # trailing Close/MACD_Hist bars a live scan would, not just today's
+    # single flattened row.
+    candidate = assemble_candidate(
+        pattern_row, fundamentals={}, scoring_row=scoring_row, symbol=ticker, pattern_history_df=enriched,
+    )
     pattern_details = assemble_pattern_details(pattern_row)
 
     return categorize(

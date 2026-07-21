@@ -277,7 +277,8 @@ def compute_score(candidate: dict, sector_row: dict, disable_fundamental_signals
     FII/DII/promoter trend, margin trend) -- for backtesting/replay_engine.py,
     where today's fundamentals can't legitimately judge a trade from years
     ago. Technical/regime signals (pattern points, FVG, liquidity sweep,
-    RS_Rating, sector breadth, RSI, delivery conviction) are unaffected.
+    RS_Rating, sector breadth, RSI, delivery conviction, MACD signal) are
+    unaffected.
     """
     score = 0.0
 
@@ -320,6 +321,20 @@ def compute_score(candidate: dict, sector_row: dict, disable_fundamental_signals
         score -= 15
     if _is_low_delivery_conviction(candidate):
         score -= 15
+
+    # Bidirectional, not negative-only: momentum actually confirming the
+    # breakout direction is real signal, not just the absence of a
+    # warning -- see technical_analysis/pattern_system/macd_signal.py's
+    # own docstring for why crediting alignment (not just penalizing
+    # divergence) is a deliberate, principled choice. -12 for divergence
+    # is slightly stronger than the +10 bonus: a breakout with active
+    # momentum divergence has a historically higher failure rate than a
+    # setup without MACD confirmation still working out.
+    macd_signal = candidate.get("macd_signal", "NEUTRAL")
+    if macd_signal == "BULLISH_ALIGNMENT":
+        score += 10
+    elif macd_signal == "BEARISH_DIVERGENCE":
+        score -= 12
 
     return round(max(0.0, min(100.0, score)), 1)
 
@@ -368,6 +383,9 @@ def get_fakeout_risk_flags(candidate: dict, sector_row: dict, disable_fundamenta
     if candidate.get("RSI_14", 0) > 70:
         flags.append("TECHNICALLY_OVEREXTENDED")
 
+    if candidate.get("macd_signal") == "BEARISH_DIVERGENCE":
+        flags.append("MACD_BEARISH_DIVERGENCE")
+
     if not disable_fundamental_signals:
         if candidate.get("margin_trend_yoy") == "CONTRACTING":
             flags.append("MARGIN_QUALITY_CONCERN")
@@ -375,6 +393,19 @@ def get_fakeout_risk_flags(candidate: dict, sector_row: dict, disable_fundamenta
             flags.append("PROMOTER_STAKE_DECLINING")
 
     return flags
+
+
+def get_contributing_factors(candidate: dict) -> list[str]:
+    """Positive-side counterpart to get_fakeout_risk_flags() -- named
+    factors that positively confirmed the setup, not just a quieter
+    absence of warnings. Currently just MACD_MOMENTUM_ALIGNED; a natural
+    place for future positive confirmations to live alongside it."""
+    factors = []
+
+    if candidate.get("macd_signal") == "BULLISH_ALIGNMENT":
+        factors.append("MACD_MOMENTUM_ALIGNED")
+
+    return factors
 
 
 def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_pattern_result: dict | None) -> dict:
@@ -443,6 +474,7 @@ def categorize(
                 "confidence_score": 0.0,
                 "caps_applied": [],
                 "fakeout_risk_flags": [],
+                "contributing_factors": [],
                 "entry": None,
                 "stop_loss": None,
                 "target": None,
@@ -484,6 +516,7 @@ def categorize(
         "confidence_score": score,
         "caps_applied": caps_applied,
         "fakeout_risk_flags": get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals),
+        "contributing_factors": get_contributing_factors(candidate),
         "multiple_patterns_confirmed": candidate.get("Multiple_Patterns_Confirmed", False),
         "entry": entry,
         "stop_loss": stop_loss,
@@ -498,8 +531,9 @@ def categorize(
 # emergent_decision_engine.py / reversal_decision_engine.py can live
 # alongside this file later, each implementing the same output contract
 # (category/market_regime_verdict/sector_health_verdict/confidence_score/
-# caps_applied/fakeout_risk_flags/entry/stop_loss/target/supporting_data)
-# with different Tier 1/2/3 logic suited to those strategies -- Reversal
+# caps_applied/fakeout_risk_flags/contributing_factors/entry/stop_loss/
+# target/supporting_data) with different Tier 1/2/3 logic suited to those
+# strategies -- Reversal
 # in particular needs its own pattern-selection table entirely, since it
 # can't rely on VCP/continuation-pattern breakouts the way this module
 # does. This module shouldn't need to change when those get built.

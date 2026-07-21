@@ -32,11 +32,40 @@ from collections import defaultdict
 
 import pandas as pd
 
+from common.logger import get_logger
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
 from backtesting.outcome_measurement import measure_forward_outcome
 from decision_engine.leadership_decision_engine import get_best_pattern_points
+from scoring.sector_map import sector_map
+
+logger = get_logger(__name__)
 
 SIGNAL_CATEGORIES = ("EXECUTE", "ALERT_WATCHLIST")
+
+
+def populate_sector_cache(universe: list[str]) -> None:
+    """
+    Force-fetches and caches the sector for every ticker in the backtest
+    universe before the replay loop starts.
+
+    Real gap this closes: sector_map.py's 30-day cache (data/sector_map.json)
+    is populated lazily, one ticker at a time, whenever get_sector() first
+    gets called for it -- for a backtest universe assembled from
+    backtesting.universe_builder (Nifty 50 + Midcap 150) that's never been
+    scanned live before, that cache starts empty. Without pre-populating
+    it, every sector lookup during the replay loop would return "Unknown"
+    on its first (uncached) call within that run, silently breaking sector
+    health verdicts, sector RS ranking, and Pct_Uptrend grouping for most
+    of the universe -- not a crash, just quietly wrong data.
+
+    One-time step, not something that runs per replay date: sector_map's
+    own cache already has a 30-day refresh interval, so calling this once
+    before the loop starts is sufficient for the whole backtest run.
+    """
+    for ticker in universe:
+        sector = sector_map.get_sector(ticker)
+        if sector == "Unknown":
+            logger.warning("No sector data for %s -- will be grouped as Unknown", ticker)
 
 
 def _sampled_dates_for_ticker(

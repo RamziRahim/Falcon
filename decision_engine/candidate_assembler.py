@@ -46,6 +46,10 @@ pattern_row like everything else here, no special handling needed.
 """
 from __future__ import annotations
 
+import pandas as pd
+
+from technical_analysis.pattern_system.macd_signal import get_macd_signal
+
 # Naming mismatch documented in leadership_decision_engine.py's own
 # docstring: pattern_engine.py persists PascalCase Is_X_Breakout columns;
 # the decision engine's PATTERN_WEIGHTS expects lowercase is_x_breakout
@@ -88,10 +92,25 @@ def _parse_formatted_percentage(value) -> float | None:
     return None  # e.g. "DEBT_FREE", "UNKNOWN", or any other non-numeric sentinel
 
 
-def assemble_candidate(pattern_row: dict, fundamentals: dict, scoring_row: dict, symbol: str | None = None) -> dict:
+def assemble_candidate(
+    pattern_row: dict,
+    fundamentals: dict,
+    scoring_row: dict,
+    symbol: str | None = None,
+    pattern_history_df=None,
+) -> dict:
     """Builds the exact `candidate` dict leadership_decision_engine.py's
     docstring documents -- copying that field list here rather than
     re-deriving it, so the two don't drift apart.
+
+    pattern_history_df : optional multi-row OHLCV+indicator DataFrame
+        (the trailing history, not a single flattened row like
+        pattern_row) -- needed by get_macd_signal(), which reads
+        MACD_Hist/Close across several bars, not a single point-in-time
+        value. Omitted (None) degrades to "NEUTRAL": get_macd_signal()
+        itself already treats a dataframe with no MACD_Hist column as
+        "no signal available," so passing an empty DataFrame produces
+        the same graceful result without a separate code path here.
     """
     # D_E is a genuine scale mismatch, not just a formatting one:
     # corporate_engine.py's debt_to_equity comes back on the same
@@ -132,6 +151,7 @@ def assemble_candidate(pattern_row: dict, fundamentals: dict, scoring_row: dict,
         "fii_trend": fundamentals.get("fii_trend"),
         "dii_trend": fundamentals.get("dii_trend"),
         "promoter_trend": fundamentals.get("promoter_trend"),
+        "macd_signal": get_macd_signal(pattern_history_df if pattern_history_df is not None else pd.DataFrame()),
     }
     return candidate
 
