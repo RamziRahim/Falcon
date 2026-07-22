@@ -49,6 +49,8 @@ from __future__ import annotations
 import pandas as pd
 
 from technical_analysis.pattern_system.macd_signal import get_macd_signal
+from technical_analysis.liquidity_sweep import detect_liquidity_sweep
+from technical_analysis.fair_value_gap import detect_fvg
 
 # Naming mismatch documented in leadership_decision_engine.py's own
 # docstring: pattern_engine.py persists PascalCase Is_X_Breakout columns;
@@ -105,12 +107,23 @@ def assemble_candidate(
 
     pattern_history_df : optional multi-row OHLCV+indicator DataFrame
         (the trailing history, not a single flattened row like
-        pattern_row) -- needed by get_macd_signal(), which reads
-        MACD_Hist/Close across several bars, not a single point-in-time
-        value. Omitted (None) degrades to "NEUTRAL": get_macd_signal()
-        itself already treats a dataframe with no MACD_Hist column as
-        "no signal available," so passing an empty DataFrame produces
-        the same graceful result without a separate code path here.
+        pattern_row) -- needed by get_macd_signal() (reads MACD_Hist/Close
+        across several bars) and by detect_liquidity_sweep()/detect_fvg()
+        (both need a trailing window, not a single point-in-time value).
+        Omitted (None) degrades gracefully for all three: get_macd_signal()
+        already treats a dataframe with no MACD_Hist column as "no signal
+        available," and detect_liquidity_sweep()/detect_fvg() both treat
+        insufficient history as "nothing detected," not a crash -- so
+        passing an empty DataFrame produces the same graceful result
+        without a separate code path here.
+
+    liquidity_sweep_direction/fvg_direction/fvg_filled_pct are always
+    computed and included on `candidate` regardless of whether the
+    microstructure signals are actually used downstream -- assembling
+    the data is unconditional; leadership_decision_engine.categorize()'s
+    enable_microstructure_signals flag controls whether they affect the
+    score, not whether they're present here. Cheap either way (both
+    detectors are simple price-action checks, not expensive computation).
     """
     # D_E is a genuine scale mismatch, not just a formatting one:
     # corporate_engine.py's debt_to_equity comes back on the same
@@ -125,6 +138,13 @@ def assemble_candidate(
     # the disqualifier actually expects -- found by tracing a real
     # candidate through categorize() end-to-end, not assumed.
     parsed_debt_to_equity_pct = _parse_formatted_percentage(fundamentals.get("debt_to_equity"))
+
+    history = pattern_history_df if pattern_history_df is not None else pd.DataFrame()
+    sweep_result = detect_liquidity_sweep(history)
+    # len(history) - 1 is -1 when history is empty, which detect_fvg()'s
+    # own "as_of_index < 2" bounds check already rejects -- no separate
+    # empty-history branch needed here.
+    fvg_result = detect_fvg(history, as_of_index=len(history) - 1)
 
     candidate = {
         "symbol": symbol,
@@ -151,7 +171,10 @@ def assemble_candidate(
         "fii_trend": fundamentals.get("fii_trend"),
         "dii_trend": fundamentals.get("dii_trend"),
         "promoter_trend": fundamentals.get("promoter_trend"),
-        "macd_signal": get_macd_signal(pattern_history_df if pattern_history_df is not None else pd.DataFrame()),
+        "macd_signal": get_macd_signal(history),
+        "liquidity_sweep_direction": sweep_result["direction"],
+        "fvg_direction": fvg_result["direction"],
+        "fvg_filled_pct": fvg_result["gap_filled_pct"],
     }
     return candidate
 

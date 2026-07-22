@@ -74,6 +74,16 @@ Expected `candidate` keys:
                                                  kept in its real PascalCase since it's a
                                                  pure passthrough, not a scoring input this
                                                  module owns)
+    macd_signal: "BULLISH_ALIGNMENT"/"BEARISH_DIVERGENCE"/"NEUTRAL"
+                                                 (technical_analysis/pattern_system/macd_signal.py's
+                                                 get_macd_signal() output)
+    liquidity_sweep_direction: "SSL"/"BSL"/None (technical_analysis/liquidity_sweep.py's
+                                                 detect_liquidity_sweep() output; only read
+                                                 when enable_microstructure_signals=True)
+    fvg_direction: "bullish"/"bearish"/None,
+    fvg_filled_pct: float | None                (technical_analysis/fair_value_gap.py's
+                                                 detect_fvg() output; only read when
+                                                 enable_microstructure_signals=True)
 
 Expected `sector_row` keys (from scoring.sector_rotation.rank_sectors(),
 one row for the candidate's own sector, plus one caller-added field):
@@ -242,6 +252,19 @@ PATTERN_WEIGHTS = [
     ("is_bull_flag_breakout", 15),
 ]
 
+# Deliberately smaller than MACD's +10/-12: MACD is an established
+# continuous indicator (histogram slope) already validated in an earlier
+# pass; liquidity sweeps and FVGs (technical_analysis/liquidity_sweep.py,
+# technical_analysis/fair_value_gap.py) are newer, more binary ICT/SMC-
+# style microstructure checks still being EVALUATED, not yet proven, per
+# their own spec's framing -- a conservative mid-range bonus (the "+5 to
+# +8" suggested range's midpoint) avoids overweighting an unvalidated
+# signal while still being large enough to show up in a flag-on/flag-off
+# backtest comparison. Confidence boosts only, never a cap or
+# disqualifier -- see enable_microstructure_signals below.
+LIQUIDITY_SWEEP_SCORE_BONUS = 6
+FVG_SCORE_BONUS = 6
+
 
 def get_ceiling(market_verdict: str, sector_verdict: str) -> str:
     if market_verdict == "UNFAVORABLE":
@@ -267,7 +290,12 @@ def get_best_pattern_points(candidate: dict) -> tuple[int, str | None]:
     return 0, None
 
 
-def compute_score(candidate: dict, sector_row: dict, disable_fundamental_signals: bool = False) -> float:
+def compute_score(
+    candidate: dict,
+    sector_row: dict,
+    disable_fundamental_signals: bool = False,
+    enable_microstructure_signals: bool = False,
+) -> float:
     """0-100 base score (clamped), computed once the cascade ceiling from
     Steps 1-2 is already known -- the final category is always the lower
     of this score and that ceiling, never the score in isolation.
@@ -279,6 +307,14 @@ def compute_score(candidate: dict, sector_row: dict, disable_fundamental_signals
     ago. Technical/regime signals (pattern points, FVG, liquidity sweep,
     RS_Rating, sector breadth, RSI, delivery conviction, MACD signal) are
     unaffected.
+
+    enable_microstructure_signals=False (the default) skips the two new
+    ICT/SMC microstructure bonuses (liquidity sweep, Fair Value Gap)
+    entirely -- with it off, this function's output is byte-for-byte
+    identical to before these signals existed. Additive only when on:
+    never a cap, never a disqualifier, confidence boosts only (see
+    LIQUIDITY_SWEEP_SCORE_BONUS/FVG_SCORE_BONUS's own comment for why
+    these are smaller than MACD's weight).
     """
     score = 0.0
 
@@ -335,6 +371,22 @@ def compute_score(candidate: dict, sector_row: dict, disable_fundamental_signals
         score += 10
     elif macd_signal == "BEARISH_DIVERGENCE":
         score -= 12
+
+    if enable_microstructure_signals:
+        # SSL (swept lows) is the bullish-bias direction for this
+        # Leadership-only, UPTREND-gated engine -- BSL (swept highs) is a
+        # bearish signal and deliberately not credited here. See
+        # technical_analysis/liquidity_sweep.py's own docstring for the
+        # SSL/BSL definitions.
+        if candidate.get("liquidity_sweep_direction") == "SSL":
+            score += LIQUIDITY_SWEEP_SCORE_BONUS
+
+        # A bullish FVG still open (not yet fully filled) confirms the
+        # setup has room the breakout can still draw price toward -- a
+        # FULLY filled gap (100%) has already done its job and no longer
+        # represents open, unmitigated demand.
+        if candidate.get("fvg_direction") == "bullish" and (candidate.get("fvg_filled_pct") or 0) < 100:
+            score += FVG_SCORE_BONUS
 
     return round(max(0.0, min(100.0, score)), 1)
 
@@ -395,15 +447,26 @@ def get_fakeout_risk_flags(candidate: dict, sector_row: dict, disable_fundamenta
     return flags
 
 
-def get_contributing_factors(candidate: dict) -> list[str]:
+def get_contributing_factors(candidate: dict, enable_microstructure_signals: bool = False) -> list[str]:
     """Positive-side counterpart to get_fakeout_risk_flags() -- named
     factors that positively confirmed the setup, not just a quieter
-    absence of warnings. Currently just MACD_MOMENTUM_ALIGNED; a natural
-    place for future positive confirmations to live alongside it."""
+    absence of warnings.
+
+    enable_microstructure_signals=False (the default) omits the two new
+    liquidity-sweep/FVG factors entirely, matching compute_score()'s own
+    flag -- with it off, this function's output is unchanged from before
+    these signals existed.
+    """
     factors = []
 
     if candidate.get("macd_signal") == "BULLISH_ALIGNMENT":
         factors.append("MACD_MOMENTUM_ALIGNED")
+
+    if enable_microstructure_signals:
+        if candidate.get("liquidity_sweep_direction") == "SSL":
+            factors.append("LIQUIDITY_SWEEP_SSL_CONFIRMED")
+        if candidate.get("fvg_direction") == "bullish" and (candidate.get("fvg_filled_pct") or 0) < 100:
+            factors.append("BULLISH_FVG_UNFILLED")
 
     return factors
 
@@ -443,6 +506,7 @@ def categorize(
     market_verdict: str,
     pattern_details: dict | None = None,
     disable_fundamental_signals: bool = False,
+    enable_microstructure_signals: bool = False,
 ) -> dict:
     """Full Leadership-strategy decision: disqualifiers first (AVOID
     immediately, regardless of market/sector/score), then the cascade
@@ -459,6 +523,13 @@ def categorize(
     own comment) -- here the checks are deliberately not run at all, not
     run and made to fail one particular way. Default False preserves the
     exact live-path behavior.
+
+    enable_microstructure_signals=False (the default) means this
+    function's output is byte-for-byte identical to before liquidity-
+    sweep/FVG detection existed -- neither signal is a cap or a
+    disqualifier, confidence boosts only, and both are opt-in per the
+    spec's explicit requirement that existing behavior stay provably
+    unchanged unless this flag is turned on.
     """
     pattern_details = pattern_details or {}
 
@@ -489,7 +560,11 @@ def categorize(
     if caps_applied:
         ceiling = min(ceiling, "ALERT_WATCHLIST", key=lambda c: CATEGORY_RANK[c])
 
-    score = compute_score(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals)
+    score = compute_score(
+        candidate, sector_row,
+        disable_fundamental_signals=disable_fundamental_signals,
+        enable_microstructure_signals=enable_microstructure_signals,
+    )
 
     if score < 40:
         score_based_category = "AVOID"
@@ -516,7 +591,7 @@ def categorize(
         "confidence_score": score,
         "caps_applied": caps_applied,
         "fakeout_risk_flags": get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals),
-        "contributing_factors": get_contributing_factors(candidate),
+        "contributing_factors": get_contributing_factors(candidate, enable_microstructure_signals=enable_microstructure_signals),
         "multiple_patterns_confirmed": candidate.get("Multiple_Patterns_Confirmed", False),
         "entry": entry,
         "stop_loss": stop_loss,

@@ -151,3 +151,62 @@ class TestPromoterTrendSkipIfAbsent:
 
         flags = get_fakeout_risk_flags(with_none, sector_row)
         assert "PROMOTER_STAKE_DECLINING" not in flags
+
+
+class TestMicrostructureSignalsAreFeatureFlagged:
+    """Liquidity sweep / FVG must be fully opt-in: with
+    enable_microstructure_signals=False (the default), categorize()'s
+    output must be byte-for-byte identical whether or not the new fields
+    are even present on `candidate` -- these two signals must never
+    silently change existing behavior."""
+
+    def test_flag_off_output_is_identical_with_or_without_the_new_fields_present(self):
+        base_candidate = _candidate(is_vcp_breakout=True, RS_Rating=80.0)
+        candidate_with_signals = _candidate(
+            is_vcp_breakout=True, RS_Rating=80.0,
+            liquidity_sweep_direction="SSL", fvg_direction="bullish", fvg_filled_pct=0.0,
+        )
+        sector_row = _sector_row()
+
+        result_without = categorize(base_candidate, sector_row, market_verdict="FAVORABLE")
+        result_with = categorize(candidate_with_signals, sector_row, market_verdict="FAVORABLE")
+
+        # supporting_data legitimately differs (it's just the input
+        # candidate passed through) -- everything DECISION-relevant must
+        # be identical.
+        for key in result_without:
+            if key == "supporting_data":
+                continue
+            assert result_with[key] == result_without[key], f"{key} differed with flag off: {result_with[key]!r} vs {result_without[key]!r}"
+
+    def test_flag_on_applies_the_sweep_and_fvg_bonuses(self):
+        candidate_plain = _candidate(is_vcp_breakout=True, RS_Rating=50.0)
+        candidate_with_signals = _candidate(
+            is_vcp_breakout=True, RS_Rating=50.0,
+            liquidity_sweep_direction="SSL", fvg_direction="bullish", fvg_filled_pct=0.0,
+        )
+        sector_row = _sector_row()
+
+        score_plain = compute_score(candidate_plain, sector_row, enable_microstructure_signals=True)
+        score_with_signals = compute_score(candidate_with_signals, sector_row, enable_microstructure_signals=True)
+
+        assert score_with_signals > score_plain
+        assert score_with_signals - score_plain == pytest.approx(12.0)  # 6 (sweep) + 6 (FVG)
+
+        result = categorize(
+            candidate_with_signals, sector_row, market_verdict="FAVORABLE",
+            enable_microstructure_signals=True,
+        )
+        assert "LIQUIDITY_SWEEP_SSL_CONFIRMED" in result["contributing_factors"]
+        assert "BULLISH_FVG_UNFILLED" in result["contributing_factors"]
+
+    def test_flag_on_but_no_signals_present_matches_flag_off(self):
+        # Turning the flag on with neither signal actually present must
+        # not change anything -- the flag alone isn't a bonus.
+        candidate = _candidate(is_vcp_breakout=True, RS_Rating=50.0)
+        sector_row = _sector_row()
+
+        score_flag_off = compute_score(candidate, sector_row, enable_microstructure_signals=False)
+        score_flag_on = compute_score(candidate, sector_row, enable_microstructure_signals=True)
+
+        assert score_flag_off == pytest.approx(score_flag_on)
