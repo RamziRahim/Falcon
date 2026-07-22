@@ -7,17 +7,20 @@ from __future__ import annotations
 from datetime import date, datetime
 from unittest.mock import patch
 
+import pandas as pd
 import pytest
 
 import ui.header as header
-from ui.header import IST, get_index_quotes, get_market_status
+from ui.header import IST, get_index_quotes, get_market_status, get_market_regime_snapshot
 
 
 @pytest.fixture(autouse=True)
 def _clear_quote_cache():
     get_index_quotes.clear()
+    get_market_regime_snapshot.clear()
     yield
     get_index_quotes.clear()
+    get_market_regime_snapshot.clear()
 
 
 @pytest.fixture(autouse=True)
@@ -91,6 +94,42 @@ class TestIndexQuotes:
                 "NIFTY 50", "NIFTY MIDCAP 150", "NIFTY SMALLCAP 250",
             }
             assert quotes["NIFTY 50"]["last_price"] == 100.0
+
+
+def _benchmark_history(n: int = 30) -> pd.DataFrame:
+    closes = [100.0 + i for i in range(n)]
+    return pd.DataFrame({
+        "Date": pd.date_range("2024-01-01", periods=n, freq="D"),
+        "Open": closes, "High": [c * 1.001 for c in closes],
+        "Low": [c * 0.999 for c in closes], "Close": closes,
+        "Volume": [100_000] * n,
+    })
+
+
+class TestMarketRegimeSnapshot:
+    """get_market_regime_snapshot() -- the real NIFTY trend regime state
+    (same signal decision_engine.live_scorer scores every live candidate
+    against), replacing what used to be no regime info in the header at
+    all."""
+
+    def test_returns_trend_state_and_verdict(self):
+        with patch.object(header, "get_benchmark_history", return_value=_benchmark_history()), \
+             patch.object(header, "get_market_trend_state", return_value="UPTREND"), \
+             patch.object(header, "count_distribution_days", return_value=3), \
+             patch.object(header, "get_market_regime_verdict", return_value="FAVORABLE"):
+
+            snapshot = get_market_regime_snapshot()
+
+            assert snapshot == {"trend_state": "UPTREND", "verdict": "FAVORABLE", "distribution_days": 3}
+
+    def test_returns_none_on_fetch_failure(self):
+        with patch.object(header, "get_benchmark_history", side_effect=ConnectionError("no network")):
+            assert get_market_regime_snapshot() is None
+
+    def test_returns_none_when_distribution_days_unresolvable(self):
+        with patch.object(header, "get_benchmark_history", return_value=_benchmark_history()), \
+             patch.object(header, "count_distribution_days", return_value=None):
+            assert get_market_regime_snapshot() is None
 
     def test_failed_fetch_yields_none_not_fabricated_value(self):
         with patch.object(header, "market_provider") as mock_provider:

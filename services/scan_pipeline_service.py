@@ -32,6 +32,7 @@ from technical_analysis.indicator_engine import IndicatorEngine, IndicatorEngine
 from technical_analysis.pattern_engine import PatternEngine
 from technical_analysis.candidate_table_builder import build_candidate_table
 from scoring.scoring_engine import scoring_engine
+from decision_engine.live_scorer import score_live_candidates
 
 StageCallback = Callable[[str], None]
 
@@ -50,7 +51,11 @@ def run_new_scan_pipeline(
     """
     Runs Phase 3 (market data), Phase 4 (indicators), and Phase 5 (patterns)
     for ticker_universe, then assembles and scores the display-ready
-    candidate table from the now-real pattern data.
+    candidate table from the now-real pattern data, then runs each
+    candidate through decision_engine.leadership_decision_engine.categorize()
+    (via decision_engine.live_scorer.score_live_candidates()) -- the same
+    deterministic decision cascade backtesting/replay_engine.py already
+    uses, evaluated against live/current data instead of a historical replay.
 
     Always runs all three stages for the full universe on every call --
     DataCollectionEngine is already incremental (cheap for tickers seen
@@ -76,6 +81,9 @@ def run_new_scan_pipeline(
         scored_df = scoring_engine.score_universe(symbols=records_df["Symbol"].tolist())
         if not scored_df.empty:
             records_df = records_df.merge(scored_df, on="Symbol", how="left")
+
+        _notify("Scoring candidates against the Leadership decision engine...")
+        records_df = score_live_candidates(records_df)
 
     return ScanPipelineResult(
         records_df=records_df,

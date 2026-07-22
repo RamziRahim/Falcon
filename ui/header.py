@@ -17,8 +17,17 @@ from config import NIFTY50, NIFTY_MIDCAP_150, NIFTY_SMALLCAP_250
 from common.logger import get_logger
 from market_data.holiday_calendar import get_nse_holidays
 from market_data.providers.yahoo_provider import market_provider
+from scoring.benchmark import get_benchmark_history
+from scoring.market_regime import get_market_trend_state, count_distribution_days
+from decision_engine.leadership_decision_engine import get_market_regime_verdict
 
 logger = get_logger(__name__)
+
+# get_market_regime_verdict()'s three outputs mapped to a "+"/"-" prefix
+# purely so st.metric()'s own delta_color (red for anything starting with
+# "-") renders them correctly -- CAUTION has no natural sign, left
+# unprefixed (renders as a neutral/positive delta).
+_REGIME_VERDICT_PREFIX = {"FAVORABLE": "+", "UNFAVORABLE": "-"}
 
 IST = pytz.timezone("Asia/Kolkata")
 
@@ -52,6 +61,42 @@ def get_index_quotes() -> dict[str, dict | None]:
             quotes[label] = None
 
     return quotes
+
+
+@st.cache_data(ttl=90)  # same freshness cadence as get_index_quotes()
+def get_market_regime_snapshot() -> dict | None:
+    """
+    Real NIFTY trend regime state (scoring.market_regime.get_market_trend_state())
+    plus the FAVORABLE/CAUTION/UNFAVORABLE verdict
+    (decision_engine.leadership_decision_engine.get_market_regime_verdict())
+    -- the same regime signal decision_engine.live_scorer scores every
+    live candidate against, evaluated at "now" instead of a historical
+    replay date. Returns None on any fetch failure (no network,
+    insufficient benchmark history) -- render() shows the same "data
+    unavailable" placeholder get_index_quotes() already uses for a failed
+    quote, not a crash.
+    """
+    try:
+        benchmark_history = get_benchmark_history()
+
+        if benchmark_history is None or benchmark_history.empty or len(benchmark_history) < 2:
+            return None
+
+        trend_state = get_market_trend_state(benchmark_history)
+        distribution_days = count_distribution_days(benchmark_history)
+
+        if distribution_days is None:
+            return None
+
+        return {
+            "trend_state": trend_state,
+            "verdict": get_market_regime_verdict(trend_state, distribution_days),
+            "distribution_days": distribution_days,
+        }
+
+    except Exception as ex:
+        logger.warning("Market regime snapshot failed: %s", ex)
+        return None
 
 
 def get_market_status(now: datetime | None = None) -> str:
@@ -145,8 +190,11 @@ Scan markets. Find leaders. Ride the trend.
     # ------------------------------------------------------------------
 
     quotes = get_index_quotes()
+    regime = get_market_regime_snapshot()
 
-    for column, (label, _symbol) in zip(st.columns(3), INDEX_SYMBOLS):
+    snapshot_columns = st.columns(4)
+
+    for column, (label, _symbol) in zip(snapshot_columns[:3], INDEX_SYMBOLS):
 
         with column:
 
@@ -160,6 +208,18 @@ Scan markets. Find leaders. Ride the trend.
                 )
             else:
                 st.metric(label, "—", "data unavailable")
+
+    with snapshot_columns[3]:
+
+        if regime:
+            verdict_prefix = _REGIME_VERDICT_PREFIX.get(regime["verdict"], "")
+            st.metric(
+                "Market Regime",
+                regime["trend_state"],
+                f"{verdict_prefix}{regime['verdict']}",
+            )
+        else:
+            st.metric("Market Regime", "—", "data unavailable")
 
     st.divider()
 

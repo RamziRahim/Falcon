@@ -24,13 +24,28 @@ def _scored_universe() -> pd.DataFrame:
 class TestTickerCountInLabel:
 
     def test_bar_labels_include_ticker_count(self):
+        # No Sector_Index_Trend column in this fixture -- degrades to the
+        # documented "N/A" placeholder rather than crashing or omitting
+        # the trend segment inconsistently.
         with patch.object(sector_ranking_panel, "st") as mock_st:
             SectorRankingPanel.render(_scored_universe())
 
             fig = mock_st.plotly_chart.call_args[0][0]
             labels = list(fig.data[0].y)
-            assert "Technology (3)" in labels
-            assert "Healthcare (1)" in labels
+            assert "Technology (3) — N/A" in labels
+            assert "Healthcare (1) — N/A" in labels
+
+    def test_bar_labels_include_real_sector_index_trend_when_present(self):
+        universe = _scored_universe()
+        universe["Sector_Index_Trend"] = ["UPTREND", "UPTREND", "UPTREND", "DOWNTREND"]
+
+        with patch.object(sector_ranking_panel, "st") as mock_st:
+            SectorRankingPanel.render(universe)
+
+            fig = mock_st.plotly_chart.call_args[0][0]
+            labels = list(fig.data[0].y)
+            assert "Technology (3) — UPTREND" in labels
+            assert "Healthcare (1) — DOWNTREND" in labels
 
 
 class TestInterpretationCaption:

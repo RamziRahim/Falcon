@@ -38,6 +38,8 @@ DISPLAY_COLUMNS = [
     "Trend_State",
     "VCP_Score",
     "Status",
+    "category",
+    "confidence_score",
     "RS_Rating",
     "RS_2M",
     "RS_6M",
@@ -47,6 +49,9 @@ DISPLAY_COLUMNS = [
     "ROCE",
     "YoY_Rev",
     "D_E",
+    "caps_applied",
+    "contributing_factors",
+    "fakeout_risk_flags",
 ]
 
 

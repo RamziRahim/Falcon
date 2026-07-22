@@ -67,7 +67,10 @@ class TestScoreUniverse:
             lambda symbol: synthetic_multi_ticker_history.get(symbol)
         )
         result = engine.score_universe(symbols=list(synthetic_multi_ticker_history.keys()))
-        expected = {"Symbol", "RS_Rating", "RS_2M", "RS_6M", "RS_12M", "Rel_Vol", "Sector"}
+        expected = {
+            "Symbol", "RS_Rating", "RS_2M", "RS_6M", "RS_12M", "Rel_Vol", "Sector",
+            "Sector_Index_Trend",
+        }
         assert set(result.columns) == expected
 
     def test_score_universe_empty_symbols_returns_empty_not_crash(self):

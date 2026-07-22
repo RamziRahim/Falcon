@@ -29,11 +29,17 @@ def mocked_pipeline():
          patch.object(svc, "IndicatorEngine") as mock_ie_cls, \
          patch.object(svc, "PatternEngine") as mock_pe_cls, \
          patch.object(svc, "build_candidate_table") as mock_build, \
-         patch.object(svc, "scoring_engine") as mock_scoring:
+         patch.object(svc, "scoring_engine") as mock_scoring, \
+         patch.object(svc, "score_live_candidates") as mock_score_live:
 
         mock_dce_cls.return_value.run.return_value = DataCollectionResult()
         mock_ie_cls.return_value.run.return_value = IndicatorEngineResult()
         mock_build.return_value = pd.DataFrame()
+        # Pass-through by default -- real categorize()-wiring behavior is
+        # covered by tests/decision_engine/test_live_scorer.py; this test
+        # module only needs to prove the *pipeline* calls it, without
+        # hitting real Playwright/network fetches per test run.
+        mock_score_live.side_effect = lambda df: df
 
         manager.attach_mock(mock_dce_cls.return_value.run, "data_collection_run")
         manager.attach_mock(mock_ie_cls.return_value.run, "indicator_run")
@@ -47,6 +53,7 @@ def mocked_pipeline():
             "pe_cls": mock_pe_cls,
             "build": mock_build,
             "scoring": mock_scoring,
+            "score_live": mock_score_live,
         }
 
 
@@ -109,7 +116,29 @@ class TestResultComposition:
         result = svc.run_new_scan_pipeline(["DEMO.NS"])
 
         mocked_pipeline["scoring"].score_universe.assert_not_called()
+        mocked_pipeline["score_live"].assert_not_called()
         assert result.records_df.empty
+
+    def test_categorize_wiring_runs_when_records_non_empty(self, mocked_pipeline):
+        """decision_engine.live_scorer.score_live_candidates() -- the
+        categorize() wiring itself -- must actually be invoked with the
+        scored candidate table, and its result (not the pre-categorize
+        table) must be what ends up in records_df."""
+        mocked_pipeline["build"].return_value = pd.DataFrame({"Symbol": ["DEMO.NS"], "Price": [100.0]})
+        mocked_pipeline["scoring"].score_universe.return_value = pd.DataFrame(
+            {"Symbol": ["DEMO.NS"], "RS_Rating": [88]}
+        )
+        mocked_pipeline["score_live"].side_effect = lambda df: df.assign(category=["EXECUTE"])
+
+        result = svc.run_new_scan_pipeline(["DEMO.NS"])
+
+        mocked_pipeline["score_live"].assert_called_once()
+        called_with_df = mocked_pipeline["score_live"].call_args[0][0]
+        assert "RS_Rating" in called_with_df.columns, (
+            "score_live_candidates must be called AFTER scoring_engine's merge, "
+            "not before -- it needs RS_Rating/Sector already present."
+        )
+        assert result.records_df.loc[0, "category"] == "EXECUTE"
 
     def test_returns_collection_and_indicator_results(self, mocked_pipeline):
         collection = DataCollectionResult(downloaded=5, updated=5, failed=1, warnings=0)

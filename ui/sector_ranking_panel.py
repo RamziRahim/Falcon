@@ -9,6 +9,16 @@ Purpose
 Renders the "Key Insights" Sector RS Ranking bar chart — Phase 1 of
 scoring/sector_rotation.py's sector aggregation (average composite RS Rating
 per sector, ranked strongest to weakest).
+
+Avg_RS_Rating is now sector-index-anchored (scoring.scoring_engine.ScoringEngine.score_universe()
+computes it via scoring.sector_index_rs.compute_sector_index_rs(), not the
+old small-universe peer-percentile rank) -- rank_sectors() itself needed no
+change, since it's a pure aggregator of whatever RS_Rating values it's
+given. Each bar additionally shows that sector's own real NSE index trend
+(scoring.sector_indices.get_sector_index_trend(), already computed once by
+score_universe() and passed through as the Sector_Index_Trend column --
+no separate fetch here), matching what backtesting/replay_engine.py's
+sector health verdict now uses alongside the breadth metrics.
 ===============================================================================
 """
 
@@ -32,6 +42,10 @@ class SectorRankingPanel:
         scored_universe : pd.DataFrame
             Candidate rows with at least 'Sector' and 'RS_Rating' columns,
             as produced by scoring.scoring_engine.ScoringEngine.score_universe().
+            An optional 'Sector_Index_Trend' column (also produced by
+            score_universe()) is shown alongside each bar when present --
+            omitted gracefully (no trend label) for older callers that
+            don't supply it.
         """
 
         st.markdown(
@@ -39,10 +53,9 @@ class SectorRankingPanel:
             unsafe_allow_html=True,
         )
         st.caption(
-            "Each bar averages the RS Rating of tickers currently in that sector "
-            "within your tracked universe — not the full market. Higher = "
-            "relatively stronger momentum among the stocks you're tracking right "
-            "now, not an absolute market-wide ranking."
+            "Each bar averages the sector-index-anchored RS Rating of tickers "
+            "currently in that sector within your tracked universe, against "
+            "that sector's own real NSE index trend — not the full market."
         )
 
         ranking = rank_sectors(scored_universe)
@@ -51,10 +64,19 @@ class SectorRankingPanel:
             st.info("No sector rankings available yet — run a scan to populate scored candidates.")
             return
 
+        # Real per-sector index trend, one value per Sector (score_universe()
+        # attaches the same Sector_Index_Trend value to every ticker row in
+        # a sector, so .first() per group recovers it without averaging
+        # anything meaningless across rows).
+        if "Sector_Index_Trend" in scored_universe.columns:
+            trend_by_sector = scored_universe.groupby("Sector")["Sector_Index_Trend"].first()
+        else:
+            trend_by_sector = pd.Series(dtype=object)
+
         # Ascending so the strongest sector renders at the top of the horizontal bar chart
         ranking = ranking.sort_values("Avg_RS_Rating", ascending=True)
         bar_labels = [
-            f"{sector} ({int(count)})"
+            f"{sector} ({int(count)}) — {trend_by_sector.get(sector) or 'N/A'}"
             for sector, count in zip(ranking.index, ranking["Ticker_Count"])
         ]
 
