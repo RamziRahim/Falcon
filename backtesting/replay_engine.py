@@ -33,13 +33,22 @@ the core technical/regime design. See
 leadership_decision_engine.categorize()'s disable_fundamental_signals for
 exactly what this skips.
 
-RS Rating is a percentile rank against the whole tracked universe
-(scoring.relative_strength.compute_rs_ratings) -- replaying it correctly
-means truncating EVERY ticker in the universe to the same as_of_date, not
-just the one being tested, and recomputing the percentile ranks fresh.
-build_scored_universe_as_of() does this once per date; run_backtest.py
-(Part D) reuses that result across every ticker sampled on the same date
-rather than recomputing it once per ticker.
+RS Rating is sector-index-anchored (scoring.sector_index_rs.compute_sector_index_rs()),
+not the old small-universe peer-percentile rank (scoring.relative_strength.compute_rs_ratings()
+-- still used internally as that function's own graceful fallback for an
+unresolvable sector, never called directly from this module anymore).
+Either way, replaying it correctly means truncating EVERY ticker in the
+universe (and every sector index) to the same as_of_date, not just the
+one being tested, and recomputing fresh. build_scored_universe_as_of()
+does this once per date; run_backtest.py (Part D) reuses that result
+across every ticker sampled on the same date rather than recomputing it
+once per ticker.
+
+Sector health verdict combines scoring.sector_indices.get_sector_index_trend()
+(the sector's real NSE index, e.g. NIFTY IT, run through the same
+market_structure_engine) with the existing Pct_Uptrend/Avg_RS_Rating
+breadth metrics -- see leadership_decision_engine.get_sector_health_verdict()'s
+own docstring for how the two combine.
 
 Market regime is trend-based, not VIX-based: NIFTY's own Trend_State
 (same market_structure_engine already used per-stock, applied to
@@ -63,9 +72,10 @@ from technical_analysis.indicator_calculator import indicator_calculator
 from technical_analysis.pattern_engine import analyze_ticker, build_pattern_row_fields, macro_swing_detector
 from technical_analysis.pattern_system.market_structure import market_structure_engine
 from scoring.relative_volume import calculate as calculate_relative_volume
-from scoring.relative_strength import compute_rs_ratings
 from scoring.sector_rotation import rank_sectors
 from scoring.sector_map import sector_map
+from scoring.sector_indices import get_sector_index_trend
+from scoring.sector_index_rs import compute_sector_index_rs
 from scoring.market_regime import count_distribution_days
 from decision_engine.candidate_assembler import assemble_candidate, assemble_sector_row, assemble_pattern_details
 from decision_engine.leadership_decision_engine import categorize, get_market_regime_verdict
@@ -111,7 +121,10 @@ def _trend_state_of_truncated(df: pd.DataFrame) -> str:
 
 
 def build_scored_universe_as_of(
-    as_of_date: pd.Timestamp, universe_histories: dict
+    as_of_date: pd.Timestamp,
+    universe_histories: dict,
+    benchmark_history: pd.DataFrame,
+    sector_index_histories: dict | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series]:
     """
     Truncates every ticker in the tracked universe to as_of_date and
@@ -120,10 +133,30 @@ def build_scored_universe_as_of(
     computed against full (untruncated) histories would leak future
     relative performance into a historical replay date.
 
+    RS Rating is sector-index-anchored (scoring.sector_index_rs.compute_sector_index_rs()),
+    not the old small-universe peer-percentile rank (scoring.relative_strength.compute_rs_ratings(),
+    still used internally as compute_sector_index_rs()'s own graceful
+    fallback for any ticker whose sector index can't be resolved -- not
+    called directly from here anymore).
+
     Computed once per date, not once per ticker: run_backtest.py (Part D)
     calls this once per sampled date and reuses the result across every
     ticker sampled at that same date via replay_decision_as_of's
     precomputed_universe_scoring parameter.
+
+    Parameters
+    ----------
+    benchmark_history : NIFTY 50 full history -- truncated the same way
+        as everything else here before being used as
+        compute_sector_index_rs()'s market benchmark.
+    sector_index_histories : dict[Sector label -> full sector index
+        OHLCV history], pre-fetched once per backtest run by the caller
+        (scoring.sector_indices.get_sector_index_history(), one call per
+        distinct sector actually present in the universe) -- truncated
+        to as_of_date here before use, same lookahead-bias discipline as
+        universe_histories/benchmark_history. None/{} degrades to
+        compute_sector_index_rs()'s own peer-percentile fallback for
+        every ticker (no sector index data available), not a crash.
 
     Returns
     -------
@@ -133,13 +166,24 @@ def build_scored_universe_as_of(
     looking up any individual ticker's own rating.
     """
     truncated_universe = {symbol: _truncate(history, as_of_date) for symbol, history in universe_histories.items()}
-    rs_ratings = compute_rs_ratings(truncated_universe)
+    truncated_benchmark = _truncate(benchmark_history, as_of_date)
+
+    sector_index_histories = sector_index_histories or {}
+    truncated_sector_indices = {
+        sector: _truncate(history, as_of_date) for sector, history in sector_index_histories.items()
+    }
+
+    sector_map_data = {symbol: sector_map.get_sector(symbol) for symbol in truncated_universe}
+
+    rs_ratings = compute_sector_index_rs(
+        truncated_universe, sector_map_data, truncated_benchmark, truncated_sector_indices,
+    )
 
     rows = []
     for symbol, history in truncated_universe.items():
         rows.append({
             "Symbol": symbol,
-            "Sector": sector_map.get_sector(symbol),
+            "Sector": sector_map_data[symbol],
             "RS_Rating": rs_ratings["RS_Rating"].get(symbol) if not rs_ratings.empty else None,
             "Trend_State": _trend_state_of_truncated(history),
         })
@@ -157,6 +201,7 @@ def replay_decision_as_of(
     benchmark_history: pd.DataFrame,
     universe_histories: dict,
     vix_history: pd.DataFrame | None,
+    sector_index_histories: dict | None = None,
     precomputed_universe_scoring: tuple | None = None,
 ) -> dict:
     """
@@ -182,6 +227,14 @@ def replay_decision_as_of(
         longer read for the regime verdict itself (trend-based now, see
         module docstring) -- kept in the signature since it's still
         fetched by callers and may back a future stop-loss-width use.
+    sector_index_histories : dict[Sector label -> full sector index
+        OHLCV history], pre-fetched once per backtest run by the caller
+        (scoring.sector_indices.get_sector_index_history()) -- passed
+        through to build_scored_universe_as_of() for the sector-index-
+        anchored RS Rating, and used directly here for this ticker's own
+        sector health verdict. None/{} degrades gracefully (peer-
+        percentile RS Rating, CHOPPY sector index trend) rather than
+        crashing.
     precomputed_universe_scoring : optional (scored_universe, sector_ranking,
         rs_ratings) tuple from build_scored_universe_as_of(), so callers
         replaying many tickers at the same as_of_date don't each
@@ -244,18 +297,32 @@ def replay_decision_as_of(
     if precomputed_universe_scoring is not None:
         scored_universe, sector_ranking, rs_ratings = precomputed_universe_scoring
     else:
-        scored_universe, sector_ranking, rs_ratings = build_scored_universe_as_of(as_of_date, universe_histories)
+        scored_universe, sector_ranking, rs_ratings = build_scored_universe_as_of(
+            as_of_date, universe_histories, benchmark_history, sector_index_histories,
+        )
 
     ticker_sector = sector_map.get_sector(ticker)
 
+    # Real sector index trend (scoring.sector_indices.get_sector_index_trend()),
+    # not the small-sample Pct_Uptrend proxy -- passed into sector_row for
+    # get_sector_health_verdict() to combine with the existing metrics
+    # (see that function's own docstring for how). get_sector_index_trend()
+    # truncates to as_of_date internally, so the FULL (untruncated)
+    # sector_index_histories is passed here, not pre-truncated like
+    # build_scored_universe_as_of()'s own copy.
+    sector_index_trend = get_sector_index_trend(ticker_sector, as_of_date, sector_index_histories or {})
+
     if ticker_sector in sector_ranking.index:
-        sector_row = assemble_sector_row(sector_ranking, ticker_sector)
+        sector_row = assemble_sector_row(sector_ranking, ticker_sector, sector_index_trend=sector_index_trend)
     else:
         # Sector has no valid RS_Rating entries yet this early in the
         # replay period (rank_sectors() drops those) -- a neutral,
         # honestly-unknown sector row rather than a crash or a fabricated
         # STRONG/WEAK verdict.
-        sector_row = {"Avg_RS_Rating": 0.0, "Pct_Uptrend": 0.0, "Rank": None, "Total_Sectors": len(sector_ranking)}
+        sector_row = {
+            "Avg_RS_Rating": 0.0, "Pct_Uptrend": 0.0, "Rank": None, "Total_Sectors": len(sector_ranking),
+            "Sector_Index_Trend": sector_index_trend,
+        }
 
     scoring_row = {
         "Rel_Vol": pattern_row.get("Rel_Vol"),

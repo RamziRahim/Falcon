@@ -129,8 +129,15 @@ class TestRSRatingUsesTruncatedUniverse:
             "STRONG2.NS": _random_walk_df(seed=202, n=400, drift=0.5),
         }
 
-        _, _, rs_ratings_a = build_scored_universe_as_of(as_of_date, universe_a)
-        _, _, rs_ratings_b = build_scored_universe_as_of(as_of_date, universe_b)
+        # Fake tickers resolve to sector "Unknown" (not real Yahoo
+        # symbols), which is never in SECTOR_INDEX_MAP -- so
+        # compute_sector_index_rs() falls back to the same peer-
+        # percentile calculation this test is actually exercising, same
+        # behavior as before sector-index RS existed.
+        benchmark_history = _random_walk_df(seed=99, n=400)
+
+        _, _, rs_ratings_a = build_scored_universe_as_of(as_of_date, universe_a, benchmark_history)
+        _, _, rs_ratings_b = build_scored_universe_as_of(as_of_date, universe_b, benchmark_history)
 
         rating_a = rs_ratings_a.get("TEST.NS")
         rating_b = rs_ratings_b.get("TEST.NS")

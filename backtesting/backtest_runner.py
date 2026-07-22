@@ -93,6 +93,7 @@ def run_backtest(
     end_date: pd.Timestamp,
     sample_every_n_days: int = 5,
     max_holding_days: int = 20,
+    sector_index_histories: dict | None = None,
 ) -> pd.DataFrame:
     """
     Returns one row per signal generated (Part C's schema) across every
@@ -103,6 +104,17 @@ def run_backtest(
     computed once per distinct sampled date and reused across every
     ticker sampled on that date -- not once per (ticker, date) pair --
     since it's the same answer for all of them at a fixed as_of_date.
+
+    sector_index_histories : dict[Sector label -> full sector index
+        OHLCV history], pre-fetched once by the caller (e.g. one
+        scoring.sector_indices.get_sector_index_history() call per
+        distinct sector actually present in universe_histories, after
+        populate_sector_cache() has warmed the sector lookup cache) --
+        threaded through to every replay_decision_as_of() call so RS
+        Rating and sector health verdicts are sector-index-anchored, not
+        the old small-universe peer-percentile/breadth-proxy versions.
+        None degrades gracefully (see build_scored_universe_as_of() and
+        scoring.sector_indices.get_sector_index_trend()), not a crash.
     """
     ticker_sample_dates = {
         ticker: _sampled_dates_for_ticker(history, start_date, end_date, sample_every_n_days)
@@ -118,7 +130,9 @@ def run_backtest(
 
     for as_of_date in sorted(dates_to_tickers.keys()):
 
-        universe_scoring = build_scored_universe_as_of(as_of_date, universe_histories)
+        universe_scoring = build_scored_universe_as_of(
+            as_of_date, universe_histories, benchmark_history, sector_index_histories,
+        )
 
         for ticker in dates_to_tickers[as_of_date]:
 
@@ -131,6 +145,7 @@ def run_backtest(
                 benchmark_history=benchmark_history,
                 universe_histories=universe_histories,
                 vix_history=vix_history,
+                sector_index_histories=sector_index_histories,
                 precomputed_universe_scoring=universe_scoring,
             )
 
