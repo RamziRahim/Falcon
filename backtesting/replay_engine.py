@@ -203,6 +203,7 @@ def replay_decision_as_of(
     vix_history: pd.DataFrame | None,
     sector_index_histories: dict | None = None,
     precomputed_universe_scoring: tuple | None = None,
+    enable_microstructure_signals: bool = False,
 ) -> dict:
     """
     Truncates full_history to rows <= as_of_date, re-runs the full
@@ -240,6 +241,9 @@ def replay_decision_as_of(
         replaying many tickers at the same as_of_date don't each
         redundantly recompute the whole universe's RS ratings. Computed
         internally if not given.
+    enable_microstructure_signals : passed straight through to
+        categorize() -- see that function's own docstring. Defaults to
+        False (identical behavior to before liquidity-sweep/FVG existed).
 
     Returns
     -------
@@ -346,4 +350,5 @@ def replay_decision_as_of(
         candidate, sector_row, market_verdict,
         pattern_details=pattern_details,
         disable_fundamental_signals=True,
+        enable_microstructure_signals=enable_microstructure_signals,
     )

@@ -1,6 +1,11 @@
 """
 Falcon — Backtest Run Script
 Run from project root: python tests/run_backtest.py
+
+Flip ENABLE_MICROSTRUCTURE_SIGNALS below to True to include the
+liquidity-sweep/FVG confidence-score bonuses (see
+decision_engine/leadership_decision_engine.py's own docstring); leave it
+False to reproduce every prior backtest run's exact behavior.
 """
 import sys, glob, os
 sys.path.insert(0, ".")
@@ -12,6 +17,8 @@ from scoring.benchmark import get_benchmark_history
 from scoring.market_regime import get_vix_history
 from scoring.sector_map import sector_map
 from scoring.sector_indices import get_sector_index_history
+
+ENABLE_MICROSTRUCTURE_SIGNALS = False
 
 # ── 1. Load universe from whatever is in data/technical/ ──────────────────────
 print("Loading universe from data/technical/...")
@@ -87,6 +94,7 @@ start_date = pd.Timestamp(date.today() - timedelta(days=365 * 2))
 print(f"\nTest window: {start_date.date()} → {end_date.date()}")
 print(f"Universe:    {len(universe_histories)} tickers")
 print(f"Sampling:    every 5 trading days")
+print(f"Microstructure signals (liquidity sweep + FVG): {'ON' if ENABLE_MICROSTRUCTURE_SIGNALS else 'off'}")
 print("\nStarting backtest — this will take ~70 minutes. Go make chai. ☕")
 
 # ── 5. Run ─────────────────────────────────────────────────────────────────────
@@ -98,6 +106,7 @@ trades = run_backtest(
     end_date=end_date,
     sample_every_n_days=5,
     sector_index_histories=sector_index_histories,
+    enable_microstructure_signals=ENABLE_MICROSTRUCTURE_SIGNALS,
 )
 
 # ── 6. Save raw results ────────────────────────────────────────────────────────

@@ -94,6 +94,7 @@ def run_backtest(
     sample_every_n_days: int = 5,
     max_holding_days: int = 20,
     sector_index_histories: dict | None = None,
+    enable_microstructure_signals: bool = False,
 ) -> pd.DataFrame:
     """
     Returns one row per signal generated (Part C's schema) across every
@@ -115,6 +116,11 @@ def run_backtest(
         the old small-universe peer-percentile/breadth-proxy versions.
         None degrades gracefully (see build_scored_universe_as_of() and
         scoring.sector_indices.get_sector_index_trend()), not a crash.
+    enable_microstructure_signals : passed straight through to every
+        replay_decision_as_of() call, which passes it straight through to
+        categorize() -- see that function's own docstring for what it
+        actually does. Defaults to False (identical behavior to every
+        prior backtest run).
     """
     ticker_sample_dates = {
         ticker: _sampled_dates_for_ticker(history, start_date, end_date, sample_every_n_days)
@@ -147,6 +153,7 @@ def run_backtest(
                 vix_history=vix_history,
                 sector_index_histories=sector_index_histories,
                 precomputed_universe_scoring=universe_scoring,
+                enable_microstructure_signals=enable_microstructure_signals,
             )
 
             if decision["category"] not in SIGNAL_CATEGORIES or decision["entry"] is None:
