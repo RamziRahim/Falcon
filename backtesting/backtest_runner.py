@@ -276,6 +276,9 @@ def run_backtest(
                         (ets["target"] - hypothetical_entry) / (hypothetical_entry - ets["stop_loss"])
                         if (hypothetical_entry - ets["stop_loss"]) > 0 else None
                     ),
+                    # A-5: same recency fields a real trade carries.
+                    "bars_since_breakout": decision.get("bars_since_breakout"),
+                    "breakout_within_last_k_bars": decision.get("breakout_within_last_k_bars", False),
                     "confidence_score": decision["confidence_score"],
                     "caps_applied": ",".join(decision["caps_applied"]),
                     # A-1: True whenever sampling was active for this run at
@@ -335,6 +338,10 @@ def run_backtest(
                 "stop_provenance": decision.get("stop_provenance"),
                 "target_provenance": decision.get("target_provenance"),
                 "reward_risk": decision.get("reward_risk"),
+                # A-5: for the SELECTED pattern -- None/False when no
+                # pattern fired (MONITOR, or an ATR-fallback ALERT_WATCHLIST).
+                "bars_since_breakout": decision.get("bars_since_breakout"),
+                "breakout_within_last_k_bars": decision.get("breakout_within_last_k_bars", False),
                 # categorize() already computes both of these for every
                 # decision -- without them, an ALERT_WATCHLIST row is
                 # indistinguishable from "genuinely scored low" vs "strong

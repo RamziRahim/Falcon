@@ -514,6 +514,7 @@ def _fake_real_trade_categorize_factory(category, confidence_score, sector_healt
             "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
             "entry": 100.0, "stop_loss": 90.0, "target": 120.0, "max_holding_days": 20,
             "stop_provenance": "STRUCTURAL", "target_provenance": "MEASURED_MOVE", "reward_risk": 3.0,
+            "bars_since_breakout": 1, "breakout_within_last_k_bars": True,
             "supporting_data": candidate,
         }
     return _fake
@@ -626,6 +627,16 @@ class TestProvenanceAndRewardRiskPersisted:
         assert row["stop_provenance"] == "STRUCTURAL"
         assert row["target_provenance"] == "MEASURED_MOVE"
         assert row["reward_risk"] == pytest.approx(3.0)
+
+    def test_real_trade_carries_breakout_recency_fields(self, monkeypatch):
+        # A-5 DoD: bars_since_breakout must reach the persisted trade
+        # record, not just categorize()'s own in-memory return value.
+        trades = self._run(monkeypatch, _fake_real_trade_categorize_factory("EXECUTE", 90.0))
+
+        assert len(trades) == 1
+        row = trades.iloc[0]
+        assert row["bars_since_breakout"] == 1
+        assert row["breakout_within_last_k_bars"] == True
 
     def test_avoid_row_carries_the_hypothetical_plans_own_provenance(self, monkeypatch):
         trades = self._run(monkeypatch, _fake_avoid_categorize)
