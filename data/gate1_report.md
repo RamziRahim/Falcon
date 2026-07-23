@@ -399,3 +399,41 @@ was making new highs should mostly classify FAVORABLE") uses the
 2026-01-02 all-time high, which falls in the VALIDATION split — reading
 that number now would violate standing rule 6, so it is deliberately left
 for Gate 2/3's validation-split read, not checked here.
+
+**Addendum (2026-07-23, per the human's follow-up): trend_state alone vs
+the combined verdict.** The 6→9 FAVORABLE headline understates how much
+the trend classifier itself actually improved, and obscures where the
+remaining bottleneck now sits. Trend_state alone, whole tuning split:
+
+| | UPTREND | CHOPPY | DOWNTREND |
+|---|---|---|---|
+| Original | 38 | 179 | 75 |
+| Recalibrated (asymmetric) | 51 | 166 | 75 |
+
+DOWNTREND is byte-for-byte unchanged (75→75, confirms the asymmetric
+design touched only the intended side). UPTREND is up 34% (38→51,
++13 days) -- a real, meaningful fix to the actual root cause identified
+above.
+
+**But** of those 51 recalibrated UPTREND days, 42 (82%) still get capped
+back to CAUTION by `distribution_days >= 3` -- a separate gate this item
+never touched (out of scope: B-7 was scoped to trend_state specifically,
+not the distribution-day threshold). Under the original rule the cap
+rate was 32 of 38 UPTREND days (84%) -- essentially identical. **The
+correct framing is "root cause fixed, one layer down, exposing a new
+bottleneck underneath it" -- not "regime scarcity solved."** The binding
+constraint on FAVORABLE has shifted almost entirely onto the
+distribution-day threshold, which was never part of this item's scope
+and remains untouched. If Gate 2 shows EXECUTE's episode count still
+stuck near n=20 despite this fix, `distribution_days >= 3` (not
+trend_state) is where to look next -- but that is a future tuning
+decision, not something to act on now.
+
+**On the symmetric-variant rejection, precisely:** the choice between the
+symmetric and asymmetric designs was made entirely on the tuning-split
+CAUTION/UNFAVORABLE/FAVORABLE count trade-off above (worse UNFAVORABLE
+false-negative rate, 75→86, for the symmetric variant) -- the new-high
+sanity check was never actually available to inform this choice, since it
+needs 2026-01-02 validation-split data. That check remains genuinely
+pending for Gate 2/3, not something this recalibration has already
+passed.
