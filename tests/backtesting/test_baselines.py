@@ -109,6 +109,17 @@ class TestNaiveMomentumBaseline:
         assert len(result) == 1
         assert result.iloc[0]["ticker"] == "AAA.NS"
 
+    def test_reports_the_actual_exit_date_used(self):
+        # Needed to feed momentum trades into portfolio_simulator.py for a
+        # like-for-like comparison against Falcon's own episodes.
+        universe = {"AAA.NS": _ohlcv(np.linspace(100, 200, 100))}
+        as_of_date = universe["AAA.NS"]["Date"].iloc[70]
+
+        result = naive_momentum_baseline(universe, [as_of_date], lookback_days=63, max_holding_days=10)
+
+        expected_exit_date = universe["AAA.NS"]["Date"].iloc[80]  # 70 + 10 trading days
+        assert result.iloc[0]["exit_date"] == expected_exit_date
+
     def test_insufficient_lookback_history_is_skipped_not_a_crash(self):
         universe = {"AAA.NS": _ohlcv(np.linspace(100, 110, 20))}  # too short for a 63-day lookback
         as_of_date = universe["AAA.NS"]["Date"].iloc[-1]

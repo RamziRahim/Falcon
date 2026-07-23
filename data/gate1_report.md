@@ -195,6 +195,60 @@ options being either a monitor-tier demotion for no-pattern signals or a
 raised emission threshold for them specifically. This report does not
 choose between them; that's a Gate decision.
 
+## Gate 1 extension tests (2026-07-23, per decision #5 below)
+
+Two cheap post-processing tests requested before accepting or rejecting
+the "EXECUTE ~ naive momentum" tie as meaningful — both run against
+existing logs, no re-runs (`tests/run_gate1_extension.py`).
+
+### (a) Momentum through the same portfolio simulator as Falcon
+
+Momentum's own trades (n=98) run through `portfolio_simulator.py` —
+identical 5 slots, identical 1% base risk, identical
+`ROUND_TRIP_COST_PCT`. Momentum has no natural stop distance, so its
+r_multiple uses the same reference risk unit already used for the
+random-entry control (run #1's real median stop_pct, 5.93%), and every
+momentum trade is taken at full size (1.0) — no downsizing, unlike
+Falcon-(e), which does downsize some of its own trades. This is the more
+generous assumption for momentum, not a thumb on the scale for Falcon.
+
+| system | n taken | final equity | max DD | CAGR | Calmar |
+|---|---|---|---|---|---|
+| momentum_baseline | 98 | 146.26 | **-28.33%** | 21.91% | **0.77** |
+| falcon_e_sector_aware | 78 | 117.20 | -4.08% | 9.08% | **2.23** |
+
+**Falcon-(e) wins decisively on both Calmar (2.23 vs 0.77) and max
+drawdown (-4.08% vs -28.33%).** Momentum's higher raw CAGR is bought with
+nearly 7x the drawdown — the same volatility difference test (b) below
+quantifies directly. At the portfolio level, where risk is actually
+priced, momentum is not a substitute for Falcon's machinery.
+
+### (b) score≥65 population (n=108) vs momentum (n=98)
+
+| | n | mean | std |
+|---|---|---|---|
+| Falcon score≥65 (EXECUTE + capped) | 108 | 2.66% | **8.61%** |
+| Naive momentum | 98 | 2.67% | **20.64%** |
+
+Mean difference: -0.01pp, 95% CI [-4.45, 4.43]. Welch's t: t=-0.005,
+p=0.9956. Mann-Whitney U: p=0.7299. Cohen's d: -0.001 (~zero).
+
+**The mean-return tie is confirmed, precisely — not a fluke of the
+smaller n=88 sample.** But momentum's standard deviation is 2.4x
+Falcon's (20.64% vs 8.61%). The two systems produce statistically
+identical *average* returns from populations with very different
+*variance* — which is exactly why (a)'s portfolio-level Calmar comparison
+is so lopsided. **The machinery's value doesn't show up in raw per-trade
+mean return; it shows up in consistency/risk, which only a portfolio-level
+test (not a per-trade mean comparison) can see.**
+
+**Resolution of decision #5's kill criterion:** Falcon wins clearly on
+Calmar (test a). Per the human's own framing, this demonstrates the
+machinery's value "where it actually lives" — this does *not* raise the
+kill-criterion's odds; if anything it's a stronger vindication than a
+raw-mean win would have been, since it shows exactly *how* the value is
+created (risk reduction, not edge inflation).
+
 ## Summary of what does NOT change (no engine edits made this phase)
 
 Every number above comes from post-processing run #1's existing CSV plus a
@@ -204,30 +258,57 @@ which never touches per-ticker replay). No threshold, weight, or
 
 ---
 
-## Decisions needed from the human before Phase 2 starts
+## Decisions (recorded 2026-07-23)
 
-1. **Exposure-scaling adoption.** Given G1-a/c: adopt an exposure-scaling
-   policy for CAUTION-capped signals (recommend: sector-aware variant (e),
-   best Calmar among the scaled options)? Reject and keep the hard cap?
-   Request a different variant?
-2. **UNFAVORABLE risk.** Given the clustering result (6 of 8 periods,
-   n=25, thin): trade UNFAVORABLE-capped signals at all (variant (c),
-   1/4 size), or leave UNFAVORABLE fully blocked (variant (b/d)) pending
-   more data from run #2?
-3. **Pattern-weight recalibration scope.** Given G1-e's confirmed
-   inversion: is re-deriving `PATTERN_WEIGHTS` in scope for run #2's
-   engine changes (Phase 2), or held for Phase 4's calibrated scorer?
-4. **No-pattern path (B-8).** Given G1-f: monitor-tier demotion, raised
-   emission threshold, or something else, for the 78%-of-volume
-   no-pattern population?
-5. **Naive-momentum result.** Given G1-d's tie with naive momentum on this
-   run: does this change what Phase 2/3 prioritizes (e.g. moving faster
-   toward the structural-exit/RR-floor work in 2.2, which naive momentum
-   has none of and might separate the two), or is this treated as
-   noise pending run #2's larger/cleaner sample?
-6. **Success criterion 4's construction.** Revisit the "beat random's 95th
-   percentile" framing for run #2, given the mean-vs-percentile mismatch
-   noted in G1-d?
+1. **Exposure-scaling adoption: ADOPTED.** Variant (e), sector-aware
+   (CAUTION+NEUTRAL/STRONG at 1/2, CAUTION+WEAK excluded), for run #2.
+   Best Calmar among scaled options; reinforced by the extension test
+   (a) above.
+2. **UNFAVORABLE risk: KEEP BLOCKED for real entries; shadow-log
+   would-be entries in run #2.** n=25 across 6 of 8 periods is
+   encouraging but too thin to size real risk on. Shadow-logging grows
+   the sample for free and turns this into a data-driven Gate 2 decision
+   instead of a hunch now.
+3. **Cup & Handle: PROBATION (weight -> 0, detection stays on),
+   CONDITIONAL on the underperformance holding on the tuning split alone**
+   (2024-07-22 -> 2025-09-21, `docs/backtest_success_criteria.md`). Full-
+   window numbers have already been seen by everyone in this
+   conversation, so enactment is gated on a tuning-split-only re-check to
+   keep validation-period data out of the decision. Triangle/VCP ordering
+   stays untouched — reordering integers now is exactly the one-window
+   reaction Phase 4's calibrated scorer exists to replace wholesale.
+4. **No-pattern path (B-8): MONITOR-TIER DEMOTION.** Pattern presence
+   required for ALERT_WATCHLIST and above; no-pattern signals recorded in
+   the backtest log but not surfaced as live signals. Preserves the data
+   for Phase 4's continuous features to potentially rescue an
+   unnamed-tight-base subset later; does not raise the global score
+   threshold (which would also punish pattern-confirmed 40-64 signals as
+   collateral damage).
+5. **Naive-momentum tie: RESOLVED, does not raise the kill criterion.**
+   See "Gate 1 extension tests" above — Falcon-(e) wins decisively on
+   Calmar (2.23 vs 0.77) and max drawdown (-4.08% vs -28.33%) when
+   momentum's own trades are run through the identical portfolio
+   simulator, and the mean-tie is confirmed precisely (not a small-sample
+   fluke) but explained by a 2.4x variance difference, not equal edge.
+6. **Success criterion 4: AMENDED, loudly** (see
+   `docs/backtest_success_criteria.md`'s dated amendment note). The
+   original construction (EXECUTE's mean vs the 95th percentile of
+   *individual* random-trade outcomes) is mis-specified — the top 5% of
+   individual random trades is always large by construction. Replaced
+   with a permutation test: EXECUTE's mean vs the 95th percentile of the
+   distribution of random-resample *means*, each resample matched to
+   n=20 (or whatever EXECUTE's actual n is in the run being judged).
 
-**Per standing rule 5: this report does not proceed into Phase 2 on its
-own. Awaiting the human's read.**
+## Phase 2 scope addition (recorded 2026-07-23)
+
+**Regime recalibration (B-7) is now in scope for Phase 2**, beyond what
+was originally listed: 13 FAVORABLE days in a two-year window that
+included a sustained recovery is a classifier defect in practice,
+independent of the CHOPPY-vs-distribution-days attribution split in G1-b.
+Recalibrate on the tuning split only; sanity-check the result against
+known market history — months where NIFTY was making new highs should
+mostly classify FAVORABLE, or the classifier is still wrong.
+
+**Per standing rule 5, and per the human's explicit instruction: the
+extension-test numbers above are reported back before Phase 2 begins.
+Not starting Phase 2 implementation in this same turn.**

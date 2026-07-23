@@ -178,12 +178,13 @@ def naive_momentum_baseline(
         if future.empty:
             continue
 
-        exit_price = future.iloc[-1]["Close"]
+        exit_row = future.iloc[-1]
+        exit_price, exit_date = exit_row["Close"], exit_row["Date"]
         return_pct = (exit_price - entry_price) / entry_price * 100
         net_return_pct = return_pct - ROUND_TRIP_COST_PCT * 100
 
         rows.append({
-            "as_of_date": as_of_date, "ticker": best_ticker,
+            "as_of_date": as_of_date, "ticker": best_ticker, "exit_date": exit_date,
             "trailing_momentum_pct": round(best_momentum * 100, 2),
             "return_pct": round(return_pct, 2), "net_return_pct": round(net_return_pct, 2),
         })

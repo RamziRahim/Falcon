@@ -22,8 +22,31 @@ the human decides what to do about it at the relevant STOP GATE.
    (`backtesting/portfolio_simulator.py`, I-5) at 1% risk per trade / 5
    concurrent slots.
 
-4. **EXECUTE episodes beat the random-entry control's 95th percentile**,
-   net of transaction costs (I-4 baseline, K=100 random-entry draws).
+4. **[AMENDED 2026-07-23 -- see note below] EXECUTE's mean net return beats
+   the 95th percentile of the distribution of random-resample means, each
+   resample matched to n = EXECUTE's actual episode count in the run being
+   judged** (I-4 baseline, K=100 resamples, each resample itself drawn as
+   `n` random-entry draws averaged to a single mean; the 95th percentile is
+   taken across the K resample means, not across individual trades).
+
+   > **Amendment note (2026-07-23):** the original construction compared
+   > EXECUTE's *mean* return against the 95th percentile of *individual*
+   > random-trade outcomes. That comparison is mis-specified: the top 5%
+   > of individual random trades will always be large by construction
+   > (that's what a 95th percentile of single-trade noise is), so no
+   > strategy's average trade could realistically clear it -- it is not a
+   > test of whether the strategy beats chance. Discovered during Gate 1
+   > (`data/gate1_report.md`) when EXECUTE's 2.74% mean (n=20) failed to
+   > clear the original criterion's 7.12% while decisively beating the
+   > random control's own mean (-0.45%) and median (-1.01%). The corrected
+   > test is a proper permutation test: compare EXECUTE's mean against the
+   > sampling distribution of *means* of equal-sized random samples --
+   > which asks the right question (would EXECUTE's average performance
+   > be unusual for a same-sized random sample?) instead of an
+   > unanswerable one. Editing a pre-registered criterion is exactly what
+   > pre-registration is meant to guard against; this note exists so the
+   > change is loud, not quiet, and is not a licence to revisit criteria
+   > again without an equally explicit, dated justification.
 
 ## Tuning / validation split
 

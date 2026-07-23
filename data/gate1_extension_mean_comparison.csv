@@ -1,0 +1,2 @@
+falcon_n,falcon_mean,momentum_n,momentum_mean,mean_diff,ci_low,ci_high,t_stat,t_pvalue,u_stat,u_pvalue,cohens_d
+108,2.66,98,2.67,-0.01,-4.45,4.43,-0.005,0.9956,5144.0,0.7299,-0.001
