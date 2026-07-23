@@ -320,3 +320,100 @@ class TestDetectorFunnelWiring:
         )
 
         assert isinstance(trades, pd.DataFrame)
+
+
+def _fake_avoid_categorize(candidate, sector_row, market_verdict, pattern_details=None,
+                            disable_fundamental_signals=False, enable_microstructure_signals=False):
+    return {
+        "category": "AVOID", "market_regime_verdict": market_verdict,
+        "sector_health_verdict": "NEUTRAL", "confidence_score": 25.0,
+        "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
+        "entry": None, "stop_loss": None, "target": None, "max_holding_days": None,
+        "supporting_data": candidate, "pattern_details": pattern_details or {},
+    }
+
+
+class TestAvoidOutcomeRecording:
+    """2.5 (A-1): AVOID decisions get a HYPOTHETICAL forward outcome
+    recorded (never a real one -- categorize() genuinely never prices an
+    AVOID trade), needed for the EXECUTE > ALERT_WATCHLIST > AVOID
+    monotonicity criterion."""
+
+    def test_avoid_row_recorded_with_full_sample_rate(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+
+        monkeypatch.setattr(replay_engine, "categorize", _fake_avoid_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[30]  # leaves forward bars for outcome measurement
+
+        trades = run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+            avoid_sample_rate=1.0,
+        )
+
+        assert len(trades) == 1
+        row = trades.iloc[0]
+        assert row["category"] == "AVOID"
+        assert row["sampled_avoid"] == False
+        assert row["entry_price"] > 0  # a real hypothetical price was computed, not left None
+        assert row["exit_reason"] in {"TARGET_HIT", "STOP_HIT", "TIME_EXIT"}
+
+    def test_zero_sample_rate_records_nothing(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+
+        monkeypatch.setattr(replay_engine, "categorize", _fake_avoid_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[-1]
+
+        trades = run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+            avoid_sample_rate=0.0,
+        )
+
+        assert trades.empty
+
+    def test_sampled_avoid_flag_is_true_whenever_sampling_is_active(self, monkeypatch):
+        # rate=1.0 exactly is documented as "no sampling" -- anything below
+        # that means every kept row is part of a subsample by construction.
+        import backtesting.replay_engine as replay_engine
+
+        monkeypatch.setattr(replay_engine, "categorize", _fake_avoid_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        # Several tickers so at least one survives a 0.99 sample rate with
+        # a fixed seed, without the test depending on exact RNG output.
+        histories = {f"T{i}.NS": _random_walk_df(seed=i, n=60) for i in range(20)}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = histories["T0.NS"]["Date"].iloc[30]  # leaves forward bars for outcome measurement
+
+        trades = run_backtest(
+            universe_histories=histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+            avoid_sample_rate=0.99,
+            avoid_sample_seed=1,
+        )
+
+        assert not trades.empty, "expected at least one AVOID row to survive a 0.99 sample rate across 20 tickers"
+        assert (trades["sampled_avoid"] == True).all()

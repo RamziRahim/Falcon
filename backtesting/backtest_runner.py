@@ -28,6 +28,7 @@ and scoring.market_regime.get_vix_history() for the backtest's date range.
 """
 from __future__ import annotations
 
+import random
 import time
 from collections import defaultdict
 
@@ -38,7 +39,7 @@ from backtesting.detector_funnel import tally_funnel
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
 from backtesting.outcome_measurement import measure_forward_outcome
 from config import MAX_HOLDING_TRADING_DAYS
-from decision_engine.leadership_decision_engine import get_best_pattern_points
+from decision_engine.leadership_decision_engine import get_best_pattern_points, get_entry_target_stop
 from scoring.sector_map import sector_map
 
 logger = get_logger(__name__)
@@ -88,6 +89,20 @@ def _pattern_used(candidate: dict) -> str | None:
     return field_name
 
 
+def _hypothetical_trade_plan(candidate: dict, pattern_details: dict) -> dict:
+    """A-1: categorize() never prices an AVOID decision (entry/stop_loss/
+    target are all None) -- there's no real trade to plan. This reuses the
+    exact same selection + pricing logic (get_best_pattern_points ->
+    get_entry_target_stop) a REAL decision would have used, purely to
+    answer "what would have happened if we'd taken this anyway," which is
+    what the monotonicity check (EXECUTE > ALERT_WATCHLIST > AVOID,
+    docs/backtest_success_criteria.md criterion 2) needs. Never called
+    from the live/categorize() path -- backtest-only, analysis-only."""
+    _, best_field = get_best_pattern_points(candidate)
+    best_result = pattern_details.get(best_field) if best_field else None
+    return get_entry_target_stop(candidate, best_field, best_result)
+
+
 def run_backtest(
     universe_histories: dict,
     benchmark_history: pd.DataFrame,
@@ -99,11 +114,28 @@ def run_backtest(
     sector_index_histories: dict | None = None,
     enable_microstructure_signals: bool = False,
     funnel_counts: dict | None = None,
+    avoid_sample_rate: float = 1.0,
+    avoid_sample_seed: int = 42,
 ) -> pd.DataFrame:
     """
     Returns one row per signal generated (Part C's schema) across every
     ticker in universe_histories, sampled every sample_every_n_days
     trading days between start_date and end_date.
+
+    avoid_sample_rate (A-1, Phase 2.5): fraction of AVOID decisions to
+    record with a HYPOTHETICAL forward outcome (see
+    _hypothetical_trade_plan()'s own docstring) -- 1.0 (default) records
+    every AVOID candidate, since docs/backtest_success_criteria.md's
+    monotonicity criterion (EXECUTE > ALERT_WATCHLIST > AVOID) needs real
+    AVOID outcomes to even be testable. If AVOID volume turns out to
+    swamp run #2's runtime (AVOID is typically the largest category --
+    most candidates get disqualified or score too low), drop this to 0.3;
+    every recorded AVOID row then carries sampled_avoid=True so downstream
+    analysis knows it's reading a subsample, not the full AVOID
+    population, and shouldn't treat its raw count as comparable to
+    EXECUTE/ALERT_WATCHLIST's un-sampled ones. Uses a seeded
+    random.Random (avoid_sample_seed) for a reproducible run, not the
+    global random module.
 
     funnel_counts (A-4, Phase 2.4): optional dict[str, collections.Counter],
     mutated in place via detector_funnel.tally_funnel() for EVERY (ticker,
@@ -150,6 +182,7 @@ def run_backtest(
     sorted_dates = sorted(dates_to_tickers.keys())
     total_dates = len(sorted_dates)
     run_started_at = time.monotonic()
+    avoid_rng = random.Random(avoid_sample_seed)
 
     for date_index, as_of_date in enumerate(sorted_dates):
 
@@ -187,6 +220,54 @@ def run_backtest(
 
             if funnel_counts is not None:
                 tally_funnel(funnel_counts, decision.get("detector_funnel"))
+
+            if decision["category"] == "AVOID":
+                is_sampled = avoid_sample_rate < 1.0
+                if is_sampled and avoid_rng.random() >= avoid_sample_rate:
+                    continue
+
+                candidate = decision["supporting_data"]
+                pattern_details = decision.get("pattern_details") or {}
+                ets = _hypothetical_trade_plan(candidate, pattern_details)
+                hypothetical_entry = ets["entry"]
+
+                avoid_outcome = measure_forward_outcome(
+                    entry_date=as_of_date,
+                    entry_price=hypothetical_entry,
+                    stop_loss=ets["stop_loss"],
+                    target=ets["target"],
+                    full_history=full_history,
+                    max_holding_days=ets["max_holding_days"],
+                )
+
+                if avoid_outcome["exit_reason"] == "NO_DATA":
+                    continue
+
+                trade_records.append({
+                    "ticker": ticker,
+                    "entry_date": as_of_date,
+                    "entry_price": hypothetical_entry,
+                    "category": "AVOID",
+                    "pattern_used": _pattern_used(candidate),
+                    "market_regime_verdict": decision["market_regime_verdict"],
+                    "sector_health_verdict": decision["sector_health_verdict"],
+                    "exit_date": avoid_outcome["exit_date"],
+                    "exit_price": avoid_outcome["exit_price"],
+                    "exit_reason": avoid_outcome["exit_reason"],
+                    "return_pct": avoid_outcome["return_pct"],
+                    "days_held": avoid_outcome["days_held"],
+                    "target_pct": ((ets["target"] - hypothetical_entry) / hypothetical_entry) * 100,
+                    "stop_pct": ((hypothetical_entry - ets["stop_loss"]) / hypothetical_entry) * 100,
+                    "confidence_score": decision["confidence_score"],
+                    "caps_applied": ",".join(decision["caps_applied"]),
+                    # A-1: True whenever sampling was active for this run at
+                    # all -- every AVOID row recorded under a rate < 1.0 is,
+                    # by construction, part of a subsample, not the full
+                    # AVOID population, regardless of whether this
+                    # particular row happened to be the one kept.
+                    "sampled_avoid": is_sampled,
+                })
+                continue
 
             if decision["category"] not in SIGNAL_CATEGORIES or decision["entry"] is None:
                 continue
@@ -231,6 +312,7 @@ def run_backtest(
                 # score, capped by the regime/sector ceiling."
                 "confidence_score": decision["confidence_score"],
                 "caps_applied": ",".join(decision["caps_applied"]),
+                "sampled_avoid": False,  # only ever True for AVOID rows, see above
             })
 
     return pd.DataFrame(trade_records)

@@ -21,6 +21,13 @@ from scoring.sector_indices import get_sector_index_history
 
 ENABLE_MICROSTRUCTURE_SIGNALS = False
 
+# A-1 (2.5): fraction of AVOID decisions to record with a hypothetical
+# forward outcome. 1.0 records every one -- drop to e.g. 0.3 if AVOID
+# volume turns out to swamp runtime (AVOID is typically the largest
+# category). See run_backtest()'s own docstring for what sampled_avoid
+# means downstream.
+AVOID_SAMPLE_RATE = 1.0
+
 # ── 1. Load universe from whatever is in data/technical/ ──────────────────────
 print("Loading universe from data/technical/...")
 
@@ -111,6 +118,7 @@ trades = run_backtest(
     sector_index_histories=sector_index_histories,
     enable_microstructure_signals=ENABLE_MICROSTRUCTURE_SIGNALS,
     funnel_counts=funnel_counts,
+    avoid_sample_rate=AVOID_SAMPLE_RATE,
 )
 
 # ── 6. Save raw results ────────────────────────────────────────────────────────

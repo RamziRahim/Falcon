@@ -101,6 +101,12 @@ NO_DATA_RESULT_TEMPLATE = {
     # ran for this (ticker, date) -- not enough truncated history yet --
     # so there's nothing to attribute to any detector's own preconditions.
     "detector_funnel": None,
+    # A-1: lets a caller price a HYPOTHETICAL trade plan for an AVOID
+    # decision (get_best_pattern_points + get_entry_target_stop against
+    # supporting_data) without re-deriving pattern_details itself --
+    # categorize() itself never needs this for a real decision, only
+    # backtest-side "what if we'd traded this anyway" analysis does.
+    "pattern_details": {},
 }
 
 
@@ -360,4 +366,8 @@ def replay_decision_as_of(
     # A-4 detector funnel diagnostics -- built from `analysis` (already
     # computed above for pattern_row), not a second detection pass.
     result["detector_funnel"] = build_detector_funnel(analysis)
+    # A-1: already computed above for categorize()'s own pattern_details
+    # argument -- returned too so a caller can price a hypothetical trade
+    # plan for an AVOID result without re-deriving it.
+    result["pattern_details"] = pattern_details
     return result
