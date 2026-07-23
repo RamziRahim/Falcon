@@ -20,6 +20,7 @@ import pandas as pd
 import pytest
 
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
+from technical_analysis.pattern_system.models import SwingPoint
 
 
 def _vcp_breakout_df(extra_days_after_breakout: int = 30, corrupt_future: bool = False) -> pd.DataFrame:
@@ -148,3 +149,103 @@ class TestRSRatingUsesTruncatedUniverse:
         # look relatively strong, strong peers make it look relatively weak.
         assert rating_a != rating_b
         assert rating_a > rating_b
+
+
+def _pivot(pivot_type, is_higher, index=0):
+    return SwingPoint(index=index, date="d", price=100.0, type=pivot_type, is_higher=is_higher)
+
+
+def _minimal_df(n=25):
+    return pd.DataFrame({
+        "Date": pd.date_range("2022-01-01", periods=n, freq="D"),
+        "Close": [100.0] * n, "High": [101.0] * n, "Low": [99.0] * n, "Volume": [100_000] * n,
+    })
+
+
+class TestRegimeTrendStateRecalibration:
+    """B-7: _regime_trend_state_of_truncated() -- market-level-only
+    recalibration, verified on the tuning split (see the function's own
+    docstring for the real NIFTY numbers). Pivots are monkeypatched
+    directly (detect_swings is already tested elsewhere) so each case
+    tests only the classification logic itself."""
+
+    def _classify(self, monkeypatch, highs, lows):
+        import backtesting.replay_engine as replay_engine
+
+        pivots = (
+            [_pivot("HIGH", flag, i) for i, flag in enumerate(highs)]
+            + [_pivot("LOW", flag, i) for i, flag in enumerate(lows)]
+        )
+        monkeypatch.setattr(replay_engine.macro_swing_detector, "detect_swings", lambda df: pivots)
+
+        return replay_engine._regime_trend_state_of_truncated(_minimal_df())
+
+    def test_clear_uptrend(self, monkeypatch):
+        result = self._classify(monkeypatch, highs=[True, True, True], lows=[True, True, True])
+        assert result == "UPTREND"
+
+    def test_clear_downtrend_short_circuits_before_any_vote(self, monkeypatch):
+        # Only the single most recent pivot pair matters for DOWNTREND --
+        # deliberately NOT loosened, unlike UPTREND.
+        result = self._classify(monkeypatch, highs=[True, True, False], lows=[True, True, False])
+        assert result == "DOWNTREND"
+
+    def test_back_and_fill_pivot_pair_still_reads_uptrend(self, monkeypatch):
+        # One "bad" pivot pair each side (majority still 2-of-3 "higher")
+        # -- the whole point of the recalibration: this used to flip to
+        # CHOPPY under the single-most-recent-pivot-pair rule whenever the
+        # LAST pivot happened to be the back-and-fill one.
+        result = self._classify(monkeypatch, highs=[True, False, True], lows=[True, True, False])
+        assert result == "UPTREND"
+
+    def test_no_majority_either_direction_is_choppy(self, monkeypatch):
+        # Last pivot pair isn't a clean downtrend (high is higher), but
+        # only 1-of-3 lows are higher -- no majority for UPTREND either.
+        result = self._classify(monkeypatch, highs=[True, True, True], lows=[False, False, True])
+        assert result == "CHOPPY"
+
+    def test_too_few_pivots_to_vote_is_choppy(self, monkeypatch):
+        result = self._classify(monkeypatch, highs=[True], lows=[True])
+        assert result == "CHOPPY"
+
+    def test_no_pivots_at_all_is_choppy(self, monkeypatch):
+        result = self._classify(monkeypatch, highs=[], lows=[])
+        assert result == "CHOPPY"
+
+    def test_short_history_is_unknown_without_calling_detect_swings(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+
+        def _fail_if_called(df):
+            raise AssertionError("detect_swings should not be called for too-short history")
+
+        monkeypatch.setattr(replay_engine.macro_swing_detector, "detect_swings", _fail_if_called)
+
+        short_df = _minimal_df(n=5)
+        result = replay_engine._regime_trend_state_of_truncated(short_df)
+
+        assert result == "UNKNOWN"
+
+    def test_does_not_affect_the_shared_per_stock_trend_helper(self, monkeypatch):
+        # _trend_state_of_truncated (pattern-gating/sector-breadth) must
+        # still use market_structure_engine's own original rule, untouched
+        # by this recalibration -- confirmed by NOT monkeypatching
+        # detect_swings here and instead checking the two functions can
+        # legitimately disagree given the same monkeypatched pivots.
+        import backtesting.replay_engine as replay_engine
+
+        # Back-and-fill pivots: original single-pivot-pair rule reads
+        # CHOPPY (last high True but last low False -> neither clean
+        # uptrend nor downtrend); recalibrated rule reads UPTREND (2-of-3
+        # majority each side).
+        pivots = [
+            _pivot("HIGH", True, 0), _pivot("HIGH", False, 1), _pivot("HIGH", True, 2),
+            _pivot("LOW", True, 0), _pivot("LOW", True, 1), _pivot("LOW", False, 2),
+        ]
+        monkeypatch.setattr(replay_engine.macro_swing_detector, "detect_swings", lambda df: pivots)
+
+        df = _minimal_df()
+        original = replay_engine._trend_state_of_truncated(df)
+        recalibrated = replay_engine._regime_trend_state_of_truncated(df)
+
+        assert original == "CHOPPY"
+        assert recalibrated == "UPTREND"

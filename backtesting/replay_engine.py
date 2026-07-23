@@ -125,11 +125,83 @@ def _trend_state_of_truncated(df: pd.DataFrame) -> str:
     structure, not the full 5-detector chain -- rank_sectors()'s
     Pct_Uptrend only needs this one field per ticker, and running full
     pattern detection for every universe member at every replay date
-    would multiply the already-expensive per-date cost for no benefit."""
+    would multiply the already-expensive per-date cost for no benefit.
+
+    This is also the same rule per-stock pattern detection gates on
+    (all 5 continuation detectors require trend_state == "UPTREND") --
+    deliberately NOT touched by _regime_trend_state_of_truncated() below,
+    which recalibrates ONLY the market-level regime signal. Changing this
+    shared function would silently loosen pattern-detection eligibility
+    and sector-breadth Pct_Uptrend everywhere, a much bigger blast radius
+    than B-7's "regime recalibration" scope calls for."""
     if len(df) < MIN_HISTORY_ROWS:
         return "UNKNOWN"
     macro_pivots = macro_swing_detector.detect_swings(df)
     return market_structure_engine.analyze_structure(df, macro_pivots)["trend_state"]
+
+
+def _regime_trend_state_of_truncated(df: pd.DataFrame, vote_window: int = 3) -> str:
+    """
+    B-7: recalibrated market-level trend classification, used ONLY for
+    the regime signal (get_market_regime_verdict()'s nifty_trend_state
+    input) -- NOT for per-stock pattern-detection gating or sector-breadth
+    Pct_Uptrend (both still use _trend_state_of_truncated()'s original
+    rule; see that function's own docstring for why this is deliberately
+    scoped narrowly).
+
+    market_structure_engine.analyze_structure()'s original rule requires
+    the SINGLE most recently confirmed HIGH pivot AND the single most
+    recently confirmed LOW pivot to BOTH be higher than their own
+    predecessor to call UPTREND. A real, sustained recovery routinely
+    produces one "back-and-fill" pivot pair (a higher high followed by a
+    slightly lower low before continuing up) that flips this rule to
+    CHOPPY even though the broader structure is still trending -- verified
+    directly against run #1's tuning split (2024-07-22 -> 2025-09-21):
+    NIFTY's real 2025-03-04 trough-to-recovery leg read CHOPPY on 99 of
+    136 days (72.8%) under the original rule.
+
+    Recalibrated (tuning split only): DOWNTREND keeps the ORIGINAL strict
+    single-most-recent-pivot-pair rule -- a false negative on a real
+    downtrend is costlier than one on an uptrend, so this side is
+    deliberately not loosened. UPTREND uses a majority vote over the last
+    `vote_window` confirmed HIGH pivots and the last `vote_window`
+    confirmed LOW pivots independently (a strict majority of each must be
+    "higher" than their own predecessor), tolerating one back-and-fill
+    pivot without flipping the whole classification to CHOPPY. Anything
+    that clears neither test (including too few confirmed pivots to vote)
+    is CHOPPY, same fallback as before.
+
+    Verified on the tuning split: this asymmetric design took FAVORABLE
+    from 6 to 9 days (of 292) while leaving UNFAVORABLE UNCHANGED at 75 --
+    a symmetric majority-vote-on-both-sides variant also tried during
+    calibration raised FAVORABLE to 9 but ALSO raised UNFAVORABLE to 86
+    (worse), which is why DOWNTREND was deliberately left on the original
+    strict rule instead of also being loosened.
+    """
+    if len(df) < MIN_HISTORY_ROWS:
+        return "UNKNOWN"
+
+    macro_pivots = macro_swing_detector.detect_swings(df)
+    highs = [p for p in macro_pivots if p.type == "HIGH"]
+    lows = [p for p in macro_pivots if p.type == "LOW"]
+
+    if not highs or not lows:
+        return "CHOPPY"
+
+    if not highs[-1].is_higher and not lows[-1].is_higher:
+        return "DOWNTREND"
+
+    if len(highs) >= vote_window and len(lows) >= vote_window:
+        recent_highs = highs[-vote_window:]
+        recent_lows = lows[-vote_window:]
+        highs_higher = sum(1 for p in recent_highs if p.is_higher)
+        lows_higher = sum(1 for p in recent_lows if p.is_higher)
+        majority = vote_window // 2 + 1
+
+        if highs_higher >= majority and lows_higher >= majority:
+            return "UPTREND"
+
+    return "CHOPPY"
 
 
 def build_scored_universe_as_of(
@@ -297,9 +369,14 @@ def replay_decision_as_of(
     # is no longer used for the regime verdict itself -- kept as a
     # parameter for now since it's still fetched by callers and may back a
     # future stop-loss-width use, per the redesign's own scope note.
+    #
+    # B-7: the recalibrated trend classification (_regime_trend_state_of_truncated,
+    # not the shared _trend_state_of_truncated per-stock/sector-breadth
+    # helper) -- see that function's own docstring for why this signal
+    # specifically needed recalibrating and what changed.
     truncated_benchmark = _truncate(benchmark_history, as_of_date)
     distribution_days = count_distribution_days(truncated_benchmark)
-    nifty_trend_state = _trend_state_of_truncated(truncated_benchmark)
+    nifty_trend_state = _regime_trend_state_of_truncated(truncated_benchmark)
 
     if nifty_trend_state != "UNKNOWN" and distribution_days is not None:
         market_verdict = get_market_regime_verdict(nifty_trend_state, distribution_days)

@@ -347,3 +347,55 @@ mostly classify FAVORABLE, or the classifier is still wrong.
 **Per standing rule 5, and per the human's explicit instruction: the
 extension-test numbers above are reported back before Phase 2 begins.
 Not starting Phase 2 implementation in this same turn.**
+
+## B-7 regime recalibration — result (2026-07-23)
+
+Root cause identified: NIFTY's own trend classification
+(`technical_analysis/pattern_system/market_structure.py`'s
+`MarketStructureEngine.analyze_structure()`, shared with per-stock pattern
+gating and sector-breadth Pct_Uptrend) calls UPTREND only when the SINGLE
+most recently confirmed HIGH pivot AND the single most recently confirmed
+LOW pivot are BOTH individually higher than their own predecessor. A real,
+sustained recovery routinely produces one "back-and-fill" pivot pair (a
+higher high followed by a slightly lower low before continuing up) that
+flips this rule to CHOPPY. Verified directly on the tuning split: the
+2025-03-04 trough-to-recovery leg (entirely inside the tuning split) read
+CHOPPY on 99 of 136 days (72.8%) under the original rule.
+
+**Recalibration implemented as a market-level-only fix**
+(`backtesting/replay_engine.py::_regime_trend_state_of_truncated()`),
+deliberately NOT touching the shared `market_structure_engine`/
+`_trend_state_of_truncated()` used for per-stock pattern gating and
+sector-breadth — that would silently loosen pattern-detection eligibility
+system-wide, a much bigger blast radius than "regime recalibration" calls
+for. Asymmetric design, tuning-split-only: DOWNTREND keeps the original
+strict single-pivot-pair rule (a false negative there is costlier than
+one on the upside); UPTREND uses a majority vote over the last 3 confirmed
+HIGH pivots and the last 3 confirmed LOW pivots independently, tolerating
+one back-and-fill pivot without flipping to CHOPPY.
+
+**Tuning-split verification** (2024-07-22 → 2025-09-21, 292 days):
+
+| | CAUTION | UNFAVORABLE | FAVORABLE |
+|---|---|---|---|
+| Original | 211 | 75 | 6 |
+| Symmetric majority-vote (both sides loosened, tried and rejected) | 197 | 86 | 9 |
+| **Asymmetric (adopted)** | 208 | **75 (unchanged)** | **9** |
+
+The symmetric variant (loosening both UPTREND and DOWNTREND) was tried
+first and rejected: it also raised FAVORABLE to 9, but raised UNFAVORABLE
+too (75→86) — a worse false-negative rate on the side that matters most.
+The asymmetric design is a clean improvement over the original: FAVORABLE
++50% (6→9), UNFAVORABLE unchanged, CAUTION down by 3.
+
+**Honest framing for Gate 2:** this is a real, verified improvement, not
+a full fix — FAVORABLE is still a small fraction of the tuning split
+(9/292, ~3%, up from ~2%). The underlying scarcity finding (G1-b: the
+market spent 97%+ of the window in CAUTION/UNFAVORABLE) is a genuine
+market-history fact this recalibration cannot and should not paper over;
+it only corrects a real classifier defect sitting on top of that fact.
+The full-window sanity check the human asked for ("months where NIFTY
+was making new highs should mostly classify FAVORABLE") uses the
+2026-01-02 all-time high, which falls in the VALIDATION split — reading
+that number now would violate standing rule 6, so it is deliberately left
+for Gate 2/3's validation-split read, not checked here.
