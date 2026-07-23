@@ -266,16 +266,25 @@ def aggregate_by(trades: pd.DataFrame, group_column: str, return_column: str = "
     next to every stat, not just left implicit in the row count -- a 71%
     win rate on 7 trades means nothing.
     """
+    empty_result = pd.DataFrame(columns=[
+        "group", "sample_size", "win_rate_pct", "avg_return_pct",
+        "avg_win_pct", "avg_loss_pct", "expectancy_pct",
+    ])
+
     if trades.empty:
-        return pd.DataFrame(columns=[
-            "group", "sample_size", "win_rate_pct", "avg_return_pct",
-            "avg_win_pct", "avg_loss_pct", "expectancy_pct",
-        ])
+        return empty_result
 
     rows = [
         _group_stats(group_value, group_df, return_column)
-        for group_value, group_df in trades.groupby(group_column)
+        for group_value, group_df in trades.groupby(group_column, observed=True)
     ]
+    # groupby(dropna=True, the pandas default) silently drops an all-NaN
+    # group -- e.g. qcut() on a single-row/no-variance input can produce one
+    # NaN-category row with zero real groups. rows=[] then would otherwise
+    # produce a DataFrame with no columns at all (not just no rows), which
+    # crashes any caller indexing into "expectancy_pct" etc.
+    if not rows:
+        return empty_result
     return pd.DataFrame(rows)
 
 

@@ -16,6 +16,7 @@ sys.path.insert(0, ".")
 import pandas as pd
 
 from backtesting.backtest_runner import compute_expectancy, print_ceiling_attribution
+from backtesting.component_diagnostics import print_component_diagnostics
 from backtesting.episode_builder import build_episodes
 
 RAW_RESULTS_PATH = "data/backtest_results.csv"
@@ -69,6 +70,8 @@ def main():
     print("  (net_return_pct, i.e. already net of ROUND_TRIP_COST_PCT)")
     print("=" * 78)
     print_ceiling_attribution(episodes, return_column="net_return_pct")
+
+    print_component_diagnostics(episodes)
 
 
 if __name__ == "__main__":
