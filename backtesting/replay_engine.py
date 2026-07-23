@@ -68,6 +68,7 @@ from __future__ import annotations
 
 import pandas as pd
 
+from backtesting.detector_funnel import build_detector_funnel
 from technical_analysis.indicator_calculator import indicator_calculator
 from technical_analysis.pattern_engine import analyze_ticker, build_pattern_row_fields, macro_swing_detector
 from technical_analysis.pattern_system.market_structure import market_structure_engine
@@ -96,6 +97,10 @@ NO_DATA_RESULT_TEMPLATE = {
     "stop_loss": None,
     "target": None,
     "supporting_data": {},
+    # A-4 detector funnel diagnostics: None means detection never even
+    # ran for this (ticker, date) -- not enough truncated history yet --
+    # so there's nothing to attribute to any detector's own preconditions.
+    "detector_funnel": None,
 }
 
 
@@ -346,9 +351,13 @@ def replay_decision_as_of(
     )
     pattern_details = assemble_pattern_details(pattern_row)
 
-    return categorize(
+    result = categorize(
         candidate, sector_row, market_verdict,
         pattern_details=pattern_details,
         disable_fundamental_signals=True,
         enable_microstructure_signals=enable_microstructure_signals,
     )
+    # A-4 detector funnel diagnostics -- built from `analysis` (already
+    # computed above for pattern_row), not a second detection pass.
+    result["detector_funnel"] = build_detector_funnel(analysis)
+    return result

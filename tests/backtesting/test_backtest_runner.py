@@ -10,6 +10,7 @@ import pytest
 from backtesting.backtest_runner import (
     aggregate_ceiling_attribution, compute_expectancy, populate_sector_cache, run_backtest,
 )
+from backtesting.detector_funnel import DETECTOR_DISPLAY_NAMES
 
 
 class TestExpectancyFormula:
@@ -252,3 +253,70 @@ class TestEnableMicrostructureSignalsThreadsThroughRunBacktest:
 
         assert received_flags, "categorize() was never reached -- fixture didn't produce a sampled date"
         assert all(flag is False for flag in received_flags)
+
+
+class TestDetectorFunnelWiring:
+    """2.4: run_backtest()'s funnel_counts accumulator is populated for
+    EVERY (ticker, date) evaluation -- categorize() is monkeypatched
+    (irrelevant to the funnel, which is built from analyze_ticker()'s own
+    output before categorize() is ever called), so the real detection
+    chain runs unmodified against a real, if synthetic, OHLCV history."""
+
+    def test_funnel_counts_populated_when_provided(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+
+        def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
+                             disable_fundamental_signals=False, enable_microstructure_signals=False):
+            return {
+                "category": "NO_DATA", "market_regime_verdict": market_verdict,
+                "sector_health_verdict": None, "confidence_score": 0.0,
+                "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
+                "entry": None, "stop_loss": None, "target": None, "supporting_data": {},
+            }
+
+        monkeypatch.setattr(replay_engine, "categorize", fake_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[-1]
+
+        funnel_counts: dict = {}
+        run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+            funnel_counts=funnel_counts,
+        )
+
+        assert funnel_counts, "funnel_counts should have at least one detector tallied"
+        assert set(funnel_counts.keys()).issubset(DETECTOR_DISPLAY_NAMES.keys())
+        for counter in funnel_counts.values():
+            assert sum(counter.values()) == 1  # one (ticker, date) evaluation in this fixture
+
+    def test_omitting_funnel_counts_does_not_change_behavior(self, monkeypatch):
+        # Default None -- must not raise, must not require the caller to
+        # opt in to get identical behavior to before A-4 existed.
+        import backtesting.replay_engine as replay_engine
+
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[-1]
+
+        trades = run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+        )
+
+        assert isinstance(trades, pd.DataFrame)

@@ -13,6 +13,7 @@ sys.path.insert(0, ".")
 import pandas as pd
 from datetime import date, timedelta
 from backtesting.backtest_runner import run_backtest, print_backtest_summary, populate_sector_cache
+from backtesting.detector_funnel import print_detector_funnel
 from scoring.benchmark import get_benchmark_history
 from scoring.market_regime import get_vix_history
 from scoring.sector_map import sector_map
@@ -99,6 +100,7 @@ print("\nStarting backtest — progress + a computed time-remaining estimate "
       "will be logged every 10 sampled dates. Go make chai. ☕")
 
 # ── 5. Run ─────────────────────────────────────────────────────────────────────
+funnel_counts: dict = {}
 trades = run_backtest(
     universe_histories=universe_histories,
     benchmark_history=benchmark_history,
@@ -108,12 +110,16 @@ trades = run_backtest(
     sample_every_n_days=5,
     sector_index_histories=sector_index_histories,
     enable_microstructure_signals=ENABLE_MICROSTRUCTURE_SIGNALS,
+    funnel_counts=funnel_counts,
 )
 
 # ── 6. Save raw results ────────────────────────────────────────────────────────
 output_path = "data/backtest_results.csv"
 trades.to_csv(output_path, index=False)
 print(f"\nRaw trade log saved → {output_path}  ({len(trades)} trades)")
+
+# ── 6b. Detector funnel diagnostics (A-4) ──────────────────────────────────────
+print_detector_funnel(funnel_counts)
 
 # ── 7. Print summary ───────────────────────────────────────────────────────────
 print_backtest_summary(trades)

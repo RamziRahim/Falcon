@@ -34,6 +34,7 @@ from collections import defaultdict
 import pandas as pd
 
 from common.logger import get_logger
+from backtesting.detector_funnel import tally_funnel
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
 from backtesting.outcome_measurement import measure_forward_outcome
 from config import MAX_HOLDING_TRADING_DAYS
@@ -97,11 +98,22 @@ def run_backtest(
     max_holding_days: int = MAX_HOLDING_TRADING_DAYS,
     sector_index_histories: dict | None = None,
     enable_microstructure_signals: bool = False,
+    funnel_counts: dict | None = None,
 ) -> pd.DataFrame:
     """
     Returns one row per signal generated (Part C's schema) across every
     ticker in universe_histories, sampled every sample_every_n_days
     trading days between start_date and end_date.
+
+    funnel_counts (A-4, Phase 2.4): optional dict[str, collections.Counter],
+    mutated in place via detector_funnel.tally_funnel() for EVERY (ticker,
+    date) evaluation -- including AVOID and NO_DATA outcomes, not just the
+    EXECUTE/ALERT_WATCHLIST rows that make it into the returned DataFrame.
+    A per-detector precondition-survival count needs every attempt, not
+    just the ones that became a trade, or it couldn't answer "how many
+    setups cleared the structural bar but never confirmed a breakout."
+    None (the default) skips funnel tracking entirely -- existing callers
+    that don't pass this see identical behavior to before A-4 existed.
 
     Universe-wide RS/sector scoring (build_scored_universe_as_of) is
     computed once per distinct sampled date and reused across every
@@ -172,6 +184,9 @@ def run_backtest(
                 precomputed_universe_scoring=universe_scoring,
                 enable_microstructure_signals=enable_microstructure_signals,
             )
+
+            if funnel_counts is not None:
+                tally_funnel(funnel_counts, decision.get("detector_funnel"))
 
             if decision["category"] not in SIGNAL_CATEGORIES or decision["entry"] is None:
                 continue
