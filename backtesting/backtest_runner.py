@@ -28,6 +28,7 @@ and scoring.market_regime.get_vix_history() for the backtest's date range.
 """
 from __future__ import annotations
 
+import time
 from collections import defaultdict
 
 import pandas as pd
@@ -133,8 +134,23 @@ def run_backtest(
             dates_to_tickers[as_of_date].append(ticker)
 
     trade_records = []
+    sorted_dates = sorted(dates_to_tickers.keys())
+    total_dates = len(sorted_dates)
+    run_started_at = time.monotonic()
 
-    for as_of_date in sorted(dates_to_tickers.keys()):
+    for date_index, as_of_date in enumerate(sorted_dates):
+
+        # Computed from this run's own observed pace, not a hardcoded guess --
+        # replay speed depends on universe size/host machine, so a fixed
+        # "~70 minutes" estimate is wrong as soon as either changes.
+        if date_index > 0 and date_index % 10 == 0:
+            elapsed = time.monotonic() - run_started_at
+            per_date = elapsed / date_index
+            remaining = per_date * (total_dates - date_index)
+            logger.info(
+                "Progress: %d/%d sampled dates (%.1fs elapsed, ~%.1fs remaining)",
+                date_index, total_dates, elapsed, remaining,
+            )
 
         universe_scoring = build_scored_universe_as_of(
             as_of_date, universe_histories, benchmark_history, sector_index_histories,
@@ -369,6 +385,14 @@ def print_backtest_summary(trades: pd.DataFrame, low_sample_threshold: int = 20)
     striking win rate on a handful of trades speak for itself."""
     print("\n" + "=" * 60)
     print("           FALCON BACKTEST RESULTS SUMMARY               ")
+    print("=" * 60)
+    print(
+        " Universe construction: curated list from current screens, not a\n"
+        " point-in-time historical constituent list -- tickers that were\n"
+        " delisted/renamed/merged out of the index over the backtest window\n"
+        " are absent. Every count and stat below is a survivorship-biased\n"
+        " upper bound, not an unconditional estimate."
+    )
     print("=" * 60)
 
     if trades.empty:

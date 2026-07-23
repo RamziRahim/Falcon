@@ -64,6 +64,46 @@ def _random_walk_df(n: int = 60, seed: int = 1) -> pd.DataFrame:
     })
 
 
+class TestComputedRuntimeEstimate:
+    """0.4: the old hardcoded '~70 minutes' guess is gone -- run_backtest()
+    now logs its own elapsed-per-date x remaining-dates estimate every 10
+    sampled dates, computed from this run's actual observed pace."""
+
+    def test_progress_logged_every_ten_dates_not_a_hardcoded_guess(self, monkeypatch, caplog):
+        import backtesting.replay_engine as replay_engine
+
+        def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
+                             disable_fundamental_signals=False, enable_microstructure_signals=False):
+            return {
+                "category": "NO_DATA", "market_regime_verdict": market_verdict,
+                "sector_health_verdict": None, "confidence_score": 0.0,
+                "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
+                "entry": None, "stop_loss": None, "target": None, "supporting_data": {},
+            }
+
+        monkeypatch.setattr(replay_engine, "categorize", fake_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+
+        with caplog.at_level("INFO", logger="backtesting.backtest_runner"):
+            run_backtest(
+                universe_histories=universe_histories,
+                benchmark_history=benchmark_history,
+                vix_history=None,
+                start_date=history["Date"].iloc[0],
+                end_date=history["Date"].iloc[-1],
+                sample_every_n_days=1,  # 60 daily rows -> 60 sampled dates, several >10 checkpoints
+            )
+
+        progress_lines = [r.message for r in caplog.records if "Progress:" in r.message]
+        assert progress_lines, "expected at least one progress log line for a 60-date run"
+        assert any("remaining" in line for line in progress_lines)
+        assert "70 minutes" not in " ".join(progress_lines)
+
+
 class TestEnableMicrostructureSignalsThreadsThroughRunBacktest:
     """Confirms enable_microstructure_signals travels run_backtest() ->
     replay_decision_as_of() -> categorize() end-to-end -- not that

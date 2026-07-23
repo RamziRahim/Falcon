@@ -95,7 +95,8 @@ print(f"\nTest window: {start_date.date()} → {end_date.date()}")
 print(f"Universe:    {len(universe_histories)} tickers")
 print(f"Sampling:    every 5 trading days")
 print(f"Microstructure signals (liquidity sweep + FVG): {'ON' if ENABLE_MICROSTRUCTURE_SIGNALS else 'off'}")
-print("\nStarting backtest — this will take ~70 minutes. Go make chai. ☕")
+print("\nStarting backtest — progress + a computed time-remaining estimate "
+      "will be logged every 10 sampled dates. Go make chai. ☕")
 
 # ── 5. Run ─────────────────────────────────────────────────────────────────────
 trades = run_backtest(
