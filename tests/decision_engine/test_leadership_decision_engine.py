@@ -17,10 +17,12 @@ from __future__ import annotations
 
 import pytest
 
+from config import MAX_HOLDING_TRADING_DAYS
 from decision_engine.leadership_decision_engine import (
     categorize,
     compute_score,
     get_best_pattern_points,
+    get_entry_target_stop,
     get_fakeout_risk_flags,
 )
 
@@ -195,6 +197,48 @@ class TestCupHandleProbation:
         result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
 
         assert not any(f.startswith("PATTERN_ON_PROBATION") for f in result["fakeout_risk_flags"])
+
+
+class TestTimeStopTradePlanField:
+    """2.1: max_holding_days is part of the trade plan (alongside
+    entry/stop_loss/target), a single MAX_HOLDING_TRADING_DAYS config
+    value -- not something a caller has to separately know to apply."""
+
+    def test_get_entry_target_stop_includes_max_holding_days(self):
+        candidate = _candidate(is_vcp_breakout=True)
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", {"pivot_level": 100.0})
+
+        assert result["max_holding_days"] == MAX_HOLDING_TRADING_DAYS
+
+    def test_categorize_passes_max_holding_days_through_for_a_real_trade(self):
+        candidate = _candidate(is_vcp_breakout=True, RS_Rating=80.0)
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] != "AVOID"
+        assert result["max_holding_days"] == MAX_HOLDING_TRADING_DAYS
+
+    def test_categorize_max_holding_days_is_none_for_disqualifier_avoid(self):
+        candidate = _candidate(Trend_State="DOWNTREND")
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "AVOID"
+        assert result["max_holding_days"] is None
+
+    def test_categorize_max_holding_days_is_none_for_score_based_avoid(self):
+        # No pattern, no fundamentals, middling everything -- scores well
+        # under 40 with the default fixture.
+        candidate = _candidate()
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "AVOID"
+        assert result["max_holding_days"] is None
 
 
 class TestMicrostructureSignalsAreFeatureFlagged:

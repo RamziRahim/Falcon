@@ -36,6 +36,7 @@ import pandas as pd
 from common.logger import get_logger
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
 from backtesting.outcome_measurement import measure_forward_outcome
+from config import MAX_HOLDING_TRADING_DAYS
 from decision_engine.leadership_decision_engine import get_best_pattern_points
 from scoring.sector_map import sector_map
 
@@ -93,7 +94,7 @@ def run_backtest(
     start_date: pd.Timestamp,
     end_date: pd.Timestamp,
     sample_every_n_days: int = 5,
-    max_holding_days: int = 20,
+    max_holding_days: int = MAX_HOLDING_TRADING_DAYS,
     sector_index_histories: dict | None = None,
     enable_microstructure_signals: bool = False,
 ) -> pd.DataFrame:
@@ -181,7 +182,12 @@ def run_backtest(
                 stop_loss=decision["stop_loss"],
                 target=decision["target"],
                 full_history=full_history,
-                max_holding_days=max_holding_days,
+                # The trade plan's own max_holding_days (categorize() ->
+                # get_entry_target_stop(), 2.1) is the authoritative time
+                # stop for this specific decision -- falls back to the
+                # function parameter only if a decision dict doesn't carry
+                # one (e.g. a test double stubbing categorize()).
+                max_holding_days=decision.get("max_holding_days") or max_holding_days,
             )
 
             if outcome["exit_reason"] == "NO_DATA":

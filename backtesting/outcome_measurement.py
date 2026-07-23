@@ -16,6 +16,8 @@ from __future__ import annotations
 
 import pandas as pd
 
+from config import MAX_HOLDING_TRADING_DAYS
+
 NO_OUTCOME_RESULT = {
     "exit_date": None, "exit_price": None, "exit_reason": "NO_DATA",
     "return_pct": None, "days_held": None,
@@ -28,7 +30,7 @@ def measure_forward_outcome(
     stop_loss: float,
     target: float,
     full_history: pd.DataFrame,
-    max_holding_days: int = 20,
+    max_holding_days: int = MAX_HOLDING_TRADING_DAYS,
 ) -> dict:
     """
     Walks forward from entry_date up to max_holding_days trading days.

@@ -118,6 +118,18 @@ HIGH_RISK = 60
 # rather than silently baked into a single number.
 ROUND_TRIP_COST_PCT = 0.003
 
+# Time stop (I-3): single source of truth for how long a swing trade is
+# held before a TIME_EXIT if neither target nor stop was hit --
+# backtesting/outcome_measurement.py's measure_forward_outcome() and
+# backtesting/backtest_runner.py's run_backtest() both default to this
+# rather than each carrying their own hardcoded number, and
+# leadership_decision_engine.py's get_entry_target_stop() surfaces it as
+# part of the trade plan (alongside entry/stop_loss/target) so a consumer
+# knows the intended holding horizon without reaching into backtest-only
+# config. Raised from the prior implicit 20 to 40 trading days -- roughly
+# two calendar months, a more realistic swing-trade horizon than one month.
+MAX_HOLDING_TRADING_DAYS = 40
+
 NIFTY50 = "^NSEI"
 NIFTY_MIDCAP_150 = "NIFTYMIDCAP150.NS"   # renamed from MIDCAP100 — it was never Midcap 100
 NIFTY_SMALLCAP_250 = "NIFTYSMLCAP250.NS"  # renamed from SMALLCAP100 — it was never Smallcap 100

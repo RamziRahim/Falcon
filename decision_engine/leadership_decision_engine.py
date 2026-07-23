@@ -101,6 +101,8 @@ selection below.
 """
 from __future__ import annotations
 
+from config import MAX_HOLDING_TRADING_DAYS
+
 CATEGORY_RANK = {"AVOID": 0, "ALERT_WATCHLIST": 1, "EXECUTE": 2}
 
 
@@ -515,6 +517,14 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
     calculation, so adding it to the returned dict is a small fast-follow,
     not new logic -- worth doing before relying on non-ATR stops/targets
     for real trades.
+
+    max_holding_days (2.1, I-3): the time-stop half of the trade plan,
+    alongside entry/stop_loss/target -- a single config value
+    (MAX_HOLDING_TRADING_DAYS) rather than something a caller has to know
+    to apply separately. backtesting/outcome_measurement.py's
+    measure_forward_outcome() defaults to the same constant, so a replay
+    that doesn't explicitly pass max_holding_days already agrees with what
+    the trade plan itself states.
     """
     if best_pattern_field is None or not best_pattern_result:
         entry = candidate["Close"]
@@ -526,6 +536,7 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
         "entry": entry,
         "stop_loss": entry - 2 * atr,
         "target": entry + 2.5 * atr,
+        "max_holding_days": MAX_HOLDING_TRADING_DAYS,
     }
 
 
@@ -578,6 +589,7 @@ def categorize(
                 "entry": None,
                 "stop_loss": None,
                 "target": None,
+                "max_holding_days": None,
                 "supporting_data": candidate,
             }
 
@@ -607,11 +619,12 @@ def categorize(
     best_points, best_field = get_best_pattern_points(candidate)
 
     if final_category == "AVOID":
-        entry = stop_loss = target = None
+        entry = stop_loss = target = max_holding_days = None
     else:
         best_result = pattern_details.get(best_field) if best_field else None
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
+        max_holding_days = ets["max_holding_days"]
 
     fakeout_risk_flags = get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals)
     if best_field in PATTERNS_ON_PROBATION:
@@ -630,6 +643,7 @@ def categorize(
         "entry": entry,
         "stop_loss": stop_loss,
         "target": target,
+        "max_holding_days": max_holding_days,
         "supporting_data": candidate,
     }
 
