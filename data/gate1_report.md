@@ -249,6 +249,41 @@ kill-criterion's odds; if anything it's a stronger vindication than a
 raw-mean win would have been, since it shows exactly *how* the value is
 created (risk reduction, not edge inflation).
 
+### (c) NIFTY buy-and-hold's own Calmar, same window
+
+Requested before treating (a)'s Calmar win as the headline: does
+Falcon-(e) beat the *index itself* on risk-adjusted terms, not just
+momentum-chasing? (`backtesting/baselines.py::nifty_buy_hold`, now also
+reporting `max_drawdown_pct`/`calmar`.)
+
+| system | CAGR | max DD | Calmar |
+|---|---|---|---|
+| NIFTY buy-and-hold | **-0.95%** | -15.77% | **-0.06** |
+| falcon_e_sector_aware | 9.08% | -4.08% | 2.23 |
+
+**This is not the ~12-15% CAGR / ~10-12% drawdown scenario hypothesized
+going in.** NIFTY was essentially flat-to-slightly-down over the full
+window, with a real -15.77% drawdown along the way — Falcon-(e) beats it
+even more decisively than expected (Calmar 2.23 vs -0.06, not ~1.0-1.2),
+but for a different reason than "beats a strong index": here it beats a
+weak one, on both return *and* risk.
+
+**One nuance worth surfacing rather than leaving implicit:** the window
+wasn't uniformly weak. NIFTY fell from 24509 (2024-07-22) to a trough of
+22083 (2025-03-04, -9.9%), then rallied to a new all-time high of 26329
+on 2026-01-02 (+19.2% off the trough) — a genuine ~10-month recovery to
+new highs — before declining again to end the window at 24052
+(2026-07-14, roughly flat vs. the start, -8.6% off the January peak).
+**The full-window buy-hold number nets out flat/negative because of the
+final ~6-month decline, not because the window lacked a real recovery
+leg.** This actually strengthens rather than weakens the B-7
+justification below: a ~10-month rally to new highs occurring somewhere
+inside a window that produced only 13 FAVORABLE days total is hard to
+explain as "the market was genuinely never favorable" — it looks more
+like the classifier under-firing FAVORABLE during a real uptrend, exactly
+what B-7's sanity check (new-high months should mostly read FAVORABLE)
+is designed to catch.
+
 ## Summary of what does NOT change (no engine edits made this phase)
 
 Every number above comes from post-processing run #1's existing CSV plus a

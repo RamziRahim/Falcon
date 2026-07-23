@@ -41,6 +41,19 @@ class TestNiftyBuyHold:
         result = nifty_buy_hold(benchmark, benchmark["Date"].iloc[0], benchmark["Date"].iloc[0])
 
         assert result["total_return_pct"] == 0.0
+        assert result["max_drawdown_pct"] == 0.0
+        assert result["calmar"] == 0.0
+
+    def test_max_drawdown_reflects_a_real_dip_below_the_running_peak(self):
+        # Rises to 120, dips to 90 (a real -25% drawdown from the peak),
+        # recovers to 110 -- total return is still positive (+10%) but the
+        # drawdown must reflect the dip, not just start-vs-end.
+        benchmark = _ohlcv([100.0, 110.0, 120.0, 90.0, 100.0, 110.0])
+
+        result = nifty_buy_hold(benchmark, benchmark["Date"].iloc[0], benchmark["Date"].iloc[-1])
+
+        assert result["total_return_pct"] == pytest.approx(10.0)
+        assert result["max_drawdown_pct"] == pytest.approx(-25.0)
 
 
 class TestRandomEntryControl:

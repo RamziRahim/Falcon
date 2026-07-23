@@ -39,6 +39,7 @@ import random as _random
 import pandas as pd
 
 from backtesting.outcome_measurement import measure_forward_outcome
+from backtesting.portfolio_simulator import _max_drawdown_pct
 from config import ROUND_TRIP_COST_PCT
 
 
@@ -47,7 +48,10 @@ def nifty_buy_hold(benchmark_history: pd.DataFrame, start_date: pd.Timestamp, en
     window = ordered[(ordered["Date"] >= start_date) & (ordered["Date"] <= end_date)]
 
     if len(window) < 2:
-        return {"total_return_pct": 0.0, "net_return_pct": 0.0, "cagr_pct": 0.0, "n_days": len(window)}
+        return {
+            "total_return_pct": 0.0, "net_return_pct": 0.0, "cagr_pct": 0.0,
+            "max_drawdown_pct": 0.0, "calmar": 0.0, "n_days": len(window),
+        }
 
     start_price = window["Close"].iloc[0]
     end_price = window["Close"].iloc[-1]
@@ -58,10 +62,20 @@ def nifty_buy_hold(benchmark_history: pd.DataFrame, start_date: pd.Timestamp, en
     years = days / 365.25
     cagr_pct = ((end_price / start_price) ** (1 / years) - 1) * 100 if years > 0 else 0.0
 
+    # Holding one unit of the index: its own price series IS the equity
+    # curve (up to an irrelevant constant scale factor for drawdown/Calmar
+    # purposes) -- reuses the same drawdown formula the portfolio
+    # simulator uses for Falcon's own policies, so the Calmar comparison
+    # in the Gate 1 report is apples-to-apples.
+    max_drawdown_pct = _max_drawdown_pct(window["Close"])
+    calmar = round(cagr_pct / abs(max_drawdown_pct), 2) if max_drawdown_pct != 0 else 0.0
+
     return {
         "total_return_pct": round(total_return_pct, 2),
         "net_return_pct": round(net_return_pct, 2),
         "cagr_pct": round(cagr_pct, 2),
+        "max_drawdown_pct": max_drawdown_pct,
+        "calmar": calmar,
         "n_days": len(window),
     }
 
