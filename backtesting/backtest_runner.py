@@ -267,6 +267,15 @@ def run_backtest(
                     "days_held": avoid_outcome["days_held"],
                     "target_pct": ((ets["target"] - hypothetical_entry) / hypothetical_entry) * 100,
                     "stop_pct": ((hypothetical_entry - ets["stop_loss"]) / hypothetical_entry) * 100,
+                    # 2.2 (I-6): the hypothetical trade plan's own
+                    # provenance -- same fields a real trade carries, so
+                    # AVOID rows are analyzable with the same tooling.
+                    "stop_provenance": ets["stop_provenance"],
+                    "target_provenance": ets["target_provenance"],
+                    "reward_risk": (
+                        (ets["target"] - hypothetical_entry) / (hypothetical_entry - ets["stop_loss"])
+                        if (hypothetical_entry - ets["stop_loss"]) > 0 else None
+                    ),
                     "confidence_score": decision["confidence_score"],
                     "caps_applied": ",".join(decision["caps_applied"]),
                     # A-1: True whenever sampling was active for this run at
@@ -319,6 +328,13 @@ def run_backtest(
                 "days_held": outcome["days_held"],
                 "target_pct": ((decision["target"] - entry_price) / entry_price) * 100,
                 "stop_pct": ((entry_price - decision["stop_loss"]) / entry_price) * 100,
+                # 2.2 (I-6): which pricing path categorize() actually took
+                # (STRUCTURAL/STRUCTURAL_CLAMPED_TO_ATR_FLOOR-or-CEILING/
+                # ATR_FALLBACK_*) and the resulting reward:risk -- already
+                # computed by categorize() itself, not re-derived here.
+                "stop_provenance": decision.get("stop_provenance"),
+                "target_provenance": decision.get("target_provenance"),
+                "reward_risk": decision.get("reward_risk"),
                 # categorize() already computes both of these for every
                 # decision -- without them, an ALERT_WATCHLIST row is
                 # indistinguishable from "genuinely scored low" vs "strong

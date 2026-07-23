@@ -667,6 +667,9 @@ def categorize(
                 "stop_loss": None,
                 "target": None,
                 "max_holding_days": None,
+                "stop_provenance": None,
+                "target_provenance": None,
+                "reward_risk": None,
                 "bars_since_breakout": None,
                 "breakout_within_last_k_bars": False,
                 "supporting_data": candidate,
@@ -712,21 +715,22 @@ def categorize(
 
     if final_category == "AVOID":
         entry = stop_loss = target = max_holding_days = None
+        stop_provenance = target_provenance = reward_risk = None
     else:
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
         max_holding_days = ets["max_holding_days"]
+        stop_provenance, target_provenance = ets["stop_provenance"], ets["target_provenance"]
+
+        # entry - stop_loss <= 0 would mean a broken stop (at or above
+        # entry) -- can't compute a meaningful RR from that.
+        reward_risk = (target - entry) / (entry - stop_loss) if (entry - stop_loss) > 0 else None
 
         # 2.2 (I-6) RR floor: only ever downgrades EXECUTE -- ALERT_WATCHLIST/
-        # MONITOR are already at or below that tier. entry - stop_loss <= 0
-        # would mean a broken stop (at or above entry) -- can't compute a
-        # meaningful RR from that, so the check is skipped rather than
-        # dividing by a non-positive number.
-        if final_category == "EXECUTE" and (entry - stop_loss) > 0:
-            reward_risk = (target - entry) / (entry - stop_loss)
-            if reward_risk < min_reward_risk:
-                final_category = "ALERT_WATCHLIST"
-                caps_applied = caps_applied + ["RR_BELOW_FLOOR"]
+        # MONITOR are already at or below that tier.
+        if final_category == "EXECUTE" and reward_risk is not None and reward_risk < min_reward_risk:
+            final_category = "ALERT_WATCHLIST"
+            caps_applied = caps_applied + ["RR_BELOW_FLOOR"]
 
     fakeout_risk_flags = get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals)
     if best_field in PATTERNS_ON_PROBATION:
@@ -746,6 +750,13 @@ def categorize(
         "stop_loss": stop_loss,
         "target": target,
         "max_holding_days": max_holding_days,
+        # 2.2 (I-6): provenance names which pricing path was actually
+        # taken (STRUCTURAL/STRUCTURAL_CLAMPED_TO_ATR_FLOOR-or-CEILING/
+        # MEASURED_MOVE/ATR_FALLBACK_*, see get_entry_target_stop()'s own
+        # docstring) -- None for AVOID (no trade plan at all).
+        "stop_provenance": stop_provenance,
+        "target_provenance": target_provenance,
+        "reward_risk": reward_risk,
         # A-5 breakout-recency contract, surfaced for the SELECTED pattern
         # (the one that actually drove the score/entry) rather than
         # requiring a consumer to dig into supporting_data/pattern_details

@@ -513,6 +513,7 @@ def _fake_real_trade_categorize_factory(category, confidence_score, sector_healt
             "sector_health_verdict": sector_health_verdict, "confidence_score": confidence_score,
             "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
             "entry": 100.0, "stop_loss": 90.0, "target": 120.0, "max_holding_days": 20,
+            "stop_provenance": "STRUCTURAL", "target_provenance": "MEASURED_MOVE", "reward_risk": 3.0,
             "supporting_data": candidate,
         }
     return _fake
@@ -590,3 +591,50 @@ class TestRecommendedRiskFractionWiring:
         assert row["category"] == "MONITOR"
         assert row["recommended_risk_fraction"] is None
         assert row["exit_reason"] in {"TARGET_HIT", "STOP_HIT", "TIME_EXIT"}
+
+
+class TestProvenanceAndRewardRiskPersisted:
+    """2.2 (I-6) DoD: run #2's trade records must carry the pricing
+    provenance and reward:risk categorize() computed, not just entry/
+    stop/target -- for both a real trade and an AVOID's hypothetical one."""
+
+    def _run(self, monkeypatch, fake_categorize):
+        import backtesting.replay_engine as replay_engine
+
+        monkeypatch.setattr(replay_engine, "categorize", fake_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[30]
+
+        return run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+        )
+
+    def test_real_trade_carries_categorizes_own_provenance(self, monkeypatch):
+        trades = self._run(monkeypatch, _fake_real_trade_categorize_factory("EXECUTE", 90.0))
+
+        assert len(trades) == 1
+        row = trades.iloc[0]
+        assert row["stop_provenance"] == "STRUCTURAL"
+        assert row["target_provenance"] == "MEASURED_MOVE"
+        assert row["reward_risk"] == pytest.approx(3.0)
+
+    def test_avoid_row_carries_the_hypothetical_plans_own_provenance(self, monkeypatch):
+        trades = self._run(monkeypatch, _fake_avoid_categorize)
+
+        assert len(trades) == 1
+        row = trades.iloc[0]
+        assert row["category"] == "AVOID"
+        assert row["stop_provenance"] in {
+            "ATR_FALLBACK_NO_PATTERN", "ATR_FALLBACK_NO_STRUCTURAL_LOW",
+            "STRUCTURAL", "STRUCTURAL_CLAMPED_TO_ATR_FLOOR", "STRUCTURAL_CLAMPED_TO_ATR_CEILING",
+        }
+        assert row["reward_risk"] is not None

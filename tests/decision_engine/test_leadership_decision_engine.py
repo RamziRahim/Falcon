@@ -363,6 +363,27 @@ class TestStructuralExitsAndRRFloor:
         assert result["category"] == "ALERT_WATCHLIST"
         assert "RR_BELOW_FLOOR" in result["caps_applied"]
 
+    def test_categorize_surfaces_provenance_and_reward_risk(self):
+        candidate, sector_row = self._execute_grade_candidate_with_pattern()
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 70.0}}
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
+
+        assert result["stop_provenance"] == "STRUCTURAL_CLAMPED_TO_ATR_CEILING"
+        assert result["target_provenance"] == "MEASURED_MOVE"
+        assert result["reward_risk"] == pytest.approx(2.0)
+
+    def test_categorize_provenance_and_reward_risk_none_for_avoid(self):
+        candidate = _candidate(Trend_State="DOWNTREND")
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "AVOID"
+        assert result["stop_provenance"] is None
+        assert result["target_provenance"] is None
+        assert result["reward_risk"] is None
+
 
 class TestBreakoutRecencySurfacedOnCategorizeOutput:
     """A-5: categorize() surfaces bars_since_breakout/
