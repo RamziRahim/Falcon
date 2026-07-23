@@ -417,3 +417,77 @@ class TestAvoidOutcomeRecording:
 
         assert not trades.empty, "expected at least one AVOID row to survive a 0.99 sample rate across 20 tickers"
         assert (trades["sampled_avoid"] == True).all()
+
+
+def _fake_real_trade_categorize_factory(category, confidence_score, sector_health_verdict="NEUTRAL"):
+    def _fake(candidate, sector_row, market_verdict, pattern_details=None,
+              disable_fundamental_signals=False, enable_microstructure_signals=False):
+        return {
+            "category": category, "market_regime_verdict": market_verdict,
+            "sector_health_verdict": sector_health_verdict, "confidence_score": confidence_score,
+            "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
+            "entry": 100.0, "stop_loss": 90.0, "target": 120.0, "max_holding_days": 20,
+            "supporting_data": candidate,
+        }
+    return _fake
+
+
+class TestRecommendedRiskFractionWiring:
+    """2.6a: the adopted exposure-scaling policy (e) is surfaced per-trade
+    as recommended_risk_fraction, reusing
+    portfolio_simulator.policy_sector_aware_caution() rather than a second
+    parallel sizing rule."""
+
+    def _run(self, monkeypatch, fake_categorize):
+        import backtesting.replay_engine as replay_engine
+
+        monkeypatch.setattr(replay_engine, "categorize", fake_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[30]
+
+        return run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+        )
+
+    def test_execute_gets_full_size(self, monkeypatch):
+        trades = self._run(monkeypatch, _fake_real_trade_categorize_factory("EXECUTE", 90.0))
+
+        assert len(trades) == 1
+        assert trades.iloc[0]["recommended_risk_fraction"] == 1.0
+
+    def test_capped_caution_neutral_sector_gets_half_size(self, monkeypatch):
+        # market_verdict is set by run_backtest()'s own regime computation,
+        # not the fake -- CAUTION isn't guaranteed for this synthetic
+        # history, so assert the policy's own documented contract instead
+        # of a specific market_regime_verdict.
+        trades = self._run(
+            monkeypatch, _fake_real_trade_categorize_factory("ALERT_WATCHLIST", 70.0, "NEUTRAL"),
+        )
+
+        assert len(trades) == 1
+        row = trades.iloc[0]
+        if row["market_regime_verdict"] == "CAUTION":
+            assert row["recommended_risk_fraction"] == 0.5
+        else:
+            assert row["recommended_risk_fraction"] == 0.0
+
+    def test_genuine_low_score_gets_zero(self, monkeypatch):
+        trades = self._run(monkeypatch, _fake_real_trade_categorize_factory("ALERT_WATCHLIST", 50.0))
+
+        assert len(trades) == 1
+        assert trades.iloc[0]["recommended_risk_fraction"] == 0.0
+
+    def test_avoid_rows_have_no_recommended_risk_fraction(self, monkeypatch):
+        trades = self._run(monkeypatch, _fake_avoid_categorize)
+
+        assert len(trades) == 1
+        assert trades.iloc[0]["recommended_risk_fraction"] is None

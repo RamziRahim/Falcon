@@ -36,6 +36,7 @@ import pandas as pd
 
 from common.logger import get_logger
 from backtesting.detector_funnel import tally_funnel
+from backtesting.portfolio_simulator import policy_sector_aware_caution
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
 from backtesting.outcome_measurement import measure_forward_outcome
 from config import MAX_HOLDING_TRADING_DAYS
@@ -266,6 +267,10 @@ def run_backtest(
                     # AVOID population, regardless of whether this
                     # particular row happened to be the one kept.
                     "sampled_avoid": is_sampled,
+                    # 2.6a: not applicable to a signal that was never
+                    # priced for real -- exposure scaling only concerns
+                    # the ceiling-capped ALERT_WATCHLIST/EXECUTE population.
+                    "recommended_risk_fraction": None,
                 })
                 continue
 
@@ -313,6 +318,16 @@ def run_backtest(
                 "confidence_score": decision["confidence_score"],
                 "caps_applied": ",".join(decision["caps_applied"]),
                 "sampled_avoid": False,  # only ever True for AVOID rows, see above
+                # 2.6a: the adopted exposure-scaling policy (e), Gate 1
+                # decision #1 -- what fraction of full (1% base) risk this
+                # signal should size at. 1.0 for EXECUTE; 0.5/0.25/0.0 for
+                # a capped ALERT_WATCHLIST depending on regime+sector (see
+                # portfolio_simulator.policy_sector_aware_caution's own
+                # docstring); 0.0 for a genuinely-scored (<65) or
+                # UNFAVORABLE-capped ALERT_WATCHLIST -- UNFAVORABLE stays
+                # blocked for real sizing per decision #2, shadow-logged
+                # separately (2.6d), not sized here.
+                "recommended_risk_fraction": policy_sector_aware_caution(decision),
             })
 
     return pd.DataFrame(trade_records)
