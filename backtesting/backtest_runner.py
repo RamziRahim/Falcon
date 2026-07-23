@@ -226,7 +226,11 @@ def compute_expectancy(win_rate: float, avg_win_pct: float, loss_rate: float, av
     return (win_rate * avg_win_pct) + (loss_rate * avg_loss_pct)
 
 
-def _group_stats(group_value, group_df: pd.DataFrame) -> dict:
+def _group_stats(group_value, group_df: pd.DataFrame, return_column: str = "return_pct") -> dict:
+    """return_column defaults to the raw-signal-level schema's return_pct;
+    episode-level callers (episode_builder.py's output) pass
+    gross_return_pct/net_return_pct instead -- same win/loss/expectancy
+    math either way, just reading a different column."""
     n = len(group_df)
 
     if n == 0:
@@ -235,26 +239,26 @@ def _group_stats(group_value, group_df: pd.DataFrame) -> dict:
             "avg_return_pct": 0.0, "avg_win_pct": 0.0, "avg_loss_pct": 0.0, "expectancy_pct": 0.0,
         }
 
-    wins = group_df[group_df["return_pct"] > 0]
-    losses = group_df[group_df["return_pct"] <= 0]  # includes exact breakeven -- see compute_expectancy's note
+    wins = group_df[group_df[return_column] > 0]
+    losses = group_df[group_df[return_column] <= 0]  # includes exact breakeven -- see compute_expectancy's note
 
     win_rate = len(wins) / n
     loss_rate = 1 - win_rate
-    avg_win = wins["return_pct"].mean() if not wins.empty else 0.0
-    avg_loss = losses["return_pct"].mean() if not losses.empty else 0.0
+    avg_win = wins[return_column].mean() if not wins.empty else 0.0
+    avg_loss = losses[return_column].mean() if not losses.empty else 0.0
 
     return {
         "group": group_value,
         "sample_size": n,
         "win_rate_pct": round(win_rate * 100, 1),
-        "avg_return_pct": round(group_df["return_pct"].mean(), 2),
+        "avg_return_pct": round(group_df[return_column].mean(), 2),
         "avg_win_pct": round(avg_win, 2),
         "avg_loss_pct": round(avg_loss, 2),
         "expectancy_pct": round(compute_expectancy(win_rate, avg_win, loss_rate, avg_loss), 2),
     }
 
 
-def aggregate_by(trades: pd.DataFrame, group_column: str) -> pd.DataFrame:
+def aggregate_by(trades: pd.DataFrame, group_column: str, return_column: str = "return_pct") -> pd.DataFrame:
     """
     Per-group breakdown (category / pattern_used / market_regime_verdict):
     win rate, avg return, avg win/loss (not blended -- win/loss asymmetry
@@ -268,7 +272,10 @@ def aggregate_by(trades: pd.DataFrame, group_column: str) -> pd.DataFrame:
             "avg_win_pct", "avg_loss_pct", "expectancy_pct",
         ])
 
-    rows = [_group_stats(group_value, group_df) for group_value, group_df in trades.groupby(group_column)]
+    rows = [
+        _group_stats(group_value, group_df, return_column)
+        for group_value, group_df in trades.groupby(group_column)
+    ]
     return pd.DataFrame(rows)
 
 
@@ -308,9 +315,11 @@ def _ceiling_cause(row) -> str:
     return f"CAUTION market + {row['sector_health_verdict']} sector"
 
 
-def aggregate_ceiling_attribution(trades: pd.DataFrame, execute_score_threshold: float = 65.0) -> dict:
+def aggregate_ceiling_attribution(
+    trades: pd.DataFrame, execute_score_threshold: float = 65.0, return_column: str = "return_pct"
+) -> dict:
     """
-    Splits every ALERT_WATCHLIST signal into two populations:
+    Splits every ALERT_WATCHLIST row into two populations:
       - "capped": confidence_score >= execute_score_threshold -- scored
         EXECUTE-grade but the market/sector ceiling (get_ceiling() in
         leadership_decision_engine.py) pulled the final category down to
@@ -324,6 +333,15 @@ def aggregate_ceiling_attribution(trades: pd.DataFrame, execute_score_threshold:
     the ceiling at reduced size (an exposure-scaling policy) rather than
     lowering compute_score()'s EXECUTE threshold -- loosening the score
     would let the genuinely weaker "genuine" population through too.
+
+    return_column: "return_pct" for the raw signal-level schema (default,
+    preserves the original signal-level table), or
+    "gross_return_pct"/"net_return_pct" to run this same attribution on
+    episode_builder.py's episode-level output instead (Phase 1.2 "ceiling
+    attribution v2" -- the raw-signal-level version overstates every
+    population's n by however much a resampling artifact re-fires the
+    same open trade, so the episode-level numbers are the ones that
+    actually inform Gate 1).
     """
     watchlist = trades[trades["category"] == "ALERT_WATCHLIST"]
 
@@ -335,19 +353,22 @@ def aggregate_ceiling_attribution(trades: pd.DataFrame, execute_score_threshold:
     if not capped.empty:
         causes = capped.apply(_ceiling_cause, axis=1)
         by_cause = pd.DataFrame([
-            _group_stats(cause, capped[causes == cause]) for cause in causes.unique()
+            _group_stats(cause, capped[causes == cause], return_column) for cause in causes.unique()
         ])
 
     return {
-        "capped": _group_stats(f"capped (score >= {execute_score_threshold})", capped),
-        "genuine": _group_stats(f"genuine (score < {execute_score_threshold})", genuine),
-        "execute": _group_stats("EXECUTE (for comparison)", execute),
+        "capped": _group_stats(f"capped (score >= {execute_score_threshold})", capped, return_column),
+        "genuine": _group_stats(f"genuine (score < {execute_score_threshold})", genuine, return_column),
+        "execute": _group_stats("EXECUTE (for comparison)", execute, return_column),
         "by_cause": by_cause,
     }
 
 
 def print_ceiling_attribution(
-    trades: pd.DataFrame, execute_score_threshold: float = 65.0, low_sample_threshold: int = 20
+    trades: pd.DataFrame,
+    execute_score_threshold: float = 65.0,
+    low_sample_threshold: int = 20,
+    return_column: str = "return_pct",
 ) -> None:
     """Ceiling-attribution table: of every ALERT_WATCHLIST signal, how many
     scored EXECUTE-grade (>=65) but were capped by the regime/sector
@@ -357,7 +378,7 @@ def print_ceiling_attribution(
     if trades.empty or "ALERT_WATCHLIST" not in trades["category"].values:
         return
 
-    attribution = aggregate_ceiling_attribution(trades, execute_score_threshold)
+    attribution = aggregate_ceiling_attribution(trades, execute_score_threshold, return_column)
 
     print("\n --- CEILING ATTRIBUTION (ALERT_WATCHLIST breakdown) ---")
     for key in ("capped", "genuine", "execute"):

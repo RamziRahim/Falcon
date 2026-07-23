@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from backtesting.backtest_runner import compute_expectancy, populate_sector_cache, run_backtest
+from backtesting.backtest_runner import (
+    aggregate_ceiling_attribution, compute_expectancy, populate_sector_cache, run_backtest,
+)
 
 
 class TestExpectancyFormula:
@@ -20,6 +22,69 @@ class TestExpectancyFormula:
         )
 
         assert expectancy == pytest.approx(3.6)
+
+
+def _ceiling_row(category, confidence_score, market_regime_verdict="CAUTION",
+                  sector_health_verdict="NEUTRAL", return_pct=5.0):
+    return {
+        "category": category, "confidence_score": confidence_score,
+        "market_regime_verdict": market_regime_verdict,
+        "sector_health_verdict": sector_health_verdict, "return_pct": return_pct,
+    }
+
+
+class TestAggregateCeilingAttribution:
+
+    def test_splits_watchlist_by_score_threshold_into_capped_vs_genuine(self):
+        trades = pd.DataFrame([
+            _ceiling_row("ALERT_WATCHLIST", confidence_score=70.0),  # capped -- score-worthy of EXECUTE
+            _ceiling_row("ALERT_WATCHLIST", confidence_score=50.0),  # genuine -- correctly below 65
+            _ceiling_row("EXECUTE", confidence_score=80.0),
+        ])
+
+        result = aggregate_ceiling_attribution(trades)
+
+        assert result["capped"]["sample_size"] == 1
+        assert result["genuine"]["sample_size"] == 1
+        assert result["execute"]["sample_size"] == 1
+
+    def test_by_cause_reports_every_distinct_cause_not_just_one(self):
+        trades = pd.DataFrame([
+            _ceiling_row("ALERT_WATCHLIST", 70.0, market_regime_verdict="UNFAVORABLE"),
+            _ceiling_row("ALERT_WATCHLIST", 70.0, market_regime_verdict="CAUTION", sector_health_verdict="NEUTRAL"),
+            _ceiling_row("ALERT_WATCHLIST", 70.0, market_regime_verdict="CAUTION", sector_health_verdict="WEAK"),
+        ])
+
+        result = aggregate_ceiling_attribution(trades)
+
+        causes = set(result["by_cause"]["group"])
+        assert causes == {
+            "UNFAVORABLE market",
+            "CAUTION market + NEUTRAL sector",
+            "CAUTION market + WEAK sector",
+        }
+
+    def test_return_column_parameter_reads_episode_level_columns(self):
+        # episode_builder.py's output uses gross_return_pct/net_return_pct,
+        # not return_pct -- same attribution logic, different column name.
+        trades = pd.DataFrame([{
+            "category": "ALERT_WATCHLIST", "confidence_score": 70.0,
+            "market_regime_verdict": "CAUTION", "sector_health_verdict": "NEUTRAL",
+            "net_return_pct": 12.0, "gross_return_pct": 12.3,
+        }])
+
+        result = aggregate_ceiling_attribution(trades, return_column="net_return_pct")
+
+        assert result["capped"]["avg_return_pct"] == pytest.approx(12.0)
+
+    def test_default_return_column_is_unchanged_return_pct(self):
+        # Regression guard: the return_column parameter must default to the
+        # original raw-signal-level behavior, not silently change it.
+        trades = pd.DataFrame([_ceiling_row("ALERT_WATCHLIST", 70.0, return_pct=7.5)])
+
+        result = aggregate_ceiling_attribution(trades)
+
+        assert result["capped"]["avg_return_pct"] == pytest.approx(7.5)
 
 
 @pytest.fixture
