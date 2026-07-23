@@ -69,6 +69,14 @@ SECTOR_INDEX_MAP = {
     "Energy": "NIFTY ENERGY",
     "Real Estate": "NIFTY REALTY",
     "Communication Services": "NIFTY MEDIA",
+    # No dedicated NSE sectoral index exists for Utilities -- NIFTY ENERGY
+    # is the closest available proxy (heavy overlap: power generation/
+    # distribution names sit in both Yahoo's "Utilities" and "Energy"
+    # labels). A documented proxy, not a real Utilities index -- confirmed
+    # live that the query itself resolves (capital_market.index_data(
+    # index="NIFTY ENERGY", ...) returns real rows), same as "Energy"'s own
+    # entry above.
+    "Utilities": "NIFTY ENERGY",
     # Any other sector (including "Unknown") has no real index mapping --
     # get_sector_index_history() returns None gracefully for these, and
     # get_sector_index_trend() falls back to CHOPPY (honestly-unknown),

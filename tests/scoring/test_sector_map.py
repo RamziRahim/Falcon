@@ -64,6 +64,25 @@ class TestCaching:
             )
 
 
+class TestKnownWrongSectorFixesArePresent:
+    """0.6: LTIM.NS and MCDOWELL-N.NS both resolved to 'Unknown' via Yahoo
+    (confirmed against the real data/sector_map.json cache before this fix
+    landed) -- reads the real repo override file directly, not the
+    isolated_sector_map fixture's temp copy, so this actually regresses
+    against the shipped scoring/sector_overrides.csv."""
+
+    def test_ltim_and_mcdowell_n_have_manual_overrides(self):
+        import pandas as pd
+
+        from scoring.sector_map import OVERRIDES_PATH
+
+        df = pd.read_csv(OVERRIDES_PATH)
+        overrides = dict(zip(df["Symbol"], df["Sector"]))
+
+        assert overrides.get("LTIM.NS") == "Technology"
+        assert overrides.get("MCDOWELL-N.NS") == "Consumer Defensive"
+
+
 @pytest.mark.integration
 class TestRealYahooIntegration:
     """Hits the real yfinance API. Run explicitly with: pytest -m integration"""

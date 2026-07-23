@@ -21,11 +21,17 @@ class TestSectorIndexMap:
         ("Consumer Cyclical", "NIFTY AUTO"),
     ])
     def test_live_verified_pairs_resolve_correctly(self, sector, index_name):
-        # These 4 (of the 10 in SECTOR_INDEX_MAP) were the pairs directly
+        # These 4 (of the 11 in SECTOR_INDEX_MAP) were the pairs directly
         # confirmed live: sector label against real yfinance output for a
         # known ticker in that sector, index name against a real
         # capital_market.index_data() call.
         assert SECTOR_INDEX_MAP[sector] == index_name
+
+    def test_utilities_is_a_documented_proxy_onto_the_energy_index(self):
+        # No dedicated NSE sectoral index exists for Utilities -- this is a
+        # deliberate proxy onto NIFTY ENERGY (0.6), confirmed live that the
+        # query itself resolves. Not claiming Utilities has its own index.
+        assert SECTOR_INDEX_MAP["Utilities"] == "NIFTY ENERGY"
 
 
 class TestUnmappedSectorDegradesGracefully:
