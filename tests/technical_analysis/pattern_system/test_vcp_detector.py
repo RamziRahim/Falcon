@@ -184,6 +184,30 @@ class TestBreakoutVolumeConfirmation:
         )
 
 
+class TestBreakoutRecency:
+    """A-5: a confirmed breakout also reports how many bars ago the
+    price+volume condition first became true."""
+
+    def test_fresh_breakout_reports_zero_bars_since(
+        self, detector, synthetic_breakout_pivots, synthetic_breakout_with_volume_df
+    ):
+        # Fixture's breakout condition is true only on the final bar.
+        result = detector.analyze_vcp(synthetic_breakout_with_volume_df, synthetic_breakout_pivots, "UPTREND")
+
+        assert result["is_vcp_breakout"] == True
+        assert result["bars_since_breakout"] == 0
+        assert result["breakout_within_last_k_bars"] == True
+
+    def test_non_breakout_reports_no_recency_at_all(
+        self, detector, synthetic_breakout_pivots, synthetic_breakout_no_volume_df
+    ):
+        result = detector.analyze_vcp(synthetic_breakout_no_volume_df, synthetic_breakout_pivots, "UPTREND")
+
+        assert result["is_vcp_breakout"] == False
+        assert result["bars_since_breakout"] is None
+        assert result["breakout_within_last_k_bars"] == False
+
+
 class TestContinuousScore:
     """#4a: vcp_score is a continuous 0-100 blend, not a 3-bucket value."""
 

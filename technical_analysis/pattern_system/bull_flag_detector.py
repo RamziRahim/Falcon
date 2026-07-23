@@ -13,6 +13,7 @@ Conceptually closest to VCP but on a much shorter timeframe: a sharp
 """
 from __future__ import annotations
 import pandas as pd
+from technical_analysis.pattern_system.breakout_recency import compute_breakout_recency
 
 class BullFlagDetector:
     FLAGPOLE_LOOKBACK_DAYS = 10
@@ -77,6 +78,8 @@ class BullFlagDetector:
             and latest_volume >= volume_baseline * 1.5
         )
 
+        recency = compute_breakout_recency(df, flag_high, volume_baseline)
+
         return {
             "is_bull_flag_setup": is_bull_flag_setup,
             "flagpole_gain_pct": round(pole_gain_pct, 1),
@@ -87,6 +90,9 @@ class BullFlagDetector:
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_bull_flag_setup and price_crossed_pivot and breakout_volume_confirmed,
+            # A-5 breakout-recency contract -- see breakout_recency.py.
+            "bars_since_breakout": recency["bars_since_breakout"],
+            "breakout_within_last_k_bars": recency["breakout_within_last_k_bars"],
             "invalidated_reason": None,
         }
 

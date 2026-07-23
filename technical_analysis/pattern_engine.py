@@ -143,6 +143,20 @@ def build_pattern_row_fields(analysis: dict) -> dict:
         "Ascending_Triangle_Support": triangle.get("most_recent_rising_low"),
         "Bull_Flag_Pivot_Level": bull_flag.get("pivot_level"),
         "Bull_Flag_Low": bull_flag.get("flag_low"),
+        # A-5 breakout-recency contract (technical_analysis/pattern_system/
+        # breakout_recency.py) -- None/False when the pattern isn't
+        # currently a confirmed breakout at all, same convention as the
+        # pivot/structural-low fields above.
+        "VCP_Bars_Since_Breakout": vcp.get("bars_since_breakout"),
+        "VCP_Breakout_Within_K_Bars": vcp.get("breakout_within_last_k_bars", False),
+        "Flat_Base_Bars_Since_Breakout": flat_base.get("bars_since_breakout"),
+        "Flat_Base_Breakout_Within_K_Bars": flat_base.get("breakout_within_last_k_bars", False),
+        "Cup_Handle_Bars_Since_Breakout": cup_handle.get("bars_since_breakout"),
+        "Cup_Handle_Breakout_Within_K_Bars": cup_handle.get("breakout_within_last_k_bars", False),
+        "Ascending_Triangle_Bars_Since_Breakout": triangle.get("bars_since_breakout"),
+        "Ascending_Triangle_Breakout_Within_K_Bars": triangle.get("breakout_within_last_k_bars", False),
+        "Bull_Flag_Bars_Since_Breakout": bull_flag.get("bars_since_breakout"),
+        "Bull_Flag_Breakout_Within_K_Bars": bull_flag.get("breakout_within_last_k_bars", False),
     }
 
 

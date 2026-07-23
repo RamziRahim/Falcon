@@ -241,6 +241,43 @@ class TestTimeStopTradePlanField:
         assert result["max_holding_days"] is None
 
 
+class TestBreakoutRecencySurfacedOnCategorizeOutput:
+    """A-5: categorize() surfaces bars_since_breakout/
+    breakout_within_last_k_bars for the SELECTED pattern, not just buried
+    in pattern_details -- so a consumer (funnel diagnostics, a live
+    dashboard) doesn't have to dig for it."""
+
+    def test_surfaces_selected_patterns_recency_fields(self):
+        candidate = _candidate(is_vcp_breakout=True, RS_Rating=80.0)
+        sector_row = _sector_row()
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "bars_since_breakout": 3,
+                                                "breakout_within_last_k_bars": True}}
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
+
+        assert result["bars_since_breakout"] == 3
+        assert result["breakout_within_last_k_bars"] is True
+
+    def test_none_and_false_when_no_pattern_fired(self):
+        candidate = _candidate(RS_Rating=80.0)  # no pattern flags set
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["bars_since_breakout"] is None
+        assert result["breakout_within_last_k_bars"] is False
+
+    def test_none_and_false_for_disqualifier_avoid(self):
+        candidate = _candidate(Trend_State="DOWNTREND", is_vcp_breakout=True)
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "AVOID"
+        assert result["bars_since_breakout"] is None
+        assert result["breakout_within_last_k_bars"] is False
+
+
 class TestMicrostructureSignalsAreFeatureFlagged:
     """Liquidity sweep / FVG must be fully opt-in: with
     enable_microstructure_signals=False (the default), categorize()'s

@@ -18,6 +18,7 @@ breakout bar and its own pivot level.
 """
 from __future__ import annotations
 import pandas as pd
+from technical_analysis.pattern_system.breakout_recency import compute_breakout_recency
 
 class AscendingTriangleDetector:
     RESISTANCE_TOLERANCE_PCT = 3.0   # highs within this % count as "flat"
@@ -73,6 +74,8 @@ class AscendingTriangleDetector:
             and latest_volume >= volume_baseline * 1.5
         )
 
+        recency = compute_breakout_recency(df, resistance_level, volume_baseline)
+
         return {
             "is_ascending_triangle_setup": is_ascending_triangle_setup,
             "resistance_level": round(resistance_level, 2),
@@ -85,6 +88,9 @@ class AscendingTriangleDetector:
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_ascending_triangle_setup and price_crossed_pivot and breakout_volume_confirmed,
+            # A-5 breakout-recency contract -- see breakout_recency.py.
+            "bars_since_breakout": recency["bars_since_breakout"],
+            "breakout_within_last_k_bars": recency["breakout_within_last_k_bars"],
             "invalidated_reason": None,
         }
 

@@ -17,6 +17,7 @@ fidelity to the classic O'Neil pattern.
 """
 from __future__ import annotations
 import pandas as pd
+from technical_analysis.pattern_system.breakout_recency import compute_breakout_recency
 
 class CupHandleDetector:
     MIN_CUP_WEEKS, MAX_CUP_WEEKS = 7, 65      # O'Neil's own bounds
@@ -97,6 +98,8 @@ class CupHandleDetector:
             and latest_volume >= volume_baseline * 1.5
         )
 
+        recency = compute_breakout_recency(df, handle_high, volume_baseline)
+
         return {
             "is_cup_handle_setup": is_cup_handle_setup,
             "cup_depth_pct": round(depth_pct, 1),
@@ -108,6 +111,9 @@ class CupHandleDetector:
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_cup_handle_setup and price_crossed_pivot and breakout_volume_confirmed,
+            # A-5 breakout-recency contract -- see breakout_recency.py.
+            "bars_since_breakout": recency["bars_since_breakout"],
+            "breakout_within_last_k_bars": recency["breakout_within_last_k_bars"],
             "invalidated_reason": None,
         }
 

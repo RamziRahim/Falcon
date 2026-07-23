@@ -590,6 +590,8 @@ def categorize(
                 "stop_loss": None,
                 "target": None,
                 "max_holding_days": None,
+                "bars_since_breakout": None,
+                "breakout_within_last_k_bars": False,
                 "supporting_data": candidate,
             }
 
@@ -618,10 +620,11 @@ def categorize(
 
     best_points, best_field = get_best_pattern_points(candidate)
 
+    best_result = pattern_details.get(best_field) if best_field else None
+
     if final_category == "AVOID":
         entry = stop_loss = target = max_holding_days = None
     else:
-        best_result = pattern_details.get(best_field) if best_field else None
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
         max_holding_days = ets["max_holding_days"]
@@ -644,6 +647,12 @@ def categorize(
         "stop_loss": stop_loss,
         "target": target,
         "max_holding_days": max_holding_days,
+        # A-5 breakout-recency contract, surfaced for the SELECTED pattern
+        # (the one that actually drove the score/entry) rather than
+        # requiring a consumer to dig into supporting_data/pattern_details
+        # themselves -- None/False when no pattern fired at all.
+        "bars_since_breakout": best_result.get("bars_since_breakout") if best_result else None,
+        "breakout_within_last_k_bars": best_result.get("breakout_within_last_k_bars", False) if best_result else False,
         "supporting_data": candidate,
     }
 

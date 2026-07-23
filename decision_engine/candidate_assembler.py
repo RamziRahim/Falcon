@@ -75,6 +75,24 @@ PATTERN_PIVOT_COLUMN_MAP = {
     "is_bull_flag_breakout": "Bull_Flag_Pivot_Level",
 }
 
+# A-5 breakout-recency contract -- same persistence pattern as
+# PATTERN_PIVOT_COLUMN_MAP above, one column pair per pattern.
+PATTERN_BARS_SINCE_BREAKOUT_COLUMN_MAP = {
+    "is_vcp_breakout": "VCP_Bars_Since_Breakout",
+    "is_flat_base_breakout": "Flat_Base_Bars_Since_Breakout",
+    "is_cup_handle_breakout": "Cup_Handle_Bars_Since_Breakout",
+    "is_ascending_triangle_breakout": "Ascending_Triangle_Bars_Since_Breakout",
+    "is_bull_flag_breakout": "Bull_Flag_Bars_Since_Breakout",
+}
+
+PATTERN_BREAKOUT_WITHIN_K_BARS_COLUMN_MAP = {
+    "is_vcp_breakout": "VCP_Breakout_Within_K_Bars",
+    "is_flat_base_breakout": "Flat_Base_Breakout_Within_K_Bars",
+    "is_cup_handle_breakout": "Cup_Handle_Breakout_Within_K_Bars",
+    "is_ascending_triangle_breakout": "Ascending_Triangle_Breakout_Within_K_Bars",
+    "is_bull_flag_breakout": "Bull_Flag_Breakout_Within_K_Bars",
+}
+
 
 def _parse_formatted_percentage(value) -> float | None:
     """Handles corporate_engine.py / institutional_engine.py's human-formatted
@@ -202,18 +220,26 @@ def assemble_sector_row(sector_ranking_df, ticker_sector: str, sector_index_tren
 
 
 def assemble_pattern_details(pattern_row: dict) -> dict:
-    """Reconstructs a pattern_details-equivalent dict (name -> {"pivot_level": ...})
+    """Reconstructs a pattern_details-equivalent dict
+    (name -> {"pivot_level": ..., "bars_since_breakout": ..., "breakout_within_last_k_bars": ...})
     from persisted parquet columns alone, per the recommended approach in
     this module's own design discussion: the raw per-pattern detector
-    dicts (with pivot_level) only ever exist in memory during
-    pattern_engine.py's own execution and are never persisted themselves
-    -- only specific fields from them are, since the Part 1 fast-follow.
+    dicts only ever exist in memory during pattern_engine.py's own
+    execution and are never persisted themselves -- only specific fields
+    from them are, since the Part 1 fast-follow (pivot_level) and the A-5
+    breakout-recency contract (bars_since_breakout/breakout_within_last_k_bars).
     Reconstructing from those persisted fields (rather than requiring a
     live in-memory hook into pattern_engine.py) is what lets this work
     identically for a live scan and for a backtest replaying a historical
     parquet row.
     """
     return {
-        field_name: {"pivot_level": pattern_row.get(column)}
+        field_name: {
+            "pivot_level": pattern_row.get(column),
+            "bars_since_breakout": pattern_row.get(PATTERN_BARS_SINCE_BREAKOUT_COLUMN_MAP[field_name]),
+            "breakout_within_last_k_bars": pattern_row.get(
+                PATTERN_BREAKOUT_WITHIN_K_BARS_COLUMN_MAP[field_name], False
+            ),
+        }
         for field_name, column in PATTERN_PIVOT_COLUMN_MAP.items()
     }

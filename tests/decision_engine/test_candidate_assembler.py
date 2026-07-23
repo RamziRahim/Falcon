@@ -16,7 +16,11 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from decision_engine.candidate_assembler import _parse_formatted_percentage, assemble_sector_row
+from decision_engine.candidate_assembler import (
+    _parse_formatted_percentage,
+    assemble_pattern_details,
+    assemble_sector_row,
+)
 
 
 class TestParseFormattedPercentage:
@@ -48,3 +52,36 @@ class TestAssembleSectorRow:
 
         assert sector_row["Rank"] == 2
         assert sector_row["Total_Sectors"] == 4
+
+
+class TestAssemblePatternDetails:
+    """A-5: bars_since_breakout/breakout_within_last_k_bars must round-trip
+    through the persisted parquet columns alongside pivot_level, per
+    pattern -- this is the "replay consumes it" half of the recency
+    contract (technical_analysis/pattern_system/breakout_recency.py)."""
+
+    def test_recency_fields_are_reconstructed_per_pattern(self):
+        pattern_row = {
+            "VCP_Pivot_Level": 150.0,
+            "VCP_Bars_Since_Breakout": 2,
+            "VCP_Breakout_Within_K_Bars": True,
+            "Cup_Handle_Pivot_Level": 90.0,
+            "Cup_Handle_Bars_Since_Breakout": None,
+            "Cup_Handle_Breakout_Within_K_Bars": False,
+        }
+
+        details = assemble_pattern_details(pattern_row)
+
+        assert details["is_vcp_breakout"] == {
+            "pivot_level": 150.0, "bars_since_breakout": 2, "breakout_within_last_k_bars": True,
+        }
+        assert details["is_cup_handle_breakout"] == {
+            "pivot_level": 90.0, "bars_since_breakout": None, "breakout_within_last_k_bars": False,
+        }
+
+    def test_missing_columns_default_gracefully(self):
+        details = assemble_pattern_details({})
+
+        assert details["is_vcp_breakout"] == {
+            "pivot_level": None, "bars_since_breakout": None, "breakout_within_last_k_bars": False,
+        }

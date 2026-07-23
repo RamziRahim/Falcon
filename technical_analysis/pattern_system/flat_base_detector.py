@@ -13,6 +13,7 @@ high/low range over the trailing window, no pivot-list traversal needed.
 """
 from __future__ import annotations
 import pandas as pd
+from technical_analysis.pattern_system.breakout_recency import compute_breakout_recency
 
 class FlatBaseDetector:
     MIN_DURATION_DAYS = 25   # ~5 weeks, O'Neil's minimum
@@ -72,6 +73,8 @@ class FlatBaseDetector:
             and latest_volume >= volume_baseline * 1.5
         )
 
+        recency = compute_breakout_recency(df, base_high, volume_baseline)
+
         return {
             "is_flat_base_setup": is_flat_base_setup,
             "base_depth_pct": round(depth_pct, 1),
@@ -82,6 +85,9 @@ class FlatBaseDetector:
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_flat_base_setup and price_crossed_pivot and breakout_volume_confirmed,
+            # A-5 breakout-recency contract -- see breakout_recency.py.
+            "bars_since_breakout": recency["bars_since_breakout"],
+            "breakout_within_last_k_bars": recency["breakout_within_last_k_bars"],
             "invalidated_reason": None,
         }
 

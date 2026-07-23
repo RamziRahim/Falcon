@@ -8,6 +8,7 @@ Package     : Technical Analysis / Pattern System
 """
 from __future__ import annotations
 import pandas as pd
+from technical_analysis.pattern_system.breakout_recency import compute_breakout_recency
 from technical_analysis.pattern_system.models import SwingPoint, VCPContraction
 
 class VCPDetector:
@@ -103,6 +104,7 @@ class VCPDetector:
         )
 
         is_breakout = price_crossed_pivot and breakout_volume_confirmed
+        recency = compute_breakout_recency(df, resistance_pivot, volume_baseline)
 
         return {
             "is_vcp_setup": True,
@@ -121,6 +123,9 @@ class VCPDetector:
             # The low of the final (tightest) contraction wave -- needed
             # for a real, non-ATR-fallback stop-loss/target.
             "final_contraction_low": contractions[-1].swing_low_price,
+            # A-5 breakout-recency contract -- see breakout_recency.py.
+            "bars_since_breakout": recency["bars_since_breakout"],
+            "breakout_within_last_k_bars": recency["breakout_within_last_k_bars"],
             "invalidated_reason": None,
         }
     

@@ -130,6 +130,18 @@ ROUND_TRIP_COST_PCT = 0.003
 # two calendar months, a more realistic swing-trade horizon than one month.
 MAX_HOLDING_TRADING_DAYS = 40
 
+# Breakout-recency contract (A-5): all 5 continuation-pattern detectors
+# confirm a breakout using only the LATEST bar (Close > pivot_level and
+# Volume >= volume_baseline * 1.5) -- a stock that broke out weeks ago and
+# has simply stayed above its pivot reads identically to one breaking out
+# today. technical_analysis/pattern_system/breakout_recency.py's
+# compute_breakout_recency() uses this as the "k" in
+# breakout_within_last_k_bars -- matches backtest_runner.run_backtest()'s
+# own sample_every_n_days default (5): a signal is "fresh" if it wasn't
+# already visible as a confirmed breakout the last time a 5-day-cadence
+# replay would have looked.
+BREAKOUT_RECENCY_K_BARS = 5
+
 NIFTY50 = "^NSEI"
 NIFTY_MIDCAP_150 = "NIFTYMIDCAP150.NS"   # renamed from MIDCAP100 — it was never Midcap 100
 NIFTY_SMALLCAP_250 = "NIFTYSMLCAP250.NS"  # renamed from SMALLCAP100 — it was never Smallcap 100
