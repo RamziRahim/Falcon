@@ -153,6 +153,50 @@ class TestPromoterTrendSkipIfAbsent:
         assert "PROMOTER_STAKE_DECLINING" not in flags
 
 
+class TestCupHandleProbation:
+    """2.6b: Cup & Handle's weight was set to 0 (data/gate1_report.md's
+    G1-e, confirmed on the tuning split alone) -- detection stays on, but
+    it must never win pattern-selection priority over a real
+    higher-weighted pattern, and its use must be visibly flagged."""
+
+    def test_cup_handle_alone_contributes_zero_points(self):
+        candidate = _candidate(is_cup_handle_breakout=True)
+
+        points, field = get_best_pattern_points(candidate)
+
+        assert points == 0
+        assert field == "is_cup_handle_breakout"
+
+    def test_ascending_triangle_wins_selection_over_cup_handle_when_both_fire(self):
+        # Guards against the exact bug probation could silently
+        # reintroduce: PATTERN_WEIGHTS list order IS selection priority
+        # (get_best_pattern_points doesn't re-sort by weight) -- Cup &
+        # Handle must sit AFTER every real-weighted pattern in that list,
+        # not just carry a 0 weight while still appearing early.
+        candidate = _candidate(is_cup_handle_breakout=True, is_ascending_triangle_breakout=True)
+
+        points, field = get_best_pattern_points(candidate)
+
+        assert field == "is_ascending_triangle_breakout"
+        assert points == 20
+
+    def test_pattern_on_probation_flag_set_when_cup_handle_is_the_only_pattern(self):
+        candidate = _candidate(is_cup_handle_breakout=True, RS_Rating=80.0)
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert "PATTERN_ON_PROBATION:is_cup_handle_breakout" in result["fakeout_risk_flags"]
+
+    def test_pattern_on_probation_flag_absent_when_a_different_pattern_wins(self):
+        candidate = _candidate(is_vcp_breakout=True, RS_Rating=80.0)
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert not any(f.startswith("PATTERN_ON_PROBATION") for f in result["fakeout_risk_flags"])
+
+
 class TestMicrostructureSignalsAreFeatureFlagged:
     """Liquidity sweep / FVG must be fully opt-in: with
     enable_microstructure_signals=False (the default), categorize()'s

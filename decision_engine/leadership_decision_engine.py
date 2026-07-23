@@ -244,13 +244,42 @@ INDEPENDENT_CAPS = [
 # Cup-Handle require multi-week structural conditions (and, for VCP, a
 # genuinely continuous, tested score); Bull Flag's brief window makes it
 # the easiest to satisfy coincidentally, hence the lowest weight.
+#
+# Cup & Handle on PROBATION (weight 0, decided at Gate 1 / master execution
+# spec item 2.6b, data/gate1_report.md's G1-e): backtest run #1 showed it
+# as the single worst-performing pattern at episode level (n=21,
+# expectancy 0.36%, full window) -- confirmed on the TUNING SPLIT ALONE
+# before enacting this (n=6, expectancy -3.21%, worse than the full-window
+# number, not better -- not a validation-period artifact). Weight 0 means
+# a Cup & Handle-only signal contributes nothing to compute_score()'s
+# pattern-points term, but detection stays on (candidate_assembler /
+# pattern_engine still run it, entry/stop/target still price off it if
+# it's the only pattern that fired) -- PATTERNS_ON_PROBATION below tags
+# categorize()'s output so a Cup & Handle-priced signal is visibly
+# flagged, not silently demoted. Triangle/VCP's own weight ordering is
+# deliberately left untouched here -- see the same report's note that
+# ordering integers now would be the one-window reaction Phase 4's
+# calibrated scorer exists to replace wholesale.
+
+# List order IS the selection priority (get_best_pattern_points() below
+# returns the first match, it does not re-sort by weight) -- must stay
+# sorted descending by weight, or a lower-weighted pattern earlier in the
+# list would keep winning selection over a higher-weighted one that fired
+# alongside it. Cup & Handle's weight-0 probation (see above) moves it
+# here, to the end, rather than leaving it in its original by-rigor
+# position -- leaving it at position 2 with a 0 weight would have let it
+# keep "winning" priority over Ascending Triangle (weight 20) whenever
+# both fired together, silently reintroducing the same problem probation
+# exists to fix.
 PATTERN_WEIGHTS = [
     ("is_vcp_breakout", 30),
-    ("is_cup_handle_breakout", 25),
     ("is_ascending_triangle_breakout", 20),
     ("is_flat_base_breakout", 18),
     ("is_bull_flag_breakout", 15),
+    ("is_cup_handle_breakout", 0),
 ]
+
+PATTERNS_ON_PROBATION = {"is_cup_handle_breakout"}
 
 # Deliberately smaller than MACD's +10/-12: MACD is an established
 # continuous indicator (histogram slope) already validated in an earlier
@@ -575,13 +604,18 @@ def categorize(
 
     final_category = min(score_based_category, ceiling, key=lambda c: CATEGORY_RANK[c])
 
+    best_points, best_field = get_best_pattern_points(candidate)
+
     if final_category == "AVOID":
         entry = stop_loss = target = None
     else:
-        best_points, best_field = get_best_pattern_points(candidate)
         best_result = pattern_details.get(best_field) if best_field else None
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
+
+    fakeout_risk_flags = get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals)
+    if best_field in PATTERNS_ON_PROBATION:
+        fakeout_risk_flags.append(f"PATTERN_ON_PROBATION:{best_field}")
 
     return {
         "symbol": candidate.get("symbol"),
@@ -590,7 +624,7 @@ def categorize(
         "sector_health_verdict": sector_verdict,
         "confidence_score": score,
         "caps_applied": caps_applied,
-        "fakeout_risk_flags": get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals),
+        "fakeout_risk_flags": fakeout_risk_flags,
         "contributing_factors": get_contributing_factors(candidate, enable_microstructure_signals=enable_microstructure_signals),
         "multiple_patterns_confirmed": candidate.get("Multiple_Patterns_Confirmed", False),
         "entry": entry,
