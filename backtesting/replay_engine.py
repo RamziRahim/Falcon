@@ -79,6 +79,7 @@ from scoring.sector_indices import get_sector_index_trend
 from scoring.sector_index_rs import compute_sector_index_rs
 from scoring.market_regime import count_distribution_days
 from decision_engine.candidate_assembler import assemble_candidate, assemble_sector_row, assemble_pattern_details
+from config import MIN_REWARD_RISK
 from decision_engine.leadership_decision_engine import categorize, get_market_regime_verdict
 
 # Same floor pattern_engine.py's execute_pipeline() uses -- a shorter
@@ -215,6 +216,7 @@ def replay_decision_as_of(
     sector_index_histories: dict | None = None,
     precomputed_universe_scoring: tuple | None = None,
     enable_microstructure_signals: bool = False,
+    min_reward_risk: float = MIN_REWARD_RISK,
 ) -> dict:
     """
     Truncates full_history to rows <= as_of_date, re-runs the full
@@ -255,6 +257,8 @@ def replay_decision_as_of(
     enable_microstructure_signals : passed straight through to
         categorize() -- see that function's own docstring. Defaults to
         False (identical behavior to before liquidity-sweep/FVG existed).
+    min_reward_risk : passed straight through to categorize() (2.2, I-6) --
+        see that function's own docstring. Defaults to config.MIN_REWARD_RISK.
 
     Returns
     -------
@@ -362,6 +366,7 @@ def replay_decision_as_of(
         pattern_details=pattern_details,
         disable_fundamental_signals=True,
         enable_microstructure_signals=enable_microstructure_signals,
+        min_reward_risk=min_reward_risk,
     )
     # A-4 detector funnel diagnostics -- built from `analysis` (already
     # computed above for pattern_row), not a second detection pass.

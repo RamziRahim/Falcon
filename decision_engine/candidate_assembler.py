@@ -93,6 +93,19 @@ PATTERN_BREAKOUT_WITHIN_K_BARS_COLUMN_MAP = {
     "is_bull_flag_breakout": "Bull_Flag_Breakout_Within_K_Bars",
 }
 
+# 2.2 (I-6): each pattern's own structural-low column (already persisted
+# by the Part 1 fast-follow, one differently-named column per pattern --
+# VCP_Structural_Low/Flat_Base_Low/Cup_Handle_Low/Ascending_Triangle_Support/
+# Bull_Flag_Low) mapped to the single uniform "structural_low" key
+# get_entry_target_stop() reads, regardless of which pattern won selection.
+PATTERN_STRUCTURAL_LOW_COLUMN_MAP = {
+    "is_vcp_breakout": "VCP_Structural_Low",
+    "is_flat_base_breakout": "Flat_Base_Low",
+    "is_cup_handle_breakout": "Cup_Handle_Low",
+    "is_ascending_triangle_breakout": "Ascending_Triangle_Support",
+    "is_bull_flag_breakout": "Bull_Flag_Low",
+}
+
 
 def _parse_formatted_percentage(value) -> float | None:
     """Handles corporate_engine.py / institutional_engine.py's human-formatted
@@ -221,21 +234,29 @@ def assemble_sector_row(sector_ranking_df, ticker_sector: str, sector_index_tren
 
 def assemble_pattern_details(pattern_row: dict) -> dict:
     """Reconstructs a pattern_details-equivalent dict
-    (name -> {"pivot_level": ..., "bars_since_breakout": ..., "breakout_within_last_k_bars": ...})
-    from persisted parquet columns alone, per the recommended approach in
-    this module's own design discussion: the raw per-pattern detector
-    dicts only ever exist in memory during pattern_engine.py's own
-    execution and are never persisted themselves -- only specific fields
-    from them are, since the Part 1 fast-follow (pivot_level) and the A-5
-    breakout-recency contract (bars_since_breakout/breakout_within_last_k_bars).
-    Reconstructing from those persisted fields (rather than requiring a
-    live in-memory hook into pattern_engine.py) is what lets this work
-    identically for a live scan and for a backtest replaying a historical
-    parquet row.
+    (name -> {"pivot_level": ..., "structural_low": ..., "bars_since_breakout": ...,
+    "breakout_within_last_k_bars": ...}) from persisted parquet columns
+    alone, per the recommended approach in this module's own design
+    discussion: the raw per-pattern detector dicts only ever exist in
+    memory during pattern_engine.py's own execution and are never
+    persisted themselves -- only specific fields from them are, since the
+    Part 1 fast-follow (pivot_level, and each pattern's own differently-
+    named structural-low column -- see PATTERN_STRUCTURAL_LOW_COLUMN_MAP)
+    and the A-5 breakout-recency contract
+    (bars_since_breakout/breakout_within_last_k_bars). Reconstructing from
+    those persisted fields (rather than requiring a live in-memory hook
+    into pattern_engine.py) is what lets this work identically for a live
+    scan and for a backtest replaying a historical parquet row.
+
+    structural_low is the single uniform key get_entry_target_stop() (2.2,
+    I-6) reads regardless of which pattern won selection -- callers never
+    need to know that VCP's own column is named differently from Cup &
+    Handle's.
     """
     return {
         field_name: {
             "pivot_level": pattern_row.get(column),
+            "structural_low": pattern_row.get(PATTERN_STRUCTURAL_LOW_COLUMN_MAP[field_name]),
             "bars_since_breakout": pattern_row.get(PATTERN_BARS_SINCE_BREAKOUT_COLUMN_MAP[field_name]),
             "breakout_within_last_k_bars": pattern_row.get(
                 PATTERN_BREAKOUT_WITHIN_K_BARS_COLUMN_MAP[field_name], False

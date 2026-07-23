@@ -241,6 +241,129 @@ class TestTimeStopTradePlanField:
         assert result["max_holding_days"] is None
 
 
+class TestStructuralExitsAndRRFloor:
+    """2.2 (I-6): get_entry_target_stop() prices off the pattern's own
+    structural low, clamped to an ATR floor/ceiling, with a measured-move
+    target independent of that clamp; categorize() downgrades EXECUTE to
+    ALERT_WATCHLIST (RR_BELOW_FLOOR) when the resulting reward:risk falls
+    short of MIN_REWARD_RISK."""
+
+    def test_structural_stop_used_when_within_atr_bounds(self):
+        candidate = _candidate(ATR_14=5.0)
+        # entry=100 (pivot), structural_low=90 -> raw distance 10, well
+        # within [1x, 3x] ATR = [5, 15].
+        best_result = {"pivot_level": 100.0, "structural_low": 90.0}
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
+
+        assert result["stop_loss"] == pytest.approx(90.0)
+        assert result["target"] == pytest.approx(110.0)  # measured move: 100 + 10
+        assert result["stop_provenance"] == "STRUCTURAL"
+        assert result["target_provenance"] == "MEASURED_MOVE"
+
+    def test_structural_stop_clamped_to_atr_floor_when_too_tight(self):
+        candidate = _candidate(ATR_14=5.0)
+        # raw distance 2 (100 -> 98) is tighter than the 1x-ATR floor (5).
+        best_result = {"pivot_level": 100.0, "structural_low": 98.0}
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
+
+        assert result["stop_loss"] == pytest.approx(95.0)  # 100 - 5 (floor), not 100 - 2
+        assert result["target"] == pytest.approx(102.0)    # measured move uses the RAW distance (2), unclamped
+        assert result["stop_provenance"] == "STRUCTURAL_CLAMPED_TO_ATR_FLOOR"
+
+    def test_structural_stop_clamped_to_atr_ceiling_when_too_wide(self):
+        candidate = _candidate(ATR_14=5.0)
+        # raw distance 30 (100 -> 70) is wider than the 3x-ATR ceiling (15).
+        best_result = {"pivot_level": 100.0, "structural_low": 70.0}
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
+
+        assert result["stop_loss"] == pytest.approx(85.0)   # 100 - 15 (ceiling), not 100 - 30
+        assert result["target"] == pytest.approx(130.0)     # measured move uses the RAW distance (30)
+        assert result["stop_provenance"] == "STRUCTURAL_CLAMPED_TO_ATR_CEILING"
+
+    def test_missing_structural_low_falls_back_to_atr(self):
+        candidate = _candidate(ATR_14=5.0)
+        best_result = {"pivot_level": 100.0, "structural_low": None}
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
+
+        assert result["stop_loss"] == pytest.approx(90.0)   # 100 - 2*5
+        assert result["target"] == pytest.approx(112.5)     # 100 + 2.5*5
+        assert result["stop_provenance"] == "ATR_FALLBACK_NO_STRUCTURAL_LOW"
+        assert result["target_provenance"] == "ATR_FALLBACK_NO_STRUCTURAL_LOW"
+
+    def test_structural_low_at_or_above_entry_falls_back_to_atr(self):
+        # A mis-detected pivot -- structural_low can't legitimately sit at
+        # or above the entry price.
+        candidate = _candidate(ATR_14=5.0)
+        best_result = {"pivot_level": 100.0, "structural_low": 100.0}
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
+
+        assert result["stop_provenance"] == "ATR_FALLBACK_NO_STRUCTURAL_LOW"
+
+    def test_no_pattern_at_all_uses_the_no_pattern_provenance(self):
+        candidate = _candidate(ATR_14=5.0)
+
+        result = get_entry_target_stop(candidate, None, None)
+
+        assert result["stop_provenance"] == "ATR_FALLBACK_NO_PATTERN"
+        assert result["target_provenance"] == "ATR_FALLBACK_NO_PATTERN"
+
+    def _execute_grade_candidate_with_pattern(self):
+        # VCP(30) + RS_Rating 100 (+20) + active FVG (+15) + liquidity
+        # sweep (+15) + top-half sector (+10) + institutional sponsorship
+        # (+10) + buy activity (+10) = 110, clamped to 100 -- comfortably
+        # EXECUTE-grade (>=65), with a real pattern (not MONITOR-eligible).
+        candidate = _candidate(
+            is_vcp_breakout=True, RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True,
+            institutional_sponsorship_pct=25.0, has_buy_activity=True, ATR_14=5.0,
+        )
+        sector_row = _sector_row(Rank=2, Total_Sectors=10)
+        return candidate, sector_row
+
+    def test_execute_downgraded_to_alert_watchlist_when_rr_below_floor(self):
+        candidate, sector_row = self._execute_grade_candidate_with_pattern()
+        # structural_low=98 -> clamped stop distance 5, raw target distance
+        # 2 -> RR = 2/5 = 0.4, well under the 1.25 floor.
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 98.0}}
+
+        score = compute_score(candidate, sector_row)
+        assert score >= 65, "fixture must be EXECUTE-grade by score for this test to mean anything"
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
+
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert "RR_BELOW_FLOOR" in result["caps_applied"]
+
+    def test_execute_stays_execute_when_rr_clears_the_floor(self):
+        candidate, sector_row = self._execute_grade_candidate_with_pattern()
+        # structural_low=70 -> clamped stop distance 15 (ceiling), raw
+        # target distance 30 -> RR = 30/15 = 2.0, clears the 1.25 floor.
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 70.0}}
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
+
+        assert result["category"] == "EXECUTE"
+        assert "RR_BELOW_FLOOR" not in result["caps_applied"]
+
+    def test_min_reward_risk_is_overridable_per_call(self):
+        candidate, sector_row = self._execute_grade_candidate_with_pattern()
+        # RR=2.0 (see test above) clears 1.25 but not an experimentally
+        # stricter 2.5 floor passed explicitly.
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 70.0}}
+
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE",
+            pattern_details=pattern_details, min_reward_risk=2.5,
+        )
+
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert "RR_BELOW_FLOOR" in result["caps_applied"]
+
+
 class TestBreakoutRecencySurfacedOnCategorizeOutput:
     """A-5: categorize() surfaces bars_since_breakout/
     breakout_within_last_k_bars for the SELECTED pattern, not just buried

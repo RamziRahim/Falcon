@@ -142,6 +142,29 @@ MAX_HOLDING_TRADING_DAYS = 40
 # replay would have looked.
 BREAKOUT_RECENCY_K_BARS = 5
 
+# Structural exits + RR floor (2.2, I-6): get_entry_target_stop() prices
+# the stop off the pattern's own structural low (VCP's final contraction
+# low, the flat base's low, etc. -- see
+# decision_engine.candidate_assembler.PATTERN_STRUCTURAL_LOW_COLUMN_MAP)
+# instead of a flat 2x-ATR guess, with the target as a measured move
+# (entry + the pattern's own height) instead of a flat 2.5x-ATR guess.
+# ATR still bounds how tight/wide the structural stop is allowed to be --
+# a structural low that's absurdly close or absurdly far from entry
+# (thin/noisy data, a mis-detected pivot) shouldn't produce an unusably
+# tight or unusably wide stop just because that's literally where the
+# pattern's low sat.
+ATR_STOP_FLOOR_MULTIPLE = 1.0    # stop can't be tighter than this many ATRs from entry
+ATR_STOP_CEILING_MULTIPLE = 3.0  # stop can't be wider than this many ATRs from entry
+
+# Minimum acceptable reward:risk (measured-move target distance / actual
+# stop distance) for an EXECUTE-grade signal. Below this floor, the signal
+# is downgraded to ALERT_WATCHLIST (RR_BELOW_FLOOR cap, see categorize())
+# -- a technically well-scored setup with a poor risk:reward isn't worth
+# EXECUTE-grade conviction. Threaded end-to-end like
+# enable_microstructure_signals: a single config default, overridable per
+# call for tuning-split experiments without touching call sites.
+MIN_REWARD_RISK = 1.25
+
 NIFTY50 = "^NSEI"
 NIFTY_MIDCAP_150 = "NIFTYMIDCAP150.NS"   # renamed from MIDCAP100 — it was never Midcap 100
 NIFTY_SMALLCAP_250 = "NIFTYSMLCAP250.NS"  # renamed from SMALLCAP100 — it was never Smallcap 100

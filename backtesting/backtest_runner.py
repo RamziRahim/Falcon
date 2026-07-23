@@ -39,7 +39,7 @@ from backtesting.detector_funnel import tally_funnel
 from backtesting.portfolio_simulator import policy_sector_aware_caution
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
 from backtesting.outcome_measurement import measure_forward_outcome
-from config import MAX_HOLDING_TRADING_DAYS
+from config import MAX_HOLDING_TRADING_DAYS, MIN_REWARD_RISK
 from decision_engine.leadership_decision_engine import get_best_pattern_points, get_entry_target_stop
 from scoring.sector_map import sector_map
 
@@ -120,6 +120,7 @@ def run_backtest(
     max_holding_days: int = MAX_HOLDING_TRADING_DAYS,
     sector_index_histories: dict | None = None,
     enable_microstructure_signals: bool = False,
+    min_reward_risk: float = MIN_REWARD_RISK,
     funnel_counts: dict | None = None,
     avoid_sample_rate: float = 1.0,
     avoid_sample_seed: int = 42,
@@ -223,6 +224,7 @@ def run_backtest(
                 sector_index_histories=sector_index_histories,
                 precomputed_universe_scoring=universe_scoring,
                 enable_microstructure_signals=enable_microstructure_signals,
+                min_reward_risk=min_reward_risk,
             )
 
             if funnel_counts is not None:

@@ -139,7 +139,8 @@ class TestComputedRuntimeEstimate:
         import backtesting.replay_engine as replay_engine
 
         def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
-                             disable_fundamental_signals=False, enable_microstructure_signals=False):
+                             disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
             return {
                 "category": "NO_DATA", "market_regime_verdict": market_verdict,
                 "sector_health_verdict": None, "confidence_score": 0.0,
@@ -187,7 +188,8 @@ class TestEnableMicrostructureSignalsThreadsThroughRunBacktest:
         received_flags = []
 
         def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
-                             disable_fundamental_signals=False, enable_microstructure_signals=False):
+                             disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
             received_flags.append(enable_microstructure_signals)
             return {
                 "category": "NO_DATA", "market_regime_verdict": market_verdict,
@@ -225,7 +227,8 @@ class TestEnableMicrostructureSignalsThreadsThroughRunBacktest:
         received_flags = []
 
         def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
-                             disable_fundamental_signals=False, enable_microstructure_signals=False):
+                             disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
             received_flags.append(enable_microstructure_signals)
             return {
                 "category": "NO_DATA", "market_regime_verdict": market_verdict,
@@ -255,6 +258,86 @@ class TestEnableMicrostructureSignalsThreadsThroughRunBacktest:
         assert all(flag is False for flag in received_flags)
 
 
+class TestMinRewardRiskThreadsThroughRunBacktest:
+    """2.2 (I-6): min_reward_risk travels run_backtest() ->
+    replay_decision_as_of() -> categorize() end-to-end, same threading
+    pattern as enable_microstructure_signals."""
+
+    def test_value_reaches_categorizes_own_kwarg(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+
+        received_values = []
+
+        def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
+                             disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
+            received_values.append(min_reward_risk)
+            return {
+                "category": "NO_DATA", "market_regime_verdict": market_verdict,
+                "sector_health_verdict": None, "confidence_score": 0.0,
+                "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
+                "entry": None, "stop_loss": None, "target": None, "supporting_data": {},
+            }
+
+        monkeypatch.setattr(replay_engine, "categorize", fake_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[-1]
+
+        run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+            min_reward_risk=2.5,
+        )
+
+        assert received_values, "categorize() was never reached -- fixture didn't produce a sampled date"
+        assert all(value == 2.5 for value in received_values)
+
+    def test_defaults_to_config_value_when_caller_omits_it(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+        from config import MIN_REWARD_RISK
+
+        received_values = []
+
+        def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
+                             disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
+            received_values.append(min_reward_risk)
+            return {
+                "category": "NO_DATA", "market_regime_verdict": market_verdict,
+                "sector_health_verdict": None, "confidence_score": 0.0,
+                "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
+                "entry": None, "stop_loss": None, "target": None, "supporting_data": {},
+            }
+
+        monkeypatch.setattr(replay_engine, "categorize", fake_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=5, n=60)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=99, n=60)
+        as_of_date = history["Date"].iloc[-1]
+
+        run_backtest(
+            universe_histories=universe_histories,
+            benchmark_history=benchmark_history,
+            vix_history=None,
+            start_date=as_of_date,
+            end_date=as_of_date,
+            sample_every_n_days=1,
+        )
+
+        assert received_values, "categorize() was never reached -- fixture didn't produce a sampled date"
+        assert all(value == MIN_REWARD_RISK for value in received_values)
+
+
 class TestDetectorFunnelWiring:
     """2.4: run_backtest()'s funnel_counts accumulator is populated for
     EVERY (ticker, date) evaluation -- categorize() is monkeypatched
@@ -266,7 +349,8 @@ class TestDetectorFunnelWiring:
         import backtesting.replay_engine as replay_engine
 
         def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
-                             disable_fundamental_signals=False, enable_microstructure_signals=False):
+                             disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
             return {
                 "category": "NO_DATA", "market_regime_verdict": market_verdict,
                 "sector_health_verdict": None, "confidence_score": 0.0,
@@ -323,7 +407,8 @@ class TestDetectorFunnelWiring:
 
 
 def _fake_avoid_categorize(candidate, sector_row, market_verdict, pattern_details=None,
-                            disable_fundamental_signals=False, enable_microstructure_signals=False):
+                            disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
     return {
         "category": "AVOID", "market_regime_verdict": market_verdict,
         "sector_health_verdict": "NEUTRAL", "confidence_score": 25.0,
@@ -421,7 +506,8 @@ class TestAvoidOutcomeRecording:
 
 def _fake_real_trade_categorize_factory(category, confidence_score, sector_health_verdict="NEUTRAL"):
     def _fake(candidate, sector_row, market_verdict, pattern_details=None,
-              disable_fundamental_signals=False, enable_microstructure_signals=False):
+              disable_fundamental_signals=False, enable_microstructure_signals=False,
+                             min_reward_risk=1.25):
         return {
             "category": category, "market_regime_verdict": market_verdict,
             "sector_health_verdict": sector_health_verdict, "confidence_score": confidence_score,

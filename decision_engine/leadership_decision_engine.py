@@ -101,7 +101,7 @@ selection below.
 """
 from __future__ import annotations
 
-from config import MAX_HOLDING_TRADING_DAYS
+from config import ATR_STOP_CEILING_MULTIPLE, ATR_STOP_FLOOR_MULTIPLE, MAX_HOLDING_TRADING_DAYS, MIN_REWARD_RISK
 
 # MONITOR (B-8, Gate 1 decision #4): a candidate that scored ALERT_WATCHLIST-
 # or-better (>=40) but had NO confirmed pattern at all -- ranked below
@@ -516,16 +516,26 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
     weight-priority logic above, not VCP specifically -- all 5 detectors
     return their own pivot_level.
 
-    Stop-loss and target currently fall back to ATR for ALL 5 patterns:
-    none of the 5 detectors return an absolute price-based structural low
-    or height, only percentage depths and pivot_level (the high) -- a
-    proper measured-move target/stop needs pivot_level minus the
-    structural low in real price terms, which isn't available from any
-    current detector output. Each detector already computes the relevant
-    low as a local variable right next to its depth-percentage
-    calculation, so adding it to the returned dict is a small fast-follow,
-    not new logic -- worth doing before relying on non-ATR stops/targets
-    for real trades.
+    Stop-loss/target (2.2, I-6): priced off the pattern's own structural
+    low (best_pattern_result["structural_low"] -- each detector's real,
+    price-terms low: VCP's final contraction low, the flat base's low,
+    etc., see decision_engine.candidate_assembler.PATTERN_STRUCTURAL_LOW_COLUMN_MAP)
+    rather than a flat ATR guess:
+      - stop_loss = entry - stop_distance, where stop_distance is the raw
+        entry-to-structural-low distance, CLAMPED to
+        [ATR_STOP_FLOOR_MULTIPLE, ATR_STOP_CEILING_MULTIPLE] x ATR_14 -- a
+        structural low that's absurdly close or far from entry (thin/noisy
+        data, a mis-detected pivot) shouldn't produce an unusably tight or
+        wide stop just because that's literally where the pattern's low sat.
+      - target = entry + RAW (unclamped) structural distance -- a genuine
+        measured move (project the pattern's own height upward from the
+        breakout), independent of whatever the stop got clamped to for
+        risk-management reasons.
+    Falls back to the prior flat ATR guess (entry -+ 2/2.5x ATR) when
+    there's no pattern at all, or the pattern's structural_low is missing
+    or nonsensical (>= entry). stop_provenance/target_provenance name
+    which path was taken, for diagnostics -- never silently one or the
+    other.
 
     max_holding_days (2.1, I-3): the time-stop half of the trade plan,
     alongside entry/stop_loss/target -- a single config value
@@ -535,17 +545,63 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
     that doesn't explicitly pass max_holding_days already agrees with what
     the trade plan itself states.
     """
+    atr = candidate.get("ATR_14", 0) or 0
+
     if best_pattern_field is None or not best_pattern_result:
         entry = candidate["Close"]
-    else:
-        entry = best_pattern_result.get("pivot_level", candidate["Close"])
+        return {
+            "entry": entry,
+            "stop_loss": entry - 2 * atr,
+            "target": entry + 2.5 * atr,
+            "max_holding_days": MAX_HOLDING_TRADING_DAYS,
+            "stop_provenance": "ATR_FALLBACK_NO_PATTERN",
+            "target_provenance": "ATR_FALLBACK_NO_PATTERN",
+        }
 
-    atr = candidate.get("ATR_14", 0)
+    entry = best_pattern_result.get("pivot_level", candidate["Close"])
+    structural_low = best_pattern_result.get("structural_low")
+
+    if structural_low is None or structural_low >= entry:
+        # No usable structural low -- missing, or nonsensical (a
+        # mis-detected pivot placing the "low" at or above entry) -- same
+        # flat-ATR fallback as the no-pattern case.
+        return {
+            "entry": entry,
+            "stop_loss": entry - 2 * atr,
+            "target": entry + 2.5 * atr,
+            "max_holding_days": MAX_HOLDING_TRADING_DAYS,
+            "stop_provenance": "ATR_FALLBACK_NO_STRUCTURAL_LOW",
+            "target_provenance": "ATR_FALLBACK_NO_STRUCTURAL_LOW",
+        }
+
+    raw_structural_distance = entry - structural_low
+
+    if atr > 0:
+        atr_floor = ATR_STOP_FLOOR_MULTIPLE * atr
+        atr_ceiling = ATR_STOP_CEILING_MULTIPLE * atr
+        stop_distance = max(atr_floor, min(raw_structural_distance, atr_ceiling))
+        if stop_distance == raw_structural_distance:
+            stop_provenance = "STRUCTURAL"
+        elif stop_distance == atr_floor:
+            stop_provenance = "STRUCTURAL_CLAMPED_TO_ATR_FLOOR"
+        else:
+            stop_provenance = "STRUCTURAL_CLAMPED_TO_ATR_CEILING"
+    else:
+        # No real ATR to clamp against -- use the structural distance as-is
+        # rather than degrading to a zero-width (unclampable) stop.
+        stop_distance = raw_structural_distance
+        stop_provenance = "STRUCTURAL"
+
     return {
         "entry": entry,
-        "stop_loss": entry - 2 * atr,
-        "target": entry + 2.5 * atr,
+        "stop_loss": entry - stop_distance,
+        # Measured move: the pattern's own REAL height, not the
+        # (possibly clamped) stop distance -- a genuine target
+        # independent of the risk-management clamp above.
+        "target": entry + raw_structural_distance,
         "max_holding_days": MAX_HOLDING_TRADING_DAYS,
+        "stop_provenance": stop_provenance,
+        "target_provenance": "MEASURED_MOVE",
     }
 
 
@@ -556,6 +612,7 @@ def categorize(
     pattern_details: dict | None = None,
     disable_fundamental_signals: bool = False,
     enable_microstructure_signals: bool = False,
+    min_reward_risk: float = MIN_REWARD_RISK,
 ) -> dict:
     """Full Leadership-strategy decision: disqualifiers first (AVOID
     immediately, regardless of market/sector/score), then the cascade
@@ -579,6 +636,17 @@ def categorize(
     disqualifier, confidence boosts only, and both are opt-in per the
     spec's explicit requirement that existing behavior stay provably
     unchanged unless this flag is turned on.
+
+    min_reward_risk (2.2, I-6): an EXECUTE-grade signal whose actual
+    reward:risk (measured-move target distance / actual stop distance,
+    from get_entry_target_stop()) falls below this floor is downgraded to
+    ALERT_WATCHLIST with an RR_BELOW_FLOOR cap recorded in caps_applied --
+    a technically well-scored setup with a poor risk:reward isn't worth
+    EXECUTE-grade conviction. Only ever downgrades EXECUTE; ALERT_WATCHLIST/
+    MONITOR/AVOID are unaffected (already at or below that tier). Threaded
+    like enable_microstructure_signals -- a single config default
+    (MIN_REWARD_RISK), overridable per call for tuning-split experiments
+    without touching call sites.
     """
     pattern_details = pattern_details or {}
 
@@ -648,6 +716,17 @@ def categorize(
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
         max_holding_days = ets["max_holding_days"]
+
+        # 2.2 (I-6) RR floor: only ever downgrades EXECUTE -- ALERT_WATCHLIST/
+        # MONITOR are already at or below that tier. entry - stop_loss <= 0
+        # would mean a broken stop (at or above entry) -- can't compute a
+        # meaningful RR from that, so the check is skipped rather than
+        # dividing by a non-positive number.
+        if final_category == "EXECUTE" and (entry - stop_loss) > 0:
+            reward_risk = (target - entry) / (entry - stop_loss)
+            if reward_risk < min_reward_risk:
+                final_category = "ALERT_WATCHLIST"
+                caps_applied = caps_applied + ["RR_BELOW_FLOOR"]
 
     fakeout_risk_flags = get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals)
     if best_field in PATTERNS_ON_PROBATION:
