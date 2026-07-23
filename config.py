@@ -110,6 +110,14 @@ LOW_RISK = 20
 MODERATE_RISK = 40
 HIGH_RISK = 60
 
+# Round-trip transaction cost (brokerage + STT + slippage, entry+exit combined)
+# as a fraction of trade value -- backtesting/episode_builder.py subtracts this
+# from every episode's gross return to get net_return_pct. 0.3% is a
+# conservative blended estimate for NSE cash-market swing trades; every
+# backtest report should show gross AND net so this assumption stays visible
+# rather than silently baked into a single number.
+ROUND_TRIP_COST_PCT = 0.003
+
 NIFTY50 = "^NSEI"
 NIFTY_MIDCAP_150 = "NIFTYMIDCAP150.NS"   # renamed from MIDCAP100 — it was never Midcap 100
 NIFTY_SMALLCAP_250 = "NIFTYSMLCAP250.NS"  # renamed from SMALLCAP100 — it was never Smallcap 100
