@@ -15,6 +15,7 @@ data/cache/
 data/patterns/
 data/signals/
 data/raw/
+data/technical/
 data/sector_map.json
 data/fundamentals_cache.json
 data/nse_holidays_cache.json

@@ -59,6 +59,23 @@ class TestBucketByOrderedColumn:
         assert result["order_checked"] == ["ALERT_WATCHLIST", "EXECUTE"]
         assert result["monotonicity"] == "monotonically increasing"
 
+    def test_nan_pattern_used_is_a_real_group_not_silently_dropped(self):
+        # 622 of 797 real episodes have no pattern at all (pattern_used is
+        # NaN) -- these must show up as their own bucket, not vanish.
+        episodes = pd.DataFrame([
+            _episode(pattern_used="is_vcp_breakout", net_return_pct=5.0),
+            _episode(pattern_used=None, net_return_pct=1.0),
+            _episode(pattern_used=None, net_return_pct=1.0),
+        ])
+
+        from backtesting.component_diagnostics import NO_PATTERN_LABEL, PATTERN_ORDER
+
+        result = bucket_by_ordered_column(episodes, "pattern_used", PATTERN_ORDER)
+
+        assert NO_PATTERN_LABEL in set(result["table"]["group"])
+        no_pattern_row = result["table"][result["table"]["group"] == NO_PATTERN_LABEL].iloc[0]
+        assert no_pattern_row["sample_size"] == 2
+
     def test_detects_a_real_inversion(self):
         episodes = pd.DataFrame([
             _episode(sector_health_verdict="WEAK", net_return_pct=5.0),

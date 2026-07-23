@@ -276,7 +276,10 @@ def aggregate_by(trades: pd.DataFrame, group_column: str, return_column: str = "
 
     rows = [
         _group_stats(group_value, group_df, return_column)
-        for group_value, group_df in trades.groupby(group_column, observed=True)
+        # dropna=False -- a NaN group (e.g. pattern_used is NaN for every
+        # episode where no pattern fired, 622 of 797 in run #1) is real
+        # data, not something to silently discard from the breakdown.
+        for group_value, group_df in trades.groupby(group_column, observed=True, dropna=False)
     ]
     # groupby(dropna=True, the pandas default) silently drops an all-NaN
     # group -- e.g. qcut() on a single-row/no-variance input can produce one

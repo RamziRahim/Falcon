@@ -1,0 +1,5 @@
+policy,n_taken,n_missed_due_to_slots,slot_utilization_pct,final_equity,max_drawdown_pct,cagr_pct,monthly_return_std_pct,n_months
+a_hard_cap,20,0,100.0,105.91,-1.17,4.3,1.39,9
+b_d_caution_half_unfavorable_blocked,78,5,94.0,117.73,-4.29,9.35,1.61,19
+c_caution_half_unfavorable_quarter,103,5,95.4,119.37,-4.99,9.96,1.56,22
+e_sector_aware_caution,78,5,94.0,117.2,-4.08,9.08,1.55,19

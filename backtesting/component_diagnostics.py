@@ -50,10 +50,12 @@ RETURN_COLUMN = "net_return_pct"
 CATEGORY_ORDER = ["ALERT_WATCHLIST", "EXECUTE"]  # AVOID not recorded in run #1, see A-1
 REGIME_ORDER = ["UNFAVORABLE", "CAUTION", "FAVORABLE"]
 SECTOR_VERDICT_ORDER = ["WEAK", "NEUTRAL", "STRONG"]
+NO_PATTERN_LABEL = "no_pattern"
+
 # Descending by PATTERN_WEIGHTS -- best-defined/most-rigorous pattern first,
 # "no pattern fired" last. Expectancy is expected to decrease along this
 # order if the weighting is justified.
-PATTERN_ORDER = [name for name, _ in PATTERN_WEIGHTS] + [None]
+PATTERN_ORDER = [name for name, _ in PATTERN_WEIGHTS] + [NO_PATTERN_LABEL]
 
 UNAVAILABLE_IN_RUN_1 = [
     "RS Rating quintile",
@@ -85,8 +87,18 @@ def bucket_by_ordered_column(episodes: pd.DataFrame, column: str, order: list) -
     """Generic ordered-categorical bucketing (regime, sector verdict,
     category, pattern) -- groups by `column`, reports stats via the same
     aggregate_by() the rest of the codebase uses, then checks monotonicity
-    against `order` using only the labels actually present."""
-    table = aggregate_by(episodes, column, return_column=RETURN_COLUMN)
+    against `order` using only the labels actually present.
+
+    NaN in `column` (real data, not missing data -- e.g. pattern_used is
+    NaN for every episode where no pattern fired, 622 of 797 in run #1) is
+    filled with NO_PATTERN_LABEL before grouping, both so it prints as a
+    readable label and because a raw NaN key can't be reliably matched
+    against `order` via equality (NaN != NaN)."""
+    working = episodes.copy()
+    if working[column].isna().any():
+        working[column] = working[column].fillna(NO_PATTERN_LABEL)
+
+    table = aggregate_by(working, column, return_column=RETURN_COLUMN)
 
     if table.empty:
         return {"table": table, "monotonicity": "N/A (no episodes)"}
