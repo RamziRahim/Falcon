@@ -279,6 +279,90 @@ def build_equity_curve(trades: pd.DataFrame, starting_equity: float = 100.0) -> 
     return pd.DataFrame(curve)
 
 
+def _ceiling_cause(row) -> str:
+    """Why a score>=65 (EXECUTE-grade) signal ended up ALERT_WATCHLIST --
+    mirrors get_ceiling()'s own branching in leadership_decision_engine.py.
+    Backtest replay always calls categorize() with
+    disable_fundamental_signals=True (replay_engine.py), which skips
+    INDEPENDENT_CAPS/EARNINGS_PROXIMITY entirely -- so market/sector
+    verdict is the only possible cause of a cap in this dataset, never
+    caps_applied."""
+    if row["market_regime_verdict"] == "UNFAVORABLE":
+        return "UNFAVORABLE market"
+    return f"CAUTION market + {row['sector_health_verdict']} sector"
+
+
+def aggregate_ceiling_attribution(trades: pd.DataFrame, execute_score_threshold: float = 65.0) -> dict:
+    """
+    Splits every ALERT_WATCHLIST signal into two populations:
+      - "capped": confidence_score >= execute_score_threshold -- scored
+        EXECUTE-grade but the market/sector ceiling (get_ceiling() in
+        leadership_decision_engine.py) pulled the final category down to
+        ALERT_WATCHLIST anyway.
+      - "genuine": confidence_score < execute_score_threshold -- would
+        have landed on ALERT_WATCHLIST regardless of any ceiling.
+
+    This is the load-bearing distinction for the signal-scarcity question
+    (EXECUTE producing far too few trades to validate or deploy): if the
+    "capped" population's outcomes resemble EXECUTE's, the fix is trading
+    the ceiling at reduced size (an exposure-scaling policy) rather than
+    lowering compute_score()'s EXECUTE threshold -- loosening the score
+    would let the genuinely weaker "genuine" population through too.
+    """
+    watchlist = trades[trades["category"] == "ALERT_WATCHLIST"]
+
+    capped = watchlist[watchlist["confidence_score"] >= execute_score_threshold]
+    genuine = watchlist[watchlist["confidence_score"] < execute_score_threshold]
+    execute = trades[trades["category"] == "EXECUTE"]
+
+    by_cause = pd.DataFrame()
+    if not capped.empty:
+        causes = capped.apply(_ceiling_cause, axis=1)
+        by_cause = pd.DataFrame([
+            _group_stats(cause, capped[causes == cause]) for cause in causes.unique()
+        ])
+
+    return {
+        "capped": _group_stats(f"capped (score >= {execute_score_threshold})", capped),
+        "genuine": _group_stats(f"genuine (score < {execute_score_threshold})", genuine),
+        "execute": _group_stats("EXECUTE (for comparison)", execute),
+        "by_cause": by_cause,
+    }
+
+
+def print_ceiling_attribution(
+    trades: pd.DataFrame, execute_score_threshold: float = 65.0, low_sample_threshold: int = 20
+) -> None:
+    """Ceiling-attribution table: of every ALERT_WATCHLIST signal, how many
+    scored EXECUTE-grade (>=65) but were capped by the regime/sector
+    ceiling vs how many genuinely scored 40-64. Answers whether EXECUTE's
+    scarcity (see BY CATEGORY above) is a scoring problem or a ceiling
+    problem -- see aggregate_ceiling_attribution()'s docstring."""
+    if trades.empty or "ALERT_WATCHLIST" not in trades["category"].values:
+        return
+
+    attribution = aggregate_ceiling_attribution(trades, execute_score_threshold)
+
+    print("\n --- CEILING ATTRIBUTION (ALERT_WATCHLIST breakdown) ---")
+    for key in ("capped", "genuine", "execute"):
+        row = attribution[key]
+        flag = "  [LOW SAMPLE SIZE -- interpret with caution]" if row["sample_size"] < low_sample_threshold else ""
+        print(
+            f"   {row['group']}: n={row['sample_size']}, win_rate={row['win_rate_pct']}%, "
+            f"avg_return={row['avg_return_pct']}%, avg_win={row['avg_win_pct']}%, "
+            f"avg_loss={row['avg_loss_pct']}%, expectancy={row['expectancy_pct']}%{flag}"
+        )
+
+    if not attribution["by_cause"].empty:
+        print("\n   capped-by-cause:")
+        for _, row in attribution["by_cause"].iterrows():
+            flag = "  [LOW SAMPLE SIZE -- interpret with caution]" if row["sample_size"] < low_sample_threshold else ""
+            print(
+                f"     {row['group']}: n={row['sample_size']}, win_rate={row['win_rate_pct']}%, "
+                f"avg_return={row['avg_return_pct']}%, expectancy={row['expectancy_pct']}%{flag}"
+            )
+
+
 def print_backtest_summary(trades: pd.DataFrame, low_sample_threshold: int = 20) -> None:
     """Console dashboard, same style as pattern_engine.py's metrics
     printout -- flags low sample sizes explicitly rather than letting a
@@ -308,5 +392,7 @@ def print_backtest_summary(trades: pd.DataFrame, low_sample_threshold: int = 20)
                 f"avg_return={row['avg_return_pct']}%, avg_win={row['avg_win_pct']}%, "
                 f"avg_loss={row['avg_loss_pct']}%, expectancy={row['expectancy_pct']}%{flag}"
             )
+
+    print_ceiling_attribution(trades, low_sample_threshold=low_sample_threshold)
 
     print("=" * 60 + "\n")
