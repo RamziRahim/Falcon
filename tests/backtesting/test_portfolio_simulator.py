@@ -65,6 +65,31 @@ class TestPolicies:
         assert policy_sector_aware_caution(row) == 0.5
 
 
+class TestMonitorTierNeverSized:
+    """2.6c (B-8): a MONITOR-category row (no pattern fired, downgraded
+    from what would have been an EXECUTE-grade score) must never be sized
+    by any capped-signal branch, even with a score>=65 + CAUTION regime
+    that would otherwise qualify -- MONITOR is explicitly never traded
+    (decision #4), and confidence_score/regime alone can't distinguish it
+    from a real capped ALERT_WATCHLIST signal without an explicit
+    category check."""
+
+    def test_caution_half_blocked_ignores_monitor_even_at_qualifying_score(self):
+        row = pd.Series(_episode(category="MONITOR", confidence_score=90.0, market_regime_verdict="CAUTION"))
+        assert policy_caution_half_unfavorable_blocked(row) == 0.0
+
+    def test_caution_half_quarter_ignores_monitor_even_at_qualifying_score(self):
+        row = pd.Series(_episode(category="MONITOR", confidence_score=90.0, market_regime_verdict="UNFAVORABLE"))
+        assert policy_caution_half_unfavorable_quarter(row) == 0.0
+
+    def test_sector_aware_ignores_monitor_even_at_qualifying_score(self):
+        row = pd.Series(_episode(
+            category="MONITOR", confidence_score=90.0,
+            market_regime_verdict="CAUTION", sector_health_verdict="NEUTRAL",
+        ))
+        assert policy_sector_aware_caution(row) == 0.0
+
+
 class TestSlotContention:
 
     def test_more_candidates_than_slots_causes_misses(self):

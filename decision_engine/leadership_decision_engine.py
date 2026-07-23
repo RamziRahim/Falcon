@@ -103,7 +103,16 @@ from __future__ import annotations
 
 from config import MAX_HOLDING_TRADING_DAYS
 
-CATEGORY_RANK = {"AVOID": 0, "ALERT_WATCHLIST": 1, "EXECUTE": 2}
+# MONITOR (B-8, Gate 1 decision #4): a candidate that scored ALERT_WATCHLIST-
+# or-better (>=40) but had NO confirmed pattern at all -- ranked below
+# ALERT_WATCHLIST so "pattern presence required for ALERT_WATCHLIST and
+# above" holds regardless of how favorable the market/sector ceiling is
+# (see categorize()'s own MONITOR downgrade, applied before the ceiling
+# min() so a great regime can never lift a pattern-less candidate past
+# it). Recorded in the backtest for analysis (data/backtest_results.csv
+# via backtest_runner.py's SIGNAL_CATEGORIES); never surfaced as an
+# actionable live signal the same way EXECUTE/ALERT_WATCHLIST are.
+CATEGORY_RANK = {"AVOID": 0, "MONITOR": 1, "ALERT_WATCHLIST": 2, "EXECUTE": 3}
 
 
 def get_market_regime_verdict(nifty_trend_state: str, distribution_day_count: int) -> str:
@@ -609,6 +618,8 @@ def categorize(
         enable_microstructure_signals=enable_microstructure_signals,
     )
 
+    best_points, best_field = get_best_pattern_points(candidate)
+
     if score < 40:
         score_based_category = "AVOID"
     elif score >= 65:
@@ -616,9 +627,18 @@ def categorize(
     else:
         score_based_category = "ALERT_WATCHLIST"
 
-    final_category = min(score_based_category, ceiling, key=lambda c: CATEGORY_RANK[c])
+    # B-8 (2.6c, Gate 1 decision #4): pattern presence required for
+    # ALERT_WATCHLIST and above -- a candidate that scored well enough on
+    # everything else (RS, sector, fundamentals, microstructure) but never
+    # had a single confirmed breakout pattern is demoted to MONITOR
+    # instead. Applied here, before the ceiling min() below, so MONITOR's
+    # rank (below ALERT_WATCHLIST, see CATEGORY_RANK) means no market/
+    # sector ceiling can lift it back up regardless of how favorable
+    # conditions are -- the gate is the pattern, not the regime.
+    if score_based_category in ("ALERT_WATCHLIST", "EXECUTE") and best_field is None:
+        score_based_category = "MONITOR"
 
-    best_points, best_field = get_best_pattern_points(candidate)
+    final_category = min(score_based_category, ceiling, key=lambda c: CATEGORY_RANK[c])
 
     best_result = pattern_details.get(best_field) if best_field else None
 

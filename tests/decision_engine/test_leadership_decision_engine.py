@@ -278,6 +278,80 @@ class TestBreakoutRecencySurfacedOnCategorizeOutput:
         assert result["breakout_within_last_k_bars"] is False
 
 
+class TestNoPatternMonitorTier:
+    """2.6c (B-8, Gate 1 decision #4): pattern presence required for
+    ALERT_WATCHLIST and above -- a no-pattern candidate that scored well
+    enough on everything else is demoted to MONITOR, never surfaced as a
+    real ALERT_WATCHLIST/EXECUTE signal, regardless of how favorable the
+    market/sector ceiling is."""
+
+    def test_alert_watchlist_grade_no_pattern_becomes_monitor(self):
+        # RS_Rating=100 (+20) + active FVG (+15) + liquidity sweep (+15) +
+        # top-half sector (+10) = 60 -- ALERT_WATCHLIST-grade (40-64) by
+        # score alone, with zero pattern fields set.
+        candidate = _candidate(RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True)
+        sector_row = _sector_row(Rank=2, Total_Sectors=10)  # top half
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "MONITOR"
+
+    def test_execute_grade_no_pattern_becomes_monitor_not_execute(self):
+        # Same as above plus institutional sponsorship + buy activity to
+        # push comfortably past 65 -- score alone says EXECUTE, but there
+        # is still no confirmed pattern anywhere.
+        candidate = _candidate(
+            RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True,
+            institutional_sponsorship_pct=25.0, has_buy_activity=True,
+        )
+        sector_row = _sector_row(Rank=2, Total_Sectors=10)
+
+        score = compute_score(candidate, sector_row)
+        assert score >= 65, "fixture must be EXECUTE-grade by score alone for this test to mean anything"
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "MONITOR"
+
+    def test_favorable_market_does_not_rescue_a_no_pattern_candidate(self):
+        # Ceiling is EXECUTE under FAVORABLE (no cap at all) -- MONITOR
+        # must still win, since the gate is the pattern, not the regime.
+        candidate = _candidate(RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True)
+        sector_row = _sector_row(Rank=2, Total_Sectors=10)
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "MONITOR"
+
+    def test_pattern_confirmed_candidate_is_unaffected(self):
+        candidate = _candidate(is_vcp_breakout=True, RS_Rating=80.0)
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] in ("ALERT_WATCHLIST", "EXECUTE")
+
+    def test_monitor_still_gets_a_real_priced_trade_plan_not_none(self):
+        # Unlike AVOID, MONITOR is a real (if unconfirmed) setup -- it
+        # still gets entry/stop/target pricing (ATR fallback, no pattern
+        # to price off), just never surfaced as an actionable signal.
+        candidate = _candidate(RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True)
+        sector_row = _sector_row(Rank=2, Total_Sectors=10)
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "MONITOR"
+        assert result["entry"] is not None
+        assert result["stop_loss"] is not None
+        assert result["target"] is not None
+
+    def test_category_rank_orders_monitor_between_avoid_and_alert_watchlist(self):
+        from decision_engine.leadership_decision_engine import CATEGORY_RANK
+
+        assert CATEGORY_RANK["AVOID"] < CATEGORY_RANK["MONITOR"] < CATEGORY_RANK["ALERT_WATCHLIST"] \
+            < CATEGORY_RANK["EXECUTE"]
+
+
 class TestMicrostructureSignalsAreFeatureFlagged:
     """Liquidity sweep / FVG must be fully opt-in: with
     enable_microstructure_signals=False (the default), categorize()'s

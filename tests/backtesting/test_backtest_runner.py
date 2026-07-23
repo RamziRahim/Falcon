@@ -491,3 +491,16 @@ class TestRecommendedRiskFractionWiring:
 
         assert len(trades) == 1
         assert trades.iloc[0]["recommended_risk_fraction"] is None
+
+    def test_monitor_rows_have_no_recommended_risk_fraction(self, monkeypatch):
+        # 2.6c: MONITOR gets a REAL outcome recorded (unlike AVOID) but
+        # must never be sized -- it was never a real, tradeable signal.
+        fake_monitor_categorize = _fake_real_trade_categorize_factory("MONITOR", 90.0)
+
+        trades = self._run(monkeypatch, fake_monitor_categorize)
+
+        assert len(trades) == 1
+        row = trades.iloc[0]
+        assert row["category"] == "MONITOR"
+        assert row["recommended_risk_fraction"] is None
+        assert row["exit_reason"] in {"TARGET_HIT", "STOP_HIT", "TIME_EXIT"}

@@ -45,7 +45,13 @@ from scoring.sector_map import sector_map
 
 logger = get_logger(__name__)
 
-SIGNAL_CATEGORIES = ("EXECUTE", "ALERT_WATCHLIST")
+# MONITOR (B-8, 2.6c) included here so it gets a REAL forward outcome
+# recorded (it has real entry/stop/target pricing, unlike AVOID) --
+# "recorded in the backtest, not surfaced as signals" (decision #4) is
+# enforced by recommended_risk_fraction always being None for it below and
+# by the live dashboard never treating MONITOR as actionable, not by
+# excluding it from this backtest log.
+SIGNAL_CATEGORIES = ("EXECUTE", "ALERT_WATCHLIST", "MONITOR")
 
 
 def populate_sector_cache(universe: list[str]) -> None:
@@ -326,8 +332,15 @@ def run_backtest(
                 # docstring); 0.0 for a genuinely-scored (<65) or
                 # UNFAVORABLE-capped ALERT_WATCHLIST -- UNFAVORABLE stays
                 # blocked for real sizing per decision #2, shadow-logged
-                # separately (2.6d), not sized here.
-                "recommended_risk_fraction": policy_sector_aware_caution(decision),
+                # separately (2.6d), not sized here. Always None for
+                # MONITOR (2.6c) -- never traded regardless of score/regime,
+                # policy_sector_aware_caution's own category=="ALERT_WATCHLIST"
+                # guard would already return 0.0 for it, but None is more
+                # honest here: 0.0 could be misread as "considered and
+                # sized at zero," where MONITOR was never eligible at all.
+                "recommended_risk_fraction": (
+                    None if decision["category"] == "MONITOR" else policy_sector_aware_caution(decision)
+                ),
             })
 
     return pd.DataFrame(trade_records)

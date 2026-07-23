@@ -72,20 +72,36 @@ def policy_caution_half_unfavorable_blocked(episode: pd.Series) -> float:
     signal is still fully blocked, same as the current hard cap. Covers
     both the master execution spec's variant (b) 'CAUTION at 1/2 risk' and
     variant (d) 'CAUTION 1/2 + UNFAVORABLE blocked' -- they are the same
-    rule once UNFAVORABLE's fate is made explicit for (b) too."""
+    rule once UNFAVORABLE's fate is made explicit for (b) too.
+
+    The "capped" branch below only ever applied to a real ALERT_WATCHLIST
+    signal when this was written (EXECUTE/ALERT_WATCHLIST were the only
+    two categories in play) -- checking confidence_score/regime alone,
+    without an explicit category=="ALERT_WATCHLIST" guard, quietly relied
+    on that. B-8's MONITOR tier (2.6c) breaks that assumption: a
+    no-pattern candidate that would have scored EXECUTE-grade (>=65) is
+    downgraded to MONITOR, not ALERT_WATCHLIST, but can still carry
+    confidence_score>=65 -- without the explicit guard, a MONITOR row in
+    a CAUTION regime would get sized here as if it were a real capped
+    signal, directly contradicting decision #4 (no-pattern signals are
+    never traded, monitor-only)."""
     if episode["category"] == "EXECUTE":
         return 1.0
-    if episode["confidence_score"] >= 65.0 and episode["market_regime_verdict"] == "CAUTION":
+    if episode["category"] == "ALERT_WATCHLIST" and episode["confidence_score"] >= 65.0 \
+            and episode["market_regime_verdict"] == "CAUTION":
         return 0.5
     return 0.0
 
 
 def policy_caution_half_unfavorable_quarter(episode: pd.Series) -> float:
     """Variant (c): capped CAUTION signals at half size, capped UNFAVORABLE
-    signals at quarter size (rather than fully blocked)."""
+    signals at quarter size (rather than fully blocked). See
+    policy_caution_half_unfavorable_blocked's docstring for why the
+    category=="ALERT_WATCHLIST" guard is required, not optional, now that
+    MONITOR (2.6c) exists."""
     if episode["category"] == "EXECUTE":
         return 1.0
-    if episode["confidence_score"] >= 65.0:
+    if episode["category"] == "ALERT_WATCHLIST" and episode["confidence_score"] >= 65.0:
         if episode["market_regime_verdict"] == "CAUTION":
             return 0.5
         if episode["market_regime_verdict"] == "UNFAVORABLE":
@@ -102,10 +118,16 @@ def policy_sector_aware_caution(episode: pd.Series) -> float:
     smaller than NEUTRAL's), CAUTION+STRONG at half size (STRONG sector in
     a CAUTION market is at least as strong a case as NEUTRAL). UNFAVORABLE
     stays blocked, same as (b)/(d) -- this variant isolates the
-    sector-quality question, not the market-regime one."""
+    sector-quality question, not the market-regime one.
+
+    See policy_caution_half_unfavorable_blocked's docstring for why the
+    category=="ALERT_WATCHLIST" guard is required, not optional, now that
+    MONITOR (2.6c) exists -- this is the policy actually wired into run #2
+    (2.6a), so the guard matters most here."""
     if episode["category"] == "EXECUTE":
         return 1.0
-    if episode["confidence_score"] >= 65.0 and episode["market_regime_verdict"] == "CAUTION":
+    if episode["category"] == "ALERT_WATCHLIST" and episode["confidence_score"] >= 65.0 \
+            and episode["market_regime_verdict"] == "CAUTION":
         if episode["sector_health_verdict"] == "WEAK":
             return 0.25
         return 0.5  # NEUTRAL or STRONG
