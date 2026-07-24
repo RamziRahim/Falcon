@@ -56,6 +56,21 @@ class TestQualifyingBullFlag:
         assert result["is_breakout_confirmed"] == True
 
 
+class TestTwoLowModel:
+    """2.2 fix (I-6): flagpole_low (structural, for the measured-move
+    target -- the pole height projected from breakout) must be deeper
+    than flag_low (proximal, for the stop -- the shallow pullback within
+    the consolidation, after the pole already ran)."""
+
+    def test_flagpole_low_is_deeper_than_flag_low(self, detector):
+        result = detector.analyze_bull_flag(
+            _df(pole_gain_pct=20.0, flag_range=3.0, breakout_close=125.0, breakout_volume=200_000),
+            "UPTREND",
+        )
+
+        assert result["flagpole_low"] < result["flag_low"]
+
+
 class TestWeakFlagpoleRejected:
 
     def test_flagpole_gain_below_minimum_does_not_qualify(self, detector):

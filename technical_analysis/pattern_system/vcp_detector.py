@@ -120,9 +120,18 @@ class VCPDetector:
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "pivot_level": resistance_pivot,
-            # The low of the final (tightest) contraction wave -- needed
-            # for a real, non-ATR-fallback stop-loss/target.
+            # Two-low model (2.2 fix, I-6): the final (tightest) contraction's
+            # low is the PROXIMAL low -- the near-term support closest to
+            # entry, used for the stop. The first (widest) contraction's low
+            # is the STRUCTURAL low -- the true base of the whole VCP
+            # formation, used for the measured-move target. Using the same
+            # low for both (the original bug) forces reward:risk to exactly
+            # 1.0 for any unclamped structural stop; contractions tighten
+            # toward the pivot as the pattern matures, so first_contraction_low
+            # is genuinely deeper (further from entry) than
+            # final_contraction_low for a well-formed VCP.
             "final_contraction_low": contractions[-1].swing_low_price,
+            "first_contraction_low": contractions[0].swing_low_price,
             # A-5 breakout-recency contract -- see breakout_recency.py.
             "bars_since_breakout": recency["bars_since_breakout"],
             "breakout_within_last_k_bars": recency["breakout_within_last_k_bars"],

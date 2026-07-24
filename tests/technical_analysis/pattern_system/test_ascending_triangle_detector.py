@@ -53,6 +53,28 @@ class TestQualifyingAscendingTriangle:
         assert result["is_breakout_confirmed"] == True
 
 
+class TestTwoLowModel:
+    """2.2 fix (I-6): earliest_rising_low (structural, for the measured-
+    move target -- the triangle's original base) must be deeper than
+    most_recent_rising_low (proximal, for the stop -- the current support
+    line level) since lows_are_rising confirms each is higher than its
+    predecessor."""
+
+    def test_earliest_rising_low_is_deeper_than_most_recent(self, detector):
+        pivots = [
+            SwingPoint(index=0, date="d", price=90.0, type="LOW", is_higher=True),
+            SwingPoint(index=1, date="d", price=100.0, type="HIGH", is_higher=True),
+            SwingPoint(index=2, date="d", price=95.0, type="LOW", is_higher=True),
+            SwingPoint(index=3, date="d", price=101.0, type="HIGH", is_higher=True),
+        ]
+
+        result = detector.analyze_ascending_triangle(
+            _df(breakout_close=105.0, breakout_volume=200_000), pivots, "UPTREND"
+        )
+
+        assert result["earliest_rising_low"] < result["most_recent_rising_low"]
+
+
 class TestRisingHighsRejected:
 
     def test_rising_lows_with_also_rising_highs_does_not_qualify(self, detector):

@@ -184,6 +184,20 @@ class TestBreakoutVolumeConfirmation:
         )
 
 
+class TestTwoLowModel:
+    """2.2 fix (I-6): first_contraction_low (structural, for the
+    measured-move target) must be deeper than final_contraction_low
+    (proximal, for the stop) in a well-formed, genuinely tightening VCP --
+    using the same low for both was the original RR-floor bug."""
+
+    def test_first_contraction_low_is_deeper_than_final(
+        self, detector, synthetic_breakout_pivots, synthetic_breakout_with_volume_df
+    ):
+        result = detector.analyze_vcp(synthetic_breakout_with_volume_df, synthetic_breakout_pivots, "UPTREND")
+
+        assert result["first_contraction_low"] < result["final_contraction_low"]
+
+
 class TestBreakoutRecency:
     """A-5: a confirmed breakout also reports how many bars ago the
     price+volume condition first became true."""

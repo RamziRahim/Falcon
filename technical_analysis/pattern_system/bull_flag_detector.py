@@ -53,6 +53,13 @@ class BullFlagDetector:
 
         flag_high = flag_window["High"].max()
         flag_low = flag_window["Low"].min()
+        # Two-low model (2.2 fix, I-6): the flagpole's own low, i.e. where
+        # the sharp advance actually started -- the STRUCTURAL low, used
+        # for the measured-move target (pole height projected from
+        # breakout). flag_low (the shallow pullback within the
+        # consolidation, after the pole already ran) is the PROXIMAL low,
+        # used for the stop.
+        flagpole_low = pole_window["Low"].min()
         pole_range = pole_end - pole_start
         retrace_pct = ((flag_high - flag_low) / pole_range * 100) if pole_range > 0 else 100.0
         flag_valid = retrace_pct <= self.FLAG_MAX_RETRACE_PCT
@@ -84,9 +91,10 @@ class BullFlagDetector:
             "is_bull_flag_setup": is_bull_flag_setup,
             "flagpole_gain_pct": round(pole_gain_pct, 1),
             "pivot_level": flag_high,
-            # Structural low of the flag -- needed for a real, non-ATR-
-            # fallback stop-loss/target.
+            # Structural/proximal low split -- see comment above where
+            # flagpole_low is computed.
             "flag_low": flag_low,
+            "flagpole_low": flagpole_low,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_bull_flag_setup and price_crossed_pivot and breakout_volume_confirmed,

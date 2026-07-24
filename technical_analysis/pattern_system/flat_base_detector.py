@@ -48,6 +48,12 @@ class FlatBaseDetector:
 
         base_high = base_window["High"].max()
         base_low = base_window["Low"].min()
+        # Two-low model (2.2 fix, I-6): base_low (full ~25-day window) is
+        # the STRUCTURAL low, used for the measured-move target -- already
+        # correct as the deeper reference, no change needed here. The
+        # PROXIMAL low is the tighter last-10-bars low, closer to entry,
+        # used for the stop.
+        recent_base_low = base_window.tail(10)["Low"].min()
         depth_pct = ((base_high - base_low) / base_high) * 100 if base_high > 0 else 100.0
 
         is_flat_base_setup = depth_pct <= self.MAX_DEPTH_PCT
@@ -79,9 +85,10 @@ class FlatBaseDetector:
             "is_flat_base_setup": is_flat_base_setup,
             "base_depth_pct": round(depth_pct, 1),
             "pivot_level": base_high,
-            # Structural low of the base -- needed for a real, non-ATR-
-            # fallback stop-loss/target.
+            # Structural/proximal low split -- see comment above where
+            # recent_base_low is computed.
             "base_low": base_low,
+            "recent_base_low": recent_base_low,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_flat_base_setup and price_crossed_pivot and breakout_volume_confirmed,

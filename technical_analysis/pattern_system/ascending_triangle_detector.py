@@ -80,11 +80,15 @@ class AscendingTriangleDetector:
             "is_ascending_triangle_setup": is_ascending_triangle_setup,
             "resistance_level": round(resistance_level, 2),
             "pivot_level": resistance_level,
-            # recent_lows is sorted ascending by index, so [-1] is the
-            # most recent (highest, since lows are rising) confirmed low --
-            # the support line's current level, needed for a real,
-            # non-ATR-fallback stop-loss/target.
+            # Two-low model (2.2 fix, I-6): recent_lows is sorted ascending
+            # by index/time, and lows_are_rising already confirmed each is
+            # higher than its predecessor. [-1] (most recent, highest) is
+            # the PROXIMAL low -- the support line's current level, used
+            # for the stop. [0] (earliest, lowest of the pair) is the
+            # STRUCTURAL low -- the triangle's original base, used for the
+            # measured-move target (the full triangle height).
             "most_recent_rising_low": recent_lows[-1].price,
+            "earliest_rising_low": recent_lows[0].price,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_ascending_triangle_setup and price_crossed_pivot and breakout_volume_confirmed,

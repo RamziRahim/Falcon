@@ -105,9 +105,16 @@ class CupHandleDetector:
             "cup_depth_pct": round(depth_pct, 1),
             "handle_depth_pct": round(handle_depth_pct, 1),
             "pivot_level": handle_high,
-            # Structural low of the handle -- needed for a real, non-ATR-
-            # fallback stop-loss/target.
+            # Two-low model (2.2 fix, I-6): handle_low is the PROXIMAL low
+            # (the shallow final pullback right before breakout, near-term
+            # support, used for the stop). cup_low is the STRUCTURAL low
+            # (the deep U-bottom trough of the whole cup, used for the
+            # measured-move target) -- already computed above for the cup
+            # depth check, just not previously exposed. cup_low is always
+            # deeper than handle_low for a genuine cup-with-handle (the
+            # handle is explicitly a shallow retracement near the highs).
             "handle_low": handle_low,
+            "cup_low": cup_low,
             "price_crossed_pivot": price_crossed_pivot,
             "breakout_volume_confirmed": breakout_volume_confirmed,
             "is_breakout_confirmed": is_cup_handle_setup and price_crossed_pivot and breakout_volume_confirmed,

@@ -83,6 +83,18 @@ class TestQualifyingCupHandle:
         assert result["is_breakout_confirmed"] == True
 
 
+class TestTwoLowModel:
+    """2.2 fix (I-6): cup_low (structural, for the measured-move target)
+    must be deeper than handle_low (proximal, for the stop) -- the handle
+    is explicitly a shallow retracement near the highs, much shallower
+    than the cup's own depth."""
+
+    def test_cup_low_is_deeper_than_handle_low(self, detector):
+        result = detector.analyze_cup_handle(_rounded_cup_df(), "UPTREND")
+
+        assert result["cup_low"] < result["handle_low"]
+
+
 class TestCupNotRounded:
 
     def test_low_at_window_start_does_not_qualify(self, detector):
