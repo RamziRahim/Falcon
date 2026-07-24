@@ -645,7 +645,7 @@ class TestProvenanceAndRewardRiskPersisted:
         row = trades.iloc[0]
         assert row["category"] == "AVOID"
         assert row["stop_provenance"] in {
-            "ATR_FALLBACK_NO_PATTERN", "ATR_FALLBACK_NO_STRUCTURAL_LOW",
+            "ATR_FALLBACK_NO_PATTERN", "ATR_FALLBACK_NO_PROXIMAL_LOW",
             "STRUCTURAL", "STRUCTURAL_CLAMPED_TO_ATR_FLOOR", "STRUCTURAL_CLAMPED_TO_ATR_CEILING",
         }
         assert row["reward_risk"] is not None

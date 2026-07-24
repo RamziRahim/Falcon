@@ -9,6 +9,7 @@ import pytest
 from backtesting.portfolio_simulator import (
     NAMED_POLICIES,
     compare_policies,
+    make_unified_scaling_policy,
     policy_caution_half_unfavorable_blocked,
     policy_caution_half_unfavorable_quarter,
     policy_hard_cap,
@@ -19,12 +20,12 @@ from backtesting.portfolio_simulator import (
 
 def _episode(category="EXECUTE", confidence_score=80.0, market_regime_verdict="FAVORABLE",
              sector_health_verdict="STRONG", episode_start_date="2024-01-01",
-             episode_end_date="2024-01-10", r_multiple=1.0):
+             episode_end_date="2024-01-10", r_multiple=1.0, caps_applied=""):
     return {
         "category": category, "confidence_score": confidence_score,
         "market_regime_verdict": market_regime_verdict, "sector_health_verdict": sector_health_verdict,
         "episode_start_date": episode_start_date, "episode_end_date": episode_end_date,
-        "r_multiple": r_multiple,
+        "r_multiple": r_multiple, "caps_applied": caps_applied,
     }
 
 
@@ -88,6 +89,82 @@ class TestMonitorTierNeverSized:
             market_regime_verdict="CAUTION", sector_health_verdict="NEUTRAL",
         ))
         assert policy_sector_aware_caution(row) == 0.0
+
+
+class TestUnifiedScalingPolicy:
+    """Gate 2 extension (post-hoc choke-point decomposition): any
+    score>=65 episode is eligible regardless of which single gate capped
+    it, at gate-specific risk scaling -- see
+    make_unified_scaling_policy's own docstring for the sizing rationale."""
+
+    def test_execute_gets_full_risk(self):
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(category="EXECUTE", confidence_score=90.0))
+        assert policy(row) == 1.0
+
+    def test_rr_floor_capped_gets_full_risk(self):
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(
+            category="ALERT_WATCHLIST", confidence_score=90.0,
+            market_regime_verdict="FAVORABLE", caps_applied="RR_BELOW_FLOOR",
+        ))
+        assert policy(row) == 1.0
+
+    def test_regime_ceiling_capped_gets_half_risk(self):
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(
+            category="ALERT_WATCHLIST", confidence_score=90.0,
+            market_regime_verdict="UNFAVORABLE", caps_applied="",
+        ))
+        assert policy(row) == 0.5
+
+    def test_sector_ceiling_capped_gets_half_risk(self):
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(
+            category="ALERT_WATCHLIST", confidence_score=90.0,
+            market_regime_verdict="CAUTION", caps_applied="",
+        ))
+        assert policy(row) == 0.5
+
+    def test_monitor_gets_the_configured_monitor_risk_fraction(self):
+        half = make_unified_scaling_policy(monitor_risk_fraction=0.5)
+        three_quarter = make_unified_scaling_policy(monitor_risk_fraction=0.75)
+        row = pd.Series(_episode(category="MONITOR", confidence_score=90.0))
+
+        assert half(row) == 0.5
+        assert three_quarter(row) == 0.75
+
+    def test_monitor_below_score_threshold_is_ineligible(self):
+        # A real MONITOR row can score well below 65 (score_based_category
+        # only needed to be ALERT_WATCHLIST-or-better, i.e. score>=40,
+        # before the no-pattern demotion) -- unlike the other capped
+        # branches, this policy must not blanket-enable every MONITOR row.
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(category="MONITOR", confidence_score=50.0))
+        assert policy(row) == 0.0
+
+    def test_genuine_low_score_alert_watchlist_gets_zero(self):
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(category="ALERT_WATCHLIST", confidence_score=50.0))
+        assert policy(row) == 0.0
+
+    def test_avoid_gets_zero(self):
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(category="AVOID", confidence_score=90.0))
+        assert policy(row) == 0.0
+
+    def test_rr_floor_precedence_over_regime_ceiling(self):
+        # A row could plausibly be both "UNFAVORABLE regime" AND
+        # RR-floor-capped in raw data (unlikely in practice, since
+        # UNFAVORABLE already caps below EXECUTE before RR is ever
+        # checked -- but the classifier must still resolve one gate, not
+        # silently pick whichever branch happens to run first).
+        policy = make_unified_scaling_policy()
+        row = pd.Series(_episode(
+            category="ALERT_WATCHLIST", confidence_score=90.0,
+            market_regime_verdict="UNFAVORABLE", caps_applied="RR_BELOW_FLOOR",
+        ))
+        assert policy(row) == 1.0  # rr_floor takes precedence, per categorize()'s real order
 
 
 class TestSlotContention:

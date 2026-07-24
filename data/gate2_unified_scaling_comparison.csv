@@ -1,0 +1,4 @@
+policy,n_taken,n_missed_due_to_slots,slot_utilization_pct,final_equity,max_drawdown_pct,cagr_pct,calmar
+e_sector_aware_caution (baseline),16,0,100.0,105.97,-1.16,4.46,3.84
+f_unified_scaling (MONITOR@0.5),52,1,98.1,115.15,-1.87,7.97,4.26
+f_unified_scaling (MONITOR@0.75),52,1,98.1,118.64,-2.68,9.74,3.63

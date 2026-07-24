@@ -133,16 +133,29 @@ def build_pattern_row_fields(analysis: dict) -> dict:
         "Ascending_Triangle_Breakout_Volume_Confirmed": triangle.get("breakout_volume_confirmed", False),
         "Bull_Flag_Price_Crossed_Pivot": bull_flag.get("price_crossed_pivot", False),
         "Bull_Flag_Breakout_Volume_Confirmed": bull_flag.get("breakout_volume_confirmed", False),
+        # Two-low model (2.2 fix, I-6): "*_Structural_Low"/"Ascending_Triangle_Support"
+        # are the DEEP anchor (measured-move target); the new "*_Proximal_Low"
+        # columns are the NEAR anchor (stop). VCP/Flat_Base's structural
+        # column source is unchanged; Cup_Handle/Ascending_Triangle_Support/
+        # Bull_Flag's structural column now sources from a DEEPER field than
+        # before (cup_low/earliest_rising_low/flagpole_low) -- see each
+        # detector's own module docstring for why. Column NAMES kept as-is
+        # to avoid an unnecessary rename of already-persisted schema.
         "VCP_Pivot_Level": vcp.get("pivot_level"),
-        "VCP_Structural_Low": vcp.get("final_contraction_low"),
+        "VCP_Structural_Low": vcp.get("first_contraction_low"),
+        "VCP_Proximal_Low": vcp.get("final_contraction_low"),
         "Flat_Base_Pivot_Level": flat_base.get("pivot_level"),
         "Flat_Base_Low": flat_base.get("base_low"),
+        "Flat_Base_Proximal_Low": flat_base.get("recent_base_low"),
         "Cup_Handle_Pivot_Level": cup_handle.get("pivot_level"),
-        "Cup_Handle_Low": cup_handle.get("handle_low"),
+        "Cup_Handle_Low": cup_handle.get("cup_low"),
+        "Cup_Handle_Proximal_Low": cup_handle.get("handle_low"),
         "Ascending_Triangle_Pivot_Level": triangle.get("pivot_level"),
-        "Ascending_Triangle_Support": triangle.get("most_recent_rising_low"),
+        "Ascending_Triangle_Support": triangle.get("earliest_rising_low"),
+        "Ascending_Triangle_Proximal_Low": triangle.get("most_recent_rising_low"),
         "Bull_Flag_Pivot_Level": bull_flag.get("pivot_level"),
-        "Bull_Flag_Low": bull_flag.get("flag_low"),
+        "Bull_Flag_Low": bull_flag.get("flagpole_low"),
+        "Bull_Flag_Proximal_Low": bull_flag.get("flag_low"),
         # A-5 breakout-recency contract (technical_analysis/pattern_system/
         # breakout_recency.py) -- None/False when the pattern isn't
         # currently a confirmed breakout at all, same convention as the

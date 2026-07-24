@@ -101,7 +101,14 @@ selection below.
 """
 from __future__ import annotations
 
-from config import ATR_STOP_CEILING_MULTIPLE, ATR_STOP_FLOOR_MULTIPLE, MAX_HOLDING_TRADING_DAYS, MIN_REWARD_RISK
+from config import (
+    ATR_STOP_CEILING_MULTIPLE,
+    ATR_STOP_FLOOR_MULTIPLE,
+    MAX_HOLDING_TRADING_DAYS,
+    MIN_REWARD_RISK,
+    STOP_BUFFER_ATR_MULTIPLE,
+    TARGET_MIN_ATR_MULTIPLE,
+)
 
 # MONITOR (B-8, Gate 1 decision #4): a candidate that scored ALERT_WATCHLIST-
 # or-better (>=40) but had NO confirmed pattern at all -- ranked below
@@ -516,26 +523,35 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
     weight-priority logic above, not VCP specifically -- all 5 detectors
     return their own pivot_level.
 
-    Stop-loss/target (2.2, I-6): priced off the pattern's own structural
-    low (best_pattern_result["structural_low"] -- each detector's real,
-    price-terms low: VCP's final contraction low, the flat base's low,
-    etc., see decision_engine.candidate_assembler.PATTERN_STRUCTURAL_LOW_COLUMN_MAP)
-    rather than a flat ATR guess:
-      - stop_loss = entry - stop_distance, where stop_distance is the raw
-        entry-to-structural-low distance, CLAMPED to
-        [ATR_STOP_FLOOR_MULTIPLE, ATR_STOP_CEILING_MULTIPLE] x ATR_14 -- a
-        structural low that's absurdly close or far from entry (thin/noisy
-        data, a mis-detected pivot) shouldn't produce an unusably tight or
-        wide stop just because that's literally where the pattern's low sat.
-      - target = entry + RAW (unclamped) structural distance -- a genuine
-        measured move (project the pattern's own height upward from the
-        breakout), independent of whatever the stop got clamped to for
-        risk-management reasons.
-    Falls back to the prior flat ATR guess (entry -+ 2/2.5x ATR) when
-    there's no pattern at all, or the pattern's structural_low is missing
-    or nonsensical (>= entry). stop_provenance/target_provenance name
-    which path was taken, for diagnostics -- never silently one or the
-    other.
+    Stop-loss/target (2.2, I-6, two-low model): stop and target are priced
+    off two DIFFERENT lows on the same pattern, not the same one --
+    pricing both off one low forced reward:risk toward exactly 1.0
+    whenever the stop was unclamped, which is what run #2 caught.
+      - stop_loss = entry - stop_distance, where stop_distance is the
+        entry-to-proximal-low distance (best_pattern_result["proximal_low"]
+        -- the pattern's near support: VCP's final contraction low, the
+        flag's pullback low, etc., see
+        decision_engine.candidate_assembler.PATTERN_PROXIMAL_LOW_COLUMN_MAP)
+        plus a small buffer (STOP_BUFFER_ATR_MULTIPLE x ATR_14, so the
+        stop sits below support rather than exactly on it), CLAMPED to
+        [ATR_STOP_FLOOR_MULTIPLE, ATR_STOP_CEILING_MULTIPLE] x ATR_14 same
+        as before.
+      - target = entry + the entry-to-structural-low distance
+        (best_pattern_result["structural_low"] -- the pattern's deeper,
+        overall base: VCP's first contraction low, the flagpole's base,
+        etc.) -- a genuine measured move, floored at
+        TARGET_MIN_ATR_MULTIPLE x ATR_14 so a shallow pattern can't
+        produce a target too close to entry to ever clear the RR floor.
+    Falls back to the prior flat ATR guess (entry -+ 2/2.5x ATR) for BOTH
+    legs when there's no pattern at all, or proximal_low is missing/
+    nonsensical (>= entry) -- there's no usable near support to price a
+    stop off at all. Falls back for the TARGET leg only (stop still prices
+    off proximal_low normally) when structural_low is missing or not
+    actually deeper than proximal_low (malformed/mis-detected pattern) --
+    tagged target_provenance="ATR_FALLBACK_STRUCTURAL_INVALID" so this
+    case is distinguishable from a genuine measured move.
+    stop_provenance/target_provenance name which path was taken, for
+    diagnostics -- never silently one or the other.
 
     max_holding_days (2.1, I-3): the time-stop half of the trade plan,
     alongside entry/stop_loss/target -- a single config value
@@ -556,52 +572,72 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
             "max_holding_days": MAX_HOLDING_TRADING_DAYS,
             "stop_provenance": "ATR_FALLBACK_NO_PATTERN",
             "target_provenance": "ATR_FALLBACK_NO_PATTERN",
+            "proximal_low": None,
         }
 
     entry = best_pattern_result.get("pivot_level", candidate["Close"])
+    proximal_low = best_pattern_result.get("proximal_low")
     structural_low = best_pattern_result.get("structural_low")
 
-    if structural_low is None or structural_low >= entry:
-        # No usable structural low -- missing, or nonsensical (a
+    if proximal_low is None or proximal_low >= entry:
+        # No usable proximal low -- missing, or nonsensical (a
         # mis-detected pivot placing the "low" at or above entry) -- same
-        # flat-ATR fallback as the no-pattern case.
+        # flat-ATR fallback as the no-pattern case, for both legs, since
+        # there's no near support to price a stop off at all.
         return {
             "entry": entry,
             "stop_loss": entry - 2 * atr,
             "target": entry + 2.5 * atr,
             "max_holding_days": MAX_HOLDING_TRADING_DAYS,
-            "stop_provenance": "ATR_FALLBACK_NO_STRUCTURAL_LOW",
-            "target_provenance": "ATR_FALLBACK_NO_STRUCTURAL_LOW",
+            "stop_provenance": "ATR_FALLBACK_NO_PROXIMAL_LOW",
+            "target_provenance": "ATR_FALLBACK_NO_PROXIMAL_LOW",
+            "proximal_low": proximal_low,
         }
 
-    raw_structural_distance = entry - structural_low
+    raw_proximal_distance = (entry - proximal_low) + STOP_BUFFER_ATR_MULTIPLE * atr
 
     if atr > 0:
         atr_floor = ATR_STOP_FLOOR_MULTIPLE * atr
         atr_ceiling = ATR_STOP_CEILING_MULTIPLE * atr
-        stop_distance = max(atr_floor, min(raw_structural_distance, atr_ceiling))
-        if stop_distance == raw_structural_distance:
+        stop_distance = max(atr_floor, min(raw_proximal_distance, atr_ceiling))
+        if stop_distance == raw_proximal_distance:
             stop_provenance = "STRUCTURAL"
         elif stop_distance == atr_floor:
             stop_provenance = "STRUCTURAL_CLAMPED_TO_ATR_FLOOR"
         else:
             stop_provenance = "STRUCTURAL_CLAMPED_TO_ATR_CEILING"
     else:
-        # No real ATR to clamp against -- use the structural distance as-is
-        # rather than degrading to a zero-width (unclampable) stop.
-        stop_distance = raw_structural_distance
+        # No real ATR to clamp against (or buffer with) -- use the
+        # proximal distance as-is rather than degrading to a zero-width
+        # (unclampable) stop.
+        stop_distance = raw_proximal_distance
         stop_provenance = "STRUCTURAL"
+
+    if structural_low is None or structural_low >= proximal_low:
+        # Malformed geometry -- the deeper anchor isn't actually deeper
+        # than the near one -- fall back to the flat ATR target rather
+        # than project a nonsensical (or negative) measured move. The
+        # stop above is unaffected: it never depended on structural_low.
+        target = entry + 2.5 * atr
+        target_provenance = "ATR_FALLBACK_STRUCTURAL_INVALID"
+    else:
+        raw_structural_distance = entry - structural_low
+        target_min = TARGET_MIN_ATR_MULTIPLE * atr
+        if atr > 0 and raw_structural_distance < target_min:
+            target = entry + target_min
+            target_provenance = "MEASURED_MOVE_FLOORED_TO_ATR_MIN"
+        else:
+            target = entry + raw_structural_distance
+            target_provenance = "MEASURED_MOVE"
 
     return {
         "entry": entry,
         "stop_loss": entry - stop_distance,
-        # Measured move: the pattern's own REAL height, not the
-        # (possibly clamped) stop distance -- a genuine target
-        # independent of the risk-management clamp above.
-        "target": entry + raw_structural_distance,
+        "target": target,
         "max_holding_days": MAX_HOLDING_TRADING_DAYS,
         "stop_provenance": stop_provenance,
-        "target_provenance": "MEASURED_MOVE",
+        "target_provenance": target_provenance,
+        "proximal_low": proximal_low,
     }
 
 
@@ -670,6 +706,7 @@ def categorize(
                 "stop_provenance": None,
                 "target_provenance": None,
                 "reward_risk": None,
+                "proximal_low": None,
                 "bars_since_breakout": None,
                 "breakout_within_last_k_bars": False,
                 "supporting_data": candidate,
@@ -715,12 +752,13 @@ def categorize(
 
     if final_category == "AVOID":
         entry = stop_loss = target = max_holding_days = None
-        stop_provenance = target_provenance = reward_risk = None
+        stop_provenance = target_provenance = reward_risk = proximal_low = None
     else:
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
         max_holding_days = ets["max_holding_days"]
         stop_provenance, target_provenance = ets["stop_provenance"], ets["target_provenance"]
+        proximal_low = ets["proximal_low"]
 
         # entry - stop_loss <= 0 would mean a broken stop (at or above
         # entry) -- can't compute a meaningful RR from that.
@@ -757,6 +795,10 @@ def categorize(
         "stop_provenance": stop_provenance,
         "target_provenance": target_provenance,
         "reward_risk": reward_risk,
+        # Two-low model (2.2 fix, I-6): the near-support anchor the stop
+        # was actually priced off, alongside the provenance fields above --
+        # None for AVOID/no-pattern/no-usable-proximal-low.
+        "proximal_low": proximal_low,
         # A-5 breakout-recency contract, surfaced for the SELECTED pattern
         # (the one that actually drove the score/entry) rather than
         # requiring a consumer to dig into supporting_data/pattern_details

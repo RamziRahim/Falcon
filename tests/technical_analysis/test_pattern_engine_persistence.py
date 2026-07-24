@@ -1,8 +1,11 @@
 """
 Plumbing check for pattern_engine.py's column-writing block: confirms the
-20 newly persisted columns (2 breakout sub-fields + 1 pivot level + 1
-structural low, x5 patterns) actually land on the output parquet with
-correct values -- not new detection logic, just verifying the wiring.
+25 newly persisted columns (2 breakout sub-fields + 1 pivot level + 1
+structural low + 1 proximal low, x5 patterns) actually land on the output
+parquet with correct values -- not new detection logic, just verifying
+the wiring. The proximal-low columns (2.2 fix, I-6) were added later than
+the other 20 -- see technical_analysis/pattern_system/*_detector.py's own
+docstrings for the two-low model this closes a real RR-floor bug with.
 
 Needed for WEAK_VOLUME_CONFIRMATION (can't be computed today without the
 granular price_crossed_pivot/breakout_volume_confirmed columns) and for a
@@ -65,6 +68,11 @@ NEW_COLUMNS = [
     "Cup_Handle_Pivot_Level", "Cup_Handle_Low",
     "Ascending_Triangle_Pivot_Level", "Ascending_Triangle_Support",
     "Bull_Flag_Pivot_Level", "Bull_Flag_Low",
+    # Two-low model (2.2 fix, I-6) -- the near anchor for each pattern's
+    # stop, alongside the (now deeper, for 3 of 5 patterns) structural
+    # low above used for the measured-move target.
+    "VCP_Proximal_Low", "Flat_Base_Proximal_Low", "Cup_Handle_Proximal_Low",
+    "Ascending_Triangle_Proximal_Low", "Bull_Flag_Proximal_Low",
 ]
 
 

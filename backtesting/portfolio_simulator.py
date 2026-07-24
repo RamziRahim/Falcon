@@ -134,11 +134,70 @@ def policy_sector_aware_caution(episode: pd.Series) -> float:
     return 0.0
 
 
+def _unified_scaling_gate(episode: pd.Series) -> str:
+    """Which gate (if any) capped this episode below EXECUTE -- mirrors
+    tests/choke_point_decomposition.py's _classify_gate (see that
+    module's docstring for why pattern-requirement/RR-floor are checked
+    ahead of regime/sector: that's categorize()'s own real precedence,
+    not an arbitrary ordering). Requires "caps_applied" to already be
+    merged onto `episode` (episode_builder.py's own schema doesn't carry
+    it -- see that module's docstring); a row without it just can't ever
+    match "rr_floor" and falls through to regime/sector, the same
+    degradation choke_point_decomposition.py accepts."""
+    if episode["confidence_score"] < 65.0:
+        return "ineligible"
+    if episode["category"] == "EXECUTE":
+        return "execute"
+    if episode["category"] == "MONITOR":
+        return "pattern_requirement"
+    if episode["category"] != "ALERT_WATCHLIST":
+        return "ineligible"  # e.g. AVOID -- can't actually happen at score>=65, see gate2_report.md
+    if "RR_BELOW_FLOOR" in str(episode.get("caps_applied") or ""):
+        return "rr_floor"
+    if episode["market_regime_verdict"] == "UNFAVORABLE":
+        return "regime_ceiling"
+    return "sector_ceiling"
+
+
+def make_unified_scaling_policy(monitor_risk_fraction: float = 0.5) -> RiskPolicy:
+    """Gate 2 extension (post-hoc choke-point decomposition,
+    data/gate2_report.md, 2026-07-24): any score>=65 episode is eligible
+    for entry regardless of which single gate capped its category, at
+    gate-specific risk scaling -- because every blocked population
+    (regime 5.7%, sector 4.09%, pattern-requirement/MONITOR 3.56% net
+    expectancy, n=31) cleared Gate 1's own 2.5%+ "resembles EXECUTE" bar;
+    none looked like a gate correctly screening out weak signals.
+
+    Sizing: EXECUTE and RR-floor-capped at full risk (RR-floor n=1 in the
+    corrected run #2 data -- full weight per the human's own spec, but
+    flagged as unvalidated at this sample size, not a considered
+    conclusion); regime-ceiling and sector-ceiling capped at half risk,
+    matching the existing CAUTION-scaling precedent (policy_
+    caution_half_unfavorable_blocked / policy_sector_aware_caution); a
+    MONITOR (pattern-requirement) episode at `monitor_risk_fraction` --
+    a genuinely new case with no Gate 1 precedent, left as a parameter
+    (not a fixed constant) specifically so 0.5 and 0.75 can both be
+    compared cheaply rather than picked in advance.
+    """
+    def policy(episode: pd.Series) -> float:
+        gate = _unified_scaling_gate(episode)
+        if gate in ("execute", "rr_floor"):
+            return 1.0
+        if gate in ("regime_ceiling", "sector_ceiling"):
+            return 0.5
+        if gate == "pattern_requirement":
+            return monitor_risk_fraction
+        return 0.0
+    return policy
+
+
 NAMED_POLICIES: dict[str, RiskPolicy] = {
     "a_hard_cap": policy_hard_cap,
     "b_d_caution_half_unfavorable_blocked": policy_caution_half_unfavorable_blocked,
     "c_caution_half_unfavorable_quarter": policy_caution_half_unfavorable_quarter,
     "e_sector_aware_caution": policy_sector_aware_caution,
+    "f_unified_scaling_half": make_unified_scaling_policy(0.5),
+    "f_unified_scaling_three_quarter": make_unified_scaling_policy(0.75),
 }
 
 

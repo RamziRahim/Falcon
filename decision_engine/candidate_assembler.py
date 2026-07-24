@@ -106,6 +106,22 @@ PATTERN_STRUCTURAL_LOW_COLUMN_MAP = {
     "is_bull_flag_breakout": "Bull_Flag_Low",
 }
 
+# 2.2 (I-6) two-low model fix: each pattern's PROXIMAL low column -- the
+# near-term support/resistance closest to entry, used for the stop.
+# Deliberately distinct from PATTERN_STRUCTURAL_LOW_COLUMN_MAP's (deeper)
+# target-anchoring low above -- using the same low for both was the
+# original RR-floor bug (any unclamped structural stop mathematically
+# forced reward_risk == 1.0). See each detector's own module docstring
+# for why proximal is provably closer to entry than structural in a
+# well-formed pattern.
+PATTERN_PROXIMAL_LOW_COLUMN_MAP = {
+    "is_vcp_breakout": "VCP_Proximal_Low",
+    "is_flat_base_breakout": "Flat_Base_Proximal_Low",
+    "is_cup_handle_breakout": "Cup_Handle_Proximal_Low",
+    "is_ascending_triangle_breakout": "Ascending_Triangle_Proximal_Low",
+    "is_bull_flag_breakout": "Bull_Flag_Proximal_Low",
+}
+
 
 def _parse_formatted_percentage(value) -> float | None:
     """Handles corporate_engine.py / institutional_engine.py's human-formatted
@@ -248,15 +264,16 @@ def assemble_pattern_details(pattern_row: dict) -> dict:
     into pattern_engine.py) is what lets this work identically for a live
     scan and for a backtest replaying a historical parquet row.
 
-    structural_low is the single uniform key get_entry_target_stop() (2.2,
-    I-6) reads regardless of which pattern won selection -- callers never
-    need to know that VCP's own column is named differently from Cup &
-    Handle's.
+    structural_low/proximal_low are the single uniform keys
+    get_entry_target_stop() (2.2, I-6, two-low model) reads regardless of
+    which pattern won selection -- callers never need to know that VCP's
+    own columns are named differently from Cup & Handle's.
     """
     return {
         field_name: {
             "pivot_level": pattern_row.get(column),
             "structural_low": pattern_row.get(PATTERN_STRUCTURAL_LOW_COLUMN_MAP[field_name]),
+            "proximal_low": pattern_row.get(PATTERN_PROXIMAL_LOW_COLUMN_MAP[field_name]),
             "bars_since_breakout": pattern_row.get(PATTERN_BARS_SINCE_BREAKOUT_COLUMN_MAP[field_name]),
             "breakout_within_last_k_bars": pattern_row.get(
                 PATTERN_BREAKOUT_WITHIN_K_BARS_COLUMN_MAP[field_name], False

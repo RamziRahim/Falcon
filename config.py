@@ -156,6 +156,20 @@ BREAKOUT_RECENCY_K_BARS = 5
 ATR_STOP_FLOOR_MULTIPLE = 1.0    # stop can't be tighter than this many ATRs from entry
 ATR_STOP_CEILING_MULTIPLE = 3.0  # stop can't be wider than this many ATRs from entry
 
+# Two-low model (2.2 fix, I-6): the stop prices off the pattern's PROXIMAL
+# low (its nearest support -- VCP's final contraction low, the flag's
+# pullback low, etc.) rather than the deeper structural low the target
+# uses, since pricing both off the same low forced reward:risk toward
+# 1.0 whenever the stop was unclamped. A small buffer pushes the stop
+# below the proximal low itself -- support sitting exactly at the stop
+# gets clipped by ordinary noise, not just a genuine breakdown.
+STOP_BUFFER_ATR_MULTIPLE = 0.25
+
+# Floor under the measured-move target distance (entry to structural
+# low) -- a shallow pattern shouldn't produce a target so close to entry
+# that it can't clear the RR floor even with a well-behaved stop.
+TARGET_MIN_ATR_MULTIPLE = 2.0
+
 # Minimum acceptable reward:risk (measured-move target distance / actual
 # stop distance) for an EXECUTE-grade signal. Below this floor, the signal
 # is downgraded to ALERT_WATCHLIST (RR_BELOW_FLOOR cap, see categorize())

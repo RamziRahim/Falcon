@@ -242,67 +242,99 @@ class TestTimeStopTradePlanField:
 
 
 class TestStructuralExitsAndRRFloor:
-    """2.2 (I-6): get_entry_target_stop() prices off the pattern's own
-    structural low, clamped to an ATR floor/ceiling, with a measured-move
-    target independent of that clamp; categorize() downgrades EXECUTE to
-    ALERT_WATCHLIST (RR_BELOW_FLOOR) when the resulting reward:risk falls
-    short of MIN_REWARD_RISK."""
+    """2.2 (I-6, two-low model): get_entry_target_stop() prices the stop
+    off the pattern's PROXIMAL low (near support, plus a small ATR buffer,
+    clamped to an ATR floor/ceiling) and the target off its STRUCTURAL low
+    (the deeper, overall base -- a measured move, floored at a 2x-ATR
+    minimum), independently of each other; categorize() downgrades EXECUTE
+    to ALERT_WATCHLIST (RR_BELOW_FLOOR) when the resulting reward:risk
+    falls short of MIN_REWARD_RISK."""
 
     def test_structural_stop_used_when_within_atr_bounds(self):
         candidate = _candidate(ATR_14=5.0)
-        # entry=100 (pivot), structural_low=90 -> raw distance 10, well
-        # within [1x, 3x] ATR = [5, 15].
-        best_result = {"pivot_level": 100.0, "structural_low": 90.0}
+        # entry=100 (pivot), proximal_low=90 -> raw distance 10 + buffer
+        # (0.25x5=1.25) = 11.25, well within [1x, 3x] ATR = [5, 15].
+        # structural_low=80 -> raw distance 20, above the 2x-ATR (10) min.
+        best_result = {"pivot_level": 100.0, "proximal_low": 90.0, "structural_low": 80.0}
 
         result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
 
-        assert result["stop_loss"] == pytest.approx(90.0)
-        assert result["target"] == pytest.approx(110.0)  # measured move: 100 + 10
+        assert result["stop_loss"] == pytest.approx(88.75)  # 100 - 11.25
+        assert result["target"] == pytest.approx(120.0)     # measured move: 100 + 20
         assert result["stop_provenance"] == "STRUCTURAL"
         assert result["target_provenance"] == "MEASURED_MOVE"
+        assert result["proximal_low"] == pytest.approx(90.0)
 
     def test_structural_stop_clamped_to_atr_floor_when_too_tight(self):
         candidate = _candidate(ATR_14=5.0)
-        # raw distance 2 (100 -> 98) is tighter than the 1x-ATR floor (5).
-        best_result = {"pivot_level": 100.0, "structural_low": 98.0}
+        # raw distance 2 (100 -> 98) + buffer 1.25 = 3.25, tighter than
+        # the 1x-ATR floor (5).
+        best_result = {"pivot_level": 100.0, "proximal_low": 98.0, "structural_low": 80.0}
 
         result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
 
-        assert result["stop_loss"] == pytest.approx(95.0)  # 100 - 5 (floor), not 100 - 2
-        assert result["target"] == pytest.approx(102.0)    # measured move uses the RAW distance (2), unclamped
+        assert result["stop_loss"] == pytest.approx(95.0)  # 100 - 5 (floor), not 100 - 3.25
+        assert result["target"] == pytest.approx(120.0)    # measured move off structural_low, unaffected by the stop clamp
         assert result["stop_provenance"] == "STRUCTURAL_CLAMPED_TO_ATR_FLOOR"
 
     def test_structural_stop_clamped_to_atr_ceiling_when_too_wide(self):
         candidate = _candidate(ATR_14=5.0)
-        # raw distance 30 (100 -> 70) is wider than the 3x-ATR ceiling (15).
-        best_result = {"pivot_level": 100.0, "structural_low": 70.0}
+        # raw distance 30 (100 -> 70) + buffer 1.25 = 31.25, wider than
+        # the 3x-ATR ceiling (15).
+        best_result = {"pivot_level": 100.0, "proximal_low": 70.0, "structural_low": 60.0}
 
         result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
 
-        assert result["stop_loss"] == pytest.approx(85.0)   # 100 - 15 (ceiling), not 100 - 30
-        assert result["target"] == pytest.approx(130.0)     # measured move uses the RAW distance (30)
+        assert result["stop_loss"] == pytest.approx(85.0)   # 100 - 15 (ceiling), not 100 - 31.25
+        assert result["target"] == pytest.approx(140.0)     # measured move: 100 + 40 (structural_low=60)
         assert result["stop_provenance"] == "STRUCTURAL_CLAMPED_TO_ATR_CEILING"
 
-    def test_missing_structural_low_falls_back_to_atr(self):
+    def test_target_floored_to_atr_minimum_when_structural_distance_too_shallow(self):
         candidate = _candidate(ATR_14=5.0)
-        best_result = {"pivot_level": 100.0, "structural_low": None}
+        # structural_low=93 (deeper than proximal_low=98, so still valid
+        # geometry) -> raw distance 7, below the 2x-ATR (10) min.
+        best_result = {"pivot_level": 100.0, "proximal_low": 98.0, "structural_low": 93.0}
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
+
+        assert result["target"] == pytest.approx(110.0)  # 100 + 2*5 (floor), not 100 + 5
+        assert result["target_provenance"] == "MEASURED_MOVE_FLOORED_TO_ATR_MIN"
+
+    def test_structural_low_not_deeper_than_proximal_falls_back_target_only(self):
+        # Malformed geometry -- structural_low (95) isn't actually deeper
+        # than proximal_low (90) -- target falls back to flat ATR, but the
+        # stop (priced off proximal_low) is unaffected.
+        candidate = _candidate(ATR_14=5.0)
+        # structural_low=92 >= proximal_low=90 -- invalid, since
+        # structural must be the deeper of the two.
+        best_result = {"pivot_level": 100.0, "proximal_low": 90.0, "structural_low": 92.0}
+
+        result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
+
+        assert result["target"] == pytest.approx(112.5)  # 100 + 2.5*5, flat ATR fallback
+        assert result["target_provenance"] == "ATR_FALLBACK_STRUCTURAL_INVALID"
+        assert result["stop_provenance"] == "STRUCTURAL"  # stop path untouched
+
+    def test_missing_proximal_low_falls_back_to_atr_for_both_legs(self):
+        candidate = _candidate(ATR_14=5.0)
+        best_result = {"pivot_level": 100.0, "proximal_low": None, "structural_low": 80.0}
 
         result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
 
         assert result["stop_loss"] == pytest.approx(90.0)   # 100 - 2*5
         assert result["target"] == pytest.approx(112.5)     # 100 + 2.5*5
-        assert result["stop_provenance"] == "ATR_FALLBACK_NO_STRUCTURAL_LOW"
-        assert result["target_provenance"] == "ATR_FALLBACK_NO_STRUCTURAL_LOW"
+        assert result["stop_provenance"] == "ATR_FALLBACK_NO_PROXIMAL_LOW"
+        assert result["target_provenance"] == "ATR_FALLBACK_NO_PROXIMAL_LOW"
 
-    def test_structural_low_at_or_above_entry_falls_back_to_atr(self):
-        # A mis-detected pivot -- structural_low can't legitimately sit at
+    def test_proximal_low_at_or_above_entry_falls_back_to_atr(self):
+        # A mis-detected pivot -- proximal_low can't legitimately sit at
         # or above the entry price.
         candidate = _candidate(ATR_14=5.0)
-        best_result = {"pivot_level": 100.0, "structural_low": 100.0}
+        best_result = {"pivot_level": 100.0, "proximal_low": 100.0, "structural_low": 80.0}
 
         result = get_entry_target_stop(candidate, "is_vcp_breakout", best_result)
 
-        assert result["stop_provenance"] == "ATR_FALLBACK_NO_STRUCTURAL_LOW"
+        assert result["stop_provenance"] == "ATR_FALLBACK_NO_PROXIMAL_LOW"
 
     def test_no_pattern_at_all_uses_the_no_pattern_provenance(self):
         candidate = _candidate(ATR_14=5.0)
@@ -311,6 +343,7 @@ class TestStructuralExitsAndRRFloor:
 
         assert result["stop_provenance"] == "ATR_FALLBACK_NO_PATTERN"
         assert result["target_provenance"] == "ATR_FALLBACK_NO_PATTERN"
+        assert result["proximal_low"] is None
 
     def _execute_grade_candidate_with_pattern(self):
         # VCP(30) + RS_Rating 100 (+20) + active FVG (+15) + liquidity
@@ -326,9 +359,11 @@ class TestStructuralExitsAndRRFloor:
 
     def test_execute_downgraded_to_alert_watchlist_when_rr_below_floor(self):
         candidate, sector_row = self._execute_grade_candidate_with_pattern()
-        # structural_low=98 -> clamped stop distance 5, raw target distance
-        # 2 -> RR = 2/5 = 0.4, well under the 1.25 floor.
-        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 98.0}}
+        # proximal_low=90 -> unclamped stop distance 10 + 1.25 buffer =
+        # 11.25 (within [5, 15]). structural_low=88 -> raw target distance
+        # 12 (above the 10 = 2x-ATR floor, so unfloored) -> RR = 12/11.25
+        # = 1.067, under the 1.25 floor.
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "proximal_low": 90.0, "structural_low": 88.0}}
 
         score = compute_score(candidate, sector_row)
         assert score >= 65, "fixture must be EXECUTE-grade by score for this test to mean anything"
@@ -340,9 +375,11 @@ class TestStructuralExitsAndRRFloor:
 
     def test_execute_stays_execute_when_rr_clears_the_floor(self):
         candidate, sector_row = self._execute_grade_candidate_with_pattern()
-        # structural_low=70 -> clamped stop distance 15 (ceiling), raw
-        # target distance 30 -> RR = 30/15 = 2.0, clears the 1.25 floor.
-        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 70.0}}
+        # proximal_low=75 -> raw distance 25 + 1.25 buffer = 26.25, clamped
+        # to the 15 (3x-ATR) ceiling. structural_low=70 -> raw target
+        # distance 30 (above the 10 floor, unfloored) -> RR = 30/15 = 2.0,
+        # clears the 1.25 floor.
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "proximal_low": 75.0, "structural_low": 70.0}}
 
         result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
 
@@ -353,7 +390,7 @@ class TestStructuralExitsAndRRFloor:
         candidate, sector_row = self._execute_grade_candidate_with_pattern()
         # RR=2.0 (see test above) clears 1.25 but not an experimentally
         # stricter 2.5 floor passed explicitly.
-        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 70.0}}
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "proximal_low": 75.0, "structural_low": 70.0}}
 
         result = categorize(
             candidate, sector_row, market_verdict="FAVORABLE",
@@ -365,13 +402,14 @@ class TestStructuralExitsAndRRFloor:
 
     def test_categorize_surfaces_provenance_and_reward_risk(self):
         candidate, sector_row = self._execute_grade_candidate_with_pattern()
-        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "structural_low": 70.0}}
+        pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "proximal_low": 75.0, "structural_low": 70.0}}
 
         result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
 
         assert result["stop_provenance"] == "STRUCTURAL_CLAMPED_TO_ATR_CEILING"
         assert result["target_provenance"] == "MEASURED_MOVE"
         assert result["reward_risk"] == pytest.approx(2.0)
+        assert result["proximal_low"] == pytest.approx(75.0)
 
     def test_categorize_provenance_and_reward_risk_none_for_avoid(self):
         candidate = _candidate(Trend_State="DOWNTREND")
@@ -383,6 +421,7 @@ class TestStructuralExitsAndRRFloor:
         assert result["stop_provenance"] is None
         assert result["target_provenance"] is None
         assert result["reward_risk"] is None
+        assert result["proximal_low"] is None
 
 
 class TestBreakoutRecencySurfacedOnCategorizeOutput:

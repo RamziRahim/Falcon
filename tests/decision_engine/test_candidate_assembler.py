@@ -64,10 +64,12 @@ class TestAssemblePatternDetails:
         pattern_row = {
             "VCP_Pivot_Level": 150.0,
             "VCP_Structural_Low": 130.0,
+            "VCP_Proximal_Low": 140.0,
             "VCP_Bars_Since_Breakout": 2,
             "VCP_Breakout_Within_K_Bars": True,
             "Cup_Handle_Pivot_Level": 90.0,
             "Cup_Handle_Low": 80.0,
+            "Cup_Handle_Proximal_Low": 85.0,
             "Cup_Handle_Bars_Since_Breakout": None,
             "Cup_Handle_Breakout_Within_K_Bars": False,
         }
@@ -75,11 +77,11 @@ class TestAssemblePatternDetails:
         details = assemble_pattern_details(pattern_row)
 
         assert details["is_vcp_breakout"] == {
-            "pivot_level": 150.0, "structural_low": 130.0,
+            "pivot_level": 150.0, "structural_low": 130.0, "proximal_low": 140.0,
             "bars_since_breakout": 2, "breakout_within_last_k_bars": True,
         }
         assert details["is_cup_handle_breakout"] == {
-            "pivot_level": 90.0, "structural_low": 80.0,
+            "pivot_level": 90.0, "structural_low": 80.0, "proximal_low": 85.0,
             "bars_since_breakout": None, "breakout_within_last_k_bars": False,
         }
 
@@ -87,6 +89,6 @@ class TestAssemblePatternDetails:
         details = assemble_pattern_details({})
 
         assert details["is_vcp_breakout"] == {
-            "pivot_level": None, "structural_low": None,
+            "pivot_level": None, "structural_low": None, "proximal_low": None,
             "bars_since_breakout": None, "breakout_within_last_k_bars": False,
         }

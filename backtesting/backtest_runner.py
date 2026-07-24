@@ -272,6 +272,7 @@ def run_backtest(
                     # AVOID rows are analyzable with the same tooling.
                     "stop_provenance": ets["stop_provenance"],
                     "target_provenance": ets["target_provenance"],
+                    "proximal_low": ets["proximal_low"],
                     "reward_risk": (
                         (ets["target"] - hypothetical_entry) / (hypothetical_entry - ets["stop_loss"])
                         if (hypothetical_entry - ets["stop_loss"]) > 0 else None
@@ -337,6 +338,7 @@ def run_backtest(
                 # computed by categorize() itself, not re-derived here.
                 "stop_provenance": decision.get("stop_provenance"),
                 "target_provenance": decision.get("target_provenance"),
+                "proximal_low": decision.get("proximal_low"),
                 "reward_risk": decision.get("reward_risk"),
                 # A-5: for the SELECTED pattern -- None/False when no
                 # pattern fired (MONITOR, or an ATR-fallback ALERT_WATCHLIST).
