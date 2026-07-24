@@ -28,6 +28,22 @@ ENABLE_MICROSTRUCTURE_SIGNALS = False
 # means downstream.
 AVOID_SAMPLE_RATE = 1.0
 
+# Universe widening: "existing_cache" (default) leaves data/technical/
+# exactly as-is, same behavior every prior run used. "wide" ensures the
+# full Nifty 500 constituent list (backtesting/universe_builder.py's
+# build_wide_backtest_universe()) is cached before loading -- ~500
+# tickers vs. the prior ~185. Idempotent either way: once everything's
+# cached, flipping this back and forth costs nothing (see
+# ensure_wide_universe_cached()'s own docstring for why the delta
+# check is cheap on a second call).
+UNIVERSE_MODE = "existing_cache"  # or "wide"
+
+if UNIVERSE_MODE == "wide":
+    from tests.prepare_wide_universe import ensure_wide_universe_cached
+    print("Universe mode: wide -- ensuring the full Nifty 500 list is cached first...")
+    ensure_wide_universe_cached()
+    print()
+
 # ── 1. Load universe from whatever is in data/technical/ ──────────────────────
 print("Loading universe from data/technical/...")
 
