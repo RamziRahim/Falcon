@@ -1,0 +1,4 @@
+strategy,total_return_pct,max_drawdown_pct,cagr_pct,calmar,n_taken
+Falcon (MONITOR@0.5),12.39,-5.8,6.32,1.09,115.0
+NIFTY buy-and-hold (net),-2.5,-15.77,-1.26,-0.08,
+"Momentum (top-decile, 126d, >50DMA)",25.13,-25.82,12.41,0.48,126.0

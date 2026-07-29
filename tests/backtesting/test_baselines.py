@@ -9,6 +9,7 @@ import pytest
 
 from backtesting.baselines import (
     naive_momentum_baseline,
+    naive_momentum_topdecile_baseline,
     nifty_buy_hold,
     random_entry_control,
     summarize_random_control,
@@ -156,5 +157,72 @@ class TestNaiveMomentumBaseline:
         as_of_date = universe["AAA.NS"]["Date"].iloc[-1]
 
         result = naive_momentum_baseline(universe, [as_of_date], lookback_days=63)
+
+        assert result.empty
+
+
+class TestNaiveMomentumTopDecileBaseline:
+
+    def test_takes_top_decile_not_just_one(self):
+        # 10 tickers, steadily increasing strength -- top decile of 10 is 1,
+        # but the point of this test is multiple picks ARE possible with a
+        # bigger universe (checked below), not that exactly 1 comes back here.
+        universe = {
+            f"T{i}.NS": _ohlcv(np.linspace(100, 100 + i * 20, 150))
+            for i in range(10)
+        }
+        as_of_date = universe["T0.NS"]["Date"].iloc[130]
+
+        result = naive_momentum_topdecile_baseline(
+            universe, [as_of_date], lookback_days=126, max_holding_days=10, trend_filter_window=50,
+        )
+
+        assert len(result) == 1
+        assert result.iloc[0]["ticker"] == "T9.NS"  # strongest momentum of the 10
+
+    def test_multiple_picks_per_date_with_a_bigger_universe(self):
+        # 20 tickers rising at different strengths (i starts at 1, not 0 --
+        # a perfectly flat line sits exactly AT its own SMA, not above it,
+        # and would be legitimately excluded by the trend filter) -- top
+        # decile of 20 is 2, so 2 distinct tickers should come back.
+        universe = {
+            f"T{i}.NS": _ohlcv(np.linspace(100, 100 + i * 10, 150))
+            for i in range(1, 21)
+        }
+        as_of_date = universe["T1.NS"]["Date"].iloc[130]
+
+        result = naive_momentum_topdecile_baseline(
+            universe, [as_of_date], lookback_days=126, max_holding_days=10, trend_filter_window=50,
+        )
+
+        assert len(result) == 2
+        assert set(result["ticker"]) == {"T19.NS", "T20.NS"}  # two strongest
+
+    def test_trend_filter_excludes_a_ticker_trading_below_its_own_sma(self):
+        # AAA: strong trailing 126-day momentum on paper, but has since
+        # rolled over hard and is now trading well below its own 50-day
+        # SMA -- the trend filter must exclude it even though its raw
+        # lookback-window return looks the best.
+        aaa_prices = np.concatenate([np.linspace(100, 300, 100), np.linspace(300, 150, 50)])
+        bbb_prices = np.linspace(100, 160, 150)  # steady, real uptrend, above its own SMA
+        universe = {"AAA.NS": _ohlcv(aaa_prices), "BBB.NS": _ohlcv(bbb_prices)}
+        # -15 from the end, not the very last row -- leaves room for the
+        # 10-day forward exit window (a date with nothing after it can
+        # never resolve an exit, regardless of whether it passes the
+        # trend filter).
+        as_of_date = universe["AAA.NS"]["Date"].iloc[-15]
+
+        result = naive_momentum_topdecile_baseline(
+            universe, [as_of_date], lookback_days=126, max_holding_days=10, trend_filter_window=50,
+        )
+
+        assert "AAA.NS" not in set(result["ticker"])
+        assert "BBB.NS" in set(result["ticker"])
+
+    def test_insufficient_history_is_skipped_not_a_crash(self):
+        universe = {"AAA.NS": _ohlcv(np.linspace(100, 110, 30))}  # too short for a 126-day lookback
+        as_of_date = universe["AAA.NS"]["Date"].iloc[-1]
+
+        result = naive_momentum_topdecile_baseline(universe, [as_of_date], lookback_days=126)
 
         assert result.empty

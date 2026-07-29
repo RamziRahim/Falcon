@@ -212,3 +212,84 @@ def naive_momentum_baseline(
         })
 
     return pd.DataFrame(rows)
+
+
+def naive_momentum_topdecile_baseline(
+    universe_histories: dict[str, pd.DataFrame],
+    sample_dates: list[pd.Timestamp],
+    lookback_days: int = 126,
+    max_holding_days: int = 20,
+    trend_filter_window: int = 50,
+    top_decile_fraction: float = 0.10,
+) -> pd.DataFrame:
+    """A stronger momentum bar than naive_momentum_baseline()'s single
+    best-of-universe pick: on each date, ranks every ticker with
+    sufficient history by trailing `lookback_days`-day return (default
+    126 -- ~6 trading months), filters to only those trading above their
+    own trailing `trend_filter_window`-day (default 50) simple moving
+    average (a real trend requirement on top of raw momentum, not just
+    "went up the most"), then takes the top `top_decile_fraction`
+    (default 10%) of that filtered population -- multiple picks per date,
+    not one. Still no target/stop/pattern/regime input at all: this is
+    "does simple trend-following at meaningful breadth do as well as
+    Falcon's actual pattern/score/ceiling machinery," a stronger version
+    of the same question naive_momentum_baseline() asks.
+
+    Every pick is independent (no de-duplication against a ticker already
+    picked on a recent prior date) -- that absorption is exactly what
+    episode_builder.build_episodes() exists to do downstream, same as it
+    does for Falcon's own raw signal log, so a caller wanting one-episode-
+    per-real-position should run this output through that same function
+    rather than this one re-deriving it.
+    """
+    rows = []
+
+    for as_of_date in sample_dates:
+        candidates = []
+
+        for ticker, history in universe_histories.items():
+            truncated = history[history["Date"] <= as_of_date].sort_values("Date")
+            if len(truncated) < max(lookback_days, trend_filter_window) + 1:
+                continue
+
+            past_price = truncated["Close"].iloc[-lookback_days - 1]
+            current_price = truncated["Close"].iloc[-1]
+            if past_price == 0:
+                continue
+
+            sma = truncated["Close"].iloc[-trend_filter_window:].mean()
+            if current_price <= sma:
+                continue  # trend filter: must be trading above its own trailing SMA
+
+            momentum = (current_price - past_price) / past_price
+            candidates.append((ticker, momentum))
+
+        if not candidates:
+            continue
+
+        candidates.sort(key=lambda pair: pair[1], reverse=True)
+        n_take = max(1, int(len(candidates) * top_decile_fraction))
+
+        for ticker, momentum in candidates[:n_take]:
+            history = universe_histories[ticker].sort_values("Date")
+            entry_rows = history[history["Date"] == as_of_date]
+            if entry_rows.empty:
+                continue
+
+            entry_price = entry_rows.iloc[0]["Close"]
+            future = history[history["Date"] > as_of_date].sort_values("Date").head(max_holding_days)
+            if future.empty:
+                continue
+
+            exit_row = future.iloc[-1]
+            exit_price, exit_date = exit_row["Close"], exit_row["Date"]
+            return_pct = (exit_price - entry_price) / entry_price * 100
+            net_return_pct = return_pct - ROUND_TRIP_COST_PCT * 100
+
+            rows.append({
+                "as_of_date": as_of_date, "ticker": ticker, "exit_date": exit_date,
+                "trailing_momentum_pct": round(momentum * 100, 2),
+                "return_pct": round(return_pct, 2), "net_return_pct": round(net_return_pct, 2),
+            })
+
+    return pd.DataFrame(rows)
