@@ -1,0 +1,3 @@
+strategy,total_return_pct,max_drawdown_pct,cagr_pct,calmar,n_taken,n_missed_due_to_slots,slot_utilization_pct
+"Falcon (MONITOR@0.5, wide universe)",12.39,-5.8,6.32,1.09,115.0,60.0,65.7
+NIFTY buy-and-hold,-2.2,-15.77,-1.11,-0.07,,,

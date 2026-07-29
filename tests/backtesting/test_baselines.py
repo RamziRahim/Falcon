@@ -55,6 +55,24 @@ class TestNiftyBuyHold:
         assert result["total_return_pct"] == pytest.approx(10.0)
         assert result["max_drawdown_pct"] == pytest.approx(-25.0)
 
+    def test_trailing_nan_close_is_not_picked_as_the_window_endpoint(self):
+        # A same-day intraday snapshot cached before that day's close
+        # settles (real case: the cache's own incremental refresh only
+        # ever fetches forward from the last cached date, so a stale
+        # incomplete row for a past date is never revisited on its own)
+        # must not be treated as the window's actual end price. Last row's
+        # own close (999.0) would be an obviously-wrong result if it were
+        # used instead of being dropped -- it's set to NaN below.
+        benchmark = _ohlcv([100.0] + [100.0] * 8 + [110.0, 999.0])
+        benchmark.loc[benchmark.index[-1], "Close"] = np.nan
+
+        result = nifty_buy_hold(benchmark, benchmark["Date"].iloc[0], benchmark["Date"].iloc[-1])
+
+        # End price should fall back to the last row WITH a real close
+        # (110, +10%), not NaN, and not the (already-overwritten) 999.0.
+        assert result["total_return_pct"] == pytest.approx(10.0)
+        assert not pd.isna(result["total_return_pct"])
+
 
 class TestRandomEntryControl:
 

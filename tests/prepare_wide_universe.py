@@ -53,12 +53,26 @@ import glob
 import os
 
 from backtesting.universe_builder import build_wide_backtest_universe
+from config import NIFTY50
 from market_data.cache_manager import cache_manager
 from market_data.downloader import downloader
 from market_data.data_validator import market_data_validator
 from technical_analysis.indicator_engine import IndicatorEngine
 
 BATCH_SIZE = 25
+
+# scoring/benchmark.py's get_benchmark_history() manages NIFTY50's (^NSEI)
+# own raw cache independently (self-heals on its own next call) -- it is
+# NOT a tradeable ticker and must never end up in data/technical/ as if
+# it were one. existing_raw (cache_manager.list_symbols()) reads
+# data/raw/*.parquet indiscriminately and WILL include it whenever the
+# benchmark's own cache happens to already exist there, which pulled it
+# into a real run's candidate set once already: it got downloaded via the
+# generic equity provider path (not get_benchmark_history()'s own
+# tz-naive-normalized fetch), came back tz-AWARE, and crashed
+# backtest_runner.py's date-range comparison against every real (tz-naive)
+# ticker the first time run_backtest() ran against the widened universe.
+_NON_EQUITY_SYMBOLS = {NIFTY50}
 
 
 def _existing_technical_symbols() -> set[str]:
@@ -85,12 +99,12 @@ def ensure_wide_universe_cached(batch_size: int = BATCH_SIZE, verbose: bool = Tr
     "failed_symbols": list[(symbol, reason)], "technical_count_before": int,
     "technical_count_after": int}
     """
-    existing_raw = set(cache_manager.list_symbols())            # currently in data/raw
+    existing_raw = set(cache_manager.list_symbols()) - _NON_EQUITY_SYMBOLS  # currently in data/raw
     existing_technical = _existing_technical_symbols()          # currently in data/technical
     wide_universe = set(build_wide_backtest_universe())         # Nifty 500, alphabetical
 
     existing_cached_symbols = existing_raw | existing_technical
-    candidate_set = sorted(existing_cached_symbols | wide_universe)
+    candidate_set = sorted((existing_cached_symbols | wide_universe) - _NON_EQUITY_SYMBOLS)
 
     # Only what's missing from data/technical needs fetching -- anything
     # already there is left alone (not re-downloaded, not recomputed).

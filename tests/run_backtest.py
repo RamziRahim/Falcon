@@ -36,7 +36,7 @@ AVOID_SAMPLE_RATE = 1.0
 # cached, flipping this back and forth costs nothing (see
 # ensure_wide_universe_cached()'s own docstring for why the delta
 # check is cheap on a second call).
-UNIVERSE_MODE = "existing_cache"  # or "wide"
+UNIVERSE_MODE = "wide"  # or "existing_cache"
 
 if UNIVERSE_MODE == "wide":
     from tests.prepare_wide_universe import ensure_wide_universe_cached
@@ -55,6 +55,16 @@ for path in sorted(glob.glob("data/technical/*.parquet")):
     try:
         df = pd.read_parquet(path)
         df["Date"] = pd.to_datetime(df["Date"])
+        # Defensive: start_date/end_date below are tz-naive Timestamps: a
+        # tz-aware Date column crashes _sampled_dates_for_ticker()'s
+        # comparison outright rather than silently misbehaving (confirmed
+        # the hard way -- ^NSEI briefly ended up in data/technical/ with a
+        # tz-aware Date column and crashed the very first widened-universe
+        # run). Every ticker actually meant to be here should already be
+        # tz-naive; this just makes that an enforced invariant instead of
+        # an assumption.
+        if df["Date"].dt.tz is not None:
+            df["Date"] = df["Date"].dt.tz_localize(None)
         df = df.sort_values("Date").reset_index(drop=True)
         if len(df) >= 250:  # need enough history for the 2-year window + pattern lookback
             universe_histories[ticker] = df
@@ -138,7 +148,9 @@ trades = run_backtest(
 )
 
 # ── 6. Save raw results ────────────────────────────────────────────────────────
-output_path = "data/backtest_results.csv"
+output_path = (
+    "data/backtest_results_run3_wide_universe.csv" if UNIVERSE_MODE == "wide" else "data/backtest_results.csv"
+)
 trades.to_csv(output_path, index=False)
 print(f"\nRaw trade log saved → {output_path}  ({len(trades)} trades)")
 

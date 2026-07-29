@@ -44,7 +44,15 @@ from config import ROUND_TRIP_COST_PCT
 
 
 def nifty_buy_hold(benchmark_history: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp) -> dict:
-    ordered = benchmark_history.sort_values("Date")
+    # A row with no Close at all (a same-day intraday snapshot cached
+    # before that day's close settled) is not a valid start/end point --
+    # confirmed in practice: the cache's own incremental refresh only
+    # ever fetches forward from the last cached date, so a stale
+    # incomplete row for a past date is never revisited/corrected on its
+    # own. Dropping it here (rather than upstream) keeps every other
+    # caller of benchmark_history untouched and fixes exactly the "picked
+    # a NaN close as the window's own endpoint" failure mode.
+    ordered = benchmark_history.dropna(subset=["Close"]).sort_values("Date")
     window = ordered[(ordered["Date"] >= start_date) & (ordered["Date"] <= end_date)]
 
     if len(window) < 2:
