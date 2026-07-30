@@ -72,3 +72,15 @@ split date is revisited deliberately and explicitly, not silently shifted.
 - The validation split, at any point before its one-time read.
 - Anything against the full undivided dataset (tuning happens only on the
   tuning split, per standing rule 6).
+
+## Known open data issues affecting Phase 4
+
+See `docs/known_data_issues.md` for the full, standing tracker. As of
+2026-07-30, one item there is a **blocking pre-check for trusting Phase
+4's calibration output specifically** (not for starting Phase 4's
+implementation work): a ~34-ticker price corruption issue, verified
+clean for run #3's 459 traded episodes but not yet re-verified at the
+full-universe/full-tuning-split scale Phase 4's feature-fitting will
+actually read. Do not treat Phase 4 fitted weights/thresholds as
+validated, or carry them into Phase 5, until that document's item #1 is
+resolved or re-verified at Phase-4 scale.
