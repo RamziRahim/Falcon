@@ -191,18 +191,31 @@ def compute_breakout_volume_ratio(df_as_of: pd.DataFrame) -> float | None:
     return round(latest_volume / baseline, 3)
 
 
-def compute_dist_52w_high(df_as_of: pd.DataFrame, lookback_bars: int = TWELVE_MONTH_LOOKBACK_BARS) -> float | None:
+def compute_dist_52w_high(df_as_of: pd.DataFrame, lookback_bars: int = TWELVE_MONTH_LOOKBACK_BARS) -> dict:
     """Proximity to the 52-week high -- leaders break out near highs, not
     off a deep base (O'Neil). 0 means sitting at the 52-week high itself;
-    positive means still below it."""
-    if df_as_of.empty:
-        return None
+    positive means still below it.
+
+    Fails closed on insufficient history rather than silently computing
+    over whatever's available: `pandas.Series.tail(n)` on a series with
+    fewer than `n` rows just returns all of them, no error -- confirmed
+    the hard way (a 100-row truncation of HDFCBANK.NS produced the exact
+    same result as its real ~2,474-row history, no signal the window was
+    short). A "52-week high" computed over 100 days isn't a 52-week high;
+    returning a same-shaped but silently wrong number would be worse than
+    refusing to answer, same reasoning as every existing detector's own
+    invalidated_reason convention.
+    """
+    if len(df_as_of) < lookback_bars:
+        return {"dist_52w_high": None, "invalidated_reason": "INSUFFICIENT_HISTORY"}
+
     window = df_as_of.tail(lookback_bars)
     high_52w = window["High"].max()
     current_close = df_as_of["Close"].iloc[-1]
     if pd.isna(high_52w) or high_52w <= 0:
-        return None
-    return round((high_52w - current_close) / high_52w * 100, 2)
+        return {"dist_52w_high": None, "invalidated_reason": None}
+
+    return {"dist_52w_high": round((high_52w - current_close) / high_52w * 100, 2), "invalidated_reason": None}
 
 
 def compute_consolidation_features(df: pd.DataFrame, macro_pivots: list[SwingPoint]) -> dict:
@@ -227,7 +240,8 @@ def compute_consolidation_features(df: pd.DataFrame, macro_pivots: list[SwingPoi
             "prior_trend_pct_gain": None, "prior_trend_slope": None, "prior_trend_bars": None,
             "base_depth_pct": None, "base_length_bars": None, "contraction_slope": None,
             "volume_dryup_ratio": None, "volume_down_up_ratio": None,
-            "pivot_proximity": None, "breakout_volume_ratio": None, "dist_52w_high": None,
+            "pivot_proximity": None, "breakout_volume_ratio": None,
+            "dist_52w_high": None, "dist_52w_high_invalidated_reason": None,
         }
 
     swing_low, swing_high = boundaries
@@ -238,6 +252,7 @@ def compute_consolidation_features(df: pd.DataFrame, macro_pivots: list[SwingPoi
     prior_trend = compute_prior_trend_strength(swing_low, swing_high)
     volume_dryup = compute_volume_dryup_ratio(base_window, pre_base_window)
     current_close = ordered["Close"].iloc[-1]
+    dist_52w = compute_dist_52w_high(ordered)
 
     return {
         "valid": True,
@@ -249,7 +264,17 @@ def compute_consolidation_features(df: pd.DataFrame, macro_pivots: list[SwingPoi
         **volume_dryup,
         "pivot_proximity": compute_pivot_proximity(base_window, current_close),
         "breakout_volume_ratio": compute_breakout_volume_ratio(ordered),
-        "dist_52w_high": compute_dist_52w_high(ordered),
+        "dist_52w_high": dist_52w["dist_52w_high"],
+        # Renamed from compute_dist_52w_high()'s own "invalidated_reason"
+        # key: this composite dict already has a top-level
+        # "invalidated_reason" for the pivot-boundary failure -- unpacking
+        # dist_52w's dict directly would silently clobber it (or vice
+        # versa) whichever key happened to be assembled last, not a real
+        # design choice. The two failure modes are independent (a base can
+        # be perfectly valid with too little history for a 52-week
+        # lookback specifically), so they need distinct keys, not a shared
+        # one that can only hold one reason at a time.
+        "dist_52w_high_invalidated_reason": dist_52w["invalidated_reason"],
     }
 
 
@@ -275,6 +300,15 @@ def compute_rs_line_new_high(
     so only dates present in both series are compared (a benchmark
     holiday gap silently drops that day rather than misaligning the two
     series by position).
+
+    Fails closed on insufficient merged history rather than silently
+    computing over whatever's available -- same reasoning, and same bug
+    it closes, as compute_dist_52w_high()'s own INSUFFICIENT_HISTORY
+    check: `pandas.Series.tail(n)` on fewer than `n` rows just returns
+    all of them, no error, so a stock with only 100 days of overlapping
+    history would otherwise silently get a "252-day new high" verdict
+    computed over 100 days -- confirmed directly against real data before
+    this fix existed.
     """
     stock = stock_df.sort_values("Date").reset_index(drop=True)
     bench = benchmark_df.sort_values("Date").reset_index(drop=True)
@@ -284,19 +318,24 @@ def compute_rs_line_new_high(
         on="Date", suffixes=("_stock", "_bench"),
     )
     if merged.empty:
-        return {"rs_line_new_high": None, "rs_line_value": None}
+        return {"rs_line_new_high": None, "invalidated_reason": "NO_OVERLAPPING_DATES", "rs_line_value": None}
 
     merged = merged[merged["Close_bench"] > 0]
     if merged.empty:
-        return {"rs_line_new_high": None, "rs_line_value": None}
+        return {"rs_line_new_high": None, "invalidated_reason": "NO_OVERLAPPING_DATES", "rs_line_value": None}
+
+    if len(merged) < lookback_bars:
+        return {"rs_line_new_high": None, "invalidated_reason": "INSUFFICIENT_HISTORY", "rs_line_value": None}
 
     merged["rs_line"] = merged["Close_stock"] / merged["Close_bench"]
 
     trailing = merged["rs_line"].tail(lookback_bars)
     recent = merged["rs_line"].tail(recency_bars)
-    if trailing.empty or recent.empty:
-        return {"rs_line_new_high": None, "rs_line_value": None}
 
     is_new_high = bool(recent.max() >= trailing.max())
 
-    return {"rs_line_new_high": is_new_high, "rs_line_value": round(merged["rs_line"].iloc[-1], 6)}
+    return {
+        "rs_line_new_high": is_new_high,
+        "invalidated_reason": None,
+        "rs_line_value": round(merged["rs_line"].iloc[-1], 6),
+    }

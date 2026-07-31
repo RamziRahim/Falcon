@@ -243,12 +243,14 @@ class TestDist52wHigh:
 
     def test_matches_hand_computation(self):
         # Constant High ceiling of 120 throughout; today's Close (the
-        # value the distance is actually measured from) is 110.
+        # value the distance is actually measured from) is 110. 10 rows,
+        # lookback_bars=10 -- exactly enough history, not short.
         df = _ohlcv([100.0] * 9 + [110.0], highs=[120.0] * 10)
 
         result = compute_dist_52w_high(df, lookback_bars=10)
 
-        assert result == pytest.approx((120.0 - 110.0) / 120.0 * 100, abs=0.01)
+        assert result["invalidated_reason"] is None
+        assert result["dist_52w_high"] == pytest.approx((120.0 - 110.0) / 120.0 * 100, abs=0.01)
 
     def test_sitting_at_the_52w_high_is_zero(self):
         # Today's Close equals the 52-week High itself.
@@ -256,7 +258,36 @@ class TestDist52wHigh:
 
         result = compute_dist_52w_high(df, lookback_bars=10)
 
-        assert result == pytest.approx(0.0, abs=1e-9)
+        assert result["dist_52w_high"] == pytest.approx(0.0, abs=1e-9)
+
+    def test_under_the_lookback_fails_closed_not_a_silent_short_window(self):
+        # 251 rows against a 252-bar lookback -- pandas' own .tail(252) on
+        # a 251-row frame would silently return all 251 rows with no
+        # error; this must refuse to answer instead of quietly computing
+        # a "52-week high" over 251 days.
+        df = _ohlcv([100.0] * 250 + [110.0], highs=[120.0] * 251)
+
+        result = compute_dist_52w_high(df, lookback_bars=252)
+
+        assert result == {"dist_52w_high": None, "invalidated_reason": "INSUFFICIENT_HISTORY"}
+
+    def test_exactly_at_the_lookback_boundary_computes_normally(self):
+        # Exactly 252 rows against a 252-bar lookback -- the boundary
+        # itself must NOT be treated as insufficient.
+        df = _ohlcv([100.0] * 251 + [110.0], highs=[120.0] * 252)
+
+        result = compute_dist_52w_high(df, lookback_bars=252)
+
+        assert result["invalidated_reason"] is None
+        assert result["dist_52w_high"] == pytest.approx((120.0 - 110.0) / 120.0 * 100, abs=0.01)
+
+    def test_one_bar_over_the_lookback_boundary_also_computes_normally(self):
+        df = _ohlcv([100.0] * 252 + [110.0], highs=[120.0] * 253)
+
+        result = compute_dist_52w_high(df, lookback_bars=252)
+
+        assert result["invalidated_reason"] is None
+        assert result["dist_52w_high"] == pytest.approx((120.0 - 110.0) / 120.0 * 100, abs=0.01)
 
 
 class TestComputeConsolidationFeatures:
@@ -281,6 +312,13 @@ class TestComputeConsolidationFeatures:
         assert result["base_length_bars"] == 10  # bars 20..29 inclusive
         assert result["base_depth_pct"] is not None
         assert result["contraction_slope"] is not None
+        # Only 30 rows total, well under the 252-bar 52-week lookback --
+        # dist_52w_high must fail closed on ITS OWN, independent reason
+        # without touching the top-level "invalidated_reason" the pivot
+        # boundary already used (the base itself is genuinely valid; it's
+        # only the 52-week comparison specifically that lacks history).
+        assert result["dist_52w_high"] is None
+        assert result["dist_52w_high_invalidated_reason"] == "INSUFFICIENT_HISTORY"
 
     def test_no_confirmed_pivots_yet_is_explicitly_invalid(self):
         df = _ohlcv([100.0] * 10)
@@ -290,6 +328,8 @@ class TestComputeConsolidationFeatures:
         assert result["valid"] is False
         assert result["invalidated_reason"] == "INSUFFICIENT_PIVOTS"
         assert result["base_depth_pct"] is None
+        assert result["dist_52w_high"] is None
+        assert result["dist_52w_high_invalidated_reason"] is None
 
 
 class TestComputeRsLineNewHigh:
@@ -322,4 +362,35 @@ class TestComputeRsLineNewHigh:
 
         result = compute_rs_line_new_high(stock, benchmark)
 
-        assert result == {"rs_line_new_high": None, "rs_line_value": None}
+        assert result == {"rs_line_new_high": None, "invalidated_reason": "NO_OVERLAPPING_DATES", "rs_line_value": None}
+
+    def test_under_the_lookback_fails_closed_not_a_silent_short_window(self):
+        # 251 overlapping days against a 252-bar lookback -- pandas' own
+        # .tail(252) on a 251-row series would silently return all 251
+        # with no error; this must refuse to answer instead of quietly
+        # computing a "252-day new high" over 251 days -- the exact gap
+        # confirmed against real HDFCBANK.NS data before this fix existed.
+        stock = _ohlcv(np.linspace(100.0, 150.0, 251))
+        benchmark = _ohlcv([100.0] * 251)
+
+        result = compute_rs_line_new_high(stock, benchmark, lookback_bars=252, recency_bars=5)
+
+        assert result == {"rs_line_new_high": None, "invalidated_reason": "INSUFFICIENT_HISTORY", "rs_line_value": None}
+
+    def test_exactly_at_the_lookback_boundary_computes_normally(self):
+        stock = _ohlcv(np.linspace(100.0, 150.0, 252))
+        benchmark = _ohlcv([100.0] * 252)
+
+        result = compute_rs_line_new_high(stock, benchmark, lookback_bars=252, recency_bars=5)
+
+        assert result["invalidated_reason"] is None
+        assert result["rs_line_new_high"] is True  # steadily outperforming, peak is the last bar
+
+    def test_one_bar_over_the_lookback_boundary_also_computes_normally(self):
+        stock = _ohlcv(np.linspace(100.0, 150.0, 253))
+        benchmark = _ohlcv([100.0] * 253)
+
+        result = compute_rs_line_new_high(stock, benchmark, lookback_bars=252, recency_bars=5)
+
+        assert result["invalidated_reason"] is None
+        assert result["rs_line_new_high"] is True
