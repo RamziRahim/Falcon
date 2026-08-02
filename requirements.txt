@@ -18,3 +18,7 @@ pytz
 # nothing imports them directly by name.
 pyarrow
 openpyxl
+
+# Phase 4.4 (docs/FALCON_V2_REDESIGN.md section 5): the logistic
+# regression fitting the consolidation-quality feature vector.
+statsmodels
