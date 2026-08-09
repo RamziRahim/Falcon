@@ -73,4 +73,32 @@ Do not start sizing real capital, reporting Phase 4 results as validated,
 or carrying calibrated weights into Phase 5 before this item is resolved
 or re-verified at Phase-4 scale.
 
+**✅ Re-verified clean at Phase-4 scale, 2026-08-09** (option (a) above,
+`tests/check_corruption_exposure_phase4.py`): re-ran both checks against
+the actual 265-row fitting-set population (78 distinct entry dates,
+tuning + validation splits combined) that `tests/backfill_rs_macd.py`
+read when computing `RS_Rating` -- not the narrower 459-row/101-date run
+#3 population the original check used.
+
+- Check 1 (own-ticker lookback exposure): 1 of 265 fitting-set rows
+  touches its own corrupted date (SHRIRAMFIN.NS, 2024-08-30) -- same
+  finding as the original 459-row check, same single ticker, now
+  confirmed at the correct scale.
+- Check 2 (cross-sectional RS percentile-rank exposure): 264 of 265 rows
+  checked, max |delta| = 2.0 percentile points, **zero rows at or above
+  the 3-point materiality bar** the original check used. 65/264 rows
+  show a nonzero shift, all ±1 or ±2 points -- immaterial for the same
+  reason the original check gave (`RS_Rating` enters `compute_score()`
+  linearly).
+
+**This clears the Phase-4-calibration-output blocking condition above.**
+Phase 4's fitted weights and thresholds (the spec-complete logistic
+regression and its derived EXECUTE/WATCHLIST cutoffs) may now be treated
+as validated with respect to this specific issue and carried into Gate 3.
+
+The underlying corruption itself is **still not fixed** -- this is a
+re-verification of a workaround's safety at a larger scale, not a root-
+cause fix, so per this document's own convention the item stays open
+below, not moved to Resolved.
+
 ---

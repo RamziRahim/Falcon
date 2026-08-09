@@ -75,12 +75,16 @@ split date is revisited deliberately and explicitly, not silently shifted.
 
 ## Known open data issues affecting Phase 4
 
-See `docs/known_data_issues.md` for the full, standing tracker. As of
-2026-07-30, one item there is a **blocking pre-check for trusting Phase
-4's calibration output specifically** (not for starting Phase 4's
-implementation work): a ~34-ticker price corruption issue, verified
-clean for run #3's 459 traded episodes but not yet re-verified at the
-full-universe/full-tuning-split scale Phase 4's feature-fitting will
-actually read. Do not treat Phase 4 fitted weights/thresholds as
-validated, or carry them into Phase 5, until that document's item #1 is
-resolved or re-verified at Phase-4 scale.
+See `docs/known_data_issues.md` for the full, standing tracker. A
+~34-ticker price corruption issue was flagged as a **blocking pre-check
+for trusting Phase 4's calibration output specifically** (not for
+starting Phase 4's implementation work) as of 2026-07-30, pending
+re-verification at the full-universe/full-tuning-split scale Phase 4's
+feature-fitting actually reads (run #3's 459-trade check alone wasn't
+sufficient). **Re-verified clean at that scale on 2026-08-09** (see that
+document's item #1) -- max cross-sectional RS-rank shift 2 percentile
+points, zero rows at or above the 3-point materiality bar, one own-ticker
+lookback touch (SHRIRAMFIN.NS, same finding as the original check). The
+blocking condition on Phase 4's fitted weights/thresholds is cleared;
+the underlying corruption itself remains open and unfixed, tracked as
+before.
