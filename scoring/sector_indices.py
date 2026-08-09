@@ -35,15 +35,27 @@ capital_market.index_data() hits a live www.nseindia.com API endpoint
 (not a static archive CSV like the equity-list functions) -- confirmed
 working after one transient DNS failure that resolved on retry.
 
-CONFIRMED REAL LIMITATION: index_data() does its own internal chunking
-for ranges over 365 days, but a request for 2024-01-01 to 2026-07-20
-(a live test, ~2.5 years) silently returned data only through
-2026-04-15 -- about 3 months short of what was asked, with no exception
-raised. Callers must check the actual returned Date range rather than
-assume the request was fully honored; get_sector_index_trend() below
-already degrades to CHOPPY on insufficient truncated history for exactly
-this reason, but anything computing recency (e.g. "as of today") off
-this data should verify coverage first.
+CONFIRMED REAL LIMITATION (superseding an earlier, looser diagnosis of
+this same symptom): index_data() silently caps EVERY single request --
+regardless of requested span -- at roughly 70 rows / ~100 calendar days
+measured from that request's own from_date, with no exception raised. A
+60-day request is unaffected (comes in under the cap), but 365-day and
+4-year requests for the same sector both truncated to the identical
+~100-day window starting at their shared from_date. This is NOT a
+>365-day threshold as first suspected -- live A/B testing (Technology
+sector, same day) showed a 180-day single request and a 4-year single
+request both stopped at the same ~70-row mark. Callers needing full
+multi-year coverage must chunk their own requests into windows of at
+most ~85 days (kept under the observed ~100-day cap for margin), fetch
+sequentially, and concatenate + de-duplicate by Date -- see
+tests/backfill_rs_macd.py's _fetch_sector_index_history_chunked() for a
+live-verified implementation (785 rows, ~3.17 years, zero gaps wider
+than a long weekend). Callers must check the actual returned Date range
+rather than assume any single request was fully honored;
+get_sector_index_trend() below already degrades to CHOPPY on
+insufficient truncated history for exactly this reason, but anything
+computing recency (e.g. "as of today") off this data should verify
+coverage first.
 ===============================================================================
 """
 from __future__ import annotations
