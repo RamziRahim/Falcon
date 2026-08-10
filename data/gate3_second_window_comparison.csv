@@ -1,0 +1,5 @@
+strategy,total_return_pct,max_drawdown_pct,cagr_pct,calmar,n_taken,n_missed_due_to_slots,slot_utilization_pct
+Hand-set FULL PRODUCTION (category==EXECUTE),-1.1,-0.16,-7.77,-48.56,3.0,0.0,100.0
+"Hand-set SCORE-ONLY (score>=65, no ceiling)",22.79,-1.05,38.95,37.1,15.0,0.0,100.0
+"Calibrated (Reading A, frozen p>=0.6527)",66.72,-2.23,122.07,54.74,41.0,33.0,55.4
+NIFTY buy-and-hold,10.8,-5.93,22.72,3.83,,,
