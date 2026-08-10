@@ -77,7 +77,7 @@ from scoring.sector_rotation import rank_sectors
 from scoring.sector_map import sector_map
 from scoring.sector_indices import get_sector_index_trend
 from scoring.sector_index_rs import compute_sector_index_rs
-from scoring.market_regime import count_distribution_days
+from scoring.market_regime import count_distribution_days, get_recalibrated_market_trend_state
 from decision_engine.candidate_assembler import assemble_candidate, assemble_sector_row, assemble_pattern_details
 from config import MIN_REWARD_RISK
 from decision_engine.leadership_decision_engine import categorize, get_market_regime_verdict
@@ -140,68 +140,15 @@ def _trend_state_of_truncated(df: pd.DataFrame) -> str:
     return market_structure_engine.analyze_structure(df, macro_pivots)["trend_state"]
 
 
-def _regime_trend_state_of_truncated(df: pd.DataFrame, vote_window: int = 3) -> str:
-    """
-    B-7: recalibrated market-level trend classification, used ONLY for
-    the regime signal (get_market_regime_verdict()'s nifty_trend_state
-    input) -- NOT for per-stock pattern-detection gating or sector-breadth
-    Pct_Uptrend (both still use _trend_state_of_truncated()'s original
-    rule; see that function's own docstring for why this is deliberately
-    scoped narrowly).
-
-    market_structure_engine.analyze_structure()'s original rule requires
-    the SINGLE most recently confirmed HIGH pivot AND the single most
-    recently confirmed LOW pivot to BOTH be higher than their own
-    predecessor to call UPTREND. A real, sustained recovery routinely
-    produces one "back-and-fill" pivot pair (a higher high followed by a
-    slightly lower low before continuing up) that flips this rule to
-    CHOPPY even though the broader structure is still trending -- verified
-    directly against run #1's tuning split (2024-07-22 -> 2025-09-21):
-    NIFTY's real 2025-03-04 trough-to-recovery leg read CHOPPY on 99 of
-    136 days (72.8%) under the original rule.
-
-    Recalibrated (tuning split only): DOWNTREND keeps the ORIGINAL strict
-    single-most-recent-pivot-pair rule -- a false negative on a real
-    downtrend is costlier than one on an uptrend, so this side is
-    deliberately not loosened. UPTREND uses a majority vote over the last
-    `vote_window` confirmed HIGH pivots and the last `vote_window`
-    confirmed LOW pivots independently (a strict majority of each must be
-    "higher" than their own predecessor), tolerating one back-and-fill
-    pivot without flipping the whole classification to CHOPPY. Anything
-    that clears neither test (including too few confirmed pivots to vote)
-    is CHOPPY, same fallback as before.
-
-    Verified on the tuning split: this asymmetric design took FAVORABLE
-    from 6 to 9 days (of 292) while leaving UNFAVORABLE UNCHANGED at 75 --
-    a symmetric majority-vote-on-both-sides variant also tried during
-    calibration raised FAVORABLE to 9 but ALSO raised UNFAVORABLE to 86
-    (worse), which is why DOWNTREND was deliberately left on the original
-    strict rule instead of also being loosened.
-    """
-    if len(df) < MIN_HISTORY_ROWS:
-        return "UNKNOWN"
-
-    macro_pivots = macro_swing_detector.detect_swings(df)
-    highs = [p for p in macro_pivots if p.type == "HIGH"]
-    lows = [p for p in macro_pivots if p.type == "LOW"]
-
-    if not highs or not lows:
-        return "CHOPPY"
-
-    if not highs[-1].is_higher and not lows[-1].is_higher:
-        return "DOWNTREND"
-
-    if len(highs) >= vote_window and len(lows) >= vote_window:
-        recent_highs = highs[-vote_window:]
-        recent_lows = lows[-vote_window:]
-        highs_higher = sum(1 for p in recent_highs if p.is_higher)
-        lows_higher = sum(1 for p in recent_lows if p.is_higher)
-        majority = vote_window // 2 + 1
-
-        if highs_higher >= majority and lows_higher >= majority:
-            return "UPTREND"
-
-    return "CHOPPY"
+# B-7's recalibrated trend classification now lives in
+# scoring/market_regime.py (get_recalibrated_market_trend_state()) so the
+# live scan path shares the exact same regime logic the v2 model was
+# trained on -- see that function's own docstring for the full
+# rationale and the FAVORABLE/UNFAVORABLE day-count verification. Kept
+# under this module's original name here (rather than updating every
+# call site) since it's already relied on by this module's own
+# replay_decision_as_of() and by tests/backtesting/test_replay_engine.py.
+_regime_trend_state_of_truncated = get_recalibrated_market_trend_state
 
 
 def build_scored_universe_as_of(

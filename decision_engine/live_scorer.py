@@ -61,7 +61,7 @@ from fundamental_analysis.institutional_engine import institutional_engine
 from fundamental_analysis.deal_activity import get_recent_institutional_activity
 
 from scoring.benchmark import get_benchmark_history
-from scoring.market_regime import get_market_trend_state, count_distribution_days
+from scoring.market_regime import get_recalibrated_market_trend_state, count_distribution_days
 from scoring.sector_rotation import rank_sectors
 
 from decision_engine.candidate_assembler import assemble_candidate, assemble_sector_row, assemble_pattern_details
@@ -164,27 +164,38 @@ def _fetch_live_fundamentals(ticker: str, session) -> dict:
 
 
 def _compute_live_market_verdict() -> str:
-    """NIFTY's own current Trend_State + distribution days, same
-    trend-based regime signal replay_engine.py uses for a historical
-    date -- here simply evaluated at "now" (no truncation needed, there's
-    no lookahead risk against live data). Fails closed to UNFAVORABLE
-    (not a crash, not a silently-optimistic default) when regime data
-    can't be resolved, same philosophy as replay_engine.py's own
-    missing-regime-data handling."""
+    """NIFTY's own current Trend_State + distribution days, using the
+    SAME recalibrated trend logic (scoring.market_regime.
+    get_recalibrated_market_trend_state(), B-7) that
+    backtesting/replay_engine.py uses for a historical date and that the
+    v2 consolidation-quality model was actually trained against
+    (market_regime_verdict is one of that model's own fitted categorical
+    features) -- here simply evaluated at "now" (no truncation needed,
+    there's no lookahead risk against live data). Previously called the
+    original, non-recalibrated get_market_trend_state() -- switched so
+    live scoring can't silently feed the model a regime signal computed
+    by different logic than the one it was calibrated against. Fails
+    closed to UNFAVORABLE (not a crash, not a silently-optimistic
+    default) when regime data can't be resolved, same philosophy as
+    replay_engine.py's own missing-regime-data handling.
+
+    get_recalibrated_market_trend_state() returns "UNKNOWN" (not
+    "CHOPPY") when there's too little history to classify -- unlike the
+    original get_market_trend_state(), which conflates a genuinely choppy
+    market with its own too-little-history default. Live
+    benchmark_history always has far more than the ~20-row minimum (it's
+    never truncated), so "UNKNOWN" isn't expected in practice, but it's
+    still checked explicitly (falling back to UNFAVORABLE) rather than
+    passed straight into get_market_regime_verdict(), which has no
+    UNKNOWN branch of its own -- same fail-closed handling
+    replay_engine.py's replay_decision_as_of() already applies for this
+    exact case."""
     try:
         benchmark_history = get_benchmark_history()
-        trend_state = get_market_trend_state(benchmark_history)
+        trend_state = get_recalibrated_market_trend_state(benchmark_history)
         distribution_days = count_distribution_days(benchmark_history)
 
-        # get_market_trend_state() returns "CHOPPY" both for a genuinely
-        # choppy market AND as its own honest-unknown default when there's
-        # too little history -- unlike replay_engine.py's truncated-history
-        # helper, it has no separate "UNKNOWN" sentinel to check. Live
-        # benchmark_history always has far more than the ~20-row minimum
-        # (it's never truncated), so that ambiguity doesn't bite in
-        # practice; distribution_days is the one piece that genuinely can
-        # come back None (missing Volume data), so that's what's checked.
-        if distribution_days is None:
+        if trend_state == "UNKNOWN" or distribution_days is None:
             return "UNFAVORABLE"
 
         return get_market_regime_verdict(trend_state, distribution_days)
