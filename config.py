@@ -110,6 +110,15 @@ LOW_RISK = 20
 MODERATE_RISK = 40
 HIGH_RISK = 60
 
+# Phase 4.6: which frozen v2 consolidation-quality model artifact
+# (models/consolidation_quality_{version}.json) live scoring and backtest
+# replay both load via scoring.consolidation_quality_model.load_model_artifact().
+# The one, explicit place that decides which model is active -- promoting
+# a refit means changing this constant in a reviewed, committed change,
+# never automatic pickup of "the newest artifact file in the directory".
+ACTIVE_MODEL_VERSION = "v1"
+MODEL_ARTIFACT_DIR = "models"
+
 # Round-trip transaction cost (brokerage + STT + slippage, entry+exit combined)
 # as a fraction of trade value -- backtesting/episode_builder.py subtracts this
 # from every episode's gross return to get net_return_pct. 0.3% is a
