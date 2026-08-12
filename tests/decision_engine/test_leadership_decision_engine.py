@@ -4,14 +4,28 @@ deliberately small per spec, five tests that actually matter:
 
 1. Pattern selection takes the single best-weighted confirmed pattern,
    never sums multiple simultaneously-confirmed patterns.
-2. The market/sector cascade caps an otherwise score-EXECUTE candidate
-   when the broader market regime is UNFAVORABLE.
+2. (Phase 4.6) market_regime_verdict measurably suppresses an otherwise
+   EXECUTE-eligible candidate's calibrated probability -- the replacement
+   for the OLD hand-set market/sector hard ceiling (get_ceiling(), removed
+   -- see TestMarketRegimeCascadeCap's own docstring) that used to cap
+   EXECUTE outright whenever the regime was UNFAVORABLE.
 3. The days_to_earnings independent cap limits an otherwise score-EXECUTE
    candidate to ALERT_WATCHLIST.
 4. LOW_DELIVERY_CONVICTION fires on low delivery % even when a breakout
    pattern is otherwise confirmed.
 5. promoter_trend=None is skip-if-absent: no score effect, no
    PROMOTER_STAKE_DECLINING flag.
+
+Several fixtures below now pass an explicit model_artifact= stub
+(_always_execute_artifact() / _regime_sensitive_artifact()) rather than
+depending on config.ACTIVE_MODEL_VERSION's real fitted model: these
+fixtures predate Phase 4.6 and never populate the v2 consolidation
+features/RS_Rating/macd_signal the real model actually needs, so without
+a stub they'd fail closed to ALERT_WATCHLIST regardless of what's under
+test -- the stub isolates the mechanism being tested (RR floor, earnings
+cap, regime suppression) from the real model's own behavior, which has
+its own separate, real-data-backed test coverage
+(tests/scoring/test_consolidation_quality_model.py's round-trip test).
 """
 from __future__ import annotations
 
@@ -64,6 +78,41 @@ def _sector_row(**overrides) -> dict:
     return base
 
 
+def _always_execute_artifact() -> dict:
+    """Phase 4.6: a minimal stub model artifact for tests that need a
+    pattern-confirmed, score>=40 candidate to reliably reach EXECUTE so
+    some OTHER downstream mechanism (RR floor, provenance) can be tested
+    in isolation -- no numeric/boolean features required (so pre-Phase-4.6
+    fixtures like _candidate(), which never populate the v2 feature
+    fields, don't fail closed for missing inputs), one large positive
+    intercept so sigmoid(z) is comfortably above any reasonable cutoff
+    regardless of candidate content."""
+    return {
+        "numeric_features": [], "categorical_features": [], "boolean_features": [],
+        "categorical_baselines": {}, "scaler_mean": {}, "scaler_std": {},
+        "coefficients": {"const": 10.0}, "execute_cutoff": 0.5,
+    }
+
+
+def _regime_sensitive_artifact() -> dict:
+    """Phase 4.6: a minimal stub model artifact for testing that
+    market_regime_verdict measurably suppresses the predicted probability
+    -- the replacement for the old hard get_ceiling() cap. CAUTION
+    (baseline, no dummy fires) and FAVORABLE (no coefficient in this
+    minimal stub, same as baseline) both land comfortably above the
+    cutoff; UNFAVORABLE's own coefficient pulls it clearly below. A
+    directional/comparative stub, not the real fitted coefficients (which
+    could change on refit) -- proves the MECHANISM (regime is a soft,
+    learned input that CAN suppress EXECUTE), not a specific number."""
+    return {
+        "numeric_features": [], "categorical_features": ["market_regime_verdict"], "boolean_features": [],
+        "categorical_baselines": {"market_regime_verdict": "CAUTION"},
+        "scaler_mean": {}, "scaler_std": {},
+        "coefficients": {"const": 2.0, "market_regime_verdict_UNFAVORABLE": -3.0},
+        "execute_cutoff": 0.5,
+    }
+
+
 class TestPatternSelectionNoDoubleCounting:
 
     def test_two_simultaneously_confirmed_patterns_score_only_the_best_one(self):
@@ -84,11 +133,22 @@ class TestPatternSelectionNoDoubleCounting:
 
 
 class TestMarketRegimeCascadeCap:
+    """Phase 4.6: the hand-set market/sector hard ceiling (get_ceiling(),
+    UNFAVORABLE always caps EXECUTE regardless of score) is REMOVED --
+    market_regime_verdict is now a soft, continuously-weighted, LEARNED
+    input to the calibrated model's own predicted probability instead.
+    These tests use a small stub artifact (_regime_sensitive_artifact())
+    rather than the real fitted model (whose exact coefficients could
+    change on refit) to prove the MECHANISM survives: an UNFAVORABLE
+    verdict measurably suppresses the outcome relative to an identical
+    candidate in a favorable-or-neutral regime, via the model's own
+    coefficient -- not via a hardcoded threshold on market_verdict
+    itself."""
 
-    def test_unfavorable_market_caps_an_otherwise_execute_score(self):
-        # Comfortably >=65 on points alone: VCP breakout (+30), active FVG
-        # (+15), liquidity sweep (+15), full RS_Rating (+20), strong
-        # institutional sponsorship (+10) = 90.
+    def _execute_eligible_candidate(self):
+        # Pattern-confirmed and score>=40 -- clears both hard pre-model
+        # gates (AVOID floor, MONITOR no-pattern gate) so the calibrated
+        # model actually gets evaluated.
         candidate = _candidate(
             is_vcp_breakout=True, has_active_fvg=True, has_liquidity_sweep=True,
             RS_Rating=100.0, institutional_sponsorship_pct=25.0,
@@ -96,12 +156,50 @@ class TestMarketRegimeCascadeCap:
         sector_row = _sector_row(Avg_RS_Rating=70.0, Pct_Uptrend=70.0)  # STRONG sector
 
         score = compute_score(candidate, sector_row)
-        assert score >= 65.0  # sanity: would be EXECUTE on points alone
+        assert score >= 40.0  # sanity: clears the hard AVOID floor
 
-        result = categorize(candidate, sector_row, market_verdict="UNFAVORABLE")
+        return candidate, sector_row
+
+    def test_unfavorable_regime_suppresses_an_otherwise_execute_candidate(self):
+        candidate, sector_row = self._execute_eligible_candidate()
+
+        result = categorize(
+            candidate, sector_row, market_verdict="UNFAVORABLE",
+            model_artifact=_regime_sensitive_artifact(),
+        )
 
         assert result["category"] == "ALERT_WATCHLIST"
         assert result["market_regime_verdict"] == "UNFAVORABLE"
+
+    def test_caution_regime_does_not_suppress_the_identical_candidate(self):
+        # Same candidate, same stub artifact -- only market_verdict
+        # differs. Proves the suppression above is genuinely regime-driven
+        # (the coefficient firing), not some other property of the
+        # candidate or the stub.
+        candidate, sector_row = self._execute_eligible_candidate()
+
+        result = categorize(
+            candidate, sector_row, market_verdict="CAUTION",
+            model_artifact=_regime_sensitive_artifact(),
+        )
+
+        assert result["category"] == "EXECUTE"
+
+    def test_model_unable_to_score_fails_closed_to_alert_watchlist_not_execute(self):
+        # No model_artifact override -- the real config.ACTIVE_MODEL_VERSION
+        # artifact is used, and this fixture (like all of _candidate()'s
+        # pre-Phase-4.6 fields) never populates the v2 consolidation
+        # features/RS_Rating-as-model-input/macd_signal-as-model-input the
+        # real model actually needs. Confirms the missing-input path fails
+        # closed to ALERT_WATCHLIST, never a silent EXECUTE, exactly as
+        # _predict_candidate_consolidation_quality()'s own docstring
+        # promises -- same fail-closed convention this codebase already
+        # uses for missing regime/fundamentals data everywhere else.
+        candidate, sector_row = self._execute_eligible_candidate()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "ALERT_WATCHLIST"
 
 
 class TestEarningsProximityIndependentCap:
@@ -114,7 +212,14 @@ class TestEarningsProximityIndependentCap:
         )
         sector_row = _sector_row(Avg_RS_Rating=70.0, Pct_Uptrend=70.0)
 
-        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+        # Phase 4.6: _always_execute_artifact() so this candidate WOULD
+        # reach EXECUTE via the calibrated model absent the earnings cap
+        # -- proving the cap is what downgrades it, not that the fixture
+        # never reached EXECUTE in the first place for an unrelated reason.
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE",
+            model_artifact=_always_execute_artifact(),
+        )
 
         assert result["caps_applied"] == ["EARNINGS_PROXIMITY"]
         assert result["category"] == "ALERT_WATCHLIST"
@@ -368,7 +473,15 @@ class TestStructuralExitsAndRRFloor:
         score = compute_score(candidate, sector_row)
         assert score >= 65, "fixture must be EXECUTE-grade by score for this test to mean anything"
 
-        result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
+        # Phase 4.6: EXECUTE is now decided by the calibrated model, not
+        # score>=65 -- _always_execute_artifact() lets this pre-Phase-4.6
+        # fixture (no v2 feature fields populated) reliably reach EXECUTE
+        # so the RR-floor DOWNGRADE mechanism itself is what's actually
+        # under test here, in isolation.
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details,
+            model_artifact=_always_execute_artifact(),
+        )
 
         assert result["category"] == "ALERT_WATCHLIST"
         assert "RR_BELOW_FLOOR" in result["caps_applied"]
@@ -381,7 +494,10 @@ class TestStructuralExitsAndRRFloor:
         # clears the 1.25 floor.
         pattern_details = {"is_vcp_breakout": {"pivot_level": 100.0, "proximal_low": 75.0, "structural_low": 70.0}}
 
-        result = categorize(candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details)
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE", pattern_details=pattern_details,
+            model_artifact=_always_execute_artifact(),
+        )
 
         assert result["category"] == "EXECUTE"
         assert "RR_BELOW_FLOOR" not in result["caps_applied"]
@@ -395,6 +511,7 @@ class TestStructuralExitsAndRRFloor:
         result = categorize(
             candidate, sector_row, market_verdict="FAVORABLE",
             pattern_details=pattern_details, min_reward_risk=2.5,
+            model_artifact=_always_execute_artifact(),
         )
 
         assert result["category"] == "ALERT_WATCHLIST"

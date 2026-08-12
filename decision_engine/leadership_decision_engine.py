@@ -109,6 +109,7 @@ from config import (
     STOP_BUFFER_ATR_MULTIPLE,
     TARGET_MIN_ATR_MULTIPLE,
 )
+from scoring.consolidation_quality_model import load_model_artifact, predict_consolidation_quality
 
 # MONITOR (B-8, Gate 1 decision #4): a candidate that scored ALERT_WATCHLIST-
 # or-better (>=40) but had NO confirmed pattern at all -- ranked below
@@ -313,15 +314,81 @@ LIQUIDITY_SWEEP_SCORE_BONUS = 6
 FVG_SCORE_BONUS = 6
 
 
-def get_ceiling(market_verdict: str, sector_verdict: str) -> str:
-    if market_verdict == "UNFAVORABLE":
-        return "ALERT_WATCHLIST"  # never EXECUTE in a genuinely bad market,
-                                    # no matter how good the stock looks
-    if market_verdict == "CAUTION":
-        # Even in a shaky market, the strongest names in the strongest
-        # groups can still work -- but only those. Everything else caps.
-        return "EXECUTE" if sector_verdict == "STRONG" else "ALERT_WATCHLIST"
-    return "EXECUTE"  # FAVORABLE market -- no market-imposed ceiling
+# Phase 4.6: the hand-set market/sector hard ceiling this function used
+# to implement (UNFAVORABLE always caps, CAUTION caps unless sector
+# STRONG, FAVORABLE never caps) is REMOVED, not reparameterized --
+# replaced by the calibrated v2 consolidation-quality model's own
+# probability output, in which market_regime_verdict/sector_health_verdict
+# are soft, continuously-weighted, LEARNED inputs (see
+# models/consolidation_quality_v1.json's own coefficients) rather than a
+# hard rule. Gate 3 (two independent, non-overlapping validation windows)
+# showed the calibrated probability outperforms this hard ceiling +
+# score>=65 combination; see _predict_candidate_consolidation_quality()
+# below for what replaced it. Confirmed unused elsewhere in the codebase
+# before deletion -- backtesting/backtest_runner.py's ceiling-attribution
+# diagnostics and tests/choke_point_decomposition.py's own comments
+# describe this function's OLD behavior for analyzing historical (run #2/
+# #3) backtest data generated under it, not live calls into it.
+
+
+_MODEL_ARTIFACT_CACHE: dict[str, dict] = {}
+
+
+def _get_default_model_artifact() -> dict:
+    """Lazily loads and caches config.ACTIVE_MODEL_VERSION's artifact --
+    loaded once per process, not once per candidate (categorize() can be
+    called thousands of times in a single backtest run). Lazy (not
+    module-level at import time) so a test can construct a categorize()
+    call with an explicit model_artifact= override without ever touching
+    the real file on disk."""
+    from config import ACTIVE_MODEL_VERSION
+
+    if ACTIVE_MODEL_VERSION not in _MODEL_ARTIFACT_CACHE:
+        _MODEL_ARTIFACT_CACHE[ACTIVE_MODEL_VERSION] = load_model_artifact(ACTIVE_MODEL_VERSION)
+
+    return _MODEL_ARTIFACT_CACHE[ACTIVE_MODEL_VERSION]
+
+
+def _predict_candidate_consolidation_quality(
+    candidate: dict, market_verdict: str, sector_verdict: str, pattern_used: str, artifact: dict,
+) -> float | None:
+    """Assembles the calibrated model's feature vector from `candidate`
+    (already carrying the 9 v2 consolidation-quality features + RS_Rating +
+    macd_signal via decision_engine.candidate_assembler.assemble_candidate(),
+    Phase 4.6) plus the regime/sector/pattern context categorize() already
+    has in scope, and returns the predicted win probability.
+
+    Returns None (not a crash, not a fabricated probability) when a
+    required numeric feature or rs_line_new_high is missing -- e.g.
+    consolidation_valid=False (INSUFFICIENT_PIVOTS: not enough confirmed
+    macro pivots yet to locate a base) or rs_line_invalidated_reason set
+    (INSUFFICIENT_HISTORY/NO_BENCHMARK_HISTORY). The caller treats None as
+    "the model genuinely can't score this candidate" and fails closed to
+    ALERT_WATCHLIST, the same conservative default this codebase already
+    uses everywhere else a required input can't be resolved (missing
+    regime data -> UNFAVORABLE, missing fundamentals -> "no signal") --
+    never a silent EXECUTE.
+    """
+    feature_values = {}
+
+    for feature in artifact["numeric_features"]:
+        value = candidate.get(feature)
+        if value is None:
+            return None
+        feature_values[feature] = value
+
+    for feature in artifact["boolean_features"]:
+        value = candidate.get(feature)
+        if value is None:
+            return None
+        feature_values[feature] = value
+
+    feature_values["market_regime_verdict"] = market_verdict
+    feature_values["sector_health_verdict"] = sector_verdict
+    feature_values["pattern_used"] = pattern_used
+    feature_values["macd_signal"] = candidate.get("macd_signal") or "NEUTRAL"
+
+    return predict_consolidation_quality(feature_values, artifact)
 
 
 def get_best_pattern_points(candidate: dict) -> tuple[int, str | None]:
@@ -649,12 +716,30 @@ def categorize(
     disable_fundamental_signals: bool = False,
     enable_microstructure_signals: bool = False,
     min_reward_risk: float = MIN_REWARD_RISK,
+    model_artifact: dict | None = None,
 ) -> dict:
     """Full Leadership-strategy decision: disqualifiers first (AVOID
-    immediately, regardless of market/sector/score), then the cascade
-    ceiling from market + sector verdicts, then the 0-100 score -- the
-    final category is always the lower of the score-based result and
-    that ceiling, never the score alone.
+    immediately, regardless of market/sector/score), then the 0-100 score
+    floors AVOID (score<40) and MONITOR (no confirmed pattern, B-8) same
+    as before -- but for a pattern-confirmed candidate that clears the
+    score floor, EXECUTE-vs-ALERT_WATCHLIST is now decided by the
+    calibrated v2 consolidation-quality model's predicted win probability
+    (Phase 4.6), not a hand-set score>=65 cutoff clamped by a market/
+    sector hard ceiling. market_regime_verdict/sector_health_verdict are
+    now soft, continuously-weighted, LEARNED inputs to that probability
+    (see the model's own fitted coefficients) instead of a rule that
+    either fully blocks or fully permits EXECUTE. Gate 3 (two independent,
+    non-overlapping validation windows) showed this outperforms the old
+    score+ceiling combination; see _predict_candidate_consolidation_quality()'s
+    own docstring for exactly what replaced get_ceiling().
+
+    model_artifact : optional override, defaults to
+        config.ACTIVE_MODEL_VERSION's artifact (loaded once per process
+        and cached, not once per candidate). Tests pass a small stub/
+        fixture artifact directly rather than depending on the real file
+        on disk -- same pattern as min_reward_risk/enable_microstructure_signals
+        below, a single overridable parameter for experiments/tests
+        without touching call sites.
 
     disable_fundamental_signals=True is for backtesting/replay_engine.py:
     it genuinely skips the ROCE/D_E disqualifiers, the EARNINGS_PROXIMITY
@@ -713,12 +798,9 @@ def categorize(
             }
 
     sector_verdict = get_sector_health_verdict(sector_row)
-    ceiling = get_ceiling(market_verdict, sector_verdict)
 
     independent_caps = [] if disable_fundamental_signals else INDEPENDENT_CAPS
     caps_applied = [name for check, name in independent_caps if check(candidate)]
-    if caps_applied:
-        ceiling = min(ceiling, "ALERT_WATCHLIST", key=lambda c: CATEGORY_RANK[c])
 
     score = compute_score(
         candidate, sector_row,
@@ -729,24 +811,40 @@ def categorize(
     best_points, best_field = get_best_pattern_points(candidate)
 
     if score < 40:
-        score_based_category = "AVOID"
-    elif score >= 65:
-        score_based_category = "EXECUTE"
+        # Unchanged: the calibrated model was only ever fit on real
+        # EXECUTE/ALERT_WATCHLIST episodes (score>=40, pattern-confirmed)
+        # -- it has no trained behavior for genuinely weak setups, so this
+        # floor stays a hard, pre-model rule, same as before.
+        final_category = "AVOID"
+    elif best_field is None:
+        # B-8 (2.6c, Gate 1 decision #4) unchanged: pattern presence
+        # required for ALERT_WATCHLIST and above -- the model's own
+        # pattern_used feature is only ever populated for a pattern-
+        # confirmed candidate too (never fit on a no-pattern row), so this
+        # gate stays a hard pre-filter, not something the calibrated
+        # probability could ever rescue.
+        final_category = "MONITOR"
     else:
-        score_based_category = "ALERT_WATCHLIST"
+        artifact = model_artifact if model_artifact is not None else _get_default_model_artifact()
+        predicted_p = _predict_candidate_consolidation_quality(
+            candidate, market_verdict, sector_verdict, best_field, artifact,
+        )
+        if predicted_p is None:
+            # The model genuinely can't score this candidate (missing v2
+            # feature inputs -- insufficient own-ticker or benchmark
+            # history) -- fails closed to ALERT_WATCHLIST, never a silent
+            # EXECUTE. See _predict_candidate_consolidation_quality()'s
+            # own docstring.
+            final_category = "ALERT_WATCHLIST"
+        else:
+            final_category = "EXECUTE" if predicted_p >= artifact["execute_cutoff"] else "ALERT_WATCHLIST"
 
-    # B-8 (2.6c, Gate 1 decision #4): pattern presence required for
-    # ALERT_WATCHLIST and above -- a candidate that scored well enough on
-    # everything else (RS, sector, fundamentals, microstructure) but never
-    # had a single confirmed breakout pattern is demoted to MONITOR
-    # instead. Applied here, before the ceiling min() below, so MONITOR's
-    # rank (below ALERT_WATCHLIST, see CATEGORY_RANK) means no market/
-    # sector ceiling can lift it back up regardless of how favorable
-    # conditions are -- the gate is the pattern, not the regime.
-    if score_based_category in ("ALERT_WATCHLIST", "EXECUTE") and best_field is None:
-        score_based_category = "MONITOR"
-
-    final_category = min(score_based_category, ceiling, key=lambda c: CATEGORY_RANK[c])
+    # independent_caps (e.g. EARNINGS_PROXIMITY) unchanged: still hard-caps
+    # at ALERT_WATCHLIST regardless of how the tier above was reached --
+    # only ever downgrades EXECUTE, since AVOID/MONITOR/ALERT_WATCHLIST
+    # already rank at or below ALERT_WATCHLIST (CATEGORY_RANK).
+    if caps_applied:
+        final_category = min(final_category, "ALERT_WATCHLIST", key=lambda c: CATEGORY_RANK[c])
 
     best_result = pattern_details.get(best_field) if best_field else None
 
