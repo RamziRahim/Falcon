@@ -1,0 +1,91 @@
+{
+  "version": "v1",
+  "generated_date": "2026-08-10",
+  "source": {
+    "episode_log": "data/run3_episodes_with_v2_features.csv",
+    "tuning_split_end": "2025-09-21",
+    "n_tuning_rows": 169,
+    "tuning_date_range": [
+      "2024-07-25",
+      "2025-09-16"
+    ]
+  },
+  "numeric_features": [
+    "prior_trend_pct_gain",
+    "prior_trend_slope",
+    "base_depth_pct",
+    "base_length_bars",
+    "contraction_slope",
+    "volume_dryup_ratio",
+    "volume_down_up_ratio",
+    "pivot_proximity",
+    "breakout_volume_ratio",
+    "dist_52w_high",
+    "RS_Rating"
+  ],
+  "categorical_features": [
+    "market_regime_verdict",
+    "sector_health_verdict",
+    "pattern_used",
+    "macd_signal"
+  ],
+  "categorical_baselines": {
+    "market_regime_verdict": "CAUTION",
+    "sector_health_verdict": "NEUTRAL",
+    "pattern_used": "is_ascending_triangle_breakout",
+    "macd_signal": "NEUTRAL"
+  },
+  "boolean_features": [
+    "rs_line_new_high"
+  ],
+  "scaler_mean": {
+    "prior_trend_pct_gain": 15.838579881656806,
+    "prior_trend_slope": 2.2305366863905323,
+    "base_depth_pct": 14.989881656804734,
+    "base_length_bars": 17.31360946745562,
+    "contraction_slope": -6.218343195266272e-05,
+    "volume_dryup_ratio": 1.4933846153846153,
+    "volume_down_up_ratio": 0.6447692307692309,
+    "pivot_proximity": 2.020887573964497,
+    "breakout_volume_ratio": 3.926514792899409,
+    "dist_52w_high": 8.863668639053255,
+    "RS_Rating": 68.24260355029585
+  },
+  "scaler_std": {
+    "prior_trend_pct_gain": 7.753914018007197,
+    "prior_trend_slope": 2.099458459411884,
+    "base_depth_pct": 6.270335437189196,
+    "base_length_bars": 7.686297151087877,
+    "contraction_slope": 0.0002874714836756565,
+    "volume_dryup_ratio": 1.2498571326639722,
+    "volume_down_up_ratio": 0.2842938308309217,
+    "pivot_proximity": 2.0327175485863256,
+    "breakout_volume_ratio": 4.67059666260023,
+    "dist_52w_high": 10.438683157741435,
+    "RS_Rating": 23.73635431776432
+  },
+  "coefficients": {
+    "const": 0.15036983347331193,
+    "prior_trend_pct_gain": -0.09135109569868226,
+    "prior_trend_slope": -0.46727005614545114,
+    "base_depth_pct": 1.3456588767154563,
+    "base_length_bars": -0.00884532617149842,
+    "contraction_slope": -0.17012664523228518,
+    "volume_dryup_ratio": 0.32840906881978094,
+    "volume_down_up_ratio": 0.007178821335668274,
+    "pivot_proximity": 0.017977269858891195,
+    "breakout_volume_ratio": 0.6100129894967535,
+    "dist_52w_high": -0.4836345963328484,
+    "RS_Rating": -0.5159743369565901,
+    "rs_line_new_high": 0.28827923471523476,
+    "market_regime_verdict_FAVORABLE": -0.12703847383123346,
+    "market_regime_verdict_UNFAVORABLE": -1.2730320605231997,
+    "sector_health_verdict_STRONG": -2.7670694751624123,
+    "sector_health_verdict_WEAK": 0.732952622670879,
+    "pattern_used_is_flat_base_breakout": -1.036117866281734,
+    "pattern_used_is_vcp_breakout": -0.669187028447166,
+    "macd_signal_BULLISH_ALIGNMENT": 1.025917184737877
+  },
+  "execute_cutoff": 0.6526920989878143,
+  "mcfadden_pseudo_r2": 0.233715
+}
