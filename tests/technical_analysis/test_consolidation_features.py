@@ -331,6 +331,17 @@ class TestComputeConsolidationFeatures:
         assert result["dist_52w_high"] is None
         assert result["dist_52w_high_invalidated_reason"] is None
 
+    def test_genuinely_empty_dataframe_fails_closed_not_crash(self):
+        # decision_engine/candidate_assembler.py (Phase 4.6) can hand this
+        # function a bare pd.DataFrame() with no Date column at all when
+        # no pattern history is available -- df.sort_values("Date") would
+        # raise KeyError on that, not fail closed like every other branch.
+        result = compute_consolidation_features(pd.DataFrame(), macro_pivots=[])
+
+        assert result["valid"] is False
+        assert result["invalidated_reason"] == "INSUFFICIENT_PIVOTS"
+        assert result["base_depth_pct"] is None
+
 
 class TestComputeRsLineNewHigh:
 

@@ -229,7 +229,25 @@ def compute_consolidation_features(df: pd.DataFrame, macro_pivots: list[SwingPoi
     "invalidated_reason") when no base can be located yet -- same
     fail-explicit convention every existing detector already follows,
     never a silently wrong feature vector.
+
+    A genuinely empty `df` (or one missing a Date column entirely --
+    decision_engine/candidate_assembler.py can hand this function an
+    empty pd.DataFrame() when no pattern history is available at all)
+    can't be sorted by "Date" -- checked explicitly before that call
+    rather than letting it raise, since "no rows at all" is just a more
+    extreme case of "not enough pivots yet," not a different failure
+    mode.
     """
+    if df.empty or "Date" not in df.columns:
+        return {
+            "valid": False, "invalidated_reason": "INSUFFICIENT_PIVOTS",
+            "prior_trend_pct_gain": None, "prior_trend_slope": None, "prior_trend_bars": None,
+            "base_depth_pct": None, "base_length_bars": None, "contraction_slope": None,
+            "volume_dryup_ratio": None, "volume_down_up_ratio": None,
+            "pivot_proximity": None, "breakout_volume_ratio": None,
+            "dist_52w_high": None, "dist_52w_high_invalidated_reason": None,
+        }
+
     ordered = df.sort_values("Date").reset_index(drop=True)
     as_of_index = len(ordered) - 1
 

@@ -225,7 +225,7 @@ def _load_pattern_history(ticker: str) -> pd.DataFrame | None:
 
 def _decide_for_ticker(
     ticker: str, sector: str | None, rel_vol, rs_rating, sector_index_trend,
-    sector_ranking: pd.DataFrame, market_verdict: str, session,
+    sector_ranking: pd.DataFrame, market_verdict: str, session, benchmark_history: pd.DataFrame,
 ) -> dict:
     """Assembles and categorizes a single live candidate -- mirrors
     backtesting/replay_engine.py's replay_decision_as_of() step-by-step,
@@ -252,7 +252,7 @@ def _decide_for_ticker(
 
     candidate = assemble_candidate(
         pattern_row, fundamentals=fundamentals, scoring_row=scoring_row, symbol=ticker,
-        pattern_history_df=history,
+        pattern_history_df=history, benchmark_history=benchmark_history,
     )
     pattern_details = assemble_pattern_details(pattern_row)
 
@@ -292,6 +292,19 @@ def score_live_candidates(records_df: pd.DataFrame) -> pd.DataFrame:
         market_verdict = _compute_live_market_verdict()
         sector_ranking = rank_sectors(records_df) if "Sector" in records_df.columns else pd.DataFrame()
 
+        # Phase 4.6: fetched once per scan batch (same "fetch once, reuse
+        # per-candidate" pattern already used for market_verdict/
+        # sector_ranking above), not once per ticker -- needed by
+        # assemble_candidate()'s rs_line_new_high feature. tz_localize(None)
+        # matches every other get_benchmark_history() caller in this
+        # codebase (its raw Date column is tz-aware) -- compute_rs_line_new_high()'s
+        # own internal merge on "Date" against a tz-naive stock history
+        # otherwise raises, not silently misbehaves.
+        benchmark_history = get_benchmark_history()
+        benchmark_history["Date"] = pd.to_datetime(
+            benchmark_history["Date"] if "Date" in benchmark_history.columns else benchmark_history.index
+        ).dt.tz_localize(None)
+
         decision_rows = []
 
         for _, row in records_df.iterrows():
@@ -305,6 +318,7 @@ def score_live_candidates(records_df: pd.DataFrame) -> pd.DataFrame:
                 sector_ranking=sector_ranking,
                 market_verdict=market_verdict,
                 session=session,
+                benchmark_history=benchmark_history,
             )
             decision["Symbol"] = ticker
             decision_rows.append(decision)

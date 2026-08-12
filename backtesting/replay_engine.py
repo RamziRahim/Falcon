@@ -380,8 +380,13 @@ def replay_decision_as_of(
     # 1 -- passed through so MACD signal detection sees the same
     # trailing Close/MACD_Hist bars a live scan would, not just today's
     # single flattened row.
+    # truncated_benchmark (not the full benchmark_history) -- Phase 4.6's
+    # rs_line_new_high needs the SAME point-in-time discipline as every
+    # other truncated input here (see module docstring's own "no code
+    # path may read any row dated after as_of_date").
     candidate = assemble_candidate(
         pattern_row, fundamentals={}, scoring_row=scoring_row, symbol=ticker, pattern_history_df=enriched,
+        benchmark_history=truncated_benchmark,
     )
     pattern_details = assemble_pattern_details(pattern_row)
 

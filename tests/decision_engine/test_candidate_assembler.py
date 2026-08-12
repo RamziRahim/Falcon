@@ -18,6 +18,7 @@ import pytest
 
 from decision_engine.candidate_assembler import (
     _parse_formatted_percentage,
+    assemble_candidate,
     assemble_pattern_details,
     assemble_sector_row,
 )
@@ -92,3 +93,66 @@ class TestAssemblePatternDetails:
             "pivot_level": None, "structural_low": None, "proximal_low": None,
             "bars_since_breakout": None, "breakout_within_last_k_bars": False,
         }
+
+
+class TestAssembleCandidateV2Features:
+    """Phase 4.6: assemble_candidate() now also computes the v2
+    consolidation-quality model's 9 own-history features + rs_line_new_high
+    (technical_analysis/consolidation_features.py, already independently
+    tested by tests/technical_analysis/test_consolidation_features.py's
+    own 34 tests) -- these tests check the WIRING (assemble_candidate()
+    threads pattern_history_df/benchmark_history through correctly and
+    the fail-closed degradation paths survive the round trip), not the
+    underlying feature math itself."""
+
+    def _short_history(self, n_rows=5):
+        dates = pd.date_range("2024-01-01", periods=n_rows)
+        return pd.DataFrame({
+            "Date": dates, "Open": 100.0, "High": 102.0, "Low": 98.0,
+            "Close": 100.0, "Volume": 1000.0, "ATR_14": 2.0,
+        })
+
+    def test_no_benchmark_history_degrades_to_no_benchmark_reason(self):
+        candidate = assemble_candidate(
+            pattern_row={}, fundamentals={}, scoring_row={}, symbol="TEST.NS",
+            pattern_history_df=self._short_history(), benchmark_history=None,
+        )
+
+        assert candidate["rs_line_new_high"] is None
+        assert candidate["rs_line_invalidated_reason"] == "NO_BENCHMARK_HISTORY"
+
+    def test_empty_benchmark_history_degrades_the_same_way(self):
+        empty_benchmark = pd.DataFrame(columns=["Date", "Close"])
+
+        candidate = assemble_candidate(
+            pattern_row={}, fundamentals={}, scoring_row={}, symbol="TEST.NS",
+            pattern_history_df=self._short_history(), benchmark_history=empty_benchmark,
+        )
+
+        assert candidate["rs_line_new_high"] is None
+        assert candidate["rs_line_invalidated_reason"] == "NO_BENCHMARK_HISTORY"
+
+    def test_insufficient_history_fails_closed_not_crash(self):
+        # Fewer rows than MIN_HISTORY_FOR_MACRO_PIVOTS -- no macro pivots
+        # can be found, so compute_consolidation_features() itself should
+        # report INSUFFICIENT_PIVOTS, not raise or silently fabricate a
+        # feature vector.
+        candidate = assemble_candidate(
+            pattern_row={}, fundamentals={}, scoring_row={}, symbol="TEST.NS",
+            pattern_history_df=self._short_history(n_rows=3), benchmark_history=None,
+        )
+
+        assert candidate["consolidation_valid"] is False
+        assert candidate["consolidation_invalidated_reason"] == "INSUFFICIENT_PIVOTS"
+        assert candidate["base_depth_pct"] is None
+
+    def test_no_pattern_history_at_all_fails_closed_not_crash(self):
+        candidate = assemble_candidate(
+            pattern_row={}, fundamentals={}, scoring_row={}, symbol="TEST.NS",
+            pattern_history_df=None, benchmark_history=None,
+        )
+
+        assert candidate["consolidation_valid"] is False
+        assert candidate["consolidation_invalidated_reason"] == "INSUFFICIENT_PIVOTS"
+        assert candidate["rs_line_new_high"] is None
+        assert candidate["rs_line_invalidated_reason"] == "NO_BENCHMARK_HISTORY"

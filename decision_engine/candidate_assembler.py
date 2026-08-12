@@ -48,9 +48,17 @@ from __future__ import annotations
 
 import pandas as pd
 
+from technical_analysis.consolidation_features import compute_consolidation_features, compute_rs_line_new_high
+from technical_analysis.pattern_engine import macro_swing_detector
 from technical_analysis.pattern_system.macd_signal import get_macd_signal
 from technical_analysis.liquidity_sweep import detect_liquidity_sweep
 from technical_analysis.fair_value_gap import detect_fvg
+
+# Same floor consolidation_features.py's own callers use (Phase 4.3's
+# backfill_v2_features.py, tests/run_extended_window_replay.py) --
+# _find_base_boundaries() needs a real macro-pivot history, not a couple
+# of bars.
+MIN_HISTORY_FOR_MACRO_PIVOTS = 10
 
 # Naming mismatch documented in leadership_decision_engine.py's own
 # docstring: pattern_engine.py persists PascalCase Is_X_Breakout columns;
@@ -147,6 +155,7 @@ def assemble_candidate(
     scoring_row: dict,
     symbol: str | None = None,
     pattern_history_df=None,
+    benchmark_history=None,
 ) -> dict:
     """Builds the exact `candidate` dict leadership_decision_engine.py's
     docstring documents -- copying that field list here rather than
@@ -155,14 +164,29 @@ def assemble_candidate(
     pattern_history_df : optional multi-row OHLCV+indicator DataFrame
         (the trailing history, not a single flattened row like
         pattern_row) -- needed by get_macd_signal() (reads MACD_Hist/Close
-        across several bars) and by detect_liquidity_sweep()/detect_fvg()
-        (both need a trailing window, not a single point-in-time value).
-        Omitted (None) degrades gracefully for all three: get_macd_signal()
+        across several bars), detect_liquidity_sweep()/detect_fvg() (both
+        need a trailing window, not a single point-in-time value), and
+        (Phase 4.6) compute_consolidation_features()/compute_rs_line_new_high()
+        for the v2 consolidation-quality model's own 9 features. Omitted
+        (None) degrades gracefully for all of these: get_macd_signal()
         already treats a dataframe with no MACD_Hist column as "no signal
-        available," and detect_liquidity_sweep()/detect_fvg() both treat
-        insufficient history as "nothing detected," not a crash -- so
-        passing an empty DataFrame produces the same graceful result
-        without a separate code path here.
+        available," detect_liquidity_sweep()/detect_fvg() both treat
+        insufficient history as "nothing detected," and
+        compute_consolidation_features() itself returns valid=False with
+        an explicit invalidated_reason rather than a crash -- so passing
+        an empty DataFrame produces the same graceful, fail-explicit
+        result without a separate code path here.
+
+    benchmark_history : optional NIFTY 50 OHLCV history (Phase 4.6) --
+        needed by compute_rs_line_new_high() (RS line = stock Close /
+        benchmark Close). Callers pass their own already-truncated
+        (backtest) or current (live) benchmark series; identical function
+        call either way, no separate logic path. Omitted (None) degrades
+        to rs_line_new_high=None with invalidated_reason="NO_BENCHMARK_HISTORY"
+        rather than a crash -- categorize()'s calibrated-model call
+        already has to handle a candidate missing v2 features (falls
+        back to the pre-model score-based path), so this is one more
+        instance of that same handled case, not a new failure mode.
 
     liquidity_sweep_direction/fvg_direction/fvg_filled_pct are always
     computed and included on `candidate` regardless of whether the
@@ -193,6 +217,19 @@ def assemble_candidate(
     # empty-history branch needed here.
     fvg_result = detect_fvg(history, as_of_index=len(history) - 1)
 
+    # Phase 4.6: the v2 consolidation-quality model's own 9 own-history
+    # features + rs_line_new_high. Same functions, same fail-explicit
+    # convention, whether called from a live scan (history/benchmark_history
+    # are already "as of now") or a backtest replay (both already
+    # truncated by the caller) -- no separate logic path for either side.
+    macro_pivots = macro_swing_detector.detect_swings(history) if len(history) >= MIN_HISTORY_FOR_MACRO_PIVOTS else []
+    consolidation = compute_consolidation_features(history, macro_pivots)
+
+    if benchmark_history is not None and not benchmark_history.empty:
+        rs_line = compute_rs_line_new_high(history, benchmark_history)
+    else:
+        rs_line = {"rs_line_new_high": None, "invalidated_reason": "NO_BENCHMARK_HISTORY", "rs_line_value": None}
+
     candidate = {
         "symbol": symbol,
         **{lower: pattern_row.get(pascal, False) for lower, pascal in PATTERN_COLUMN_MAP.items()},
@@ -222,6 +259,24 @@ def assemble_candidate(
         "liquidity_sweep_direction": sweep_result["direction"],
         "fvg_direction": fvg_result["direction"],
         "fvg_filled_pct": fvg_result["gap_filled_pct"],
+        # Phase 4.6: v2 consolidation-quality model inputs.
+        "consolidation_valid": consolidation["valid"],
+        "consolidation_invalidated_reason": consolidation["invalidated_reason"],
+        "prior_trend_pct_gain": consolidation["prior_trend_pct_gain"],
+        "prior_trend_slope": consolidation["prior_trend_slope"],
+        "prior_trend_bars": consolidation["prior_trend_bars"],
+        "base_depth_pct": consolidation["base_depth_pct"],
+        "base_length_bars": consolidation["base_length_bars"],
+        "contraction_slope": consolidation["contraction_slope"],
+        "volume_dryup_ratio": consolidation["volume_dryup_ratio"],
+        "volume_down_up_ratio": consolidation["volume_down_up_ratio"],
+        "pivot_proximity": consolidation["pivot_proximity"],
+        "breakout_volume_ratio": consolidation["breakout_volume_ratio"],
+        "dist_52w_high": consolidation["dist_52w_high"],
+        "dist_52w_high_invalidated_reason": consolidation["dist_52w_high_invalidated_reason"],
+        "rs_line_new_high": rs_line["rs_line_new_high"],
+        "rs_line_invalidated_reason": rs_line["invalidated_reason"],
+        "rs_line_value": rs_line["rs_line_value"],
     }
     return candidate
 
