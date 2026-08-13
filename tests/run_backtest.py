@@ -17,7 +17,7 @@ from backtesting.detector_funnel import print_detector_funnel
 from scoring.benchmark import get_benchmark_history
 from scoring.market_regime import get_vix_history
 from scoring.sector_map import sector_map
-from scoring.sector_indices import get_sector_index_history
+from tests.backfill_rs_macd import _fetch_sector_index_history_chunked
 
 ENABLE_MICROSTRUCTURE_SIGNALS = False
 
@@ -109,14 +109,20 @@ print(f"  VIX rows: {len(vix_history) if vix_history is not None else 0}")
 # ── 3b. Load real sector index histories -- one fetch per distinct sector
 # actually present in the universe (sector cache is warm from step 1b, so
 # these lookups don't hit the network), reusing the same 4-year buffer as
-# the VIX fetch above. ─────────────────────────────────────────────────────
-print("\nLoading sector index histories...")
+# the VIX fetch above. CHUNKED (not a single big request): confirmed live
+# during the Phase 4 RS_Rating/MACD backfill that get_sector_index_history()
+# silently truncates EVERY request, regardless of requested span, to
+# ~100 calendar days from its own from_date (see scoring/sector_indices.py's
+# corrected module docstring) -- a single 4-year request here would badly
+# truncate RS_Rating's sector-index input for most of this replay's own
+# window, which the new categorize() now depends on directly (RS_Rating is
+# one of the frozen model's own fitted features, not just a compute_score()
+# input as before Phase 4.6). ─────────────────────────────────────────────
+print("\nLoading sector index histories (chunked)...")
 distinct_sectors = {sector_map.get_sector(ticker) for ticker in universe_histories}
 sector_index_histories = {}
 for sector in distinct_sectors:
-    history = get_sector_index_history(
-        sector, from_date=start.strftime("%d-%m-%Y"), to_date=end.strftime("%d-%m-%Y"),
-    )
+    history = _fetch_sector_index_history_chunked(sector, start, end)
     if history is not None:
         sector_index_histories[sector] = history
 print(f"  Sector indices resolved: {len(sector_index_histories)}/{len(distinct_sectors)} "
@@ -148,8 +154,13 @@ trades = run_backtest(
 )
 
 # ── 6. Save raw results ────────────────────────────────────────────────────────
+# Phase 4.6: this script now runs through the NEW production categorize()
+# (calibrated model, no hard regime/sector ceiling) -- output path changed
+# from run #3's own filename so this run's results land in a new file
+# rather than silently overwriting run #3's historical data. Run #3 stays
+# on disk as historical context; this becomes the new canonical baseline.
 output_path = (
-    "data/backtest_results_run3_wide_universe.csv" if UNIVERSE_MODE == "wide" else "data/backtest_results.csv"
+    "data/backtest_results_run4_calibrated_model.csv" if UNIVERSE_MODE == "wide" else "data/backtest_results.csv"
 )
 trades.to_csv(output_path, index=False)
 print(f"\nRaw trade log saved → {output_path}  ({len(trades)} trades)")
