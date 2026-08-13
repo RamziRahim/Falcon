@@ -102,3 +102,35 @@ cause fix, so per this document's own convention the item stays open
 below, not moved to Resolved.
 
 ---
+
+## 2. Full test suite runtime (~3h47m) not explained by Phase 4.6 (open)
+
+**Found**: 2026-08-09, running the full suite after Phase 4.6 (replacing
+`get_ceiling()` with the calibrated model) -- `511 passed, 5 deselected`
+took 3:47:31, long enough to be worth checking whether the new v2-feature
+computation (now called from `candidate_assembler.assemble_candidate()`
+on every candidate, live and backtest) was the driver.
+
+**Checked, hypothesis rejected**: timed 4 representative integration
+test files (`test_replay_engine.py`, `test_live_scorer.py`,
+`test_candidate_assembler.py`, `test_leadership_decision_engine.py` --
+the ones most likely to exercise the new per-candidate v2-feature path
+against real data) on the commit immediately before Phase 4.6
+(`0269597`, via an isolated `git worktree`, not a stash/checkout of the
+main tree) versus HEAD (`b42092f`). Result: HEAD is FASTER (6.85s vs.
+39.31s) with more tests passing (67 vs. 61, the new tests Phase 4.6
+added). The v2-feature computation is not the driver of the long
+full-suite runtime -- if anything these specific files got faster.
+
+**Status: open, not investigated further** (time-boxed check, per
+explicit instruction). The 3h47m full-suite time most likely comes from
+a small number of pre-existing, real-network-dependent integration tests
+elsewhere in the suite (this project tests against real data/live APIs
+by design in several places, e.g. sector index / VIX / corporate-actions
+fetches) -- not yet identified which specific test(s). Worth a targeted
+per-file timing pass later if the full-suite runtime becomes a real
+workflow bottleneck (e.g. blocking CI), with an eye toward fixture-level
+caching for whichever real-network calls turn out to dominate -- not
+urgent now, not blocking anything.
+
+---
