@@ -131,12 +131,12 @@ print(f"  Sector indices resolved: {len(sector_index_histories)}/{len(distinct_s
 # ── 4. Define the 2-year test window ──────────────────────────────────────────
 end_date   = pd.Timestamp(date.today())
 start_date = pd.Timestamp(date.today() - timedelta(days=365 * 2))
-print(f"\nTest window: {start_date.date()} → {end_date.date()}")
+print(f"\nTest window: {start_date.date()} -> {end_date.date()}")
 print(f"Universe:    {len(universe_histories)} tickers")
 print(f"Sampling:    every 5 trading days")
 print(f"Microstructure signals (liquidity sweep + FVG): {'ON' if ENABLE_MICROSTRUCTURE_SIGNALS else 'off'}")
-print("\nStarting backtest — progress + a computed time-remaining estimate "
-      "will be logged every 10 sampled dates. Go make chai. ☕")
+print("\nStarting backtest -- progress + a computed time-remaining estimate "
+      "will be logged every 10 sampled dates.")
 
 # ── 5. Run ─────────────────────────────────────────────────────────────────────
 funnel_counts: dict = {}
@@ -163,7 +163,7 @@ output_path = (
     "data/backtest_results_run4_calibrated_model.csv" if UNIVERSE_MODE == "wide" else "data/backtest_results.csv"
 )
 trades.to_csv(output_path, index=False)
-print(f"\nRaw trade log saved → {output_path}  ({len(trades)} trades)")
+print(f"\nRaw trade log saved -> {output_path}  ({len(trades)} trades)")
 
 # ── 6b. Detector funnel diagnostics (A-4) ──────────────────────────────────────
 print_detector_funnel(funnel_counts)
