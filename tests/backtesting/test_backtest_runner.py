@@ -649,3 +649,114 @@ class TestProvenanceAndRewardRiskPersisted:
             "STRUCTURAL", "STRUCTURAL_CLAMPED_TO_ATR_FLOOR", "STRUCTURAL_CLAMPED_TO_ATR_CEILING",
         }
         assert row["reward_risk"] is not None
+
+
+class TestCheckpointingAndResume:
+    """Added after a multi-hour wide-universe run was killed outright by
+    an environment restart with zero recovery (run_backtest() previously
+    held everything in memory, only ever writing a result on a clean
+    return). Confirms: (1) a resumed run's COMBINED output is byte-for-byte
+    identical to an uninterrupted run's -- no duplicated or dropped
+    rows at the resume boundary -- and (2) the checkpoint files
+    (CSV + meta.json) are actually written with the fields resume depends
+    on. real_random_walk price data (not a stub outcome) so
+    measure_forward_outcome()'s exit resolution is exercised identically
+    in both the full and split runs, not just categorize()'s own inputs."""
+
+    def _setup(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+
+        monkeypatch.setattr(
+            replay_engine, "categorize", _fake_real_trade_categorize_factory("EXECUTE", 90.0),
+        )
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+
+        history = _random_walk_df(seed=7, n=80)
+        universe_histories = {"TEST.NS": history}
+        benchmark_history = _random_walk_df(seed=101, n=80)
+        # 10 sampled dates (sample_every_n_days=1) well clear of the
+        # history's own start, same margin every other test in this file
+        # uses.
+        start_date = history["Date"].iloc[-10]
+        end_date = history["Date"].iloc[-1]
+        return universe_histories, benchmark_history, start_date, end_date
+
+    def test_resumed_run_matches_uninterrupted_run_exactly(self, monkeypatch, tmp_path):
+        universe_histories, benchmark_history, start_date, end_date = self._setup(monkeypatch)
+
+        baseline = run_backtest(
+            universe_histories=universe_histories, benchmark_history=benchmark_history,
+            vix_history=None, start_date=start_date, end_date=end_date, sample_every_n_days=1,
+        )
+        assert len(baseline) >= 8, "fixture didn't produce enough sampled dates to test a resume boundary"
+
+        # Simulate "the run got killed partway through": a first pass over
+        # only the FIRST HALF of the same date range -- _sampled_dates_for_ticker
+        # anchors off start_date, so this is a genuine prefix of baseline's
+        # own sampled-date list, not a different grid.
+        midpoint_date = pd.Timestamp(
+            start_date.value + (end_date.value - start_date.value) // 2
+        )
+        partial = run_backtest(
+            universe_histories=universe_histories, benchmark_history=benchmark_history,
+            vix_history=None, start_date=start_date, end_date=midpoint_date, sample_every_n_days=1,
+        )
+        n_partial_dates = partial["entry_date"].nunique()
+        assert 0 < n_partial_dates < baseline["entry_date"].nunique(), (
+            "fixture's midpoint didn't produce a genuine partial prefix -- adjust the split"
+        )
+
+        # Resume: full start/end (the ORIGINAL window, not the partial
+        # run's own truncated one -- exactly what the real recovery path
+        # requires), skipping every date already covered by `partial`.
+        resumed = run_backtest(
+            universe_histories=universe_histories, benchmark_history=benchmark_history,
+            vix_history=None, start_date=start_date, end_date=end_date, sample_every_n_days=1,
+            resume_trade_records=partial.to_dict("records"),
+            resume_from_date_index=n_partial_dates,
+        )
+
+        sort_cols = ["ticker", "entry_date", "category"]
+        baseline_sorted = baseline.sort_values(sort_cols).reset_index(drop=True)
+        resumed_sorted = resumed.sort_values(sort_cols).reset_index(drop=True)
+
+        assert len(resumed_sorted) == len(baseline_sorted), (
+            f"resumed run produced {len(resumed_sorted)} rows, uninterrupted run produced "
+            f"{len(baseline_sorted)} -- a duplicated or dropped date at the resume boundary"
+        )
+        pd.testing.assert_frame_equal(baseline_sorted, resumed_sorted, check_like=False)
+
+    def test_checkpoint_files_are_written_with_expected_fields(self, monkeypatch, tmp_path):
+        universe_histories, benchmark_history, start_date, end_date = self._setup(monkeypatch)
+        checkpoint_path = str(tmp_path / "checkpoint.csv")
+
+        trades = run_backtest(
+            universe_histories=universe_histories, benchmark_history=benchmark_history,
+            vix_history=None, start_date=start_date, end_date=end_date, sample_every_n_days=1,
+            checkpoint_path=checkpoint_path, checkpoint_every_n_dates=3,
+        )
+
+        import json
+        import os
+
+        assert os.path.exists(checkpoint_path), "checkpoint CSV was never written"
+        assert os.path.exists(f"{checkpoint_path}.meta.json"), "checkpoint meta.json was never written"
+
+        checkpoint_df = pd.read_csv(checkpoint_path)
+        # The FINAL checkpoint write (forced at the last date regardless of
+        # the checkpoint_every_n_dates cadence) must carry every row --
+        # otherwise a resume from the last checkpoint would silently lose
+        # whatever dates fell after the last periodic write.
+        assert len(checkpoint_df) == len(trades)
+
+        with open(f"{checkpoint_path}.meta.json", encoding="utf-8") as fh:
+            meta = json.load(fh)
+
+        # A sampled date legitimately produces zero trade rows sometimes
+        # (e.g. NO_DATA) -- trades["entry_date"].nunique() can't be used
+        # as ground truth for total sampled dates, only meta["total_dates"]
+        # (written from run_backtest()'s own internal count) can.
+        assert meta["last_completed_date_index"] == meta["total_dates"] - 1
+        assert meta["total_dates"] >= trades["entry_date"].nunique()
+        assert meta["start_date"] == str(start_date.date())
+        assert meta["end_date"] == str(end_date.date())

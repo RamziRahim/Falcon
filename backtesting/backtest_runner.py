@@ -28,6 +28,7 @@ and scoring.market_regime.get_vix_history() for the backtest's date range.
 """
 from __future__ import annotations
 
+import json
 import random
 import time
 from collections import defaultdict
@@ -124,6 +125,10 @@ def run_backtest(
     funnel_counts: dict | None = None,
     avoid_sample_rate: float = 1.0,
     avoid_sample_seed: int = 42,
+    checkpoint_path: str | None = None,
+    checkpoint_every_n_dates: int = 20,
+    resume_trade_records: list | None = None,
+    resume_from_date_index: int = 0,
 ) -> pd.DataFrame:
     """
     Returns one row per signal generated (Part C's schema) across every
@@ -175,6 +180,31 @@ def run_backtest(
         categorize() -- see that function's own docstring for what it
         actually does. Defaults to False (identical behavior to every
         prior backtest run).
+
+    checkpoint_path / checkpoint_every_n_dates (added after a multi-hour
+    wide-universe run was killed outright by an environment restart with
+    zero recovery -- this function previously held everything in memory
+    and only ever wrote a result on a clean return): every
+    checkpoint_every_n_dates sampled dates (same cadence as the existing
+    progress log above), and once more after the final date, trade_records
+    accumulated SO FAR is written to checkpoint_path as a plain CSV
+    (full overwrite each time, not an append -- avoids any risk of a
+    duplicate-row checkpoint from a partial/interrupted write), plus a
+    small `<checkpoint_path>.meta.json` sidecar recording
+    last_completed_date_index/last_completed_date/start_date/end_date/
+    total_dates. checkpoint_path=None (default) reproduces every prior
+    caller's exact behavior -- no new file, no new I/O.
+
+    resume_trade_records / resume_from_date_index: the other half of the
+    same recovery -- a caller that has a prior checkpoint passes its
+    already-completed rows (prepended to this run's own trade_records) and
+    the date_index to resume from (every date before it is skipped
+    entirely, not re-computed) rather than starting over from date 0.
+    start_date/end_date must be the SAME values the checkpointed run used
+    (the checkpoint's own meta.json records them for exactly this reason)
+    -- passing today's freshly-recomputed "start_date = today - N days"
+    on a later calendar day would silently shift the whole sampling grid
+    and misalign the resume point.
     """
     ticker_sample_dates = {
         ticker: _sampled_dates_for_ticker(history, start_date, end_date, sample_every_n_days)
@@ -186,11 +216,24 @@ def run_backtest(
         for as_of_date in dates:
             dates_to_tickers[as_of_date].append(ticker)
 
-    trade_records = []
+    trade_records = list(resume_trade_records) if resume_trade_records else []
     sorted_dates = sorted(dates_to_tickers.keys())
     total_dates = len(sorted_dates)
     run_started_at = time.monotonic()
     avoid_rng = random.Random(avoid_sample_seed)
+
+    def _write_checkpoint(completed_index: int, completed_date: pd.Timestamp) -> None:
+        if checkpoint_path is None:
+            return
+        pd.DataFrame(trade_records).to_csv(checkpoint_path, index=False)
+        with open(f"{checkpoint_path}.meta.json", "w", encoding="utf-8") as fh:
+            json.dump({
+                "last_completed_date_index": completed_index,
+                "last_completed_date": str(completed_date.date()),
+                "start_date": str(start_date.date()),
+                "end_date": str(end_date.date()),
+                "total_dates": total_dates,
+            }, fh, indent=2)
 
     for date_index, as_of_date in enumerate(sorted_dates):
 
@@ -205,6 +248,12 @@ def run_backtest(
                 "Progress: %d/%d sampled dates (%.1fs elapsed, ~%.1fs remaining)",
                 date_index, total_dates, elapsed, remaining,
             )
+
+        if date_index < resume_from_date_index:
+            # Already covered by a prior checkpoint (resume_trade_records
+            # already carries this date's rows) -- skip the real work, not
+            # just the logging, so a resume is actually fast.
+            continue
 
         universe_scoring = build_scored_universe_as_of(
             as_of_date, universe_histories, benchmark_history, sector_index_histories,
@@ -369,6 +418,11 @@ def run_backtest(
                     None if decision["category"] == "MONITOR" else policy_sector_aware_caution(decision)
                 ),
             })
+
+        if checkpoint_path is not None and (
+            (date_index + 1) % checkpoint_every_n_dates == 0 or date_index == total_dates - 1
+        ):
+            _write_checkpoint(date_index, as_of_date)
 
     return pd.DataFrame(trade_records)
 

@@ -128,9 +128,41 @@ for sector in distinct_sectors:
 print(f"  Sector indices resolved: {len(sector_index_histories)}/{len(distinct_sectors)} "
       f"({sorted(distinct_sectors - sector_index_histories.keys())} unmapped or fetch failed)")
 
-# ── 4. Define the 2-year test window ──────────────────────────────────────────
-end_date   = pd.Timestamp(date.today())
-start_date = pd.Timestamp(date.today() - timedelta(days=365 * 2))
+# ── 4. Define the 2-year test window, or resume a prior checkpoint ─────────────
+# A prior run of this exact script was killed outright by an environment
+# restart with zero recovery (~10.5 hours of a ~444-sampled-date replay
+# lost, no partial save existed). run_backtest() now checkpoints itself
+# periodically -- if a checkpoint from an interrupted run of THIS script
+# exists, resume it rather than silently restarting from date 0. The
+# checkpoint's own meta.json records the ORIGINAL run's start_date/end_date
+# -- reused as-is, not recomputed from today's date, which would silently
+# shift the whole sampling grid on a later calendar day and misalign the
+# resume point.
+CHECKPOINT_PATH = (
+    "data/backtest_results_run4_calibrated_model_checkpoint.csv" if UNIVERSE_MODE == "wide"
+    else "data/backtest_results_checkpoint.csv"
+)
+CHECKPOINT_META_PATH = f"{CHECKPOINT_PATH}.meta.json"
+
+import json
+import os
+
+if os.path.exists(CHECKPOINT_META_PATH):
+    with open(CHECKPOINT_META_PATH, encoding="utf-8") as fh:
+        checkpoint_meta = json.load(fh)
+    start_date = pd.Timestamp(checkpoint_meta["start_date"])
+    end_date = pd.Timestamp(checkpoint_meta["end_date"])
+    resume_trade_records = pd.read_csv(CHECKPOINT_PATH).to_dict("records")
+    resume_from_date_index = checkpoint_meta["last_completed_date_index"] + 1
+    print(f"\nResuming from checkpoint: {len(resume_trade_records)} rows already recorded, "
+          f"date_index {resume_from_date_index}/{checkpoint_meta['total_dates']} "
+          f"(original window {start_date.date()} -> {end_date.date()}, reused as-is)")
+else:
+    end_date = pd.Timestamp(date.today())
+    start_date = pd.Timestamp(date.today() - timedelta(days=365 * 2))
+    resume_trade_records = None
+    resume_from_date_index = 0
+
 print(f"\nTest window: {start_date.date()} -> {end_date.date()}")
 print(f"Universe:    {len(universe_histories)} tickers")
 print(f"Sampling:    every 5 trading days")
@@ -151,6 +183,10 @@ trades = run_backtest(
     enable_microstructure_signals=ENABLE_MICROSTRUCTURE_SIGNALS,
     funnel_counts=funnel_counts,
     avoid_sample_rate=AVOID_SAMPLE_RATE,
+    checkpoint_path=CHECKPOINT_PATH,
+    checkpoint_every_n_dates=20,
+    resume_trade_records=resume_trade_records,
+    resume_from_date_index=resume_from_date_index,
 )
 
 # ── 6. Save raw results ────────────────────────────────────────────────────────
