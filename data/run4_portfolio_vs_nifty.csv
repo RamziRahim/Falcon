@@ -1,0 +1,4 @@
+strategy,total_return_pct,max_drawdown_pct,cagr_pct,calmar,n_taken,n_missed_due_to_slots,slot_utilization_pct
+"Falcon run #4 (EXECUTE-only, new production categorize())",82.74,-2.1,36.54,17.4,59.0,5.0,92.2
+"Falcon run #4 (MONITOR@0.5, reapplied literally)",11.08,-6.55,5.64,0.86,111.0,60.0,64.9
+NIFTY buy-and-hold,-1.14,-15.77,-0.59,-0.04,,,
