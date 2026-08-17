@@ -130,7 +130,7 @@ larger scale, not a resolution.
 
 ---
 
-## 2. Full test suite runtime (~3h47m) not explained by Phase 4.6 (open)
+## 2. Full test suite runtime (~3h47m) not explained by Phase 4.6 (downgraded: not reproducing)
 
 **Found**: 2026-08-09, running the full suite after Phase 4.6 (replacing
 `get_ceiling()` with the calibrated model) -- `511 passed, 5 deselected`
@@ -159,5 +159,16 @@ per-file timing pass later if the full-suite runtime becomes a real
 workflow bottleneck (e.g. blocking CI), with an eye toward fixture-level
 caching for whichever real-network calls turn out to dominate -- not
 urgent now, not blocking anything.
+
+**Downgraded, 2026-08-17**: a subsequent full-suite run (after the
+predicted_p/model_version fix, `ec41e0a`) completed in **32.12s** --
+519 passed, 5 deselected, same population plus 8 new tests. Not a fix
+(no root cause was ever identified, so this can't honestly move to
+"Resolved" per this document's own convention), but strong circumstantial
+support for the standing hypothesis: whatever caused the 3h47m run was
+a one-off (most likely a slow/flaky real network call that specific day),
+not a structural cost of anything in this codebase's normal test path.
+Leaving this open rather than closed, since "it didn't reproduce once"
+isn't the same as "it can't happen again" -- revisit if it recurs.
 
 ---
