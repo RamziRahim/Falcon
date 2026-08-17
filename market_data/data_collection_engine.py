@@ -46,6 +46,7 @@ Future Enhancements
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Callable, Optional
 
 from common.logger import get_logger
 
@@ -87,6 +88,7 @@ class DataCollectionEngine:
     def run(
         self,
         symbols: list[str],
+        on_download_progress: Optional[Callable[[int, int, str], None]] = None,
     ) -> DataCollectionResult:
         """
         Execute data collection pipeline.
@@ -94,6 +96,8 @@ class DataCollectionEngine:
         Parameters
         ----------
         symbols : list[str]
+        on_download_progress : optional callback, forwarded straight to
+            downloader.download() -- see that function's own docstring.
 
         Returns
         -------
@@ -131,7 +135,7 @@ class DataCollectionEngine:
         sync.retained
         )
 
-        datasets = downloader.download(working_symbols)
+        datasets = downloader.download(working_symbols, on_progress=on_download_progress)
 
         result.downloaded = len(datasets)
 

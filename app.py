@@ -92,6 +92,14 @@ is_new_scan_triggered = render_header()
 if is_new_scan_triggered:
     with st.spinner("Invoking Falcon Engine Pipeline Chain..."):
         # ─── RUN CANDIDATE GENERATION ENGINE ────────────────────────────────
+        # progress_placeholder created here (not just inside the pipeline
+        # call below) so "Fetching candidates..." is a real stage message
+        # too, not a silent gap before the pipeline's own stage messages
+        # start -- candidate generation happens upstream of ticker_universe
+        # even existing, so run_new_scan_pipeline() itself can't emit it.
+        progress_placeholder = st.empty()
+        progress_placeholder.info("Fetching candidates from Screener...")
+
         from candidate_generation.candidate_generator import generate_candidates
         master_candidates_df = generate_candidates()
 
@@ -103,7 +111,6 @@ if is_new_scan_triggered:
             ]
 
             # ─── PHASE 3-5: MARKET DATA -> INDICATORS -> PATTERNS -> CANDIDATE TABLE ─
-            progress_placeholder = st.empty()
             scan_result = run_new_scan_pipeline(ticker_universe, on_stage=progress_placeholder.info)
             progress_placeholder.empty()
 

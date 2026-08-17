@@ -79,9 +79,20 @@ class TestEngineCallOrder:
         universe = ["A.NS", "B.NS", "C.NS"]
         svc.run_new_scan_pipeline(universe)
 
-        mocked_pipeline["dce_cls"].return_value.run.assert_called_once_with(symbols=universe)
+        # DataCollectionEngine.run() also receives on_download_progress now
+        # (the live per-ticker progress callback) -- checked separately
+        # below, so only the symbols kwarg is asserted here rather than
+        # the full call signature.
+        dce_kwargs = mocked_pipeline["dce_cls"].return_value.run.call_args.kwargs
+        assert dce_kwargs["symbols"] == universe
         mocked_pipeline["ie_cls"].return_value.run.assert_called_once_with(symbols=universe)
         mocked_pipeline["build"].assert_called_once_with(universe)
+
+    def test_data_collection_receives_a_download_progress_callback(self, mocked_pipeline):
+        svc.run_new_scan_pipeline(["DEMO.NS"])
+
+        dce_kwargs = mocked_pipeline["dce_cls"].return_value.run.call_args.kwargs
+        assert callable(dce_kwargs["on_download_progress"])
 
     def test_stage_callback_fires_for_each_stage_in_order(self, mocked_pipeline):
         stages_seen = []
@@ -95,6 +106,65 @@ class TestEngineCallOrder:
     def test_on_stage_is_optional(self, mocked_pipeline):
         """Must not crash when no progress callback is supplied."""
         svc.run_new_scan_pipeline(["DEMO.NS"], on_stage=None)
+
+
+class TestDownloadProgressNotifier:
+    """_make_download_progress_notifier() -- real per-ticker progress
+    messages with a remaining-time estimate computed from THIS run's own
+    observed pace (time.monotonic()-based), not a hardcoded guess, per
+    the same fix already applied to backtesting/backtest_runner.py's own
+    progress estimate."""
+
+    def test_message_includes_completed_and_total_counts(self):
+        messages = []
+        notifier = svc._make_download_progress_notifier(messages.append, total=50)
+
+        notifier(1, 50, "AETHER.NS")
+
+        assert "1/50" in messages[0]
+
+    def test_eta_shrinks_as_more_tickers_complete_at_a_steady_pace(self, monkeypatch):
+        # Simulated steady 2s/ticker pace via a fake monotonic clock --
+        # deterministic, no real sleeping needed.
+        fake_time = {"now": 0.0}
+        monkeypatch.setattr(svc.time, "monotonic", lambda: fake_time["now"])
+
+        messages = []
+        notifier = svc._make_download_progress_notifier(messages.append, total=10)
+
+        fake_time["now"] = 2.0
+        notifier(1, 10, "A.NS")  # 2s elapsed / 1 done -> 9 remaining * 2s/ea = ~18s left
+
+        fake_time["now"] = 18.0
+        notifier(9, 10, "I.NS")  # 18s elapsed / 9 done -> 1 remaining * 2s/ea = ~2s left
+
+        assert "18s" in messages[0] or "~18s" in messages[0]
+        assert "2s" in messages[1] or "~2s" in messages[1]
+
+    def test_final_ticker_reports_done_not_a_zero_second_eta(self, monkeypatch):
+        fake_time = {"now": 0.0}
+        monkeypatch.setattr(svc.time, "monotonic", lambda: fake_time["now"])
+
+        messages = []
+        notifier = svc._make_download_progress_notifier(messages.append, total=3)
+
+        fake_time["now"] = 6.0
+        notifier(3, 3, "C.NS")
+
+        assert "done" in messages[0].lower()
+
+    def test_eta_over_a_minute_reported_in_minutes(self, monkeypatch):
+        fake_time = {"now": 0.0}
+        monkeypatch.setattr(svc.time, "monotonic", lambda: fake_time["now"])
+
+        messages = []
+        notifier = svc._make_download_progress_notifier(messages.append, total=100)
+
+        fake_time["now"] = 10.0
+        notifier(1, 100, "A.NS")  # 10s/ticker * 99 remaining = 990s = 16.5m
+
+        assert "m" in messages[0]
+        assert "s remaining" not in messages[0]
 
 
 class TestResultComposition:

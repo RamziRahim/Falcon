@@ -22,6 +22,7 @@ than calling st.empty()/st.info() here directly.
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Callable, Optional
 
@@ -35,6 +36,33 @@ from scoring.scoring_engine import scoring_engine
 from decision_engine.live_scorer import score_live_candidates
 
 StageCallback = Callable[[str], None]
+
+
+def _format_eta(seconds: float) -> str:
+    if seconds < 60:
+        return f"~{seconds:.0f}s"
+    return f"~{seconds / 60:.1f}m"
+
+
+def _make_download_progress_notifier(notify: StageCallback, total: int) -> Callable[[int, int, str], None]:
+    """Remaining-time estimate computed from THIS run's own observed pace
+    (time.monotonic()-based elapsed / completed * remaining), same fix
+    already applied to backtesting/backtest_runner.py's own progress
+    estimate -- a hardcoded per-ticker guess would repeat that estimate's
+    original mistake (wrong by ~9-10x), since real NSE fetch latency
+    varies with cache hit rate and network conditions, not a constant.
+    Recomputed on every call (not just once), so the estimate tightens as
+    the scan progresses instead of staying frozen at a first guess."""
+    started_at = time.monotonic()
+
+    def _on_progress(completed: int, total_count: int, symbol: str) -> None:
+        elapsed = time.monotonic() - started_at
+        per_ticker = elapsed / completed
+        remaining = per_ticker * (total_count - completed)
+        eta_suffix = "done" if completed >= total_count else f"{_format_eta(remaining)} remaining"
+        notify(f"Downloading market data ({completed}/{total_count} tickers, {eta_suffix})...")
+
+    return _on_progress
 
 
 @dataclass(slots=True)
@@ -60,14 +88,24 @@ def run_new_scan_pipeline(
     Always runs all three stages for the full universe on every call --
     DataCollectionEngine is already incremental (cheap for tickers seen
     before), so this doesn't re-download unchanged history.
+
+    on_stage is called repeatedly as real stage transitions actually
+    happen (not a fixed animation): once per download-stage ticker
+    completion (with a live remaining-time estimate, see
+    _make_download_progress_notifier), then once each for the
+    indicators/patterns/scoring stage transitions. Callers wanting a
+    "Fetching candidates from Screener..." stage message should emit that
+    themselves before calling this function -- candidate generation
+    itself happens upstream of ticker_universe even existing.
     """
 
     def _notify(message: str) -> None:
         if on_stage is not None:
             on_stage(message)
 
-    _notify(f"Downloading market data for {len(ticker_universe)} tickers...")
-    collection_result = DataCollectionEngine().run(symbols=ticker_universe)
+    _notify(f"Downloading market data (0/{len(ticker_universe)} tickers)...")
+    download_progress = _make_download_progress_notifier(_notify, len(ticker_universe))
+    collection_result = DataCollectionEngine().run(symbols=ticker_universe, on_download_progress=download_progress)
 
     _notify("Calculating technical indicators...")
     indicator_result = IndicatorEngine().run(symbols=ticker_universe)
@@ -82,7 +120,7 @@ def run_new_scan_pipeline(
         if not scored_df.empty:
             records_df = records_df.merge(scored_df, on="Symbol", how="left")
 
-        _notify("Scoring candidates against the Leadership decision engine...")
+        _notify("Scoring & categorizing candidates...")
         records_df = score_live_candidates(records_df)
 
     return ScanPipelineResult(

@@ -9,7 +9,7 @@ Updated to use Provider Factory.
 from __future__ import annotations
 
 from datetime import date, timedelta
-from typing import Dict, List
+from typing import Callable, Dict, List, Optional
 
 import pandas as pd
 
@@ -35,7 +35,14 @@ class Downloader:
     def download(
         self,
         symbols: List[str],
+        on_progress: Optional[Callable[[int, int, str], None]] = None,
     ) -> Dict[str, pd.DataFrame]:
+        """
+        on_progress(completed_count, total_count, symbol) -- fired after
+        EACH symbol finishes (success or failure), not just once at the
+        end, so a caller (e.g. the live scan UI) can show real per-ticker
+        progress instead of one static message for the whole batch.
+        """
 
         downloads: Dict[str, pd.DataFrame] = {}
 
@@ -44,7 +51,7 @@ class Downloader:
             len(symbols),
         )
 
-        for symbol in symbols:
+        for index, symbol in enumerate(symbols, start=1):
             try:
                 df = self._download_symbol(symbol)
 
@@ -57,6 +64,9 @@ class Downloader:
                     symbol,
                     ex,
                 )
+
+            if on_progress is not None:
+                on_progress(index, len(symbols), symbol)
 
         logger.info(
             "Download complete. Successful downloads: %d / %d",
