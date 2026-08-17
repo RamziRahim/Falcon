@@ -14,6 +14,44 @@ from scoring.relative_strength import compute_rs_ratings
 EXPECTED_ROW_KEYS = {"RS_Rating", "RS_2M", "RS_6M", "RS_12M", "Rel_Vol", "Sector"}
 
 
+def _index_history(n_days: int = 400) -> pd.DataFrame:
+    dates = pd.date_range("2025-01-01", periods=n_days, freq="D")
+    return pd.DataFrame({
+        "Date": dates, "Open": 100.0, "High": 101.0, "Low": 99.0,
+        "Close": pd.Series(range(n_days), dtype=float) + 100.0, "Volume": 1_000_000,
+    })
+
+
+class TestSectorIndexRSEnrichmentReachesRealPath:
+    """Regression test for a real bug: _compute_rs_and_sector_trends() passed
+    a raw datetime.date (date.today()) to get_sector_index_trend(), which
+    compares it against a datetime64[ns] column -- pandas raises
+    "Invalid comparison between dtype=datetime64[ns] and date" on that,
+    silently caught by this method's own except block, so the sector-index
+    enrichment (and _sector_trend_cache) ALWAYS fell back to the plain
+    peer-percentile path, undetected because the fallback returns a
+    validly-shaped result. This test fails before the pd.Timestamp(to_date)
+    fix (empty _sector_trend_cache) and passes after (real verdict cached)."""
+
+    def test_sector_trend_cache_gets_populated_not_silently_empty(self, monkeypatch, synthetic_multi_ticker_history):
+        import scoring.scoring_engine as se
+
+        monkeypatch.setattr(se, "get_benchmark_history", lambda: _index_history())
+        monkeypatch.setattr(se, "get_sector_index_history", lambda sector, from_date, to_date: _index_history())
+
+        engine = ScoringEngine()
+        sector_map_data = {symbol: "Technology" for symbol in synthetic_multi_ticker_history}
+
+        engine._compute_rs_and_sector_trends(synthetic_multi_ticker_history, sector_map_data)
+
+        assert engine._sector_trend_cache != {}, (
+            "Sector trend cache is empty -- _compute_rs_and_sector_trends() "
+            "silently fell back to the except block instead of completing "
+            "the real sector-index path."
+        )
+        assert engine._sector_trend_cache["Technology"] in ("UPTREND", "DOWNTREND", "CHOPPY")
+
+
 class TestScoreTickerSchema:
 
     def test_score_ticker_returns_exact_expected_keys(self, synthetic_multi_ticker_history):

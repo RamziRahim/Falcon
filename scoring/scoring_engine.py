@@ -198,8 +198,17 @@ class ScoringEngine:
                 if history is not None:
                     sector_index_histories[sector] = history
 
+            # get_sector_index_trend() compares this against history["Date"],
+            # a datetime64[ns] column -- a raw date.today() there raises
+            # "Invalid comparison between dtype=datetime64[ns] and date"
+            # (pandas can't compare datetime64 to a plain date object),
+            # silently taking down the whole sector-index RS enrichment via
+            # the except block below. pd.Timestamp is what every other
+            # caller/test of get_sector_index_trend() already passes.
+            as_of_timestamp = pd.Timestamp(to_date)
+
             self._sector_trend_cache = {
-                sector: get_sector_index_trend(sector, to_date, sector_index_histories)
+                sector: get_sector_index_trend(sector, as_of_timestamp, sector_index_histories)
                 for sector in distinct_sectors
             }
 
