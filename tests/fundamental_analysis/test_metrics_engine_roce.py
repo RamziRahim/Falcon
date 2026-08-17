@@ -67,6 +67,50 @@ class TestRoceKnownGoodCalculation:
         # Would be 100/(1000-700)=33.33% if the non-current row were matched by mistake
         assert result == "12.50%"
 
+    def test_excludes_other_non_operating_income_expenses_row(self, engine):
+        """Regression test using NESTLEIND.NS's real yfinance figures
+        (pulled live and hand-verified 2026-08-17) -- the exact case that
+        caught this bug. yfinance's own 'financials' index contains BOTH
+        'Operating Income' (the real EBIT) and 'Other Non Operating Income
+        Expenses' (an unrelated, much smaller line item that also contains
+        the substring "Operating Income" and sorts BEFORE the real row in
+        yfinance's own column order). The unguarded `"Operating Income" in
+        x` match picked ebit_label[0] == the wrong row, which was NaN in
+        NESTLEIND's most recent reported column -- producing "N/A" instead
+        of a real ROCE. Confirmed independently against Screener.in's own
+        published ROCE for NESTLEIND (85.3%, a different capital-employed
+        formula but the same order of magnitude/direction -- both far from
+        the ~0-4% this bug was producing for other tickers with a non-NaN
+        wrong-row value)."""
+        # Row order matters here, not just presence: real yfinance data has
+        # "Other Non Operating Income Expenses" BEFORE "Operating Income"
+        # in financials.index, which is exactly why the unguarded
+        # ebit_label[0] picked it (dict literal order alone doesn't
+        # reproduce this -- explicit index= construction does).
+        financials = pd.DataFrame(
+            {pd.Timestamp("2025-03-31"): [629_900_000.0, 42_677_600_000.0]},
+            index=["Other Non Operating Income Expenses", "Operating Income"],
+        )
+        balance_sheet = _statement({
+            pd.Timestamp("2025-03-31"): {
+                "Total Assets": 121_933_200_000.0,
+                "Current Liabilities": 46_853_500_000.0,
+            },
+        })
+
+        mock_stock = MagicMock()
+        mock_stock.financials = financials
+        mock_stock.balance_sheet = balance_sheet
+
+        with patch("fundamental_analysis.metrics_engine.yf.Ticker", return_value=mock_stock):
+            result = engine.get_roce("NESTLEIND.NS")
+
+        # Real Operating Income (42,677,600,000) / Capital Employed
+        # (121,933,200,000 - 46,853,500,000 = 75,079,700,000) = 56.84%.
+        # Before the fix: ebit_label[0] picked "Other Non Operating Income
+        # Expenses", whose most-recent (2026-03-31) value is NaN -> "N/A".
+        assert result == "56.84%"
+
 
 class TestRoceMissingDataFallback:
 

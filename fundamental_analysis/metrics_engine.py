@@ -94,7 +94,19 @@ class MetricsEngine:
         if financials is None or financials.empty or balance_sheet is None or balance_sheet.empty:
             return None
 
-        ebit_label = [x for x in financials.index if "Operating Income" in x]
+        # Excludes "Other Non Operating Income Expenses", which also
+        # contains the substring "Operating Income" and sorts before the
+        # real "Operating Income" row in yfinance's own index order --
+        # confirmed live (NESTLEIND.NS): unguarded, ebit_label[0] picked
+        # that unrelated, much-smaller line item as "EBIT", producing a
+        # wrong ROCE (or None, when that wrong row's most recent column
+        # is itself NaN) instead of the real ~57% figure the correct row
+        # gives. Same guard style already used below for Current
+        # Liabilities vs. Non Current Liabilities.
+        ebit_label = [
+            x for x in financials.index
+            if "Operating Income" in x and "Non Operating" not in x
+        ]
         assets_label = [x for x in balance_sheet.index if "Total Assets" in x]
 
         # Excludes "Total Non Current Liabilities ..." rows, which also
