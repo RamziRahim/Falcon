@@ -65,8 +65,20 @@ class CorporateEngine:
             # Safely locate row index labels regardless of row ordering changes in API
             financial_index = quarterly_financials.index
             
-            # Find row positions dynamically rather than hardcoding numeric row indices
-            rev_label = [x for x in financial_index if "Total Revenue" in x or "Revenue" in x]
+            # Find row positions dynamically rather than hardcoding numeric row indices.
+            # "Cost" excluded from the revenue match: "Cost Of Revenue" /
+            # "Reconciled Cost Of Revenue" also contain the substring
+            # "Revenue" and sort BEFORE "Total Revenue" in yfinance's own
+            # index order -- confirmed live (HAPPYFORGE.NS): unguarded,
+            # rev_label[0] picked Cost Of Revenue, computing "revenue
+            # growth" and "net margin" off COGS instead of actual revenue
+            # (net_margin_pct came out 51.76% -- net income / COGS -- vs a
+            # real ~20.35% net income / Total Revenue). Same bug class
+            # already found and fixed in metrics_engine.py's get_roce().
+            rev_label = [
+                x for x in financial_index
+                if ("Total Revenue" in x or "Revenue" in x) and "Cost" not in x
+            ]
             net_label = [x for x in financial_index if "Net Income" in x]
 
             if not rev_label or not net_label:

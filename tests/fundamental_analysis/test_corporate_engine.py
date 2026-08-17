@@ -136,6 +136,41 @@ class TestZeroOrNegativeRevenueDoesNotCrash:
         assert result["margin_trend_yoy"] == "DATA_GAP"
 
 
+class TestRevenueRowExcludesCostOfRevenue:
+    """Regression test using HAPPYFORGE.NS's real yfinance figures (pulled
+    live and hand-verified 2026-08-17) -- the exact case that caught this
+    bug while spot-checking the fundamentals behind a live EXECUTE signal.
+    yfinance's own quarterly_financials index contains BOTH 'Total
+    Revenue' and 'Cost Of Revenue'/'Reconciled Cost Of Revenue' -- all
+    three contain the substring "Revenue", and the Cost-of-Revenue rows
+    sort BEFORE 'Total Revenue' in yfinance's own column order. The
+    unguarded `"Revenue" in x` match picked rev_label[0] == a Cost-of-
+    Revenue row, computing net_margin_pct as net_income/COGS (51.76%)
+    instead of net_income/real_revenue (20.35%) -- confirmed independently
+    against yfinance's own info['revenueGrowth'] (0.27, close to the real
+    +27.69% YoY growth, not the wrong +21.41% the bug produced)."""
+
+    def test_excludes_cost_of_revenue_row(self, engine):
+        # Row order matters, not just presence -- real yfinance data has
+        # "Reconciled Cost Of Revenue" / "Cost Of Revenue" BEFORE "Total
+        # Revenue" in the index, which is why the unguarded match picked
+        # them (a dict literal alone wouldn't reproduce this).
+        qf = pd.DataFrame(
+            {
+                pd.Timestamp("2026-06-30"): [1_766_924_000.0, 1_766_924_000.0, 914_613_000.0, 4_494_223_000.0],
+                pd.Timestamp("2026-03-31"): [1_722_878_000.0, 1_722_878_000.0, 835_538_000.0, 4_238_397_000.0],
+            },
+            index=["Reconciled Cost Of Revenue", "Cost Of Revenue", "Net Income", "Total Revenue"],
+        )
+        with patch("fundamental_analysis.corporate_engine.yf.Ticker", return_value=_mock_stock(qf)):
+            result = engine.get_comprehensive_fundamentals("HAPPYFORGE.NS")
+
+        # Real: 914,613,000 / 4,494,223,000 = 20.35%.
+        # Before the fix: rev_label[0] picked a Cost-of-Revenue row ->
+        # 914,613,000 / 1,766,924,000 = 51.76%.
+        assert result["net_margin_pct"] == "20.35%"
+
+
 class TestFallbackPacketIncludesMarginKeys:
 
     def test_fallback_packet_has_margin_keys_when_no_financials(self, engine):
