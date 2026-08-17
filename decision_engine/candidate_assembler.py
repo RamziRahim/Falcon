@@ -244,6 +244,7 @@ def assemble_candidate(
         "Multiple_Patterns_Confirmed": pattern_row.get("Multiple_Patterns_Confirmed", False),
         "Rel_Vol": scoring_row.get("Rel_Vol"),
         "RS_Rating": scoring_row.get("RS_Rating"),
+        "Sector": scoring_row.get("Sector"),
         "ROCE": _parse_formatted_percentage(fundamentals.get("roce")),
         "D_E": parsed_debt_to_equity_pct / 100 if parsed_debt_to_equity_pct is not None else None,
         "institutional_sponsorship_pct": _parse_formatted_percentage(

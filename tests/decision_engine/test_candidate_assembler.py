@@ -55,6 +55,25 @@ class TestAssembleSectorRow:
         assert sector_row["Total_Sectors"] == 4
 
 
+class TestAssembleCandidateSectorPassthrough:
+    """Ethical exclusion filter: leadership_decision_engine.py's new
+    disqualifier reads candidate["Sector"], but assemble_candidate()
+    previously only copied Rel_Vol/RS_Rating out of scoring_row --
+    Sector was silently dropped, which would have made the disqualifier
+    unconditionally no-op (candidate.get("Sector") always None) despite
+    every caller (live_scorer.py, replay_engine.py) already populating
+    scoring_row["Sector"] correctly."""
+
+    def test_sector_is_copied_from_scoring_row_onto_the_candidate(self):
+        candidate = assemble_candidate(
+            pattern_row={}, fundamentals={},
+            scoring_row={"Rel_Vol": 1.0, "RS_Rating": 50.0, "Sector": "Financial Services"},
+            symbol="TEST.NS", pattern_history_df=None, benchmark_history=None,
+        )
+
+        assert candidate["Sector"] == "Financial Services"
+
+
 class TestAssemblePatternDetails:
     """A-5: bars_since_breakout/breakout_within_last_k_bars must round-trip
     through the persisted parquet columns alongside pivot_level, per

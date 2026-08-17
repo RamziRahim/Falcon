@@ -50,6 +50,12 @@ Expected `candidate` keys:
     Trend_State: str                          ("UPTREND"/"DOWNTREND"/"CHOPPY")
     Close: float
     Rel_Vol: float
+    Sector: str | None                        (Yahoo sector label, real field --
+                                                 scoring.sector_map.sector_map.get_sector(),
+                                                 threaded through scoring_row by the caller.
+                                                 Used only by the ethical exclusion
+                                                 disqualifier below -- static, point-in-time-safe
+                                                 identity, not a live-fundamentals-snapshot field.)
     D_E: float                                 (debt-to-equity ratio, e.g. 0.35)
     ROCE: float                                (percentage as a plain number, e.g. 14.2)
     RS_Rating: float                           (0-100, real field -- scoring_engine.py)
@@ -104,6 +110,8 @@ from __future__ import annotations
 from config import (
     ATR_STOP_CEILING_MULTIPLE,
     ATR_STOP_FLOOR_MULTIPLE,
+    EXCLUDED_SECTORS,
+    EXCLUDED_TICKERS,
     MAX_HOLDING_TRADING_DAYS,
     MIN_REWARD_RISK,
     STOP_BUFFER_ATR_MULTIPLE,
@@ -233,6 +241,17 @@ def _is_top_half_sector(sector_row: dict) -> bool:
 TECHNICAL_DISQUALIFIERS = [
     lambda s: s["Trend_State"] != "UPTREND",
     lambda s: s["Rel_Vol"] is None or s["Rel_Vol"] < 0.5,
+    # Ethical exclusion filter (config.EXCLUDED_SECTORS / EXCLUDED_TICKERS):
+    # sector/ticker identity is static, point-in-time-safe data -- unlike
+    # ROCE/D_E (today's live snapshot, genuinely unknowable for a past
+    # backtest date), a company's sector classification and ticker symbol
+    # aren't lookahead bias, so this belongs here (unconditional, both live
+    # and backtest) rather than in FUNDAMENTAL_DISQUALIFIERS (skipped under
+    # disable_fundamental_signals=True). Must hold regardless of which
+    # universe feeds categorize() -- the live Screener.in query's own
+    # thresholds only apply to that one candidate source and don't protect
+    # a future wider-universe scan or the backtest replay path.
+    lambda s: s.get("Sector") in EXCLUDED_SECTORS or s.get("symbol") in EXCLUDED_TICKERS,
 ]
 
 # `is None or` on each numeric check: candidate_assembler.py's

@@ -193,6 +193,65 @@ NIFTY_MIDCAP_150 = "NIFTYMIDCAP150.NS"   # renamed from MIDCAP100 — it was nev
 NIFTY_SMALLCAP_250 = "NIFTYSMLCAP250.NS"  # renamed from SMALLCAP100 — it was never Smallcap 100
 INDIA_VIX = "^INDIAVIX"
 
+# =============================================================================
+# Ethical Exclusion Filter
+# =============================================================================
+# Permanent, code-level exclusion -- holds regardless of which universe feeds
+# categorize() (live Screener-sourced scan, any future wider scan, or the
+# backtest replay path), unlike the live Screener.in query's own filters,
+# which only apply to that one candidate source. See
+# decision_engine.leadership_decision_engine.TECHNICAL_DISQUALIFIERS for
+# where this is enforced (unconditionally -- sector/ticker identity is
+# static, point-in-time-safe data, so there's no lookahead-bias reason to
+# ever skip this check, including in backtests).
+#
+# Both lists are meant to be extended later -- keep entries one-per-line
+# with a short comment, alphabetized isn't required.
+
+# Sector-level exclusion (Yahoo's own "Sector" classification, already
+# threaded through scoring.sector_map / scoring.scoring_engine). Safe to do
+# at the sector level for Financial Services specifically -- Yahoo's broad
+# bucket (banks, NBFCs, insurance, asset managers, interest-based lending)
+# is a reasonably clean match for the actual intent without meaningfully
+# over-excluding unrelated companies. Do NOT add Consumer Defensive here to
+# try to catch alcohol -- that bucket also contains hundreds of unrelated
+# packaged-food/household-goods companies (see EXCLUDED_TICKERS below,
+# which is why alcohol is excluded by ticker instead).
+EXCLUDED_SECTORS = [
+    "Financial Services",
+]
+
+# Hand-curated, ticker-level exclusion for alcohol manufacturers/distillers/
+# breweries/vineyards -- NOT done at the sector level (Yahoo's beverage
+# companies sit under "Consumer Defensive" alongside hundreds of unrelated
+# staples companies). Confirmed live against Screener.in/Tickertape
+# (2026-08-17): the NSE-listed alcohol universe is small (~20 tickers) and
+# stable enough to hand-curate directly, rather than fighting imprecise
+# industry-field taxonomy. Falcon's own ".NS"-suffixed ticker format,
+# matched against candidate["symbol"].
+EXCLUDED_TICKERS = [
+    "UNITDSPR.NS",    # United Spirits
+    "UBL.NS",         # United Breweries
+    "RADICO.NS",      # Radico Khaitan
+    "ABDL.NS",        # Allied Blenders and Distillers
+    "TI.NS",          # Tilaknagar Industries
+    "PICCADIL.NS",    # Piccadily Agro Industries
+    "GLOBUSSPR.NS",   # Globus Spirits
+    "GMBREW.NS",      # G M Breweries
+    "SDBL.NS",        # Som Distilleries and Breweries
+    "ASALCBR.NS",     # Associated Alcohols & Breweries
+    "SULA.NS",        # Sula Vineyards
+    "ASGARD.NS",      # Asgard Alcobev
+    "IFBAGRO.NS",     # IFB Agro Industries
+    "JAGAJITIND.NS",  # Jagatjit Industries
+    "FRATELLI.NS",    # Fratelli Vineyards
+    "MONIKA.NS",      # Monika Alcobev
+    "CUPIDALBV.NS",   # Cupid Breweries and Distilleries
+    "PICCASUG.NS",    # Piccadily Sugar and Allied Industries
+    "VALENCIA.NS",    # Valencia Nutrition
+    "ALCODIS.NS",     # Alcokraft Distilleries
+]
+
 FAIL_INDUSTRY_KEYWORDS = [
     "bank","insurance","credit services","mortgage",
     "consumer finance","tobacco","wineries","distilleries"
