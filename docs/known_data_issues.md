@@ -101,6 +101,33 @@ re-verification of a workaround's safety at a larger scale, not a root-
 cause fix, so per this document's own convention the item stays open
 below, not moved to Resolved.
 
+**✅ Re-verified clean at run #4 scale, 2026-08-17**
+(`tests/check_corruption_exposure_run4.py`): run #4 (the canonical
+baseline under the new production `categorize()`, Phase 4.6) reads a
+much larger real-signal population than the Phase-4 fitting-set check
+above -- 357 rows, 94 distinct entry dates, every EXECUTE/ALERT_WATCHLIST
+signal the new categorize() actually produced, not just the 265-row
+tuning+validation fitting set.
+
+- Check 1: 1 of 357 rows touches its own corrupted date (SHRIRAMFIN.NS,
+  2024-09-12) -- same recurring single ticker every prior check at
+  every scale has found.
+- Check 2: 335 rows checked, max |delta| = 3.0 percentile points, with
+  **one row at the materiality bar**: ANURAS.NS, 2024-12-10, delta =
+  -3.0 (the first check at any scale to actually reach the 3-point
+  bar, not stay comfortably under it). Investigated directly rather
+  than waved through: confirmed this (ticker, date) is NOT among the
+  59 taken EXECUTE episodes behind the +82.74% headline, nor among the
+  111 taken MONITOR@0.5 episodes -- it's `category=="EXECUTE"` but was
+  one of the 5 episodes dropped to slot exhaustion, never entered
+  either reported equity curve.
+
+**This clears run #4's own headline numbers specifically** (both the
+EXECUTE-only +82.74% and the MONITOR@0.5 +11.08% readings) -- the one
+boundary-case exposure found doesn't touch either. The underlying
+corruption is still open/unfixed; this is a re-verification at a third,
+larger scale, not a resolution.
+
 ---
 
 ## 2. Full test suite runtime (~3h47m) not explained by Phase 4.6 (open)
