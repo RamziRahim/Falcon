@@ -1,9 +1,11 @@
 """
 Tests for market_data/providers/nse_provider.py -- delivery % / deliverable
 quantity unlock. NSE_provider.get_history() already fetched these columns
-via capital_market.price_volume_and_deliverable_position_data() but silently
-dropped them in the OHLCV-only column filter. Real column names (confirmed
-via nselib/constants.py, not guessed): 'DeliverableQty', '%DlyQttoTradedQty'.
+via its NseSessionClient (vendored, session-reusing replacement for
+nselib's own price_volume_and_deliverable_position_data(), see
+nse_session_client.py) but silently dropped them in the OHLCV-only
+column filter. Real column names (confirmed via nselib/constants.py,
+not guessed): 'DeliverableQty', '%DlyQttoTradedQty'.
 """
 from __future__ import annotations
 
@@ -62,7 +64,7 @@ class TestDeliveryColumnsUnlocked:
 
     def test_deliverable_qty_and_delivery_pct_mapped_and_cleaned(self, provider):
         with patch(
-            "market_data.providers.nse_provider.capital_market.price_volume_and_deliverable_position_data",
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
             return_value=_raw_payload_with_delivery(),
         ):
             df = provider.get_history(
@@ -78,7 +80,7 @@ class TestDeliveryColumnsUnlocked:
 
     def test_deliverable_qty_is_numeric_dtype(self, provider):
         with patch(
-            "market_data.providers.nse_provider.capital_market.price_volume_and_deliverable_position_data",
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
             return_value=_raw_payload_with_delivery(),
         ):
             df = provider.get_history(
@@ -93,7 +95,7 @@ class TestDeliveryColumnsUnlocked:
     def test_core_ohlcv_contract_unchanged(self, provider):
         """Existing callers that only read OHLCV must be unaffected."""
         with patch(
-            "market_data.providers.nse_provider.capital_market.price_volume_and_deliverable_position_data",
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
             return_value=_raw_payload_with_delivery(),
         ):
             df = provider.get_history(
@@ -115,7 +117,7 @@ class TestGracefulDegradationWithoutDeliveryColumns:
         without delivery columns must not raise -- only Date/OHLCV are
         required."""
         with patch(
-            "market_data.providers.nse_provider.capital_market.price_volume_and_deliverable_position_data",
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
             return_value=_raw_payload_without_delivery(),
         ):
             df = provider.get_history(
@@ -129,7 +131,7 @@ class TestGracefulDegradationWithoutDeliveryColumns:
 
     def test_delivery_columns_absent_not_null(self, provider):
         with patch(
-            "market_data.providers.nse_provider.capital_market.price_volume_and_deliverable_position_data",
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
             return_value=_raw_payload_without_delivery(),
         ):
             df = provider.get_history(
@@ -147,7 +149,7 @@ class TestGracefulDegradationWithoutDeliveryColumns:
         delivery columns optional."""
         broken = _raw_payload_without_delivery().drop(columns=["ClosePrice"])
         with patch(
-            "market_data.providers.nse_provider.capital_market.price_volume_and_deliverable_position_data",
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
             return_value=broken,
         ):
             with pytest.raises(ProviderError):

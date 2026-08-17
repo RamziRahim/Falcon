@@ -2,8 +2,8 @@ import datetime
 import logging
 from typing import Dict, Any, List, Optional
 import pandas as pd
-from nselib import capital_market
 from market_data.providers.base_provider import BaseProvider
+from market_data.providers.nse_session_client import NseSessionClient
 from market_data.exceptions import DownloadError, ProviderError
 
 # Setup logger matching Falcon style
@@ -26,6 +26,12 @@ class NSEProvider(BaseProvider):
         super().__init__()
         self.config = config or {}
         self._name = "NSE"
+        # One requests.Session()/cookie pair reused for this provider's
+        # entire lifetime, not fetched fresh per get_history() call --
+        # see nse_session_client.py's own module docstring for why
+        # nselib itself can't be asked to do this (no session-injection
+        # point anywhere in its real call chain).
+        self._session_client = NseSessionClient()
 
     # region Abstract Properties Implementation
 
@@ -104,7 +110,7 @@ class NSEProvider(BaseProvider):
             )
             
             try:
-                df_raw = capital_market.price_volume_and_deliverable_position_data(
+                df_raw = self._session_client.price_volume_and_deliverable_position_data(
                     symbol=clean_symbol,
                     from_date=str_start,
                     to_date=str_end
