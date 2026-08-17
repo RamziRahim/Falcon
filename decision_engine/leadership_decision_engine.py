@@ -781,6 +781,11 @@ def categorize(
                 "market_regime_verdict": market_verdict,
                 "sector_health_verdict": None,
                 "confidence_score": 0.0,
+                # Disqualified before the model was ever consulted -- null,
+                # not a fabricated probability, same convention as every
+                # other None below on this path.
+                "predicted_p": None,
+                "model_version": None,
                 "caps_applied": [],
                 "fakeout_risk_flags": [],
                 "contributing_factors": [],
@@ -810,6 +815,13 @@ def categorize(
 
     best_points, best_field = get_best_pattern_points(candidate)
 
+    # Both None unless the score>=40/pattern-confirmed branch below
+    # actually consults the model -- AVOID (score<40) and MONITOR
+    # (no pattern) never reach it, same "never fabricate a value the
+    # model didn't actually produce" rule as every other None field.
+    predicted_p = None
+    model_version = None
+
     if score < 40:
         # Unchanged: the calibrated model was only ever fit on real
         # EXECUTE/ALERT_WATCHLIST episodes (score>=40, pattern-confirmed)
@@ -826,6 +838,7 @@ def categorize(
         final_category = "MONITOR"
     else:
         artifact = model_artifact if model_artifact is not None else _get_default_model_artifact()
+        model_version = artifact.get("version")
         predicted_p = _predict_candidate_consolidation_quality(
             candidate, market_verdict, sector_verdict, best_field, artifact,
         )
@@ -878,6 +891,19 @@ def categorize(
         "market_regime_verdict": market_verdict,
         "sector_health_verdict": sector_verdict,
         "confidence_score": score,
+        # Phase 4.6: the calibrated model's raw predicted win probability
+        # and which frozen artifact version produced it -- previously
+        # computed and used internally to set final_category but never
+        # surfaced, so no caller (e.g. a UI showing real model confidence)
+        # could read it. Both None for AVOID (score<40)/MONITOR (no
+        # pattern, B-8) -- the model was never consulted for either -- and
+        # for a pattern-confirmed candidate the model genuinely couldn't
+        # score (missing v2 feature inputs, see
+        # _predict_candidate_consolidation_quality()'s own docstring):
+        # predicted_p is None there but model_version is still set, since
+        # an artifact WAS consulted, it just couldn't produce a number.
+        "predicted_p": predicted_p,
+        "model_version": model_version,
         "caps_applied": caps_applied,
         "fakeout_risk_flags": fakeout_risk_flags,
         "contributing_factors": get_contributing_factors(candidate, enable_microstructure_signals=enable_microstructure_signals),

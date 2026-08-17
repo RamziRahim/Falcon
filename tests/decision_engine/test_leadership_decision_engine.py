@@ -88,6 +88,7 @@ def _always_execute_artifact() -> dict:
     intercept so sigmoid(z) is comfortably above any reasonable cutoff
     regardless of candidate content."""
     return {
+        "version": "test_always_execute_v1",
         "numeric_features": [], "categorical_features": [], "boolean_features": [],
         "categorical_baselines": {}, "scaler_mean": {}, "scaler_std": {},
         "coefficients": {"const": 10.0}, "execute_cutoff": 0.5,
@@ -223,6 +224,104 @@ class TestEarningsProximityIndependentCap:
 
         assert result["caps_applied"] == ["EARNINGS_PROXIMITY"]
         assert result["category"] == "ALERT_WATCHLIST"
+
+
+class TestPredictedPAndModelVersionSurfaced:
+    """Phase 4.6 follow-up: predicted_p and model_version were computed and
+    used internally to set final_category, but never reached categorize()'s
+    own return dict -- no caller (a UI showing real model confidence, for
+    one) could read them. Covers every path through categorize() for
+    whether/why each field is populated or null."""
+
+    def _execute_eligible_candidate(self):
+        candidate = _candidate(
+            is_vcp_breakout=True, has_active_fvg=True, has_liquidity_sweep=True,
+            RS_Rating=100.0, institutional_sponsorship_pct=25.0,
+        )
+        sector_row = _sector_row(Avg_RS_Rating=70.0, Pct_Uptrend=70.0)
+        return candidate, sector_row
+
+    def test_both_none_for_disqualifier_avoid(self):
+        # Disqualified before the model is ever consulted -- no artifact
+        # loaded, no prediction attempted.
+        candidate = _candidate(Trend_State="DOWNTREND")
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "AVOID"
+        assert result["predicted_p"] is None
+        assert result["model_version"] is None
+
+    def test_both_none_for_score_based_avoid(self):
+        # score<40 -- the model was only ever fit on score>=40 rows, so
+        # this floor stays a hard pre-model gate; never consulted here
+        # either.
+        candidate = _candidate()
+        sector_row = _sector_row()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "AVOID"
+        assert result["predicted_p"] is None
+        assert result["model_version"] is None
+
+    def test_both_none_for_no_pattern_monitor(self):
+        # B-8: no pattern -- the model's own pattern_used feature is only
+        # ever populated for a pattern-confirmed row, so MONITOR stays a
+        # hard pre-model gate too.
+        candidate = _candidate(RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True)
+        sector_row = _sector_row(Rank=2, Total_Sectors=10)
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "MONITOR"
+        assert result["predicted_p"] is None
+        assert result["model_version"] is None
+
+    def test_execute_surfaces_a_real_probability_and_the_artifacts_version(self):
+        candidate, sector_row = self._execute_eligible_candidate()
+
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE",
+            model_artifact=_always_execute_artifact(),
+        )
+
+        assert result["category"] == "EXECUTE"
+        assert result["predicted_p"] is not None
+        assert result["predicted_p"] >= 0.5  # _always_execute_artifact()'s own cutoff
+        assert result["model_version"] == "test_always_execute_v1"
+
+    def test_alert_watchlist_via_suppressed_probability_still_surfaces_a_real_number(self):
+        # Scored (not missing-input None) but below cutoff -- predicted_p
+        # is a real, sub-cutoff float, not None, distinguishing this from
+        # the missing-input case below.
+        candidate, sector_row = self._execute_eligible_candidate()
+
+        result = categorize(
+            candidate, sector_row, market_verdict="UNFAVORABLE",
+            model_artifact=_regime_sensitive_artifact(),
+        )
+
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert result["predicted_p"] is not None
+        assert result["predicted_p"] < _regime_sensitive_artifact()["execute_cutoff"]
+
+    def test_missing_model_inputs_null_predicted_p_but_keeps_model_version(self):
+        # No model_artifact override -- the real config.ACTIVE_MODEL_VERSION
+        # artifact needs the v2 feature fields this pre-Phase-4.6 fixture
+        # never populates, so the model genuinely can't score it
+        # (predicted_p None) -- but an artifact WAS loaded and consulted,
+        # so model_version is still populated, not null. Distinguishes
+        # "never consulted" (AVOID/MONITOR, both None) from "consulted but
+        # couldn't produce a number" (this case).
+        candidate, sector_row = self._execute_eligible_candidate()
+
+        result = categorize(candidate, sector_row, market_verdict="FAVORABLE")
+
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert result["predicted_p"] is None
+        assert result["model_version"] is not None
 
 
 class TestLowDeliveryConviction:
