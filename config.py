@@ -221,6 +221,12 @@ EXCLUDED_SECTORS = [
     "Financial Services",
 ]
 
+# Verified against live NSE data as of 2026-08-17 (see the detailed note
+# below for method) -- re-sweep periodically, not just once. Tickers can
+# rename (this project already hit MCDOWELL-N -> UNITDSPR once), new
+# alcohol companies list, and existing ones delist -- nothing else in
+# this codebase will notice if this list quietly goes stale.
+#
 # Hand-curated, ticker-level exclusion for alcohol manufacturers/distillers/
 # breweries/vineyards -- NOT done at the sector level (Yahoo's beverage
 # companies sit under "Consumer Defensive" alongside hundreds of unrelated
