@@ -17,6 +17,7 @@ from ui.dashboard_data import (
     build_market_pulse,
     build_sector_view,
     compute_day_change_pct,
+    fetch_fundamentals_view,
 )
 
 
@@ -107,6 +108,39 @@ class TestNoFabricatedDataOnEmptyInput:
         pulse = build_market_pulse(regime_snapshot=None, index_quotes={"NIFTY 50": None})
         assert pulse["indices"][0]["price"] == NA
         assert pulse["indices"][0]["change"] == "unavailable"
+
+
+class TestFundamentalsPanelNeverLeaksRawSentinels:
+    """Regression coverage moved here from the pre-dashboard-rebuild
+    tests/test_app.py, which pinned this same guarantee against app.py's
+    old roce_str/yoy_rev_str/de_str assignments -- that code moved to
+    fetch_fundamentals_view() below, so the test moved with it. An
+    internal-only sentinel like "DATA_GAP" reaching the screen as literal
+    text would look like a broken/leaked implementation detail to a user."""
+
+    def test_data_gap_sentinel_never_reaches_display(self, monkeypatch):
+        # fetch_fundamentals_view() imports each source function locally
+        # inside its own body (not as a ui.dashboard_data module attribute),
+        # so patching has to target each source module directly.
+        import fundamental_analysis.fundamental_cache as fc
+        import fundamental_analysis.corporate_engine as ce
+        import fundamental_analysis.institutional_engine as ie
+
+        monkeypatch.setattr(fc, "get_fundamentals", lambda symbol: {"roce": "DATA_GAP", "debt_to_equity": "DATA_GAP"})
+        monkeypatch.setattr(
+            ce.corporate_engine, "get_comprehensive_fundamentals",
+            lambda symbol: {"revenue_yoy_quarterly_growth": "DATA_GAP", "margin_trend_yoy": "DATA_GAP"},
+        )
+        monkeypatch.setattr(
+            ie.institutional_engine, "get_shareholding_profile",
+            lambda symbol: {"institutional_sponsorship": "DATA_GAP"},
+        )
+
+        rows = fetch_fundamentals_view("TEST.NS")
+        values = [row["v"] for row in rows]
+
+        assert "DATA_GAP" not in values
+        assert NA in values
 
 
 class TestDashboardContextSplitsExecuteAndWatchlist:

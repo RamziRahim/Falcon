@@ -1,11 +1,16 @@
 """
-Regression tests for two app.py bugs (Falcon spec):
+Regression tests for app.py bugs (Falcon spec).
 
-1. The KPI card's market_status was a separate hardcoded "OPEN" literal,
-   independent of ui/header.py's real get_market_status() badge -- the two
-   could disagree on screen at the same moment.
-2. The fundamentals panel passed internal-only sentinel strings (e.g.
-   "DATA_GAP") straight through to display instead of a user-facing label.
+The dashboard rebuild (ui/dashboard.py + ui/dashboard_data.py +
+ui/dashboard_template.html, replacing the old Streamlit-native KPI-card/
+fundamentals-panel/sector-ranking-panel rendering) moved two of the
+original protections here to those new files -- their regression
+coverage moved with them (see TestMarketStatusSingleSourceOfTruth below
+for the market-status one, and tests/ui/test_dashboard_data.py's sentinel
+tests for the fundamentals one). The old container-nesting protection
+(#4 below) doesn't apply anymore -- there are no separately-called
+Streamlit sibling widgets to nest incorrectly now that the whole surface
+is one Jinja2-rendered HTML block.
 
 app.py is a top-to-bottom Streamlit script, not a library of functions --
 importing it directly would execute render_header()'s live index-quote
@@ -15,71 +20,32 @@ regression back to a hardcoded literal or an unmapped sentinel.
 """
 from __future__ import annotations
 
-import ast
 from pathlib import Path
 
 APP_SOURCE = (Path(__file__).resolve().parent.parent / "app.py").read_text(encoding="utf-8")
-
-
-def _container_with_line_ranges(tree: ast.Module) -> list[tuple[int, int]]:
-    """Line ranges of every `with st.container(...):` block in the module."""
-    ranges = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.With):
-            for item in node.items:
-                ctx = item.context_expr
-                if (
-                    isinstance(ctx, ast.Call)
-                    and isinstance(ctx.func, ast.Attribute)
-                    and ctx.func.attr == "container"
-                ):
-                    ranges.append((node.lineno, node.end_lineno))
-    return ranges
-
-
-def _line_in_any_range(lineno: int, ranges: list[tuple[int, int]]) -> bool:
-    return any(start <= lineno <= end for start, end in ranges)
+DASHBOARD_SOURCE = (Path(__file__).resolve().parent.parent / "ui" / "dashboard.py").read_text(encoding="utf-8")
 
 
 class TestMarketStatusSingleSourceOfTruth:
+    """The KPI card's market_status used to be a separate hardcoded "OPEN"
+    literal, independent of ui/header.py's real get_market_status() badge
+    -- the two could disagree on screen at the same moment. That literal
+    is gone (app.py no longer renders a KPI card at all), but the same
+    single-source-of-truth requirement now applies to
+    ui/dashboard.py's _is_market_open(), which drives the dashboard
+    template's own market-open state."""
 
-    def test_never_hardcodes_a_literal_market_status(self):
+    def test_app_never_hardcodes_a_literal_market_status(self):
         assert 'market_status="OPEN"' not in APP_SOURCE
         assert 'market_status="CLOSED"' not in APP_SOURCE
 
-    def test_derives_market_status_from_header(self):
-        assert "market_status=get_market_status()" in APP_SOURCE
-        assert "from ui.header import" in APP_SOURCE
-        import_line = next(
-            line for line in APP_SOURCE.splitlines()
-            if line.strip().startswith("from ui.header import")
-        )
-        assert "get_market_status" in import_line
-
-
-class TestSentinelNeverLeaksToDisplay:
-
-    def _assignment_line(self, var_name: str) -> str:
-        return next(
-            line for line in APP_SOURCE.splitlines()
-            if line.strip().startswith(f"{var_name} =")
-        )
-
-    def test_roce_str_goes_through_sentinel_mapping(self):
-        assert "sentinel_to_display(" in self._assignment_line("roce_str")
-
-    def test_yoy_rev_str_goes_through_sentinel_mapping(self):
-        assert "sentinel_to_display(" in self._assignment_line("yoy_rev_str")
-
-    def test_de_str_goes_through_sentinel_mapping(self):
-        assert "sentinel_to_display(" in self._assignment_line("de_str")
-
-    def test_data_gap_literal_no_longer_used_as_a_default(self):
-        # The raw sentinel may still appear in a comment or import elsewhere,
-        # but the fundamentals fields themselves must never pass it straight
-        # through as a bare default value.
-        for var_name in ("roce_str", "yoy_rev_str", "de_str"):
-            assert '"DATA_GAP"' not in self._assignment_line(var_name)
+    def test_dashboard_derives_market_open_from_header_not_a_reimplementation(self):
+        assert "get_market_status" in DASHBOARD_SOURCE
+        # Guards against the duplication this test previously missed: an
+        # independent weekday/hours/holiday reimplementation living in
+        # dashboard.py instead of calling the real header.py function.
+        assert "MARKET_OPEN_TIME" not in DASHBOARD_SOURCE
+        assert "get_nse_holidays" not in DASHBOARD_SOURCE
 
 
 class TestNewScanRunsFullPipeline:
@@ -107,61 +73,3 @@ class TestNewScanRunsFullPipeline:
         # exact gap this task fixed (skipping Phase 3/4/5 for new tickers).
         assert "build_candidate_table(ticker_universe)" not in APP_SOURCE
         assert "from technical_analysis.candidate_table_builder import" not in APP_SOURCE
-
-
-class TestContainerNestingFix:
-    """
-    #4: st.markdown('<div class="panel-box">') opened in one call, followed
-    by a separately-called SectorRankingPanel.render()/AI panel content,
-    then a closing </div> in a third call, does NOT nest in Streamlit --
-    each call renders as an independent sibling. The div rendered as its
-    own empty bordered block; the real content rendered separately below
-    it. Fixed with `with st.container(border=True):`, which genuinely
-    nests -- verified here via AST line-range containment rather than
-    string matching, since a regression back to sibling calls is still
-    syntactically valid Python and wouldn't be caught by a simple substring
-    check.
-    """
-
-    def test_sector_ranking_panel_renders_inside_a_container_block(self):
-        tree = ast.parse(APP_SOURCE)
-        ranges = _container_with_line_ranges(tree)
-        assert ranges, "Expected at least one `with st.container(...):` block in app.py"
-
-        render_calls = [
-            node for node in ast.walk(tree)
-            if isinstance(node, ast.Call)
-            and isinstance(node.func, ast.Attribute)
-            and node.func.attr == "render"
-            and isinstance(node.func.value, ast.Name)
-            and node.func.value.id == "SectorRankingPanel"
-        ]
-        assert render_calls, "Expected a SectorRankingPanel.render(...) call in app.py"
-
-        for call in render_calls:
-            assert _line_in_any_range(call.lineno, ranges), (
-                "SectorRankingPanel.render(...) must be called inside a "
-                "`with st.container(...):` block, not as a sibling after a "
-                "separately-opened <div> -- that leaves an empty bordered "
-                "block with the real chart rendered separately below it."
-            )
-
-    def test_ai_panel_heading_renders_inside_a_container_block(self):
-        tree = ast.parse(APP_SOURCE)
-        ranges = _container_with_line_ranges(tree)
-
-        heading_strings = [
-            node for node in ast.walk(tree)
-            if isinstance(node, ast.Constant)
-            and isinstance(node.value, str)
-            and "Falcon AI Engine Guidance" in node.value
-        ]
-        assert heading_strings, "Expected the AI panel heading string in app.py"
-
-        for node in heading_strings:
-            assert _line_in_any_range(node.lineno, ranges), (
-                "The AI panel heading must render inside a "
-                "`with st.container(...):` block -- previously this bug made "
-                "the AI panel show as a thin, empty green-bordered strip "
-                "with no visible content."
-            )

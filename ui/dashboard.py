@@ -75,13 +75,13 @@ def _session_label(now: datetime) -> str:
 
 
 def _is_market_open(now: datetime) -> bool:
-    from ui.header import MARKET_OPEN_TIME, MARKET_CLOSE_TIME
-    from market_data.holiday_calendar import get_nse_holidays
+    """Derives from ui.header.get_market_status() -- the single real
+    source of the OPEN/CLOSED determination -- rather than reimplementing
+    the weekday/hours/holiday check a second time, which could silently
+    drift from it."""
+    from ui.header import get_market_status
 
-    is_weekday = now.weekday() < 5
-    is_trading_hours = MARKET_OPEN_TIME <= now.time() <= MARKET_CLOSE_TIME
-    is_holiday = now.date() in get_nse_holidays()
-    return is_weekday and is_trading_hours and not is_holiday
+    return "OPEN" in get_market_status(now)
 
 
 def _load_price_history(symbol: str) -> pd.DataFrame | None:
