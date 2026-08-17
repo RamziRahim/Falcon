@@ -43,6 +43,15 @@ def _fake_categorize_recorder(monkeypatch):
         })
         return {
             "category": "ALERT_WATCHLIST", "confidence_score": 55.0,
+            # Phase 4.6 dashboard build: categorize() always returns these
+            # now (predicted_p/model_version/trade-plan fields) -- this
+            # stub needs to match the real shape score_live_candidates()
+            # actually indexes into, same reasoning as
+            # test_leadership_decision_engine.py's own stub updates.
+            "predicted_p": 0.61, "model_version": "test_stub_v1",
+            "entry": 100.0, "stop_loss": 92.0, "target": 118.0,
+            "stop_provenance": "STRUCTURAL", "target_provenance": "MEASURED_MOVE",
+            "reward_risk": 2.25, "max_holding_days": 20,
             "caps_applied": ["EARNINGS_PROXIMITY"], "contributing_factors": ["RS_STRONG"],
             "fakeout_risk_flags": [],
         }

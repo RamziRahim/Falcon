@@ -79,6 +79,23 @@ MIN_HISTORY_ROWS = 20
 NO_DATA_RESULT = {
     "category": "NO_DATA",
     "confidence_score": 0.0,
+    # Phase 4.6 dashboard build: categorize() already computes all of
+    # these (predicted_p/model_version since the predicted_p/model_version
+    # fix; entry/stop/target/provenance/reward_risk/max_holding_days since
+    # Phase 2.2) but this function previously discarded everything except
+    # the five fields above -- no caller downstream of score_live_candidates()
+    # (e.g. a UI needing a real trade plan or real model confidence) could
+    # read them. None here matches categorize()'s own null convention for
+    # NO_DATA/AVOID/MONITOR -- never a fabricated number.
+    "predicted_p": None,
+    "model_version": None,
+    "entry": None,
+    "stop_loss": None,
+    "target": None,
+    "stop_provenance": None,
+    "target_provenance": None,
+    "reward_risk": None,
+    "max_holding_days": None,
     "caps_applied": "",
     "contributing_factors": "",
     "fakeout_risk_flags": "",
@@ -265,6 +282,15 @@ def _decide_for_ticker(
     return {
         "category": result["category"],
         "confidence_score": result["confidence_score"],
+        "predicted_p": result["predicted_p"],
+        "model_version": result["model_version"],
+        "entry": result["entry"],
+        "stop_loss": result["stop_loss"],
+        "target": result["target"],
+        "stop_provenance": result["stop_provenance"],
+        "target_provenance": result["target_provenance"],
+        "reward_risk": result["reward_risk"],
+        "max_holding_days": result["max_holding_days"],
         "caps_applied": ",".join(result["caps_applied"]),
         "contributing_factors": ",".join(result["contributing_factors"]),
         "fakeout_risk_flags": ",".join(result["fakeout_risk_flags"]),
