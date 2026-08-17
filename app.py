@@ -36,7 +36,7 @@ if current_dir not in sys.path:
 
 # UI Module imports directly matching your folder structure
 from ui.sidebar import render as render_sidebar
-from ui.header import render as render_header
+from ui.header import IST, render as render_header
 import ui.dashboard as dashboard
 
 # New Scan pipeline orchestration (Phase 3 data collection -> Phase 4 -> Phase 5)
@@ -81,12 +81,24 @@ st.markdown("""
 # read anywhere anymore, so removed rather than kept as unused state.
 if "screener_records" not in st.session_state:
     st.session_state.screener_records = pd.DataFrame()
+# Both None until the first scan ever completes -- render_header() shows
+# an honest "Last scan: never" state for None, not a fabricated
+# timestamp/count. Only updated inside the scan-trigger block below (not
+# reset on every unrelated rerun/interaction), so they persist until the
+# NEXT scan actually runs.
+if "last_scan_ticker_count" not in st.session_state:
+    st.session_state.last_scan_ticker_count = None
+if "last_scan_completed_at" not in st.session_state:
+    st.session_state.last_scan_completed_at = None
 
 # 1. Render Left Sidebar Navigation (Section 4)
 render_sidebar()
 
 # 2. Render Top Control Header Ribbon (Section 4)
-is_new_scan_triggered = render_header()
+is_new_scan_triggered = render_header(
+    last_scan_ticker_count=st.session_state.last_scan_ticker_count,
+    last_scan_completed_at=st.session_state.last_scan_completed_at,
+)
 
 # Execution pipeline chain triggered dynamically from your explicit button input
 if is_new_scan_triggered:
@@ -117,6 +129,15 @@ if is_new_scan_triggered:
             render_scan_warnings(scan_result.collection_result, scan_result.indicator_result)
 
             st.session_state.screener_records = scan_result.records_df
+            st.session_state.last_scan_ticker_count = len(ticker_universe)
+        else:
+            # Candidate generation itself found nothing (Screener query
+            # returned zero rows) -- the scan still genuinely ran, just
+            # screened 0 tickers, distinct from "never scanned" (None).
+            progress_placeholder.empty()
+            st.session_state.last_scan_ticker_count = 0
+
+        st.session_state.last_scan_completed_at = datetime.now(IST)
 
         st.rerun()
 

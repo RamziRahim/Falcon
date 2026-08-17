@@ -99,6 +99,26 @@ def get_market_regime_snapshot() -> dict | None:
         return None
 
 
+def format_last_scan_label(last_scan_completed_at: datetime | None) -> str:
+    """Pure formatting logic, separated from render()'s widget calls so
+    it's directly unit-testable without a Streamlit test harness (this
+    module's existing convention -- only pure data/formatting functions
+    get tested here, not render()'s own widget-drawing). Honest "never"
+    state before the first scan, not a fabricated placeholder timestamp."""
+    if last_scan_completed_at is None:
+        return "Last scan: never"
+    return f"Last scan: {last_scan_completed_at.strftime('%d %b, %H:%M')} IST"
+
+
+def format_tickers_screened_label(last_scan_ticker_count: int | None) -> str | None:
+    """None (not "0 tickers...") before the first scan has ever run --
+    distinguishes "never scanned" from "scanned, found nothing" (both are
+    real, honest states, just different ones)."""
+    if last_scan_ticker_count is None:
+        return None
+    return f"{last_scan_ticker_count} tickers screened from Leadership query"
+
+
 def get_market_status(now: datetime | None = None) -> str:
     """
     Returns NSE market status from trading hours (9:15-15:30 IST, Mon-Fri)
@@ -115,7 +135,10 @@ def get_market_status(now: datetime | None = None) -> str:
     return "🟢 OPEN" if (is_weekday and is_trading_hours and not is_holiday) else "🔴 CLOSED"
 
 
-def render() -> bool:
+def render(
+    last_scan_ticker_count: int | None = None,
+    last_scan_completed_at: datetime | None = None,
+) -> bool:
     """
     Render Falcon dashboard header: greeting, market status/time, and the
     New Scan trigger.
@@ -128,6 +151,15 @@ def render() -> bool:
     are unchanged and still the real, tested data sources ui/dashboard.py
     itself calls -- only the second, redundant Streamlit-native rendering
     of that same data was removed.
+
+    last_scan_ticker_count / last_scan_completed_at : read from
+    st.session_state by the caller (app.py), not read directly here --
+    matches this app's existing convention of passing session_state data
+    into render functions explicitly (see dashboard.render(records_df))
+    rather than each render function reaching into session_state itself.
+    Both persist in session_state until the NEXT scan actually completes
+    (app.py only updates them inside the scan-trigger block), not reset
+    on every unrelated rerun/interaction.
 
     Returns
     -------
@@ -187,6 +219,12 @@ Scan markets. Find leaders. Ride the trend.
             use_container_width=True,
             type="primary",
         )
+
+        st.caption(format_last_scan_label(last_scan_completed_at))
+
+        tickers_screened_label = format_tickers_screened_label(last_scan_ticker_count)
+        if tickers_screened_label is not None:
+            st.caption(tickers_screened_label)
 
         st.button(
             "Market Overview",

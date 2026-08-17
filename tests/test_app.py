@@ -73,3 +73,29 @@ class TestNewScanRunsFullPipeline:
         # exact gap this task fixed (skipping Phase 3/4/5 for new tickers).
         assert "build_candidate_table(ticker_universe)" not in APP_SOURCE
         assert "from technical_analysis.candidate_table_builder import" not in APP_SOURCE
+
+
+class TestLastScanPersistedInSessionState:
+    """last_scan_ticker_count/last_scan_completed_at must persist in
+    session_state until the NEXT scan actually completes -- initialized
+    once with an honest None default (never scanned), updated only
+    inside the scan-trigger block (never reset on an unrelated rerun),
+    same persistence pattern screener_records already uses."""
+
+    def test_both_keys_initialized_with_a_none_default(self):
+        assert '"last_scan_ticker_count" not in st.session_state' in APP_SOURCE
+        assert "st.session_state.last_scan_ticker_count = None" in APP_SOURCE
+        assert '"last_scan_completed_at" not in st.session_state' in APP_SOURCE
+        assert "st.session_state.last_scan_completed_at = None" in APP_SOURCE
+
+    def test_header_receives_both_values_from_session_state(self):
+        assert "last_scan_ticker_count=st.session_state.last_scan_ticker_count" in APP_SOURCE
+        assert "last_scan_completed_at=st.session_state.last_scan_completed_at" in APP_SOURCE
+
+    def test_ticker_count_updated_from_the_real_scanned_universe_size(self):
+        assert "st.session_state.last_scan_ticker_count = len(ticker_universe)" in APP_SOURCE
+
+    def test_completed_timestamp_set_on_every_scan_attempt_using_ist(self):
+        # Set even when candidate generation found nothing -- the scan
+        # still genuinely ran, distinct from "never scanned".
+        assert "st.session_state.last_scan_completed_at = datetime.now(IST)" in APP_SOURCE

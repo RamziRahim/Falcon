@@ -11,7 +11,14 @@ import pandas as pd
 import pytest
 
 import ui.header as header
-from ui.header import IST, get_index_quotes, get_market_status, get_market_regime_snapshot
+from ui.header import (
+    IST,
+    format_last_scan_label,
+    format_tickers_screened_label,
+    get_index_quotes,
+    get_market_status,
+    get_market_regime_snapshot,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -78,6 +85,32 @@ class TestHolidayDetection:
         with patch.object(header, "get_nse_holidays", return_value=set()):
             monday_10am = IST.localize(datetime(2026, 7, 20, 10, 0))
             assert get_market_status(monday_10am) == "🟢 OPEN"
+
+
+class TestLastScanLabels:
+    """format_last_scan_label() / format_tickers_screened_label() -- pure
+    formatting logic pulled out of render() specifically so it's directly
+    testable (this module's existing convention: only pure functions get
+    unit tests here, not render()'s own widget-drawing)."""
+
+    def test_never_scanned_shows_honest_never_state(self):
+        assert format_last_scan_label(None) == "Last scan: never"
+
+    def test_completed_timestamp_is_formatted_with_ist_suffix(self):
+        completed_at = IST.localize(datetime(2026, 8, 18, 0, 15))
+        assert format_last_scan_label(completed_at) == "Last scan: 18 Aug, 00:15 IST"
+
+    def test_no_ticker_count_yet_returns_none_not_a_string(self):
+        # None (never scanned) must stay distinguishable from "0 tickers
+        # screened" (scanned, found nothing) -- both are real, different
+        # states.
+        assert format_tickers_screened_label(None) is None
+
+    def test_ticker_count_is_included_in_the_label(self):
+        assert format_tickers_screened_label(50) == "50 tickers screened from Leadership query"
+
+    def test_zero_tickers_screened_is_a_real_distinct_state(self):
+        assert format_tickers_screened_label(0) == "0 tickers screened from Leadership query"
 
 
 class TestIndexQuotes:
