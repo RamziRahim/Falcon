@@ -224,11 +224,23 @@ EXCLUDED_SECTORS = [
 # Hand-curated, ticker-level exclusion for alcohol manufacturers/distillers/
 # breweries/vineyards -- NOT done at the sector level (Yahoo's beverage
 # companies sit under "Consumer Defensive" alongside hundreds of unrelated
-# staples companies). Confirmed live against Screener.in/Tickertape
-# (2026-08-17): the NSE-listed alcohol universe is small (~20 tickers) and
-# stable enough to hand-curate directly, rather than fighting imprecise
-# industry-field taxonomy. Falcon's own ".NS"-suffixed ticker format,
-# matched against candidate["symbol"].
+# staples companies). Every symbol below individually confirmed directly
+# against NSE's own data (nselib.capital_market.equity_list() for the
+# mainboard master list, sme_band_complete() for the SME segment, and
+# price_volume_and_deliverable_position_data() to confirm each symbol
+# actually has real recent trading data -- the same source this codebase
+# already uses elsewhere for authoritative ticker data, not a secondary
+# web source) on 2026-08-17. An initial pass sourced from Screener.in/
+# Tickertape included several symbols that turned out to be BSE-only or
+# not currently NSE-listed under any symbol (Asgard Alcobev, Jagatjit
+# Industries, Fratelli Vineyards, Monika Alcobev, Cupid Breweries and
+# Distilleries, Piccadily Sugar and Allied Industries, Valencia
+# Nutrition) -- a Screener.in page existing doesn't confirm NSE listing,
+# it covers BSE too, so those were dropped rather than left in as
+# unverified/dead entries. A full sweep of NSE's mainboard company-name
+# list for alcohol-related keywords also surfaced two real, currently-
+# traded companies missing from that initial pass (Grand Oak Canyons
+# Distillery, Ravi Kumar Distilleries), added below.
 EXCLUDED_TICKERS = [
     "UNITDSPR.NS",    # United Spirits
     "UBL.NS",         # United Breweries
@@ -241,15 +253,10 @@ EXCLUDED_TICKERS = [
     "SDBL.NS",        # Som Distilleries and Breweries
     "ASALCBR.NS",     # Associated Alcohols & Breweries
     "SULA.NS",        # Sula Vineyards
-    "ASGARD.NS",      # Asgard Alcobev
     "IFBAGRO.NS",     # IFB Agro Industries
-    "JAGAJITIND.NS",  # Jagatjit Industries
-    "FRATELLI.NS",    # Fratelli Vineyards
-    "MONIKA.NS",      # Monika Alcobev
-    "CUPIDALBV.NS",   # Cupid Breweries and Distilleries
-    "PICCASUG.NS",    # Piccadily Sugar and Allied Industries
-    "VALENCIA.NS",    # Valencia Nutrition
-    "ALCODIS.NS",     # Alcokraft Distilleries
+    "ALCODIS.NS",     # Alcokraft Distilleries (NSE SME segment)
+    "GRANDOAK.NS",    # Grand Oak Canyons Distillery
+    "RKDL.NS",        # Ravi Kumar Distilleries
 ]
 
 FAIL_INDUSTRY_KEYWORDS = [
