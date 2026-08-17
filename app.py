@@ -36,17 +36,8 @@ if current_dir not in sys.path:
 
 # UI Module imports directly matching your folder structure
 from ui.sidebar import render as render_sidebar
-from ui.header import render as render_header, get_market_status
-from ui.summary_cards import render as render_summary_cards, DashboardStats
-from ui.chart_panel import ChartPanel
-from ui.candidate_grid import render as render_candidate_grid
-from ui.sector_ranking_panel import SectorRankingPanel
-
-# Fundamental Analysis (ROCE / Revenue YoY / Debt-to-Equity, cached)
-from fundamental_analysis.fundamental_cache import get_fundamentals
-
-# Internal-sentinel-to-display mapping (e.g. "DATA_GAP" -> "N/A")
-from common.utils import sentinel_to_display
+from ui.header import render as render_header
+import ui.dashboard as dashboard
 
 # New Scan pipeline orchestration (Phase 3 data collection -> Phase 4 -> Phase 5)
 from services.scan_pipeline_service import run_new_scan_pipeline
@@ -82,15 +73,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Master session state tracking keys matching blueprint Section 8
-if "selected_symbol" not in st.session_state:
-    st.session_state.selected_symbol = None
+# Master session state -- selected_symbol/ai_synthesis_runs/scan_time_elapsed
+# were the OLD Streamlit-native UI's own selection/AI-panel/KPI-card state;
+# the dashboard rebuild's interactivity (candidate selection, tab
+# switching, chart range) lives client-side inside the embedded component
+# instead (ui/dashboard.py), and the AI panel is disabled -- neither is
+# read anywhere anymore, so removed rather than kept as unused state.
 if "screener_records" not in st.session_state:
     st.session_state.screener_records = pd.DataFrame()
-if "ai_synthesis_runs" not in st.session_state:
-    st.session_state.ai_synthesis_runs = {}
-if "scan_time_elapsed" not in st.session_state:
-    st.session_state.scan_time_elapsed = 0.00
 
 # 1. Render Left Sidebar Navigation (Section 4)
 render_sidebar()
@@ -101,19 +91,17 @@ is_new_scan_triggered = render_header()
 # Execution pipeline chain triggered dynamically from your explicit button input
 if is_new_scan_triggered:
     with st.spinner("Invoking Falcon Engine Pipeline Chain..."):
-        start_time = datetime.now()
-        
         # ─── RUN CANDIDATE GENERATION ENGINE ────────────────────────────────
         from candidate_generation.candidate_generator import generate_candidates
         master_candidates_df = generate_candidates()
-        
+
         if not master_candidates_df.empty and "Symbol" in master_candidates_df.columns:
             # Ensure proper suffix handling for local listings
             ticker_universe = [
-                f"{sym}.NS" if not str(sym).endswith(".NS") else str(sym) 
+                f"{sym}.NS" if not str(sym).endswith(".NS") else str(sym)
                 for sym in master_candidates_df["Symbol"].tolist()
             ]
-            
+
             # ─── PHASE 3-5: MARKET DATA -> INDICATORS -> PATTERNS -> CANDIDATE TABLE ─
             progress_placeholder = st.empty()
             scan_result = run_new_scan_pipeline(ticker_universe, on_stage=progress_placeholder.info)
@@ -122,140 +110,13 @@ if is_new_scan_triggered:
             render_scan_warnings(scan_result.collection_result, scan_result.indicator_result)
 
             st.session_state.screener_records = scan_result.records_df
-            
-        st.session_state.scan_time_elapsed = (datetime.now() - start_time).total_seconds()
-        if not st.session_state.screener_records.empty:
-            st.session_state.selected_symbol = st.session_state.screener_records["Symbol"].iloc[0]
+
         st.rerun()
 
-# 3. Render Dashboard KPI Cards (Section 4)
-active_kpis = DashboardStats(
-    candidates=len(st.session_state.screener_records),
-    breakouts=len(st.session_state.screener_records[st.session_state.screener_records["Status"] == "Breakout"]) if not st.session_state.screener_records.empty else 0,
-    pullbacks=len(st.session_state.screener_records[st.session_state.screener_records["Status"] == "Pullback"]) if not st.session_state.screener_records.empty else 0,
-    strong_trends=len(st.session_state.screener_records[st.session_state.screener_records["Status"] == "Strong Trend"]) if not st.session_state.screener_records.empty else 0,
-    market_status=get_market_status(),
-    scan_duration=st.session_state.scan_time_elapsed
-)
-render_summary_cards(active_kpis)
-
-# 4. Main Workspace Split Panel Setup (65% Left vs 35% Right)
-if not st.session_state.screener_records.empty:
-    active_sym = st.session_state.selected_symbol or st.session_state.screener_records["Symbol"].iloc[0]
-    row_data = st.session_state.screener_records[st.session_state.screener_records["Symbol"] == active_sym].iloc[0]
-    
-    left_pane, right_pane = st.columns([6.5, 3.5])
-    
-    # --- LEFT WORKSPACE: CHART PANEL PANEL ---
-    with left_pane:
-        st.markdown(f"### Chart Framework: {active_sym}")
-        
-        source_file_path = f"data/patterns/{active_sym}.parquet"
-        if os.path.exists(source_file_path):
-            full_history_df = pd.read_parquet(source_file_path)
-            full_history_df["Date"] = pd.to_datetime(full_history_df.get("Date", full_history_df.index))
-        else:
-            st.warning(f"⚠️ MOCK CHART — no real price history found for {active_sym} yet. "
-                       f"Showing a synthetic placeholder series, not real market data.")
-            dates = pd.date_range(end=datetime.now(), periods=100)
-            full_history_df = pd.DataFrame({
-                "Date": dates, "Open": [1000 + i*15 for i in range(100)], "High": [1050 + i*15 for i in range(100)],
-                "Low": [980 + i*15 for i in range(100)], "Close": [1020 + i*15 for i in range(100)], "Volume": [150000]*100,
-                "EMA_20": [990 + i*15 for i in range(100)], "EMA_50": [950 + i*15 for i in range(100)], "EMA_200": [900 + i*15 for i in range(100)], "Trend_State": ["UPTREND"]*100
-            })
-
-        ChartPanel.render(active_sym, full_history_df)
-
-    # --- RIGHT WORKSPACE: TECHNICAL PANEL (TOP) & AI PANEL (BOTTOM) ---
-    with right_pane:
-        last_candle_row = full_history_df.iloc[-1]
-        trend_label = "STRONG UP TREND" if last_candle_row.get("Trend_State", "UNKNOWN") == "UPTREND" else "DOWN TREND"
-        vcp_score_str = str(row_data["VCP_Score"])
-        # Detail panel gets real, cached fundamentals for the selected symbol only
-        # (table-wide fundamentals are a fast-follow — see the candidate loop above).
-        active_fundamentals = get_fundamentals(active_sym)
-        roce_str = sentinel_to_display(active_fundamentals.get("roce", "N/A"))
-        yoy_rev_str = sentinel_to_display(active_fundamentals.get("revenue_yoy_quarterly_growth", "N/A"))
-        de_str = sentinel_to_display(active_fundamentals.get("debt_to_equity", "N/A"))
-        status_str = str(row_data["Status"])
-        
-        # HTML strings are shifted completely to the left margin to bypass Markdown's 4-space indent rules
-        st.markdown(f"""
-<div class="panel-box">
-<h4 style="margin-top:0; font-size:15px; color:#FFFFFF;">Technical Analysis Profile: {active_sym}</h4>
-<div class="section-header">Trend Matrix</div>
-<div class="info-row"><span class="info-label">Trend Classification</span><span class="badge badge-green">{trend_label}</span></div>
-<div class="section-header">Volatility Models</div>
-<div class="info-row"><span class="info-label">VCP Pattern Score</span><span class="badge badge-blue">{vcp_score_str}%</span></div>
-<div class="info-row"><span class="info-label">Setup Trigger Vector</span><span class="info-val">{status_str}</span></div>
-<div class="section-header">Fundamental Metrics Layer</div>
-<div class="info-row"><span class="info-label">Revenue Growth YoY</span><span class="txt-green" style="font-size:14px; font-weight:600;">{yoy_rev_str}</span></div>
-<div class="info-row"><span class="info-label">ROCE / D/E %</span><span class="info-val">{roce_str} / {de_str}</span></div>
-</div>
-""", unsafe_allow_html=True)
-        
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # AI Control Panel Module
-        with st.container(border=True):
-            st.markdown("<h4 style='margin-top:0; font-size:15px; color:#FFFFFF;'>Falcon AI Engine Guidance</h4>", unsafe_allow_html=True)
-
-            if active_sym not in st.session_state.ai_synthesis_runs:
-                st.warning("AI Generation awaiting explicit request link.")
-                if st.button("🧠 Generate AI Plan", use_container_width=True):
-                    # TODO(cleanup 2026-07-15): This does NOT call ai/synthesis_engine.py or the
-                    # Gemini provider at all. Every number below is derived from a fixed multiplier
-                    # on Price (e.g. SL = Price * 0.94), not from any AI inference. The score "88"
-                    # and R:R "1 : 2.6" are hardcoded constants. Wire this button to
-                    # ai.synthesis_engine.AISynthesisEngine before treating this as real AI output.
-                    st.session_state.ai_synthesis_runs[active_sym] = {
-                        "score": "88", "zone": f"₹{row_data['Price']} — ₹{round(row_data['Price']*1.01, 2)}",
-                        "targets": f"₹{round(row_data['Price']*1.08, 2)} / ₹{round(row_data['Price']*1.15, 2)}",
-                        "sl": f"₹{round(row_data['Price']*0.94, 2)}", "rr": "1 : 2.6",
-                        "is_simulated": True,
-                    }
-                    st.rerun()
-            else:
-                ai = st.session_state.ai_synthesis_runs[active_sym]
-                ai_score_val = str(ai["score"])
-                ai_zone_val = str(ai["zone"])
-                ai_targets_val = str(ai["targets"])
-                ai_sl_val = str(ai["sl"])
-                ai_rr_val = str(ai["rr"])
-
-                if ai.get("is_simulated"):
-                    st.error("⚠️ SIMULATED — this plan is calculated from a fixed price multiplier, "
-                             "not from the Falcon AI / Gemini engine. Do not trade on this yet.")
-
-                st.markdown(f"""
-<div style="display:flex; align-items:baseline; margin-bottom:10px;">
-<span style="font-size:32px; font-weight:800; color:#10B981; margin-right:5px;">{ai_score_val}</span>
-<span style="color:#6B7280; font-size:13px; margin-right:15px;">/ 100</span>
-<span class="badge badge-green">Confluence Mapped</span>
-</div>
-<div class="info-row"><span class="info-label">Accumulation Buy Zone</span><span class="info-val" style="color:#10B981;">{ai_zone_val}</span></div>
-<div class="info-row"><span class="info-label">Targets (T1 / T2)</span><span class="info-val">{ai_targets_val}</span></div>
-<div class="info-row"><span class="info-label">Stop Loss Invalidation</span><span class="info-val" style="color:#EF4444;"><b>{ai_sl_val}</b></span></div>
-<div class="info-row"><span class="info-label">Risk Reward Ratio</span><span class="info-val">{ai_rr_val}</span></div>
-""", unsafe_allow_html=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # 5. Render Bottom Watchlist Candidate Grid Component (Section 4)
-    selected_table_row = render_candidate_grid(st.session_state.screener_records)
-    if selected_table_row and selected_table_row != st.session_state.selected_symbol:
-        st.session_state.selected_symbol = selected_table_row
-        st.rerun()
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # 6. Render Key Insights: Sector RS Ranking Panel
-    with st.container(border=True):
-        SectorRankingPanel.render(st.session_state.screener_records)
-else:
-    st.markdown("""
-<div style="background-color:#111827; border:1px dashed #1F2937; padding:40px; border-radius:12px; text-align:center;">
-<h4 style="color:#9CA3AF; margin:0;">Falcon Swing Workstation Standby</h4>
-<p style="color:#6B7280; font-size:14px; margin:8px 0 0 0;">Select '➕ New Scan' inside the control header ribbon to activate your screening pipelines.</p>
-</div>
-""", unsafe_allow_html=True)
+# 3. Render the dashboard -- one embedded component built from the
+# reference mockup's own markup (ui/dashboard_template.html), fed real
+# data (ui/dashboard_data.py) from st.session_state.screener_records --
+# decision_engine.live_scorer.score_live_candidates()'s own output
+# (category/predicted_p/model_version/entry/stop_loss/target/.../
+# RS_Rating/Sector), no placeholder fields.
+dashboard.render(st.session_state.screener_records)

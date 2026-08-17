@@ -1,0 +1,420 @@
+<!--
+===============================================================================
+FALCON DASHBOARD -- rendered from reference_mockup_annotated.html
+===============================================================================
+Jinja2 template, converted from the mockup's own sc-for/sc-if/double-
+curly-brace template attributes to real Jinja2 for-loops/if-blocks --
+Jinja2's own output syntax is the same double-curly-brace convention the
+mockup already used, so most value interpolations carried over unchanged.
+Every inline style/font/color value below is copied byte-for-byte from
+the source mockup -- see that file's own header comment for provenance.
+
+Interactivity (selectTab/openCandidate/closeModal/selectRange) is
+reimplemented in plain JS at the bottom of this file, operating on
+DOM blocks that are ALL pre-rendered server-side (every candidate's
+full modal content, every chart range) -- JS only shows/hides, it does
+not fetch or template anything client-side. This is a deliberate v1
+simplification vs. the mockup's own React state model: opening a
+candidate's modal does not also re-point the main chart panel (the
+mockup's own openCandidate() coupled both) -- deferred, not dropped.
+===============================================================================
+-->
+<div style="font-family:'Inter',system-ui,sans-serif;background:oklch(0.16 0.012 250);min-height:100vh;color:oklch(0.92 0.008 250);display:flex;flex-direction:column;">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;">
+    <div style="display:flex;align-items:baseline;gap:10px;">
+      <div style="font-size:20px;font-weight:800;letter-spacing:-0.02em;">FALCON</div>
+      <div style="font-size:11px;color:oklch(0.58 0.01 250);letter-spacing:0.04em;text-transform:uppercase;">NSE Swing Trading Terminal</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;font-size:11.5px;color:oklch(0.58 0.01 250);">
+      <span class="mono">{{ session_label }}</span>
+      <span style="width:6px;height:6px;border-radius:50%;background:{{ '#22c55e' if market_open else '#6b7280' }};"></span>
+      <span>{{ 'Market Open' if market_open else 'Market Closed' }}</span>
+    </div>
+  </div>
+
+  <!-- Market Pulse Strip -->
+  <div style="padding:14px 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;background:oklch(0.185 0.014 250);">
+    <div style="display:flex;gap:0;align-items:stretch;flex-wrap:wrap;">
+
+      <!-- Regime verdict banner -->
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 22px 10px 16px;background:{{ market_pulse.regime.bg }};border-radius:8px;border:1px solid {{ market_pulse.regime.border }};margin-right:20px;">
+        <div style="font-size:26px;line-height:1;">{{ market_pulse.regime.emoji }}</div>
+        <div>
+          <div style="font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:{{ market_pulse.regime.subColor }};font-weight:600;">Market Regime</div>
+          <div style="font-size:17px;font-weight:800;color:{{ market_pulse.regime.color }};letter-spacing:-0.01em;">{{ market_pulse.regime.label }}</div>
+        </div>
+      </div>
+
+      <div style="width:1px;background:oklch(0.27 0.012 250);margin:2px 20px;"></div>
+
+      <!-- Indices -->
+      {% for idx in market_pulse.indices %}
+      <div style="padding:6px 18px;border-right:1px solid oklch(0.27 0.012 250);min-width:130px;">
+        <div style="font-size:10px;color:oklch(0.58 0.01 250);text-transform:uppercase;letter-spacing:0.04em;">{{ idx.name }}</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">
+          <span class="mono" style="font-size:15px;font-weight:600;">{{ idx.price }}</span>
+          <span class="mono" style="font-size:12px;font-weight:600;color:{{ idx.color }};">{{ idx.change }}</span>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div style="width:1px;background:oklch(0.27 0.012 250);margin:2px 20px;"></div>
+
+      <!-- NIFTY Trend badge (repurposed from the mockup's VIX slot -- Falcon
+           doesn't use VIX for anything; same slot/styling, sourced from
+           market_regime_verdict via scoring.market_regime.get_market_trend_state()). -->
+      <div style="padding:6px 18px;border-right:1px solid oklch(0.27 0.012 250);min-width:150px;">
+        <div style="font-size:10px;color:oklch(0.58 0.01 250);text-transform:uppercase;letter-spacing:0.04em;">NIFTY Trend</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:3px;">
+          <span class="mono" style="font-size:15px;font-weight:600;">{{ market_pulse.nifty_trend.value }}</span>
+          <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:0.03em;background:{{ market_pulse.nifty_trend.bg }};color:{{ market_pulse.nifty_trend.color }};border:1px solid {{ market_pulse.nifty_trend.border }};">{{ market_pulse.nifty_trend.badge }}</span>
+        </div>
+      </div>
+
+      <!-- Distribution days -->
+      <div style="padding:6px 18px;border-right:1px solid oklch(0.27 0.012 250);min-width:190px;">
+        <div style="font-size:10px;color:oklch(0.58 0.01 250);text-transform:uppercase;letter-spacing:0.04em;">Distribution Days (25d)</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:5px;">
+          <span class="mono" style="font-size:15px;font-weight:600;">{{ market_pulse.distribution.count }}</span>
+          <div style="display:flex;gap:2px;">
+            {% for seg in market_pulse.distribution.meter %}
+            <div style="width:9px;height:14px;border-radius:2px;background:{{ seg.color }};"></div>
+            {% endfor %}
+          </div>
+          <span style="font-size:10.5px;color:{{ market_pulse.distribution.labelColor }};font-weight:600;">{{ market_pulse.distribution.label }}</span>
+        </div>
+      </div>
+
+      <!-- FII/DII flow -- no real market-wide flow data source exists in
+           Falcon; honest unavailable state, not a fabricated number. -->
+      <div style="padding:6px 18px;min-width:230px;">
+        <div style="font-size:10px;color:oklch(0.58 0.01 250);text-transform:uppercase;letter-spacing:0.04em;">FII / DII Net (₹ Cr, today)</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:3px;">
+          <span class="mono" style="font-size:13px;color:oklch(0.5 0.01 250);">Not available -- no data source wired yet</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Chart + Sector Rotation row -->
+  <div style="display:grid;grid-template-columns:2fr 1fr;flex:1;min-height:0;">
+
+    <!-- LEFT column: chart, tabs, candidate lists -->
+    <div style="display:flex;flex-direction:column;min-width:0;border-right:1px solid oklch(0.27 0.012 250);overflow:hidden;">
+
+      <!-- Chart panel -->
+      {% if chart %}
+      <div style="padding:18px 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+          <div style="display:flex;align-items:baseline;gap:12px;">
+            <span style="font-size:16px;font-weight:800;">{{ chart.symbol }}</span>
+            <span class="mono" style="font-size:14px;">{{ chart.priceFmt }}</span>
+            <span class="mono" style="font-size:12px;font-weight:600;color:{{ chart.changeColor }};">{{ chart.changeFmt }}</span>
+            <span style="font-size:10.5px;color:oklch(0.58 0.01 250);">{{ chart.sector }}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <div style="display:flex;align-items:center;gap:6px;font-size:10.5px;color:oklch(0.6 0.01 250);">
+              <span style="width:10px;height:2px;background:oklch(0.7 0.15 230);display:inline-block;"></span>EMA 20
+              <span style="width:10px;height:2px;background:oklch(0.75 0.15 60);display:inline-block;margin-left:8px;"></span>EMA 50
+            </div>
+            <div style="display:flex;gap:2px;" id="chart-range-tabs">
+              {% for r in ['1M', '3M', '6M'] %}
+              <div onclick="falconSelectRange('{{ r }}')" data-range-tab="{{ r }}" style="padding:4px 10px;font-size:10.5px;font-weight:600;border-radius:5px;cursor:pointer;{{ 'background:oklch(0.3 0.012 250);color:oklch(0.9 0.008 250);' if r == '3M' else 'background:transparent;color:oklch(0.55 0.01 250);' }}">{{ r }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        {% for r in ['1M', '3M', '6M'] %}
+        <div class="chart-range-block" data-range-block="{{ r }}" style="{{ '' if r == '3M' else 'display:none;' }}">
+          <div style="position:relative;height:230px;">
+            <div style="display:flex;align-items:flex-end;height:100%;gap:2px;">
+              {% for cd in chart.ranges[r].candles %}
+              <div style="flex:1;position:relative;height:100%;">
+                <div style="{{ cd.wickStyle }}"></div>
+                <div style="{{ cd.bodyStyle }}"></div>
+              </div>
+              {% endfor %}
+            </div>
+            <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <polyline points="{{ chart.ranges[r].ema20Points }}" fill="none" stroke="oklch(0.7 0.15 230)" stroke-width="0.6" vector-effect="non-scaling-stroke"></polyline>
+              <polyline points="{{ chart.ranges[r].ema50Points }}" fill="none" stroke="oklch(0.75 0.15 60)" stroke-width="0.6" vector-effect="non-scaling-stroke"></polyline>
+            </svg>
+          </div>
+
+          <div style="display:flex;align-items:flex-end;height:44px;gap:2px;margin-top:6px;">
+            {% for v in chart.ranges[r].volumeBars %}
+            <div style="flex:1;height:{{ v.heightPct }};background:{{ v.color }};border-radius:1px;"></div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div style="padding:40px 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;text-align:center;color:oklch(0.5 0.01 250);font-size:12.5px;">
+        No chartable candidate yet -- run a scan to populate real EXECUTE/WATCHLIST signals.
+      </div>
+      {% endif %}
+
+      <!-- Strategy tabs -->
+      <div style="display:flex;gap:2px;padding:0 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;">
+        {% for tab in strategy_tabs %}
+        <div onclick="falconSelectTab('{{ tab.key }}')" data-tab-button="{{ tab.key }}" style="padding:13px 18px;font-size:13px;font-weight:600;cursor:pointer;color:{{ 'oklch(0.92 0.008 250)' if tab.key == active_strategy_tab else 'oklch(0.55 0.01 250)' }};border-bottom:2px solid {{ 'oklch(0.72 0.19 150)' if tab.key == active_strategy_tab else 'transparent' }};display:flex;align-items:center;gap:8px;">
+          {{ tab.label }}
+          {% if tab.comingSoon %}
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:oklch(0.3 0.01 250);color:oklch(0.62 0.01 250);letter-spacing:0.04em;">SOON</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Candidates column -->
+      <div style="flex:1;padding:20px 24px;overflow-y:auto;">
+
+      <div data-tab-panel="leadership" style="{{ '' if active_strategy_tab == 'leadership' else 'display:none;' }}">
+        <div>
+          <!-- EXECUTE section -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:13px;font-weight:700;color:oklch(0.72 0.19 150);letter-spacing:0.02em;">🟢 EXECUTE</span>
+            <span style="font-size:11px;color:oklch(0.55 0.01 250);">Strong conviction -- calibrated model probability clears the EXECUTE threshold</span>
+            <span class="mono" style="margin-left:auto;font-size:11px;color:oklch(0.55 0.01 250);">{{ execute_candidates|length }} candidates</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+            {% for c in execute_candidates %}
+            {% include 'dashboard_candidate_card.html' %}
+            {% else %}
+            <div style="font-size:12px;color:oklch(0.5 0.01 250);padding:12px 0;">No EXECUTE-grade candidates in the current scan.</div>
+            {% endfor %}
+          </div>
+
+          <!-- WATCHLIST section -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span style="font-size:13px;font-weight:700;color:oklch(0.78 0.16 80);letter-spacing:0.02em;">🟡 ALERT / WATCHLIST</span>
+            <span style="font-size:11px;color:oklch(0.55 0.01 250);">Good setup, below the EXECUTE threshold -- review before sizing</span>
+            <span class="mono" style="margin-left:auto;font-size:11px;color:oklch(0.55 0.01 250);">{{ watchlist_candidates|length }} candidates</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            {% for c in watchlist_candidates %}
+            {% include 'dashboard_candidate_card.html' %}
+            {% else %}
+            <div style="font-size:12px;color:oklch(0.5 0.01 250);padding:12px 0;">No WATCHLIST-grade candidates in the current scan.</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {% for tab in strategy_tabs %}
+      {% if tab.comingSoon %}
+      <div data-tab-panel="{{ tab.key }}" style="display:none;flex-direction:column;align-items:center;justify-content:center;height:420px;gap:10px;color:oklch(0.5 0.01 250);">
+        <div style="font-size:15px;font-weight:700;color:oklch(0.7 0.01 250);">{{ tab.label }} -- Coming Soon</div>
+        <div style="font-size:12.5px;max-width:420px;text-align:center;line-height:1.6;">This strategy engine shares Falcon's deterministic scoring architecture with Leadership. Rule set and backtest calibration are in progress.</div>
+      </div>
+      {% endif %}
+      {% endfor %}
+
+      </div>
+    </div>
+
+    <!-- RIGHT column: Sector Rotation + Market Insights -->
+    <div style="display:flex;flex-direction:column;min-width:0;overflow-y:auto;">
+      <div style="padding:20px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Sector Rotation</div>
+        <div style="font-size:11px;color:oklch(0.55 0.01 250);line-height:1.5;margin-bottom:16px;">Sectors ranked by average sector-index-anchored RS Rating of their constituents. Ticker count in parentheses shows how broad-based the move is.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          {% for s in sectors %}
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:4px;">
+              <span style="font-weight:600;">{{ s.name }}</span>
+              <span class="mono" style="color:oklch(0.58 0.01 250);">{{ s.rs }} &middot; {{ s.countLabel }}</span>
+            </div>
+            <div style="height:8px;border-radius:4px;background:oklch(0.25 0.012 250);overflow:hidden;">
+              <div style="height:100%;width:{{ s.barWidth }};background:{{ s.barColor }};border-radius:4px;"></div>
+            </div>
+          </div>
+          {% else %}
+          <div style="font-size:11.5px;color:oklch(0.5 0.01 250);">No sector data yet -- run a scan.</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Market Insights -- Coming Soon: Falcon has no automated
+           narrative/insight-generation capability (the same underlying
+           gap as the AI narration panel below), so this panel is
+           deliberately disabled rather than filled with fabricated
+           prose. -->
+      <div style="padding:20px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Market Insights</div>
+        <div style="font-size:11px;color:oklch(0.55 0.01 250);line-height:1.5;">Coming soon -- automated market narration isn't built yet.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- All Filtered Candidates table -->
+  <div style="padding:20px 24px;border-top:1px solid oklch(0.27 0.012 250);flex-shrink:0;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span style="font-size:13px;font-weight:700;">All Filtered Candidates</span>
+      <span class="mono" style="font-size:11px;color:oklch(0.55 0.01 250);">{{ all_candidates|length }} rows &middot; Leadership strategy</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <div style="display:table;width:100%;border-collapse:collapse;font-size:12px;min-width:960px;">
+        <div style="display:table-row;border-bottom:1px solid oklch(0.28 0.012 250);">
+          <div style="display:table-cell;text-align:left;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Symbol</div>
+          <div style="display:table-cell;text-align:right;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Price</div>
+          <div style="display:table-cell;text-align:right;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Chg %</div>
+          <div style="display:table-cell;text-align:left;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Category</div>
+          <div style="display:table-cell;text-align:right;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Confidence</div>
+          <div style="display:table-cell;text-align:right;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">RS</div>
+          <div style="display:table-cell;text-align:left;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Sector</div>
+          <div style="display:table-cell;text-align:left;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Factors</div>
+          <div style="display:table-cell;text-align:left;padding:8px 10px;color:oklch(0.55 0.01 250);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:0.03em;">Risk Flags</div>
+        </div>
+        {% for c in all_candidates %}
+        <div onclick="falconOpenCandidate('{{ c.id }}')" class="falcon-row-hover" style="display:table-row;border-bottom:1px solid oklch(0.23 0.012 250);cursor:pointer;">
+          <div style="display:table-cell;padding:9px 10px;font-weight:700;">{{ c.symbol }}</div>
+          <div class="mono" style="display:table-cell;padding:9px 10px;text-align:right;">{{ c.priceFmt }}</div>
+          <div class="mono" style="display:table-cell;padding:9px 10px;text-align:right;font-weight:600;color:{{ c.changeColor }};">{{ c.changeFmt }}</div>
+          <div style="display:table-cell;padding:9px 10px;">
+            <span style="font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;background:{{ c.categoryBg }};color:{{ c.categoryColor }};">{{ c.categoryLabel }}</span>
+          </div>
+          <div class="mono" style="display:table-cell;padding:9px 10px;text-align:right;font-weight:600;">{{ c.conf }}</div>
+          <div class="mono" style="display:table-cell;padding:9px 10px;text-align:right;">{{ c.rsRating }}</div>
+          <div style="display:table-cell;padding:9px 10px;color:oklch(0.65 0.01 250);">{{ c.sector }}</div>
+          <div style="display:table-cell;padding:9px 10px;color:oklch(0.65 0.01 250);font-size:11px;">{{ c.factors|join(' &middot; ') if c.factors else na }}</div>
+          <div style="display:table-cell;padding:9px 10px;color:oklch(0.75 0.13 60);font-size:11px;">{{ c.riskFlags|join(' &middot; ') if c.riskFlags else na }}</div>
+        </div>
+        {% else %}
+        <div style="display:table-row;"><div style="display:table-cell;padding:16px 10px;color:oklch(0.5 0.01 250);" colspan="9">No candidates in the current scan yet -- run New Scan.</div></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Deep-dive modals, one per candidate, pre-rendered and hidden --
+       falconOpenCandidate() shows the matching one and the shared overlay. -->
+  <div id="falcon-modal-overlay" onclick="falconCloseModal(event)" style="display:none;position:fixed;inset:0;background:oklch(0.05 0.01 250 / 0.7);justify-content:flex-end;z-index:50;">
+    {% for c in all_candidates %}
+    <div id="falcon-modal-{{ c.id }}" data-modal-panel="{{ c.id }}" onclick="event.stopPropagation()" class="fadein" style="display:none;width:560px;max-width:92vw;height:100%;background:oklch(0.17 0.012 250);border-left:1px solid oklch(0.3 0.012 250);overflow-y:auto;padding:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+        <div>
+          <div style="font-size:20px;font-weight:800;">{{ c.symbol }}</div>
+          <div style="font-size:12px;color:oklch(0.58 0.01 250);margin-top:2px;">{{ c.sector }} &middot; RS {{ c.rsRating }}</div>
+        </div>
+        <div onclick="falconCloseModal(event)" style="cursor:pointer;font-size:20px;color:oklch(0.55 0.01 250);padding:4px 8px;">&times;</div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:oklch(0.58 0.01 250);margin-bottom:10px;">Model Confidence</div>
+      <div style="background:oklch(0.20 0.014 250);border:1px solid oklch(0.28 0.012 250);border-radius:8px;padding:16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;color:oklch(0.7 0.01 250);">Calibrated model predicted win probability</span>
+        <span class="mono" style="font-size:18px;font-weight:800;color:{{ c.categoryColor }};">{{ c.conf }}{{ '' if c.conf == na else '%' }}</span>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:oklch(0.58 0.01 250);margin:16px 0 10px;">Composite Score Breakdown <span style="text-transform:none;font-weight:500;color:oklch(0.5 0.01 250);">-- the legacy 0-100 scoring engine's own contributing factors; no longer what decides EXECUTE vs. WATCHLIST (the model confidence above does)</span></div>
+      <div style="background:oklch(0.20 0.014 250);border:1px solid oklch(0.28 0.012 250);border-radius:8px;padding:16px;margin-bottom:20px;">
+        {% for row in c.waterfall %}
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <div style="width:100%;font-size:11px;color:{{ 'oklch(0.72 0.01 250)' if row.isBase else 'oklch(0.82 0.15 150)' }};">{{ row.label }}</div>
+        </div>
+        {% endfor %}
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid oklch(0.3 0.012 250);margin-top:10px;padding-top:10px;">
+          <span style="font-size:12px;font-weight:700;">Composite Score</span>
+          <span class="mono" style="font-size:15px;font-weight:800;">{{ c.confidenceScore }}</span>
+        </div>
+      </div>
+
+      {% if c.cap %}
+      <div style="background:oklch(0.28 0.08 80 / 0.35);border:1px solid oklch(0.45 0.1 80 / 0.5);border-radius:8px;padding:10px 12px;margin-bottom:20px;font-size:11.5px;color:oklch(0.85 0.1 80);">
+        <strong>Cap applied:</strong> {{ c.cap }}
+      </div>
+      {% endif %}
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:oklch(0.58 0.01 250);margin-bottom:10px;">Trade Plan <span style="text-transform:none;font-weight:500;color:oklch(0.5 0.01 250);">-- generated by deterministic rules</span></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px;">
+        <div style="background:oklch(0.20 0.014 250);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:oklch(0.55 0.01 250);">Entry</div>
+          <div class="mono" style="font-size:13.5px;font-weight:700;margin-top:3px;">{{ c.plan.entry }}</div>
+        </div>
+        <div style="background:oklch(0.20 0.014 250);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:oklch(0.55 0.01 250);">Target</div>
+          <div class="mono" style="font-size:13.5px;font-weight:700;margin-top:3px;color:oklch(0.72 0.19 150);">{{ c.plan.target }}</div>
+        </div>
+        <div style="background:oklch(0.20 0.014 250);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:oklch(0.55 0.01 250);">Stop-Loss</div>
+          <div class="mono" style="font-size:13.5px;font-weight:700;margin-top:3px;color:oklch(0.68 0.2 25);">{{ c.plan.stop }}</div>
+        </div>
+        <div style="background:oklch(0.20 0.014 250);border-radius:8px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:oklch(0.55 0.01 250);">Risk:Reward</div>
+          <div class="mono" style="font-size:13.5px;font-weight:700;margin-top:3px;">{{ c.plan.rr }}</div>
+        </div>
+      </div>
+      <div style="font-size:10.5px;color:oklch(0.55 0.01 250);margin-bottom:20px;">Stop: {{ c.plan.stopProvenance }} &middot; Target: {{ c.plan.targetProvenance }}</div>
+
+      <!-- AI narration -- disabled, per the build instructions: the real
+           narration layer isn't built yet, so this is a "coming soon"
+           state, not wired to any fake logic. -->
+      <div style="background:oklch(0.22 0.05 300 / 0.22);border:1px solid oklch(0.45 0.1 300 / 0.45);border-radius:8px;padding:14px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:oklch(0.68 0.18 300);"></span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:oklch(0.78 0.13 300);">Falcon AI Narration</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:oklch(0.3 0.01 250);color:oklch(0.62 0.01 250);letter-spacing:0.04em;">SOON</span>
+        </div>
+        <div style="font-size:11.5px;color:oklch(0.65 0.02 300);">Coming soon -- the real narration layer isn't built yet.</div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:oklch(0.58 0.01 250);margin-bottom:10px;">Fundamentals</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:12px;">
+        {% for fn in c.fundamentals %}
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid oklch(0.24 0.012 250);padding-bottom:5px;">
+          <span style="color:oklch(0.6 0.01 250);">{{ fn.k }}</span>
+          <span class="mono" style="font-weight:600;">{{ fn.v }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+<script>
+function falconSelectTab(key) {
+  document.querySelectorAll('[data-tab-panel]').forEach(function(el) {
+    el.style.display = (el.getAttribute('data-tab-panel') === key) ? 'flex' : 'none';
+  });
+  // Leadership's own panel is a plain block, not flex -- override back.
+  var leadership = document.querySelector('[data-tab-panel="leadership"]');
+  if (leadership) { leadership.style.display = (key === 'leadership') ? 'block' : 'none'; }
+
+  document.querySelectorAll('[data-tab-button]').forEach(function(el) {
+    var active = el.getAttribute('data-tab-button') === key;
+    el.style.color = active ? 'oklch(0.92 0.008 250)' : 'oklch(0.55 0.01 250)';
+    el.style.borderBottom = '2px solid ' + (active ? 'oklch(0.72 0.19 150)' : 'transparent');
+  });
+}
+
+function falconSelectRange(range) {
+  document.querySelectorAll('[data-range-block]').forEach(function(el) {
+    el.style.display = (el.getAttribute('data-range-block') === range) ? '' : 'none';
+  });
+  document.querySelectorAll('[data-range-tab]').forEach(function(el) {
+    var active = el.getAttribute('data-range-tab') === range;
+    el.style.background = active ? 'oklch(0.3 0.012 250)' : 'transparent';
+    el.style.color = active ? 'oklch(0.9 0.008 250)' : 'oklch(0.55 0.01 250)';
+  });
+}
+
+function falconOpenCandidate(id) {
+  document.querySelectorAll('[data-modal-panel]').forEach(function(el) {
+    el.style.display = (el.getAttribute('data-modal-panel') === id) ? 'block' : 'none';
+  });
+  document.getElementById('falcon-modal-overlay').style.display = 'flex';
+}
+
+function falconCloseModal(evt) {
+  if (evt && evt.target !== evt.currentTarget) { return; }
+  document.getElementById('falcon-modal-overlay').style.display = 'none';
+}
+</script>

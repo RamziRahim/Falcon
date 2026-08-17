@@ -117,7 +117,17 @@ def get_market_status(now: datetime | None = None) -> str:
 
 def render() -> bool:
     """
-    Render Falcon dashboard header.
+    Render Falcon dashboard header: greeting, market status/time, and the
+    New Scan trigger.
+
+    Dashboard rebuild note: this function previously also drew a market-
+    snapshot row (indices + regime via st.metric()) below the divider --
+    that content now lives in ui/dashboard.py's own market pulse strip
+    (the mockup-derived embedded component), so drawing it here too would
+    duplicate it. get_index_quotes()/get_market_regime_snapshot() below
+    are unchanged and still the real, tested data sources ui/dashboard.py
+    itself calls -- only the second, redundant Streamlit-native rendering
+    of that same data was removed.
 
     Returns
     -------
@@ -182,44 +192,6 @@ Scan markets. Find leaders. Ride the trend.
             "Market Overview",
             use_container_width=True,
         )
-
-    st.divider()
-
-    # ------------------------------------------------------------------
-    # Market Snapshot
-    # ------------------------------------------------------------------
-
-    quotes = get_index_quotes()
-    regime = get_market_regime_snapshot()
-
-    snapshot_columns = st.columns(4)
-
-    for column, (label, _symbol) in zip(snapshot_columns[:3], INDEX_SYMBOLS):
-
-        with column:
-
-            q = quotes.get(label)
-
-            if q:
-                st.metric(
-                    label,
-                    f"{q['last_price']:,.2f}",
-                    f"{q['change_pct']:+.2f}%",
-                )
-            else:
-                st.metric(label, "—", "data unavailable")
-
-    with snapshot_columns[3]:
-
-        if regime:
-            verdict_prefix = _REGIME_VERDICT_PREFIX.get(regime["verdict"], "")
-            st.metric(
-                "Market Regime",
-                regime["trend_state"],
-                f"{verdict_prefix}{regime['verdict']}",
-            )
-        else:
-            st.metric("Market Regime", "—", "data unavailable")
 
     st.divider()
 
