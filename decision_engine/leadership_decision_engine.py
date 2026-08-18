@@ -254,18 +254,41 @@ TECHNICAL_DISQUALIFIERS = [
     lambda s: s.get("Sector") in EXCLUDED_SECTORS or s.get("symbol") in EXCLUDED_TICKERS,
 ]
 
-# `is None or` on each numeric check: candidate_assembler.py's
-# _parse_formatted_percentage() legitimately returns None for a
-# non-numeric upstream sentinel (e.g. corporate_engine.py's D_E can come
-# back as "DEBT_FREE" instead of a number) -- direct `s["ROCE"] < 10.0`
-# would raise TypeError comparing None to a float the first time real
-# data hit this path. Missing/unparseable fundamental data fails closed
-# (disqualifies) rather than silently passing a quality gate whose whole
-# point is to filter on that same data.
-FUNDAMENTAL_DISQUALIFIERS = [
-    lambda s: s["D_E"] is None or s["D_E"] > 0.5,
-    lambda s: s["ROCE"] is None or s["ROCE"] < 10.0,
-]
+# ROCE/D_E disqualifiers deliberately removed from the live path,
+# 2026-08-18 (see docs/known_data_issues.md's "ROCE/D-E quality gating
+# moved to Screener" entry for the full decision record). Both quality
+# gates now live entirely in Screener's own query
+# (candidate_generation/strategies/Leadership/screen.query -- "Debt to
+# equity < 0.33" and "Return on capital employed > 10"), which is
+# strictly *tighter* than what these two lambdas ever enforced (D_E<0.33
+# vs. D_E>0.5 here; ROCE>10 vs. ROCE<10.0 here) -- Screener's own filter
+# already fully subsumes this check for every candidate that can
+# currently reach categorize() at all, since Screener IS the live
+# universe source today. get_roce() (fundamental_analysis/metrics_engine.py)
+# and D_E's own computation are untouched and still real -- only
+# referencing them here, in the disqualifier list, was removed. This
+# ALSO sidesteps the stale-cache bug documented separately (a persistent
+# fundamentals cache serving pre-fix ROCE values for up to 7 days) --
+# that bug still exists and still matters for the dashboard's own
+# fundamentals *display*, just no longer for this gate.
+#
+# Re-enabling later (once the live universe source is no longer
+# Screener-only -- a wider self-built universe, a backtest-driven live
+# scan, etc. -- see the docs entry for why that's the trigger): restore
+# the two lines below into this list.
+#   lambda s: s["D_E"] is None or s["D_E"] > 0.5,
+#   lambda s: s["ROCE"] is None or s["ROCE"] < 10.0,
+#
+# `is None or` on each numeric check (kept here for whoever re-enables
+# this): candidate_assembler.py's _parse_formatted_percentage()
+# legitimately returns None for a non-numeric upstream sentinel (e.g.
+# corporate_engine.py's D_E can come back as "DEBT_FREE" instead of a
+# number) -- direct `s["ROCE"] < 10.0` would raise TypeError comparing
+# None to a float the first time real data hit this path. Missing/
+# unparseable fundamental data fails closed (disqualifies) rather than
+# silently passing a quality gate whose whole point is to filter on that
+# same data.
+FUNDAMENTAL_DISQUALIFIERS = []
 
 DISQUALIFIERS = TECHNICAL_DISQUALIFIERS + FUNDAMENTAL_DISQUALIFIERS
 
@@ -761,12 +784,18 @@ def categorize(
         without touching call sites.
 
     disable_fundamental_signals=True is for backtesting/replay_engine.py:
-    it genuinely skips the ROCE/D_E disqualifiers, the EARNINGS_PROXIMITY
-    cap, and every fundamental-sourced score modifier/flag, rather than
-    letting them fail closed on data that was never fetched for a
-    historical replay date. This is different from the live path's
-    "missing data fails closed" behavior (see FUNDAMENTAL_DISQUALIFIERS'
-    own comment) -- here the checks are deliberately not run at all, not
+    it skips the EARNINGS_PROXIMITY cap and every fundamental-sourced
+    score modifier/flag, rather than letting them fail closed on data
+    that was never fetched for a historical replay date. (The ROCE/D_E
+    disqualifiers this used to also skip are gone from
+    FUNDAMENTAL_DISQUALIFIERS entirely as of 2026-08-18 -- see that
+    list's own comment and docs/known_data_issues.md -- so this flag no
+    longer has anything fundamental-disqualifier-shaped left to skip
+    there specifically; every other fundamental-sourced behavior below
+    is still real and still gated by this flag.) This is different from
+    the live path's "missing data fails closed" behavior (see
+    FUNDAMENTAL_DISQUALIFIERS' own comment) -- here the checks are
+    deliberately not run at all, not
     run and made to fail one particular way. Default False preserves the
     exact live-path behavior.
 

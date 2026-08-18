@@ -172,3 +172,69 @@ Leaving this open rather than closed, since "it didn't reproduce once"
 isn't the same as "it can't happen again" -- revisit if it recurs.
 
 ---
+
+## 3. ROCE/D-E quality gating moved to Screener, Falcon's own check now unused (deliberate, open)
+
+**Decision date: 2026-08-18.**
+
+**What changed**: `decision_engine/leadership_decision_engine.py`'s
+`FUNDAMENTAL_DISQUALIFIERS` (the `D_E > 0.5` / `ROCE < 10.0` AVOID
+checks) is now an empty list -- ROCE and D_E no longer gate AVOID
+anywhere on the live path. In their place,
+`candidate_generation/strategies/Leadership/screen.query` now filters on
+`Return on capital employed > 10` alongside the pre-existing
+`Debt to equity < 0.33` -- both fundamental quality gates live entirely
+in Screener's own query today, not in Falcon's own code. Verified live
+against Screener.in directly before landing: the updated query parses
+and runs cleanly (115 real matches the day this was tested), not
+guessed syntax.
+
+**Why**: found while spot-checking a live scan's AVOID breakdown at
+scale (135-ticker run, 2026-08-18) -- a *separate* bug from the row-
+matching bug fixed earlier the same week (`ed5e1ae`): the underlying
+`get_roce()` computation is correct, but `fundamental_analysis/
+fundamental_cache.py` caches fundamentals for 7 days
+(`REFRESH_INTERVAL_DAYS = 7`) with no invalidation tied to code changes,
+so any ticker cached before a fix lands keeps silently serving the
+pre-fix value for up to a week. Confirmed 3 tickers (HAPPYFORGE.NS,
+DIVISLAB.NS, SONACOMS.NS) wrongly AVOIDed on stale sub-1%-looking ROCE
+readings when their real, freshly-computed ROCE was 12-18% -- well
+clear of the 10% floor. 13 of that day's 26 `LOW_ROCE` AVOIDs were
+cached before the row-matching fix landed and were never re-verified
+individually beyond those 3.
+
+Given Screener's own query already enforces both gates today (D/E<0.33
+is *tighter* than the removed D_E>0.5 check ever was; ROCE>10 matches
+the removed ROCE<10.0 check exactly), and Screener IS the entire live
+universe source right now -- every candidate that can reach
+`categorize()` at all has already cleared both filters before Falcon
+ever sees it -- Falcon's own redundant, cache-fragile copy of the same
+gate was retired rather than patched. `get_roce()` and D_E's own
+computation are untouched and still real; only the disqualifier
+*reference* to them was removed (see `FUNDAMENTAL_DISQUALIFIERS`'s own
+comment for the exact two lines to restore). ROCE/D_E are still fetched
+and cached for the dashboard's own Fundamentals-panel *display*
+(`ui/dashboard_data.py`'s `fetch_fundamentals_view()`) -- confirmed the
+only other real (non-dead-code) consumer via a full-codebase usage
+audit before this decision -- so no fetch was skipped and there's no
+scan-speed change here. The stale-cache bug itself is **not fixed**,
+just lowered in stakes: it can now only show a stale number in the UI,
+not silently reject a genuinely good stock. Fixing the cache
+invalidation itself remains open, at leisure, not urgent.
+
+**This must be revisited before the live universe source ever changes
+from Screener to anything else** -- a wider self-built universe, a
+backtest-replay-driven live scan, or any candidate source that doesn't
+already carry its own D/E-and-ROCE prefilter. On that day, fundamental
+quality filtering silently disappears entirely (not degrades -- Screener's
+gate goes away and nothing replaces it) unless the two disqualifier
+lines above are restored into `FUNDAMENTAL_DISQUALIFIERS` first. This is
+the single most important thing to check before trusting results from a
+non-Screener candidate source.
+
+**Status: open by design** -- not a bug to fix, a scope decision to
+track so it isn't silently forgotten. Revisit trigger: any change to
+`ticker_universe`'s source in `app.py` / `services/scan_pipeline_service.py`
+away from `candidate_generation.candidate_generator.generate_candidates()`.
+
+---

@@ -305,6 +305,78 @@ class TestEthicalExclusionFilter:
         assert result["category"] == "AVOID"
 
 
+class TestRoceDebtEquityNoLongerDisqualify:
+    """ROCE/D_E disqualifiers removed from FUNDAMENTAL_DISQUALIFIERS,
+    2026-08-18 (docs/known_data_issues.md item #3) -- both quality gates
+    moved entirely into Screener's own query (screen.query's
+    "Debt to equity < 0.33" / "Return on capital employed > 10"), which
+    already fully subsumes this for every candidate that can reach
+    categorize() at all today. Pins the new behavior explicitly: a
+    candidate with a genuinely bad ROCE/D_E (values that WOULD have
+    disqualified under the old lambdas) must clear this stage and reach
+    EXECUTE now, on both the live and backtest-mode disqualifier lists --
+    proves the removal, not just an absence of a positive assertion."""
+
+    def _execute_eligible_candidate(self, **overrides):
+        candidate = _candidate(
+            is_vcp_breakout=True, has_active_fvg=True, has_liquidity_sweep=True,
+            RS_Rating=100.0, institutional_sponsorship_pct=25.0,
+            **overrides,
+        )
+        sector_row = _sector_row(Avg_RS_Rating=70.0, Pct_Uptrend=70.0)  # STRONG sector
+        return candidate, sector_row
+
+    def test_high_de_no_longer_disqualifies(self):
+        # 0.9 would have failed the old `D_E > 0.5` check outright.
+        candidate, sector_row = self._execute_eligible_candidate(D_E=0.9)
+
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE",
+            model_artifact=_always_execute_artifact(),
+        )
+
+        assert result["category"] == "EXECUTE"
+
+    def test_low_roce_no_longer_disqualifies(self):
+        # 2.0 would have failed the old `ROCE < 10.0` check outright.
+        candidate, sector_row = self._execute_eligible_candidate(ROCE=2.0)
+
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE",
+            model_artifact=_always_execute_artifact(),
+        )
+
+        assert result["category"] == "EXECUTE"
+
+    def test_none_de_and_roce_no_longer_disqualify(self):
+        # None used to fail closed (disqualify) under the old "is None or"
+        # guard -- confirms that fail-closed behavior is genuinely gone,
+        # not just the numeric-threshold half of it.
+        candidate, sector_row = self._execute_eligible_candidate(D_E=None, ROCE=None)
+
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE",
+            model_artifact=_always_execute_artifact(),
+        )
+
+        assert result["category"] == "EXECUTE"
+
+    def test_bad_fundamentals_still_clear_under_disable_fundamental_signals(self):
+        # Same bad-ROCE candidate through the backtest-mode disqualifier
+        # list too -- was already unaffected by disable_fundamental_signals
+        # before this change (FUNDAMENTAL_DISQUALIFIERS was always skipped
+        # there), still is now that the list is simply empty.
+        candidate, sector_row = self._execute_eligible_candidate(D_E=0.9, ROCE=2.0)
+
+        result = categorize(
+            candidate, sector_row, market_verdict="FAVORABLE",
+            model_artifact=_always_execute_artifact(),
+            disable_fundamental_signals=True,
+        )
+
+        assert result["category"] == "EXECUTE"
+
+
 class TestPredictedPAndModelVersionSurfaced:
     """Phase 4.6 follow-up: predicted_p and model_version were computed and
     used internally to set final_category, but never reached categorize()'s

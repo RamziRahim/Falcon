@@ -7,4 +7,5 @@ YOY Quarterly sales growth > 5 AND
 YOY Quarterly profit growth > 5 AND
 Market Capitalization > 5000 AND
 Debt to equity < 0.33 AND
+Return on capital employed > 10 AND
 Volume 1week average > 100000
