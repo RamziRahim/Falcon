@@ -166,3 +166,21 @@ def parse_results(page: Page) -> pd.DataFrame:
     except Exception as ex:
 
         raise TableParsingError(str(ex)) from ex
+
+
+def has_next_page(page: Page) -> bool:
+    """
+    True when a "Next" pagination link is present on the currently-loaded
+    results page.
+
+    Screener's custom-query results always paginate at a fixed page size
+    (Falcon requests the site's own maximum, 50/page) regardless of how
+    many rows actually match the query -- a query matching more than 50
+    stocks (e.g. the Leadership query's real 132-match, 3-page result set)
+    silently returned only page 1's 50 rows before this existed. Confirmed
+    live: the "Next" link is a plain `.pagination a` -- present on every
+    page except the last, where Screener removes it entirely rather than
+    disabling/greying it out, so a plain locator count is a reliable
+    end-of-results signal.
+    """
+    return page.locator(".pagination a:has-text('Next')").count() > 0
