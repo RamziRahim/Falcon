@@ -13,6 +13,8 @@ import pytest
 import ui.header as header
 from ui.header import (
     IST,
+    compute_category_breakdown,
+    format_category_breakdown_label,
     format_last_scan_label,
     format_tickers_screened_label,
     get_index_quotes,
@@ -111,6 +113,67 @@ class TestLastScanLabels:
 
     def test_zero_tickers_screened_is_a_real_distinct_state(self):
         assert format_tickers_screened_label(0) == "0 tickers screened from Leadership query"
+
+
+class TestCategoryBreakdown:
+    """compute_category_breakdown() / format_category_breakdown_label() --
+    the full EXECUTE/WATCHLIST/MONITOR/AVOID funnel, shown regardless of
+    how many candidates actually reached EXECUTE/WATCHLIST (same fix
+    already applied to the sector rotation panel)."""
+
+    def test_counts_sum_to_total_screened(self):
+        records_df = pd.DataFrame({
+            "category": [
+                "EXECUTE", "EXECUTE",
+                "ALERT_WATCHLIST", "ALERT_WATCHLIST", "ALERT_WATCHLIST", "ALERT_WATCHLIST", "ALERT_WATCHLIST",
+                *(["MONITOR"] * 12),
+                *(["AVOID"] * 31),
+            ],
+        })
+        counts = compute_category_breakdown(records_df)
+
+        assert counts == {"EXECUTE": 2, "ALERT_WATCHLIST": 5, "MONITOR": 12, "AVOID": 31}
+        assert sum(counts.values()) == len(records_df) == 50
+
+    def test_empty_records_df_gives_all_zero_counts_not_a_crash(self):
+        assert compute_category_breakdown(pd.DataFrame()) == {
+            "EXECUTE": 0, "ALERT_WATCHLIST": 0, "MONITOR": 0, "AVOID": 0,
+        }
+
+    def test_missing_category_column_gives_all_zero_counts_not_a_crash(self):
+        """Defensive: records_df before score_live_candidates() has run
+        yet (no "category" column) shouldn't raise a KeyError."""
+        assert compute_category_breakdown(pd.DataFrame({"Symbol": ["ABC.NS"]})) == {
+            "EXECUTE": 0, "ALERT_WATCHLIST": 0, "MONITOR": 0, "AVOID": 0,
+        }
+
+    def test_label_is_none_before_the_first_scan_ever_runs(self):
+        assert format_category_breakdown_label(None, None) is None
+
+    def test_label_renders_even_when_execute_and_watchlist_are_both_zero(self):
+        """The exact regression this pins: a quiet-market scan (0 EXECUTE,
+        0 WATCHLIST) must still show its real MONITOR/AVOID counts, not
+        disappear the way a candidate-tier-gated line would."""
+        counts = {"EXECUTE": 0, "ALERT_WATCHLIST": 0, "MONITOR": 12, "AVOID": 38}
+
+        label = format_category_breakdown_label(counts, last_scan_ticker_count=50)
+
+        assert label == "50 screened → 0 EXECUTE · 0 WATCHLIST · 12 MONITOR · 38 AVOID"
+
+    def test_label_uses_watchlist_not_alert_watchlist_display_name(self):
+        counts = {"EXECUTE": 2, "ALERT_WATCHLIST": 5, "MONITOR": 12, "AVOID": 31}
+
+        label = format_category_breakdown_label(counts, last_scan_ticker_count=50)
+
+        assert "ALERT_WATCHLIST" not in label
+        assert "5 WATCHLIST" in label
+
+    def test_zero_screened_scan_still_renders_a_real_all_zero_line(self):
+        counts = compute_category_breakdown(pd.DataFrame())
+
+        label = format_category_breakdown_label(counts, last_scan_ticker_count=0)
+
+        assert label == "0 screened → 0 EXECUTE · 0 WATCHLIST · 0 MONITOR · 0 AVOID"
 
 
 class TestIndexQuotes:

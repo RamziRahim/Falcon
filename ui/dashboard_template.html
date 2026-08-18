@@ -105,9 +105,15 @@ mockup's own openCandidate() coupled both) -- deferred, not dropped.
     <!-- LEFT column: chart, tabs, candidate lists -->
     <div style="display:flex;flex-direction:column;min-width:0;border-right:1px solid oklch(0.27 0.012 250);overflow:hidden;">
 
-      <!-- Chart panel -->
-      {% if chart %}
-      <div style="padding:18px 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;">
+      <!-- Chart panel -- one full pre-rendered panel per EXECUTE/WATCHLIST
+           candidate (only default_chart_symbol's starts visible), so
+           falconOpenCandidate() can re-point the chart to whichever
+           candidate was clicked by toggling [data-chart-panel] visibility,
+           same "JS only shows/hides, everything is pre-rendered
+           server-side" approach already used for the candidate modals. -->
+      {% if all_charts %}
+      {% for chart in all_charts %}
+      <div data-chart-panel="{{ chart.symbol }}" style="padding:18px 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;{{ '' if chart.symbol == default_chart_symbol else 'display:none;' }}">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
           <div style="display:flex;align-items:baseline;gap:12px;">
             <span style="font-size:16px;font-weight:800;">{{ chart.symbol }}</span>
@@ -120,7 +126,7 @@ mockup's own openCandidate() coupled both) -- deferred, not dropped.
               <span style="width:10px;height:2px;background:oklch(0.7 0.15 230);display:inline-block;"></span>EMA 20
               <span style="width:10px;height:2px;background:oklch(0.75 0.15 60);display:inline-block;margin-left:8px;"></span>EMA 50
             </div>
-            <div style="display:flex;gap:2px;" id="chart-range-tabs">
+            <div style="display:flex;gap:2px;" class="chart-range-tabs">
               {% for r in ['1M', '3M', '6M'] %}
               <div onclick="falconSelectRange('{{ r }}')" data-range-tab="{{ r }}" style="padding:4px 10px;font-size:10.5px;font-weight:600;border-radius:5px;cursor:pointer;{{ 'background:oklch(0.3 0.012 250);color:oklch(0.9 0.008 250);' if r == '3M' else 'background:transparent;color:oklch(0.55 0.01 250);' }}">{{ r }}</div>
               {% endfor %}
@@ -153,6 +159,7 @@ mockup's own openCandidate() coupled both) -- deferred, not dropped.
         </div>
         {% endfor %}
       </div>
+      {% endfor %}
       {% else %}
       <div style="padding:40px 24px;border-bottom:1px solid oklch(0.27 0.012 250);flex-shrink:0;text-align:center;color:oklch(0.5 0.01 250);font-size:12.5px;">
         No chartable candidate yet -- run a scan to populate real EXECUTE/WATCHLIST signals.
@@ -380,6 +387,15 @@ mockup's own openCandidate() coupled both) -- deferred, not dropped.
 </div>
 
 <script>
+// Which candidate's chart panel is currently visible -- range-tab clicks
+// (falconSelectRange) are scoped to only this panel's own
+// [data-range-block]/[data-range-tab] elements, since every candidate's
+// full chart (all 3 ranges) is pre-rendered and duplicates those data
+// attributes once per candidate (see the chart-panel loop above, over
+// all_charts) -- an unscoped querySelectorAll would toggle every
+// candidate's range blocks at once, not just the one currently on screen.
+var falconActiveChartSymbol = "{{ default_chart_symbol or '' }}";
+
 function falconSelectTab(key) {
   document.querySelectorAll('[data-tab-panel]').forEach(function(el) {
     el.style.display = (el.getAttribute('data-tab-panel') === key) ? 'flex' : 'none';
@@ -396,10 +412,12 @@ function falconSelectTab(key) {
 }
 
 function falconSelectRange(range) {
-  document.querySelectorAll('[data-range-block]').forEach(function(el) {
+  var panel = document.querySelector('[data-chart-panel="' + falconActiveChartSymbol + '"]');
+  if (!panel) { return; }
+  panel.querySelectorAll('[data-range-block]').forEach(function(el) {
     el.style.display = (el.getAttribute('data-range-block') === range) ? '' : 'none';
   });
-  document.querySelectorAll('[data-range-tab]').forEach(function(el) {
+  panel.querySelectorAll('[data-range-tab]').forEach(function(el) {
     var active = el.getAttribute('data-range-tab') === range;
     el.style.background = active ? 'oklch(0.3 0.012 250)' : 'transparent';
     el.style.color = active ? 'oklch(0.9 0.008 250)' : 'oklch(0.55 0.01 250)';
@@ -410,6 +428,17 @@ function falconOpenCandidate(id) {
   document.querySelectorAll('[data-modal-panel]').forEach(function(el) {
     el.style.display = (el.getAttribute('data-modal-panel') === id) ? 'block' : 'none';
   });
+
+  // Re-point the main chart panel to the clicked candidate, in addition
+  // to (not instead of) opening its detail modal below -- both happen
+  // together, matching the mockup's own coupled openCandidate() behavior.
+  var chartPanel = document.querySelector('[data-chart-panel="' + id + '"]');
+  if (chartPanel) {
+    document.querySelectorAll('[data-chart-panel]').forEach(function(el) {
+      el.style.display = (el.getAttribute('data-chart-panel') === id) ? 'block' : 'none';
+    });
+    falconActiveChartSymbol = id;
+  }
   document.getElementById('falcon-modal-overlay').style.display = 'flex';
 }
 

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from datetime import datetime, time
 
+import pandas as pd
 import pytz
 import streamlit as st
 
@@ -119,6 +120,57 @@ def format_tickers_screened_label(last_scan_ticker_count: int | None) -> str | N
     return f"{last_scan_ticker_count} tickers screened from Leadership query"
 
 
+# Falcon's four real decision_engine categories, in display order.
+CATEGORY_BREAKDOWN_ORDER = ["EXECUTE", "ALERT_WATCHLIST", "MONITOR", "AVOID"]
+
+_CATEGORY_DISPLAY_LABEL = {
+    "EXECUTE": "EXECUTE",
+    "ALERT_WATCHLIST": "WATCHLIST",
+    "MONITOR": "MONITOR",
+    "AVOID": "AVOID",
+}
+
+
+def compute_category_breakdown(records_df: pd.DataFrame) -> dict[str, int]:
+    """
+    Counts every candidate's real decision_engine category across the
+    FULL scanned universe -- same "always compute from the full universe,
+    independent of candidate-tier counts" treatment already applied to the
+    sector rotation panel (build_sector_view()), not gated on whether any
+    candidate actually reached EXECUTE/WATCHLIST. records_df here is the
+    same scan_result.records_df already stored in
+    st.session_state.screener_records, post score_live_candidates() (so
+    every row has a "category" column) -- an empty df or a
+    pre-categorization df (missing the column) both count as all-zero
+    rather than raising, since "0 of everything" is exactly what a scan
+    that found nothing (or hasn't scored yet) should report.
+    """
+    if records_df.empty or "category" not in records_df.columns:
+        return {c: 0 for c in CATEGORY_BREAKDOWN_ORDER}
+    counts = records_df["category"].value_counts()
+    return {c: int(counts.get(c, 0)) for c in CATEGORY_BREAKDOWN_ORDER}
+
+
+def format_category_breakdown_label(
+    category_counts: dict[str, int] | None,
+    last_scan_ticker_count: int | None,
+) -> str | None:
+    """None before the first scan has ever run (mirrors
+    format_tickers_screened_label()'s "never" vs "scanned, found nothing"
+    distinction). Once a scan has completed, always renders the full
+    EXECUTE/WATCHLIST/MONITOR/AVOID funnel even when EXECUTE and WATCHLIST
+    are both 0 -- same "always visible regardless of candidate tier" fix
+    already applied to the sector rotation panel, so this line doesn't
+    silently disappear on exactly the quiet-market days it matters most."""
+    if last_scan_ticker_count is None or category_counts is None:
+        return None
+    parts = " · ".join(
+        f"{category_counts.get(cat, 0)} {_CATEGORY_DISPLAY_LABEL[cat]}"
+        for cat in CATEGORY_BREAKDOWN_ORDER
+    )
+    return f"{last_scan_ticker_count} screened → {parts}"
+
+
 def get_market_status(now: datetime | None = None) -> str:
     """
     Returns NSE market status from trading hours (9:15-15:30 IST, Mon-Fri)
@@ -138,6 +190,7 @@ def get_market_status(now: datetime | None = None) -> str:
 def render(
     last_scan_ticker_count: int | None = None,
     last_scan_completed_at: datetime | None = None,
+    last_scan_category_breakdown: dict[str, int] | None = None,
 ) -> bool:
     """
     Render Falcon dashboard header: greeting, market status/time, and the
@@ -152,14 +205,14 @@ def render(
     itself calls -- only the second, redundant Streamlit-native rendering
     of that same data was removed.
 
-    last_scan_ticker_count / last_scan_completed_at : read from
-    st.session_state by the caller (app.py), not read directly here --
-    matches this app's existing convention of passing session_state data
-    into render functions explicitly (see dashboard.render(records_df))
+    last_scan_ticker_count / last_scan_completed_at / last_scan_category_breakdown :
+    read from st.session_state by the caller (app.py), not read directly
+    here -- matches this app's existing convention of passing session_state
+    data into render functions explicitly (see dashboard.render(records_df))
     rather than each render function reaching into session_state itself.
-    Both persist in session_state until the NEXT scan actually completes
-    (app.py only updates them inside the scan-trigger block), not reset
-    on every unrelated rerun/interaction.
+    All three persist in session_state until the NEXT scan actually
+    completes (app.py only updates them inside the scan-trigger block),
+    not reset on every unrelated rerun/interaction.
 
     Returns
     -------
@@ -225,6 +278,12 @@ Scan markets. Find leaders. Ride the trend.
         tickers_screened_label = format_tickers_screened_label(last_scan_ticker_count)
         if tickers_screened_label is not None:
             st.caption(tickers_screened_label)
+
+        category_breakdown_label = format_category_breakdown_label(
+            last_scan_category_breakdown, last_scan_ticker_count,
+        )
+        if category_breakdown_label is not None:
+            st.caption(category_breakdown_label)
 
         st.button(
             "Market Overview",

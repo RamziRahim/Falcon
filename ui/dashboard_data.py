@@ -189,10 +189,13 @@ def build_chart_view(history: pd.DataFrame, symbol: str, price: float, change_pc
     three ranges (1M/3M/6M) server-side rather than a client-side
     charting engine -- range switching is a JS show/hide of pre-rendered
     blocks, same visual result as the mockup, simpler and independently
-    testable in Python. Known v1 simplification: clicking a candidate
-    card opens its detail modal but does not also re-point this chart
-    (the mockup's own openCandidate() coupled both) -- deferred, not
-    silently dropped; flagged in the build report."""
+    testable in Python. Called once per EXECUTE/WATCHLIST candidate (see
+    build_dashboard_context()'s all_charts) so every candidate has its own
+    real, independently rendered chart ready ahead of time -- clicking a
+    candidate card re-points the chart panel to it client-side
+    (falconOpenCandidate() in dashboard_template.html toggles which
+    pre-rendered [data-chart-panel] is shown, keyed by symbol) alongside
+    opening its detail modal, matching the mockup's own coupled behavior."""
     ranges = {"1M": 22, "3M": 66, "6M": 120}
     range_blocks = {}
 
@@ -410,6 +413,17 @@ def build_dashboard_context(
     execute_candidates = []
     watchlist_candidates = []
     all_candidates = []
+    # One real chart per EXECUTE/WATCHLIST candidate (not just whichever
+    # one starts visible) -- clicking a candidate re-points the main chart
+    # panel to it client-side (falconOpenCandidate() in
+    # dashboard_template.html toggles which [data-chart-panel] is shown,
+    # keyed by symbol), so every candidate needs its own real, independently
+    # computed EMA/candle/volume data ready ahead of time rather than a
+    # relabeled copy of whichever chart happened to render first. Reuses
+    # history_by_symbol, which ui/dashboard.py already loads for every real
+    # candidate (previously only used for the day-change % on its card) --
+    # no extra I/O.
+    all_charts = []
 
     for _, row in real.iterrows():
         history = history_by_symbol.get(row["Symbol"])
@@ -420,21 +434,25 @@ def build_dashboard_context(
         else:
             watchlist_candidates.append(view)
 
-    if execute_candidates:
-        chart_subject = execute_candidates[0]
-    elif watchlist_candidates:
-        chart_subject = watchlist_candidates[0]
-    else:
-        chart_subject = None
-
-    chart = None
-    if chart_subject is not None:
-        history = history_by_symbol.get(chart_subject["symbol"])
         if history is not None and not history.empty:
             change_pct = compute_day_change_pct(history)
-            chart = build_chart_view(
-                history, chart_subject["symbol"], chart_subject["price_raw"], change_pct, chart_subject["sector"],
+            all_charts.append(
+                build_chart_view(history, view["symbol"], view["price_raw"], change_pct, view["sector"])
             )
+
+    if execute_candidates:
+        default_chart_symbol = execute_candidates[0]["symbol"]
+    elif watchlist_candidates:
+        default_chart_symbol = watchlist_candidates[0]["symbol"]
+    else:
+        default_chart_symbol = None
+
+    # Kept for backward compatibility (the initially-visible chart, same
+    # selection as before this candidate ever had its own [data-chart-panel])
+    # -- the template now iterates all_charts and shows default_chart_symbol's
+    # panel first, but "chart" alone is still enough to know whether there's
+    # anything chartable at all.
+    chart = next((c for c in all_charts if c["symbol"] == default_chart_symbol), None)
 
     strategy_tabs = [
         {"key": "leadership", "label": "Leadership", "comingSoon": False},
@@ -446,6 +464,8 @@ def build_dashboard_context(
         "market_pulse": market_pulse,
         "sectors": sectors,
         "chart": chart,
+        "all_charts": all_charts,
+        "default_chart_symbol": default_chart_symbol,
         "strategy_tabs": strategy_tabs,
         "active_strategy_tab": active_strategy_tab,
         "execute_candidates": execute_candidates,

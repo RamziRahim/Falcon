@@ -7,6 +7,8 @@ not exhaustive coverage of every formatting helper.
 """
 from __future__ import annotations
 
+import math
+
 import pandas as pd
 import pytest
 
@@ -95,6 +97,8 @@ class TestNoFabricatedDataOnEmptyInput:
         assert ctx["watchlist_candidates"] == []
         assert ctx["all_candidates"] == []
         assert ctx["chart"] is None
+        assert ctx["all_charts"] == []
+        assert ctx["default_chart_symbol"] is None
 
     def test_market_pulse_regime_unknown_when_snapshot_is_none(self):
         pulse = build_market_pulse(regime_snapshot=None, index_quotes={})
@@ -158,3 +162,101 @@ class TestDashboardContextSplitsExecuteAndWatchlist:
         assert [c["symbol"] for c in ctx["execute_candidates"]] == ["A.NS"]
         assert [c["symbol"] for c in ctx["watchlist_candidates"]] == ["B.NS"]
         assert len(ctx["all_candidates"]) == 2  # AVOID/MONITOR never reach the dashboard
+
+
+def _history(base_price: float, n: int = 30, wavy: bool = False) -> pd.DataFrame:
+    """Distinct OHLCV+EMA series per candidate -- lets a test prove two
+    candidates' charts are genuinely independently computed, not one
+    chart relabeled for a second symbol. build_chart_view() normalizes
+    every range to a 0-100% band relative to its own min/max
+    (SVG-friendly), so two plain linear ramps at different base prices
+    would still normalize to an IDENTICAL relative polyline -- wavy=True
+    uses a non-linear (sine-based) shape so the two candidates' relative
+    structure genuinely differs, not just their absolute price level."""
+    if wavy:
+        closes = [base_price + 10 * math.sin(i / 3) + i * 0.3 for i in range(n)]
+        ema20 = [base_price + 8 * math.sin(i / 3 + 1) + i * 0.2 for i in range(n)]
+        ema50 = [base_price + 6 * math.sin(i / 4) + i * 0.1 for i in range(n)]
+    else:
+        closes = [base_price + i for i in range(n)]
+        ema20 = [base_price + i * 0.5 for i in range(n)]
+        ema50 = [base_price + i * 0.25 for i in range(n)]
+    return pd.DataFrame({
+        "Date": pd.date_range("2026-01-01", periods=n, freq="D"),
+        "Open": closes, "High": [c + 1 for c in closes], "Low": [c - 1 for c in closes],
+        "Close": closes, "Volume": [100_000 + i * 10 for i in range(n)],
+        "EMA_20": ema20, "EMA_50": ema50,
+    })
+
+
+class TestChartRePointsPerCandidate:
+    """build_dashboard_context()'s all_charts/default_chart_symbol -- the
+    data underpinning falconOpenCandidate() re-pointing the main chart
+    panel to whichever candidate was actually clicked (dashboard_template.html),
+    not just relabeling whichever chart happened to render as the default."""
+
+    def _context(self):
+        records_df = pd.DataFrame([
+            _row(Symbol="A.NS", category="EXECUTE", Price=101.0),
+            _row(Symbol="B.NS", category="ALERT_WATCHLIST", Price=529.0),
+        ])
+        history_by_symbol = {"A.NS": _history(100.0), "B.NS": _history(500.0, wavy=True)}
+        return build_dashboard_context(
+            records_df=records_df, history_by_symbol=history_by_symbol,
+            regime_snapshot=None, index_quotes={},
+        )
+
+    def test_every_execute_and_watchlist_candidate_gets_its_own_chart(self):
+        ctx = self._context()
+
+        assert {c["symbol"] for c in ctx["all_charts"]} == {"A.NS", "B.NS"}
+
+    def test_default_chart_symbol_prefers_the_execute_candidate(self):
+        ctx = self._context()
+
+        assert ctx["default_chart_symbol"] == "A.NS"
+
+    def test_chart_key_still_matches_the_default_symbol_entry_in_all_charts(self):
+        """Backward-compat: existing callers reading ctx["chart"] alone
+        (e.g. the empty-input None check) still see exactly the panel
+        that starts visible."""
+        ctx = self._context()
+
+        default_entry = next(c for c in ctx["all_charts"] if c["symbol"] == ctx["default_chart_symbol"])
+        assert ctx["chart"] == default_entry
+
+    def test_each_candidates_chart_reflects_its_own_real_price_not_a_shared_value(self):
+        ctx = self._context()
+
+        by_symbol = {c["symbol"]: c for c in ctx["all_charts"]}
+        assert by_symbol["A.NS"]["priceFmt"] != by_symbol["B.NS"]["priceFmt"]
+        assert "101" in by_symbol["A.NS"]["priceFmt"]
+        assert "529" in by_symbol["B.NS"]["priceFmt"]
+
+    def test_ema_overlays_are_independently_computed_per_symbol_not_reused(self):
+        """The specific gap #4 called out: EMA/volume overlays must
+        recompute for the newly-selected symbol, not just the candlestick
+        title. A.NS and B.NS have deliberately different EMA_20 series
+        (_history()'s base_price offsets both), so their rendered SVG
+        polyline point-strings for the same range must differ."""
+        ctx = self._context()
+
+        by_symbol = {c["symbol"]: c for c in ctx["all_charts"]}
+        a_ema20 = by_symbol["A.NS"]["ranges"]["3M"]["ema20Points"]
+        b_ema20 = by_symbol["B.NS"]["ranges"]["3M"]["ema20Points"]
+
+        assert a_ema20 != ""
+        assert b_ema20 != ""
+        assert a_ema20 != b_ema20
+
+    def test_charts_are_keyed_by_symbol_for_client_side_panel_lookup(self):
+        """dashboard_template.html toggles panels via
+        data-chart-panel="{{ chart.symbol }}" keyed against the clicked
+        candidate's id (== Symbol) -- every chart dict must carry the same
+        "symbol" key build_candidate_view()'s "id" uses, or the click
+        handler's querySelector would silently find nothing."""
+        ctx = self._context()
+
+        candidate_ids = {c["id"] for c in ctx["all_candidates"]}
+        chart_symbols = {c["symbol"] for c in ctx["all_charts"]}
+        assert candidate_ids == chart_symbols

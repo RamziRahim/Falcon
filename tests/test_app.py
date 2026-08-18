@@ -76,21 +76,28 @@ class TestNewScanRunsFullPipeline:
 
 
 class TestLastScanPersistedInSessionState:
-    """last_scan_ticker_count/last_scan_completed_at must persist in
-    session_state until the NEXT scan actually completes -- initialized
-    once with an honest None default (never scanned), updated only
-    inside the scan-trigger block (never reset on an unrelated rerun),
-    same persistence pattern screener_records already uses."""
+    """last_scan_ticker_count/last_scan_completed_at/
+    last_scan_category_breakdown must persist in session_state until the
+    NEXT scan actually completes -- initialized once with an honest None
+    default (never scanned), updated only inside the scan-trigger block
+    (never reset on an unrelated rerun), same persistence pattern
+    screener_records already uses."""
 
-    def test_both_keys_initialized_with_a_none_default(self):
+    def test_all_three_keys_initialized_with_a_none_default(self):
         assert '"last_scan_ticker_count" not in st.session_state' in APP_SOURCE
         assert "st.session_state.last_scan_ticker_count = None" in APP_SOURCE
         assert '"last_scan_completed_at" not in st.session_state' in APP_SOURCE
         assert "st.session_state.last_scan_completed_at = None" in APP_SOURCE
+        assert '"last_scan_category_breakdown" not in st.session_state' in APP_SOURCE
+        assert "st.session_state.last_scan_category_breakdown = None" in APP_SOURCE
 
-    def test_header_receives_both_values_from_session_state(self):
+    def test_header_receives_all_three_values_from_session_state(self):
         assert "last_scan_ticker_count=st.session_state.last_scan_ticker_count" in APP_SOURCE
         assert "last_scan_completed_at=st.session_state.last_scan_completed_at" in APP_SOURCE
+        assert (
+            "last_scan_category_breakdown=st.session_state.last_scan_category_breakdown"
+            in APP_SOURCE
+        )
 
     def test_ticker_count_updated_from_the_real_scanned_universe_size(self):
         assert "st.session_state.last_scan_ticker_count = len(ticker_universe)" in APP_SOURCE
@@ -99,3 +106,17 @@ class TestLastScanPersistedInSessionState:
         # Set even when candidate generation found nothing -- the scan
         # still genuinely ran, distinct from "never scanned".
         assert "st.session_state.last_scan_completed_at = datetime.now(IST)" in APP_SOURCE
+
+    def test_category_breakdown_computed_from_the_real_pipeline_output(self):
+        # Computed as part of the real scan (scan_result.records_df),
+        # never from a one-off diagnostic script -- and set on BOTH
+        # branches (candidates found / candidate generation found
+        # nothing), so it never keeps a stale value from a prior scan.
+        assert (
+            "st.session_state.last_scan_category_breakdown = "
+            "compute_category_breakdown(scan_result.records_df)" in APP_SOURCE
+        )
+        assert (
+            "st.session_state.last_scan_category_breakdown = "
+            "compute_category_breakdown(pd.DataFrame())" in APP_SOURCE
+        )

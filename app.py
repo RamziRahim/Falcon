@@ -36,7 +36,7 @@ if current_dir not in sys.path:
 
 # UI Module imports directly matching your folder structure
 from ui.sidebar import render as render_sidebar
-from ui.header import IST, render as render_header
+from ui.header import IST, compute_category_breakdown, render as render_header
 import ui.dashboard as dashboard
 
 # New Scan pipeline orchestration (Phase 3 data collection -> Phase 4 -> Phase 5)
@@ -90,6 +90,8 @@ if "last_scan_ticker_count" not in st.session_state:
     st.session_state.last_scan_ticker_count = None
 if "last_scan_completed_at" not in st.session_state:
     st.session_state.last_scan_completed_at = None
+if "last_scan_category_breakdown" not in st.session_state:
+    st.session_state.last_scan_category_breakdown = None
 
 # 1. Render Left Sidebar Navigation (Section 4)
 render_sidebar()
@@ -98,6 +100,7 @@ render_sidebar()
 is_new_scan_triggered = render_header(
     last_scan_ticker_count=st.session_state.last_scan_ticker_count,
     last_scan_completed_at=st.session_state.last_scan_completed_at,
+    last_scan_category_breakdown=st.session_state.last_scan_category_breakdown,
 )
 
 # Execution pipeline chain triggered dynamically from your explicit button input
@@ -130,12 +133,14 @@ if is_new_scan_triggered:
 
             st.session_state.screener_records = scan_result.records_df
             st.session_state.last_scan_ticker_count = len(ticker_universe)
+            st.session_state.last_scan_category_breakdown = compute_category_breakdown(scan_result.records_df)
         else:
             # Candidate generation itself found nothing (Screener query
             # returned zero rows) -- the scan still genuinely ran, just
             # screened 0 tickers, distinct from "never scanned" (None).
             progress_placeholder.empty()
             st.session_state.last_scan_ticker_count = 0
+            st.session_state.last_scan_category_breakdown = compute_category_breakdown(pd.DataFrame())
 
         st.session_state.last_scan_completed_at = datetime.now(IST)
 
