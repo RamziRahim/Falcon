@@ -1,8 +1,13 @@
 """
 Tests for fundamental_analysis/corporate_engine.py -- net margin trend
-(QoQ + YoY), added alongside the existing revenue/net-income growth
-calculations. Reuses the same quarterly_financials data already extracted
-for those -- no new yfinance call.
+QoQ (still real, Yahoo-computed) plus revenue/net-income growth. As of
+docs/known_data_issues.md item #4, margin_trend_yoy itself is no longer
+computed here at all -- it's a pass-through from the Screener
+fundamentals store (fundamental_analysis/screener_fundamentals_store.py),
+sourced independently of whether the Yahoo quarterly_financials fetch
+below succeeds. Every margin_trend_yoy assertion below mocks the store
+function explicitly and checks pass-through, rather than asserting on a
+Yahoo-derived value this file no longer computes.
 """
 from __future__ import annotations
 
@@ -39,10 +44,26 @@ def engine() -> CorporateEngine:
     return CorporateEngine()
 
 
-class TestMarginCalculation:
+@pytest.fixture(autouse=True)
+def _stub_margin_trend_yoy_store(monkeypatch):
+    """margin_trend_yoy is sourced independently of everything else in
+    this file (see corporate_engine.py's own docstring) -- stubbed to a
+    fixed, obviously-not-Yahoo-derived value by default so every test
+    below that doesn't care about it specifically isn't coupled to
+    whatever's in the real data/screener_fundamentals_store.json.
+    Tests that DO care override this explicitly."""
+    monkeypatch.setattr(
+        "fundamental_analysis.corporate_engine.get_margin_trend_yoy",
+        lambda ticker: "STUBBED_TREND",
+    )
 
-    def test_expanding_margin_qoq_and_yoy(self, engine):
-        # Q0=15% margin, Q1..Q4=10% margin -- expanding both QoQ and YoY
+
+class TestMarginCalculationQoQ:
+    """QoQ margin trend/net_margin_pct are still real, unchanged Yahoo
+    computations -- only the YoY variant moved to the Screener store."""
+
+    def test_expanding_margin_qoq(self, engine):
+        # Q0=15% margin, Q1=10% margin -- expanding QoQ
         qf = _quarterly_financials(
             revenues=[1000, 950, 900, 850, 800],
             net_incomes=[150, 95, 90, 85, 80],
@@ -52,7 +73,6 @@ class TestMarginCalculation:
 
         assert result["net_margin_pct"] == "15.00%"
         assert result["margin_trend_qoq"] == "EXPANDING"
-        assert result["margin_trend_yoy"] == "EXPANDING"
 
     def test_contracting_margin_qoq(self, engine):
         # Q0=5% margin, Q1=10% margin -- contracting QoQ
@@ -80,22 +100,6 @@ class TestMarginCalculation:
         assert result["margin_trend_qoq"] == "FLAT"
 
 
-class TestInsufficientHistoryForYoY:
-
-    def test_fewer_than_5_quarters_yoy_is_data_gap(self, engine):
-        qf = _quarterly_financials(
-            revenues=[1000, 950, 900, 850],  # only 4 quarters
-            net_incomes=[150, 95, 90, 85],
-        )
-        with patch("fundamental_analysis.corporate_engine.yf.Ticker", return_value=_mock_stock(qf)):
-            result = engine.get_comprehensive_fundamentals("DEMO.NS")
-
-        assert result["margin_trend_yoy"] == "DATA_GAP"
-        # QoQ must still compute fine -- only YoY needs the 5th quarter
-        assert result["margin_trend_qoq"] == "EXPANDING"
-        assert result["net_margin_pct"] == "15.00%"
-
-
 class TestZeroOrNegativeRevenueDoesNotCrash:
 
     def test_zero_revenue_latest_quarter_falls_back_to_data_gap(self, engine):
@@ -108,7 +112,6 @@ class TestZeroOrNegativeRevenueDoesNotCrash:
 
         assert result["net_margin_pct"] == "DATA_GAP"
         assert result["margin_trend_qoq"] == "DATA_GAP"
-        assert result["margin_trend_yoy"] == "DATA_GAP"
 
     def test_negative_revenue_falls_back_to_data_gap_not_a_flipped_sign(self, engine):
         qf = _quarterly_financials(
@@ -120,20 +123,6 @@ class TestZeroOrNegativeRevenueDoesNotCrash:
 
         assert result["net_margin_pct"] == "DATA_GAP"
         assert result["margin_trend_qoq"] == "DATA_GAP"
-
-    def test_zero_revenue_in_yoy_comparison_quarter_only(self, engine):
-        """Latest quarter is fine, but the 4-quarters-ago comparison
-        quarter has zero revenue -- QoQ must still work, only YoY should
-        degrade."""
-        qf = _quarterly_financials(
-            revenues=[1000, 950, 900, 850, 0],
-            net_incomes=[150, 95, 90, 85, 80],
-        )
-        with patch("fundamental_analysis.corporate_engine.yf.Ticker", return_value=_mock_stock(qf)):
-            result = engine.get_comprehensive_fundamentals("DEMO.NS")
-
-        assert result["margin_trend_qoq"] == "EXPANDING"
-        assert result["margin_trend_yoy"] == "DATA_GAP"
 
 
 class TestRevenueRowExcludesCostOfRevenue:
@@ -181,4 +170,55 @@ class TestFallbackPacketIncludesMarginKeys:
 
         assert result["net_margin_pct"] == "DATA_GAP"
         assert result["margin_trend_qoq"] == "DATA_GAP"
-        assert result["margin_trend_yoy"] == "DATA_GAP"
+
+
+class TestMarginTrendYoySourcedFromScreenerStore:
+    """margin_trend_yoy (docs/known_data_issues.md item #4): no longer
+    computed from Yahoo quarterly_financials at all -- a pure pass-through
+    from the Screener fundamentals store, sourced BEFORE the Yahoo fetch
+    even runs and independent of whether that fetch succeeds."""
+
+    def test_pass_through_value_on_successful_yahoo_fetch(self, engine, monkeypatch):
+        monkeypatch.setattr(
+            "fundamental_analysis.corporate_engine.get_margin_trend_yoy",
+            lambda ticker: "EXPANDING",
+        )
+        qf = _quarterly_financials(
+            revenues=[1000, 950, 900, 850, 800],
+            net_incomes=[150, 95, 90, 85, 80],
+        )
+        with patch("fundamental_analysis.corporate_engine.yf.Ticker", return_value=_mock_stock(qf)):
+            result = engine.get_comprehensive_fundamentals("DEMO.NS")
+
+        assert result["margin_trend_yoy"] == "EXPANDING"
+
+    def test_pass_through_value_even_when_yahoo_fetch_fails_entirely(self, engine, monkeypatch):
+        """The old fallback_packet hardcoded margin_trend_yoy to
+        "DATA_GAP" -- now it must still reflect the store's real value
+        (or None) even when the rest of the Yahoo fetch has nothing."""
+        monkeypatch.setattr(
+            "fundamental_analysis.corporate_engine.get_margin_trend_yoy",
+            lambda ticker: "CONTRACTING",
+        )
+        stock = MagicMock()
+        stock.quarterly_financials = pd.DataFrame()
+        with patch("fundamental_analysis.corporate_engine.yf.Ticker", return_value=stock):
+            result = engine.get_comprehensive_fundamentals("DEMO.NS")
+
+        assert result["margin_trend_yoy"] == "CONTRACTING"
+        # Everything else on this path is still an honest gap.
+        assert result["net_margin_pct"] == "DATA_GAP"
+
+    def test_none_from_store_passes_through_as_none_not_a_fabricated_value(self, engine, monkeypatch):
+        monkeypatch.setattr(
+            "fundamental_analysis.corporate_engine.get_margin_trend_yoy",
+            lambda ticker: None,
+        )
+        qf = _quarterly_financials(
+            revenues=[1000, 950, 900, 850, 800],
+            net_incomes=[150, 95, 90, 85, 80],
+        )
+        with patch("fundamental_analysis.corporate_engine.yf.Ticker", return_value=_mock_stock(qf)):
+            result = engine.get_comprehensive_fundamentals("DEMO.NS")
+
+        assert result["margin_trend_yoy"] is None

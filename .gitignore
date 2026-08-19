@@ -18,6 +18,7 @@ data/raw/
 data/technical/
 data/sector_map.json
 data/fundamentals_cache.json
+data/screener_fundamentals_store.json
 data/nse_holidays_cache.json
 data/vix_cache.json
 data/pe_snapshot_cache/

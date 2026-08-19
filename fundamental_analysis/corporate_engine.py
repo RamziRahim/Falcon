@@ -11,15 +11,32 @@ import yfinance as yf
 import pandas as pd
 from datetime import datetime
 
+from fundamental_analysis.screener_fundamentals_store import get_margin_trend_yoy
+
 class CorporateEngine:
     def get_comprehensive_fundamentals(self, ticker: str) -> dict:
         """
         Extracts seasonal quarterly income footprints and computes immediate
         sequential QoQ and structural YoY growth trajectories defensively.
+
+        margin_trend_yoy is the one exception: as of
+        docs/known_data_issues.md item #4, it's sourced from the Screener
+        fundamentals store (OPM-based, same YoY comparison window this
+        function used to compute from Yahoo's NPM) rather than computed
+        here -- independent of whether the Yahoo fetch below succeeds,
+        since it's a completely separate data source now. Every other
+        field (days_to_earnings, revenue/net-income growth, margin_trend_qoq,
+        net_margin_pct) is unchanged, still live Yahoo data.
         """
+        # Sourced independent of the Yahoo fetch below -- overrides
+        # whichever of fallback_packet/the real return dict actually gets
+        # returned, so this field is never accidentally left on the old
+        # Yahoo-NPM computation on any code path.
+        margin_trend_yoy_from_store = get_margin_trend_yoy(ticker)
+
         # Formulate search term cleanly for Indian listings
         formatted_ticker = ticker if ticker.endswith(".NS") else f"{ticker}.NS"
-        
+
         # Absolute Fail-Safe Default Packet Structure
         fallback_packet = {
             "next_earnings_date": "UNKNOWN",
@@ -32,7 +49,7 @@ class CorporateEngine:
             "net_income_qoq_growth": "DATA_GAP",
             "net_margin_pct": "DATA_GAP",
             "margin_trend_qoq": "DATA_GAP",
-            "margin_trend_yoy": "DATA_GAP"
+            "margin_trend_yoy": margin_trend_yoy_from_store
         }
 
         try:
@@ -116,20 +133,15 @@ class CorporateEngine:
 
             net_margin_pct = "DATA_GAP"
             margin_trend_qoq = "DATA_GAP"
-            margin_trend_yoy = "DATA_GAP"
 
             if pd.notna(margin_q0) and pd.notna(margin_q1):
                 net_margin_pct = f"{margin_q0:.2f}%"
                 margin_trend_qoq = self._classify_margin_trend(margin_q0, margin_q1)
 
-            # YoY margin trend is the more reliable comparison for judging
-            # genuine expansion/contraction -- QoQ alone can be noisy from
-            # pure seasonality, same reasoning already applied to revenue/
-            # net-income growth above.
-            if cols_count >= 5 and pd.notna(margin_q0):
-                margin_y4 = self._safe_margin_pct(net_income_series.iloc[4], revenue_series.iloc[4])
-                if pd.notna(margin_y4):
-                    margin_trend_yoy = self._classify_margin_trend(margin_q0, margin_y4)
+            # margin_trend_yoy itself no longer computed here at all --
+            # see get_comprehensive_fundamentals()'s own docstring;
+            # margin_trend_yoy_from_store (computed unconditionally before
+            # this try block) is what actually gets returned below.
 
             # 3. EARNINGS RUNWAY RADAR TIMING LAYER
             next_earnings_date = "UNKNOWN"
@@ -166,7 +178,7 @@ class CorporateEngine:
                 "net_income_qoq_growth": net_qoq,
                 "net_margin_pct": net_margin_pct,
                 "margin_trend_qoq": margin_trend_qoq,
-                "margin_trend_yoy": margin_trend_yoy
+                "margin_trend_yoy": margin_trend_yoy_from_store
             }
 
         except IndexError as ie:

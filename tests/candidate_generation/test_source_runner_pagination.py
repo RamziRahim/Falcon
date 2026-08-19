@@ -25,7 +25,15 @@ BASE_URL = "https://example.test/screen/raw/"
 
 
 def _row(row_id: int, symbol: str, name: str) -> str:
-    values = ["100", "20", "6000", "1", "50", "10", "200", "8", "15", "3", "55", "120", "110"]
+    # 18 value cells, matching screener_adapter.py's current 20-cell row
+    # shape (2 label cells + 18 value columns: CMP Rs. through 200 DMA
+    # Rs.) -- this fixture only exercises pagination aggregation, not
+    # fundamentals-field correctness, so the values themselves are
+    # arbitrary placeholders as long as the count matches.
+    values = [
+        "100", "20", "6000", "1", "50", "10", "200", "8", "15", "3",
+        "55", "120", "110", "22", "18", "20", "95", "90",
+    ]
     cells = "".join(f"<td>{v}</td>" for v in values)
     return (
         f'<tr data-row-company-id="{row_id}">'

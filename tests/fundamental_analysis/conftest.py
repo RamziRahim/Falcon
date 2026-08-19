@@ -7,12 +7,13 @@ import pytest
 
 
 @pytest.fixture
-def isolated_fundamental_cache(monkeypatch, tmp_path):
+def isolated_screener_fundamentals_store(monkeypatch, tmp_path):
     """
-    A FundamentalCache instance pointed at a temp cache file instead of the
-    real project path, so tests never touch real data/fundamentals_cache.json.
+    Points fundamental_analysis.screener_fundamentals_store at a temp JSON
+    file instead of the real project path, so tests never touch real
+    data/screener_fundamentals_store.json.
     """
-    import fundamental_analysis.fundamental_cache as fc
+    import fundamental_analysis.screener_fundamentals_store as store
 
-    monkeypatch.setattr(fc, "CACHE_PATH", tmp_path / "fundamentals_cache_test.json")
-    return fc.FundamentalCache()
+    monkeypatch.setattr(store, "STORE_PATH", tmp_path / "screener_fundamentals_store_test.json")
+    return store

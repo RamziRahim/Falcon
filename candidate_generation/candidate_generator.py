@@ -16,6 +16,7 @@ from candidate_generation.session import create_session
 from candidate_generation.strategy_loader import discover_strategies
 from candidate_generation.source_runner import run_source
 from candidate_generation.consolidator import consolidate
+from fundamental_analysis.screener_fundamentals_store import save_from_candidate_table
 from config import FALCON_VERSION
 
 logger = get_logger("candidate_generator")
@@ -60,6 +61,17 @@ def generate_candidates(
                 df = run_source(session, strategy)
 
                 if not df.empty:
+                    # Persisted here, on the raw per-strategy DataFrame --
+                    # consolidate() below uses NAMED groupby aggregations
+                    # for a fixed column list and silently drops every
+                    # other column (confirmed by reading its
+                    # implementation), so the ratio columns this reads
+                    # would already be gone if this ran after
+                    # consolidation instead. See
+                    # fundamental_analysis/screener_fundamentals_store.py's
+                    # own docstring and docs/known_data_issues.md item #4.
+                    save_from_candidate_table(df)
+
                     candidate_frames.append(df)
 
                     logger.info(

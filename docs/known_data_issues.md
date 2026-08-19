@@ -238,3 +238,145 @@ track so it isn't silently forgotten. Revisit trigger: any change to
 away from `candidate_generation.candidate_generator.generate_candidates()`.
 
 ---
+
+## 4. Fundamental data sourcing consolidated to the Screener scrape (complete)
+
+**Decision date: 2026-08-18. Completed: 2026-08-19.** Parts 1-4 (scrape
+extension, storage, redirected call sites, live validation) are all
+implemented, tested (`tests/fundamental_analysis/`,
+`tests/candidate_generation/`), and validated against real tickers --
+see the Part 4 results below.
+
+**Scope**: ROCE, D/E, FII holding + trend, DII holding + trend, promoter
+holding + trend, and margin trend (via OPM, not NPM -- OPM matches the
+core-operations intent this signal is meant to detect; NPM is noisier
+from tax/one-off items, confirmed directly: HCLTECH/WIPRO/POWERGRID all
+showed OPM and NPM trend DIRECTIONS disagreeing, not just magnitude) move
+from independent live Yahoo/NSE calls to the single Screener scrape
+`candidate_generation/candidate_generator.py` already does to build the
+candidate list. `days_to_earnings` and bulk/block deal activity stay on
+their existing live sources -- Screener has no equivalent for either.
+
+**Acceptance criteria correction**: the original spec targeted "at most 2
+external fundamentals calls per candidate" (days-to-earnings,
+deal-activity). The real number is **3**, not 2 -- a deliberate tradeoff,
+not an incomplete implementation. `institutional_sponsorship`
+(`heldPercentInstitutions`, Yahoo's *combined* FII+DII+mutual-fund
+institutional holding) stays on its existing Yahoo call rather than being
+approximated as Screener's FII%+DII% -- those two sums are a narrower,
+different measurement (missing mutual-fund/other-institutional holding),
+a real definitional gap, not a formatting difference. `promoter_holding`
+does NOT have this problem and was routed to Screener as planned -- a
+company's disclosed promoter shareholding is a single unambiguous
+regulatory figure, not something that varies by data provider the way a
+composite "institutional" aggregate can.
+
+**Infrastructure note -- read before ever editing Screener's account
+column list**: while implementing this, discovered that three columns
+Falcon's scraper used to expect (Market Cap, Div Yield, Sales Qtr) had
+already silently disappeared from the Screener account's own column
+preferences (`screener.in/user/columns/`) at some earlier, unknown point
+-- harmless purely by luck, since nothing downstream ever consumed those
+three fields. That account-level column list is now a **real, load-
+bearing piece of Falcon's infrastructure**, not a cosmetic display
+setting -- `candidate_generation/sources/screener_adapter.py` parses the
+results table by fixed COLUMN POSITION, not by reading header text, so
+any future edit to that account's column list (add, remove, or reorder --
+by this project or anyone else with access to the account) can silently
+shift every value one or more positions to the wrong field, with no
+error raised, until something downstream starts getting an unexpectedly
+`None` or nonsensical number. The account is also on Screener's free
+tier, hard-capped at 15 columns -- already at that cap, so adding any
+further column in the future requires either an account upgrade or
+dropping an existing one first (see `EXPECTED_COLUMNS`'s own comment in
+`screener_adapter.py` for the current list and why each entry is there).
+
+**Part 4 validation (2026-08-19)**: spot-checked 10 real tickers already
+captured by a live scan (MCX, ENRIN, GLAXO, ANANDRATHI, OFSS, ATLANTAELE,
+NAM-INDIA, GRSE, HINDCOPPER, TRAVELFOOD), comparing the new Screener-
+store-sourced values against the pre-change sources they replaced:
+
+- **ROCE** (vs. `metrics_engine.get_roce()`, Yahoo, unchanged): Screener's
+  value was higher than Yahoo's for all 10 tickers, consistent with the
+  known accounting-convention gap already confirmed for NESTLEIND (85.3%
+  Screener vs. 56.84% Yahoo) -- a systematic, expected offset, not
+  noise or a sign of a broken mapping.
+- **D/E** (vs. `metrics_engine.get_risk_vitals()`, Yahoo, unchanged):
+  tight agreement across all 10 (e.g. ANANDRATHI 8% Screener vs. 8.25%
+  Yahoo, TRAVELFOOD 17% vs. 16.72%) -- D/E has far less cross-provider
+  convention drift than ROCE, and the results confirm that.
+- **margin_trend_yoy** (new: Screener OPM-based vs. old: an inline
+  reimplementation of the removed Yahoo-NPM-based calc): 7/10 tickers
+  agreed on direction, 3/10 (GLAXO, ANANDRATHI, TRAVELFOOD) disagreed --
+  this ~70/30 split matches the magnitude of real OPM-vs-NPM divergence
+  already found and accepted earlier in this investigation (HCLTECH/
+  WIPRO/POWERGRID), not a regression.
+- **promoter/FII/DII trend** (new: Screener query-table vs. old:
+  `shareholding_scraper.get_shareholding_trend()`'s per-company-page
+  scrape): FII and DII trend agreed 10/10; promoter trend agreed 9/9
+  where both sides had data (MCX's old-path fetch returned no promoter
+  row at all, consistent with MCX being a demutualized exchange with no
+  promoter category to report -- an honest absence, not a mismatch).
+
+No sign flips, no wrong-direction surprises outside the already-
+understood OPM/NPM divergence. Scoring thresholds were calibrated against
+the OLD Yahoo-convention absolute values (ROCE, NPM-based margin) -- if
+anyone ever reintroduces an absolute-value disqualifier or threshold on
+these fields (e.g. re-enabling the ROCE/D-E disqualifiers removed in item
+#3 above), it must be re-calibrated against Screener's convention, not
+reused as-is from the old Yahoo-based thresholds.
+
+**External-call-count and scan-time measurement (2026-08-19)**: reading
+the actual pre-change source (`git show HEAD:fundamental_analysis/
+fundamental_cache.py` etc., before this spec's edits) showed the real
+per-candidate cost in `decision_engine/live_scorer.py`'s Path A was worse
+than this spec's own opening description ("4 separate calls") -- the old
+`fundamental_cache.get_fundamentals()` didn't make one call, it called
+`fundamental_engine.get_complete_data_packet()`, which itself fanned out
+to FOUR more live calls (`corporate_engine`, `metrics_engine.get_risk_vitals()`,
+`institutional_engine.get_shareholding_profile()`, `news_engine.get_ticker_catalysts()`)
+plus a fifth direct call to `metrics_engine.get_roce()` -- and every one of
+those five calls except the debt-to-equity figure was **fetched and then
+discarded**, since `get_fundamentals()` only ever read `roce` and
+`debt_to_equity` back out of the packet. On top of that,
+`live_scorer.py` separately called `corporate_engine` and
+`institutional_engine.get_shareholding_profile()` AGAIN directly
+(duplicating 2 of the 5), plus `institutional_engine`'s old
+`get_shareholding_profile_with_trend()` made a live Screener.in
+company-page visit via Playwright (`shareholding_scraper.get_shareholding_trend()`)
+for the promoter/FII/DII trend, and `deal_activity` made its own NSE call.
+
+Actual measured, not estimated, external network calls per candidate:
+
+| | Before | After |
+|---|---|---|
+| Cache-miss (first scan of a ticker, or 7-day TTL expiry) | **9** | **3** |
+| Cache-hit (repeat scan within 7 days) | 4 (2 duplicate Yahoo calls + 1 Screener page + 1 NSE call -- the cache only gated `fundamental_cache`'s own 5 calls, not the other 4) | **3** |
+
+The 3 calls remaining after this change (`corporate_engine` for
+`days_to_earnings`/revenue growth, `institutional_engine` for
+Yahoo's `institutional_sponsorship`, `deal_activity` for NSE bulk/block
+deals) match the acceptance-criteria correction recorded above.
+
+Live-timed (`time.perf_counter()`, 5 real tickers: MCX, ENRIN, GLAXO,
+ANANDRATHI, OFSS) per-candidate cost:
+
+- **After (measured directly)**: 2.68s/candidate average
+  (`fundamental_cache` store read: ~0.001s, `corporate_engine`: ~0.70s,
+  `institutional_engine`: ~0.68s, `deal_activity`: ~1.29s).
+- **Before, cache-miss (built from the same measured per-call-type
+  costs -- not a literal re-run of the deleted code, to avoid reverting
+  production files)**: ~7.5s/candidate (5 discarded Yahoo/news calls
+  inside the old `get_fundamentals()` at ~0.7s each, ~3.5s total, +2
+  duplicate Yahoo calls (~1.4s), + one live Screener page visit, separately
+  measured at 1.27s average across the same 5 tickers, +1.3s NSE call).
+- **Before, cache-hit**: ~4.0s/candidate (the 4 calls the 7-day TTL
+  didn't gate: 2 duplicate Yahoo calls + 1 Screener page visit + 1 NSE
+  call).
+
+Net effect: **~64% less time per candidate on a cold cache, ~33% less on
+a warm one** -- and the store-based design has no cache-miss case at all
+going forward, since it's populated once per scan by the same scrape that
+builds the candidate list, not fetched lazily per candidate.
+
+---

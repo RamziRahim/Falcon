@@ -1,90 +1,58 @@
 """
-Tests for fundamental_analysis/fundamental_cache.py — cache-then-check-staleness
-wrapper around fundamental_engine.get_complete_data_packet(), mirroring
-scoring/sector_map.py's test pattern.
+Tests for fundamental_analysis/fundamental_cache.py -- as of
+docs/known_data_issues.md item #4, this is a thin pass-through onto
+fundamental_analysis/screener_fundamentals_store.py rather than its own
+live-Yahoo-fetch-plus-7-day-cache layer (the old version's staleness/
+fetch-failure-fallback behavior no longer applies -- there's no live
+fetch left here to go stale or fail; the Screener store is populated
+once per scan by candidate_generation, not lazily per-candidate).
 """
 from __future__ import annotations
 
-from datetime import datetime, timedelta
-from unittest.mock import patch
-
-import pytest
+from fundamental_analysis.fundamental_cache import get_fundamentals
 
 
-def _packet(rev_yoy="+18.40%", d_e="42.50%"):
-    return {
-        "ticker_identity": "DUMMY.NS",
-        "quarterly_financials": {"revenue_yoy_quarterly_growth": rev_yoy},
-        "balance_sheet_vitals": {"debt_to_equity": d_e},
-        "shareholding_distribution": {},
-        "recent_catalysts": [],
-    }
+class TestReadsFromScreenerStore:
 
+    def test_roce_and_debt_to_equity_come_from_the_store(self, isolated_screener_fundamentals_store):
+        import pandas as pd
+        df = pd.DataFrame([{
+            "Symbol": "DUMMY.NS", "ROCE %": 12.5, "Debt / Eq": 0.35,
+            "Prom. Hold. %": 50.0, "Change in Prom Hold %": 0.0,
+            "FII Hold %": 10.0, "Chg in FII Hold %": 0.0,
+            "DII Hold %": 5.0, "Chg in DII Hold %": 0.0,
+            "OPM Qtr %": 20.0, "OPM PY Qtr %": 18.0,
+        }])
+        isolated_screener_fundamentals_store.save_from_candidate_table(df)
 
-class TestCaching:
+        result = get_fundamentals("DUMMY.NS")
 
-    def test_repeated_calls_hit_cache_not_api(self, isolated_fundamental_cache):
-        with patch("fundamental_analysis.fundamental_cache.fundamental_engine") as mock_engine, \
-             patch("fundamental_analysis.fundamental_cache.metrics_engine") as mock_metrics:
-            mock_engine.get_complete_data_packet.return_value = _packet()
-            mock_metrics.get_roce.return_value = "12.50%"
+        assert result["roce"] == "12.50%"
+        # Screener's own D/E is a plain ratio (0.35); the returned string
+        # is on the same "XX.XX%" scale the old Yahoo convention used
+        # (candidate_assembler.py's _parse_formatted_percentage() divides
+        # by 100 to recover the ratio) -- 0.35 -> "35.00%", not "0.35%".
+        assert result["debt_to_equity"] == "35.00%"
 
-            isolated_fundamental_cache.get_fundamentals("DUMMY.NS")
-            isolated_fundamental_cache.get_fundamentals("DUMMY.NS")
-            isolated_fundamental_cache.get_fundamentals("DUMMY.NS")
+    def test_never_scanned_ticker_returns_honest_na_not_a_crash(self, isolated_screener_fundamentals_store):
+        result = get_fundamentals("NEVER_SEEN.NS")
 
-            assert mock_engine.get_complete_data_packet.call_count == 1, (
-                f"Expected 1 real fetch across 3 lookups of the same ticker "
-                f"(cached after the first), got {mock_engine.get_complete_data_packet.call_count}."
-            )
+        assert result["roce"] == "N/A"
+        assert result["debt_to_equity"] == "N/A"
 
-    def test_stale_entry_triggers_refetch(self, isolated_fundamental_cache):
-        with patch("fundamental_analysis.fundamental_cache.fundamental_engine") as mock_engine, \
-             patch("fundamental_analysis.fundamental_cache.metrics_engine") as mock_metrics:
-            mock_engine.get_complete_data_packet.return_value = _packet()
-            mock_metrics.get_roce.return_value = "12.50%"
+    def test_revenue_yoy_quarterly_growth_key_is_present_but_unused(self, isolated_screener_fundamentals_store):
+        """Kept for dict-shape compatibility with any future caller --
+        confirmed via a full-codebase audit that nothing currently reads
+        this specific field from get_fundamentals() (dashboard_data.py's
+        "Revenue Growth (YoY)" reads the same-named field from
+        corporate_engine.get_comprehensive_fundamentals() instead)."""
+        result = get_fundamentals("ANY.NS")
 
-            isolated_fundamental_cache.get_fundamentals("STALE.NS")
+        assert "revenue_yoy_quarterly_growth" in result
 
-            isolated_fundamental_cache._cache["STALE.NS"]["fetched_at"] = (
-                datetime.now() - timedelta(days=8)
-            ).isoformat()
+    def test_force_refresh_is_a_harmless_no_op(self, isolated_screener_fundamentals_store):
+        """force_refresh is kept for call-site compatibility -- there's no
+        live fetch left for it to force; both calls just read the store."""
+        result = get_fundamentals("ANY.NS", force_refresh=True)
 
-            isolated_fundamental_cache.get_fundamentals("STALE.NS")
-
-            assert mock_engine.get_complete_data_packet.call_count == 2
-
-
-class TestFetchFailureFallback:
-
-    def test_failure_serves_stale_cache_rather_than_fabricating(self, isolated_fundamental_cache):
-        with patch("fundamental_analysis.fundamental_cache.fundamental_engine") as mock_engine, \
-             patch("fundamental_analysis.fundamental_cache.metrics_engine") as mock_metrics:
-            mock_engine.get_complete_data_packet.return_value = _packet(rev_yoy="+9.00%")
-            mock_metrics.get_roce.return_value = "8.00%"
-            isolated_fundamental_cache.get_fundamentals("FLAKY.NS", force_refresh=True)
-
-            mock_engine.get_complete_data_packet.side_effect = Exception("rate limited")
-            result = isolated_fundamental_cache.get_fundamentals("FLAKY.NS", force_refresh=True)
-
-            assert result["revenue_yoy_quarterly_growth"] == "+9.00%", (
-                "Expected stale cache to be served on fetch failure, not a fabricated value."
-            )
-
-    def test_failure_with_no_cache_returns_na_packet(self, isolated_fundamental_cache):
-        with patch("fundamental_analysis.fundamental_cache.fundamental_engine") as mock_engine:
-            mock_engine.get_complete_data_packet.side_effect = Exception("network down")
-
-            result = isolated_fundamental_cache.get_fundamentals("NEVER_SEEN.NS")
-
-            assert result["roce"] == "N/A"
-            assert result["debt_to_equity"] == "N/A"
-
-
-@pytest.mark.integration
-class TestRealYahooIntegration:
-    """Hits the real yfinance API. Run explicitly with: pytest -m integration"""
-
-    def test_known_large_cap_returns_data(self, isolated_fundamental_cache):
-        result = isolated_fundamental_cache.get_fundamentals("RELIANCE.NS")
-        assert result["debt_to_equity"] != "N/A" or result["roce"] != "N/A"
+        assert result["roce"] == "N/A"

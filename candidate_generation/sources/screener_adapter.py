@@ -34,20 +34,60 @@ logger = get_logger("table_parser")
 SYMBOL_REGEX = re.compile(r"/company/([^/]+)/", re.IGNORECASE)
 
 
+# Updated 2026-08-18 (fundamental-data-sourcing-to-Screener spec): the
+# Screener ACCOUNT's own column preferences (screener.in/user/columns/ --
+# an account-level, persistent setting applied to every future scrape with
+# this login, not a per-query URL param or a UI step this scraper has to
+# drive at scrape time -- confirmed live, no such URL param exists) now
+# include 9 new ratio columns beyond the original 13: Debt / Eq,
+# Prom. Hold. %, Change in Prom Hold %, FII Hold %, Chg in FII Hold %,
+# DII Hold %, Chg in DII Hold %, OPM Qtr %, and OPM PY Qtr % (OPM the same
+# quarter one year ago -- needed to classify margin_trend_yoy the same
+# YoY-comparison way the old Yahoo-sourced version did; a single "OPM Qtr %"
+# snapshot alone can't show a trend direction).
+#
+# This account is on Screener's free tier, hard-capped at 15 selected
+# columns -- already at that cap before OPM PY Qtr % was added, so "RSI"
+# was dropped to make room (confirmed harmless: Screener's RSI was never
+# consumed anywhere in this codebase -- Falcon computes its own RSI_14
+# from real OHLCV data independently). Three further OLD columns are also
+# gone from the account's column list entirely (not just reordered):
+# "Mar Cap Rs.Cr.", "Div Yld %", "Sales Qtr Rs.Cr." -- confirmed harmless
+# before removing them here too: none of the three is read anywhere
+# outside this file and screen.query's own filter criteria (unrelated to
+# display columns).
+#
+# Confirmed the resulting real column ORDER via direct DOM inspection of
+# an actual query run (not assumed to match the order columns were added
+# in) -- see the positional mapping in parse_results() below, cross-
+# checked against MCX's real, independently-known values (0% promoter
+# holding, near-zero debt -- both correct, well-known facts about MCX's
+# demutualized exchange structure).
+#
+# EXPECTED_COLUMNS must always match the account's REAL current column
+# list -- any future column-preference change on the Screener account
+# (adding/removing/reordering, or hitting the free-tier cap again)
+# requires re-verifying this list the same way (live DOM inspection), not
+# just appending or assuming the UI-addition order.
 EXPECTED_COLUMNS = [
     "Name",
     "Symbol",
     "CMP Rs.",
     "P/E",
-    "Mar Cap Rs.Cr.",
-    "Div Yld %",
     "NP Qtr Rs.Cr.",
     "Qtr Profit Var %",
-    "Sales Qtr Rs.Cr.",
     "Qtr Sales Var %",
     "ROCE %",
     "CMP / BV",
-    "RSI",
+    "Debt / Eq",
+    "Prom. Hold. %",
+    "Change in Prom Hold %",
+    "Chg in FII Hold %",
+    "DII Hold %",
+    "Chg in DII Hold %",
+    "OPM Qtr %",
+    "FII Hold %",
+    "OPM PY Qtr %",
     "50 DMA Rs.",
     "200 DMA Rs.",
 ]
@@ -98,7 +138,7 @@ def parse_results(page: Page) -> pd.DataFrame:
 
             cells = row.locator("td")
 
-            if cells.count() < 15:
+            if cells.count() < 20:
                 logger.warning(
                     "Skipping malformed row %d",
                     i + 1,
@@ -127,22 +167,30 @@ def parse_results(page: Page) -> pd.DataFrame:
                     )
                 )
 
+            # Position mapping confirmed live against the account's real
+            # current column order (see EXPECTED_COLUMNS' own comment) --
+            # not the order columns were added in the Manage Columns UI.
             record = {
                 "Name": name,
                 "Symbol": symbol,
                 "CMP Rs.": values[0],
                 "P/E": values[1],
-                "Mar Cap Rs.Cr.": values[2],
-                "Div Yld %": values[3],
-                "NP Qtr Rs.Cr.": values[4],
-                "Qtr Profit Var %": values[5],
-                "Sales Qtr Rs.Cr.": values[6],
-                "Qtr Sales Var %": values[7],
-                "ROCE %": values[8],
-                "CMP / BV": values[9],
-                "RSI": values[10],
-                "50 DMA Rs.": values[11],
-                "200 DMA Rs.": values[12],
+                "NP Qtr Rs.Cr.": values[2],
+                "Qtr Profit Var %": values[3],
+                "Qtr Sales Var %": values[4],
+                "ROCE %": values[5],
+                "CMP / BV": values[6],
+                "Debt / Eq": values[7],
+                "Prom. Hold. %": values[8],
+                "Change in Prom Hold %": values[9],
+                "Chg in FII Hold %": values[10],
+                "DII Hold %": values[11],
+                "Chg in DII Hold %": values[12],
+                "OPM Qtr %": values[13],
+                "FII Hold %": values[14],
+                "OPM PY Qtr %": values[15],
+                "50 DMA Rs.": values[16],
+                "200 DMA Rs.": values[17],
             }
 
             records.append(record)
