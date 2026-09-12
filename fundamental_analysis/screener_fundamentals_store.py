@@ -66,6 +66,16 @@ COLUMN_TO_FIELD = {
     "Chg in DII Hold %": "dii_holding_change_pct",
     "OPM Qtr %": "opm_latest_qtr_pct",
     "OPM PY Qtr %": "opm_preceding_year_qtr_pct",
+    # 2026-08-20 (P/E vs Industry PE spec): both already-scraped-but-
+    # previously-unpersisted -- "P/E" was in screener_adapter.py's
+    # EXPECTED_COLUMNS since the original 2026-08-18 spec but never made
+    # it into this mapping, so it was captured and immediately discarded
+    # every scan. "Ind PE" is the new column added 2026-08-20, swapped in
+    # for "Net Profit latest quarter" (confirmed unused, see
+    # screener_adapter.py's own comment) to stay within the free-tier
+    # 15-column cap.
+    "P/E": "pe_ratio",
+    "Ind PE": "industry_pe_ratio",
 }
 
 
@@ -161,6 +171,23 @@ def _classify(latest, prior, up: str, down: str, flat: str) -> Optional[str]:
     if latest < prior:
         return down
     return flat
+
+
+def get_pe_ratio_display(ticker: str) -> str:
+    """Company's own trailing P/E, plain ratio (not a percentage -- P/E
+    has no "old Yahoo convention" to match, since ui/dashboard_data.py's
+    "P/E vs Sector" field had no real data source at all before this)."""
+    stored = get_stored_fundamentals(ticker)
+    value = stored.get("pe_ratio") if stored else None
+    return "N/A" if value is None else f"{value:.2f}"
+
+
+def get_industry_pe_display(ticker: str) -> str:
+    """Screener's own peer/sector-average P/E ("Ind PE" column) -- the
+    comparison point for get_pe_ratio_display()'s value."""
+    stored = get_stored_fundamentals(ticker)
+    value = stored.get("industry_pe_ratio") if stored else None
+    return "N/A" if value is None else f"{value:.2f}"
 
 
 def get_roce_display(ticker: str) -> str:

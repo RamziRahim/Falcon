@@ -147,6 +147,56 @@ class TestFundamentalsPanelNeverLeaksRawSentinels:
         assert NA in values
 
 
+class TestPeVsSectorField:
+    """P/E vs Sector (2026-08-20): both values now come from the
+    Screener fundamentals store (fundamental_analysis/screener_fundamentals_store.py's
+    get_pe_ratio_display()/get_industry_pe_display()) -- previously
+    always NA, no real data source existed. Only shown when BOTH values
+    are real; a half-comparison would imply more than the data supports."""
+
+    def test_shows_both_values_when_both_are_real(self, monkeypatch):
+        monkeypatch.setattr(
+            "fundamental_analysis.screener_fundamentals_store.get_pe_ratio_display",
+            lambda symbol: "48.69",
+        )
+        monkeypatch.setattr(
+            "fundamental_analysis.screener_fundamentals_store.get_industry_pe_display",
+            lambda symbol: "32.10",
+        )
+
+        row = next(r for r in fetch_fundamentals_view("TEST.NS") if r["k"] == "P/E vs Sector")
+
+        assert row["v"] == "48.69 vs 32.10"
+
+    def test_na_when_company_pe_missing(self, monkeypatch):
+        monkeypatch.setattr(
+            "fundamental_analysis.screener_fundamentals_store.get_pe_ratio_display",
+            lambda symbol: "N/A",
+        )
+        monkeypatch.setattr(
+            "fundamental_analysis.screener_fundamentals_store.get_industry_pe_display",
+            lambda symbol: "32.10",
+        )
+
+        row = next(r for r in fetch_fundamentals_view("TEST.NS") if r["k"] == "P/E vs Sector")
+
+        assert row["v"] == NA
+
+    def test_na_when_industry_pe_missing(self, monkeypatch):
+        monkeypatch.setattr(
+            "fundamental_analysis.screener_fundamentals_store.get_pe_ratio_display",
+            lambda symbol: "48.69",
+        )
+        monkeypatch.setattr(
+            "fundamental_analysis.screener_fundamentals_store.get_industry_pe_display",
+            lambda symbol: "N/A",
+        )
+
+        row = next(r for r in fetch_fundamentals_view("TEST.NS") if r["k"] == "P/E vs Sector")
+
+        assert row["v"] == NA
+
+
 class TestDashboardContextSplitsExecuteAndWatchlist:
 
     def test_execute_and_watchlist_land_in_separate_buckets(self):

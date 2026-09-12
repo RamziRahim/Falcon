@@ -26,8 +26,6 @@ rather than invented:
     (fundamental_analysis/institutional_engine.py's fii_trend/dii_trend
     are PER-STOCK shareholding trend signals, not a market-wide daily
     flow figure).
-  - P/E vs Sector -- no P/E data source exists in fundamental_cache.py/
-    corporate_engine.py.
   - Market Insights narrative text -- the mockup's own array is
     hand-written prose ("Nifty opened above yesterday's high with broad
     participation..."); Falcon has no narrative-generation capability
@@ -281,6 +279,9 @@ def fetch_fundamentals_view(symbol: str) -> list[dict]:
     from fundamental_analysis.fundamental_cache import get_fundamentals
     from fundamental_analysis.corporate_engine import corporate_engine
     from fundamental_analysis.institutional_engine import institutional_engine
+    from fundamental_analysis.screener_fundamentals_store import (
+        get_pe_ratio_display, get_industry_pe_display,
+    )
     from common.utils import sentinel_to_display
 
     try:
@@ -303,13 +304,23 @@ def fetch_fundamentals_view(symbol: str) -> list[dict]:
     days_to_earnings = comprehensive.get("days_to_earnings")
     earnings_str = NA if days_to_earnings is None or days_to_earnings == 999 else f"{days_to_earnings} days"
 
+    # P/E vs Sector (2026-08-20): both values come from the Screener
+    # fundamentals store now (docs/known_data_issues.md) -- "P/E vs
+    # Sector" only when BOTH the company's own P/E and Screener's
+    # peer/sector-average "Ind PE" are real; if either is missing, an
+    # honest NA rather than a half-comparison that implies more than the
+    # data supports.
+    pe = get_pe_ratio_display(symbol)
+    industry_pe = get_industry_pe_display(symbol)
+    pe_vs_sector = NA if pe == "N/A" or industry_pe == "N/A" else f"{pe} vs {industry_pe}"
+
     return [
         {"k": "ROCE", "v": d(base.get("roce"))},
         {"k": "Revenue Growth (YoY)", "v": d(comprehensive.get("revenue_yoy_quarterly_growth"))},
         {"k": "Net Income Growth (YoY)", "v": d(comprehensive.get("net_income_yoy_quarterly_growth"))},
         {"k": "Margin Trend", "v": d(comprehensive.get("margin_trend_yoy"))},
         {"k": "Debt / Equity", "v": d(base.get("debt_to_equity"))},
-        {"k": "P/E vs Sector", "v": NA},
+        {"k": "P/E vs Sector", "v": pe_vs_sector},
         {"k": "Institutional Sponsorship", "v": d(shareholding.get("institutional_sponsorship"))},
         {"k": "Promoter Holding", "v": d(shareholding.get("promoter_holding"))},
         {"k": "Days to Earnings", "v": earnings_str},

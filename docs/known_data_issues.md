@@ -380,3 +380,54 @@ going forward, since it's populated once per scan by the same scrape that
 builds the candidate list, not fetched lazily per candidate.
 
 ---
+
+## 5. P/E vs Sector wired up; account column swap (2026-08-20)
+
+**Decision date / completed: 2026-08-20.**
+
+While investigating a GLAXO.NS chart-staleness question, discovered
+`ui/dashboard_data.py`'s "P/E vs Sector" field had been hardcoded `NA`
+since the dashboard was first built -- but "P/E" had actually been part
+of `screener_adapter.py`'s `EXPECTED_COLUMNS` since the 2026-08-18
+Screener-consolidation spec, just never added to
+`screener_fundamentals_store.py`'s `COLUMN_TO_FIELD` mapping, so it was
+scraped and immediately discarded every single scan. Also discovered, by
+grepping the whole codebase, that 5 of the account's original columns
+(`P/E`, `NP Qtr Rs.Cr.`, `Qtr Profit Var %`, `Qtr Sales Var %`,
+`CMP / BV`) had **zero** downstream readers -- scraped, then silently
+dropped by `consolidator.py`'s named-aggregation groupby, same fate as
+the columns identified in item #4.
+
+**Account column swap** (free tier, still hard-capped at 15 -- see item
+#4's infrastructure note): dropped `Net Profit latest quarter`
+(confirmed zero downstream readers), added `Industry PE` (Screener's own
+peer/sector-average P/E) in its place -- an even trade, no upgrade
+needed. `Price to book value` was also flagged as currently-unused but
+explicitly kept at the user's request, reserved for a future column
+need rather than dropped now. Screener renders this new column's header
+as **"Ind PE"**, not "Industry PE" (the picker's own label text) --
+confirmed live; `EXPECTED_COLUMNS` and the positional mapping in
+`screener_adapter.py`'s `parse_results()` use the real rendered text,
+re-verified against a live query run the same way item #4's column
+changes were (never assumed to match the picker's label or the UI-
+addition order).
+
+**Code changes**: `COLUMN_TO_FIELD` gained `"P/E": "pe_ratio"` and
+`"Ind PE": "industry_pe_ratio"`; two new display getters
+(`get_pe_ratio_display()`, `get_industry_pe_display()`) follow the same
+`"N/A"`-on-missing convention as every other getter in that module.
+`fetch_fundamentals_view()`'s "P/E vs Sector" row now reads both and
+shows `"{pe} vs {industry_pe}"` only when BOTH are real -- a half-
+comparison (one real number, one N/A) shows the honest `NA` sentinel
+instead of implying a comparison that doesn't fully exist.
+
+**Not done**: no relative-valuation bucketing (CHEAP/FAIR/EXPENSIVE-
+style labels) was added -- `valuation_engine.py` already has that logic
+for a *different* P/E source (NSE's market-wide snapshot) and is flagged
+elsewhere in this doc as dead code worth a future revival-or-removal
+decision; duplicating similar logic here against a different P/E source
+was out of scope for this pass. The field shows both raw numbers, not a
+computed verdict.
+
+---
+

@@ -34,6 +34,21 @@ logger = get_logger("table_parser")
 SYMBOL_REGEX = re.compile(r"/company/([^/]+)/", re.IGNORECASE)
 
 
+# Updated 2026-08-20 (P/E vs Industry PE spec): "Net Profit latest
+# quarter" (NP Qtr Rs.Cr.) dropped -- confirmed harmless first (grepped
+# the whole codebase: never read anywhere outside this file, silently
+# dropped by consolidator.py's own named-aggregation groupby before
+# anything downstream ever saw it, same "scraped but dead weight" status
+# as the three columns removed 2026-08-18). "Industry PE" added in its
+# place -- Screener's own peer/sector-average P/E, needed alongside the
+# account's existing (also previously unused) "Price to Earning" column
+# for the dashboard's "P/E vs Sector" field. Same free-tier 15-column cap
+# as before (still no upgrade) -- this was a straight swap, not a net
+# addition, so no other column needed to move. Screener renders this
+# column's header as "Ind PE" (NOT "Industry PE", the picker's own label
+# text) -- confirmed live; EXPECTED_COLUMNS uses the real rendered header
+# text, matching every other entry here.
+#
 # Updated 2026-08-18 (fundamental-data-sourcing-to-Screener spec): the
 # Screener ACCOUNT's own column preferences (screener.in/user/columns/ --
 # an account-level, persistent setting applied to every future scrape with
@@ -74,7 +89,6 @@ EXPECTED_COLUMNS = [
     "Symbol",
     "CMP Rs.",
     "P/E",
-    "NP Qtr Rs.Cr.",
     "Qtr Profit Var %",
     "Qtr Sales Var %",
     "ROCE %",
@@ -88,6 +102,7 @@ EXPECTED_COLUMNS = [
     "OPM Qtr %",
     "FII Hold %",
     "OPM PY Qtr %",
+    "Ind PE",
     "50 DMA Rs.",
     "200 DMA Rs.",
 ]
@@ -175,20 +190,20 @@ def parse_results(page: Page) -> pd.DataFrame:
                 "Symbol": symbol,
                 "CMP Rs.": values[0],
                 "P/E": values[1],
-                "NP Qtr Rs.Cr.": values[2],
-                "Qtr Profit Var %": values[3],
-                "Qtr Sales Var %": values[4],
-                "ROCE %": values[5],
-                "CMP / BV": values[6],
-                "Debt / Eq": values[7],
-                "Prom. Hold. %": values[8],
-                "Change in Prom Hold %": values[9],
-                "Chg in FII Hold %": values[10],
-                "DII Hold %": values[11],
-                "Chg in DII Hold %": values[12],
-                "OPM Qtr %": values[13],
-                "FII Hold %": values[14],
-                "OPM PY Qtr %": values[15],
+                "Qtr Profit Var %": values[2],
+                "Qtr Sales Var %": values[3],
+                "ROCE %": values[4],
+                "CMP / BV": values[5],
+                "Debt / Eq": values[6],
+                "Prom. Hold. %": values[7],
+                "Change in Prom Hold %": values[8],
+                "Chg in FII Hold %": values[9],
+                "DII Hold %": values[10],
+                "Chg in DII Hold %": values[11],
+                "OPM Qtr %": values[12],
+                "FII Hold %": values[13],
+                "OPM PY Qtr %": values[14],
+                "Ind PE": values[15],
                 "50 DMA Rs.": values[16],
                 "200 DMA Rs.": values[17],
             }
