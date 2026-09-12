@@ -87,6 +87,11 @@ class TestEngineCallOrder:
         assert dce_kwargs["symbols"] == universe
         mocked_pipeline["ie_cls"].return_value.run.assert_called_once_with(symbols=universe)
         mocked_pipeline["build"].assert_called_once_with(universe)
+        # 2026-08-22: pattern detection scoped to today's universe too --
+        # it used to reprocess the ENTIRE data/technical/ cache regardless
+        # of ticker_universe, confirmed live as the largest phase of a
+        # real scan once that cache grows across days.
+        mocked_pipeline["pe_cls"].return_value.execute_pipeline.assert_called_once_with(ticker_universe=universe)
 
     def test_data_collection_receives_a_download_progress_callback(self, mocked_pipeline):
         svc.run_new_scan_pipeline(["DEMO.NS"])

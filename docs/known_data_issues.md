@@ -431,3 +431,59 @@ computed verdict.
 
 ---
 
+## 6. Scan performance + a real same-day data-freshness bug (resolved 2026-08-22)
+
+**Found**: user-reported live scan times climbing (28min -> 41min ->
+58min across three real runs on 2026-08-20/21) and, separately, cached
+technical data for many tickers still dated the 20th despite a scan run
+the evening of the 21st, after market close.
+
+**Cause 1 (performance, real and worsening over time)**:
+`technical_analysis/pattern_engine.py`'s `PatternEngine.execute_pipeline()`
+reprocessed pattern detection for **every** `*.parquet` file already
+sitting in `data/technical/` -- not just today's actual
+`ticker_universe` -- confirmed as the single largest phase of a real
+scan (~20 of ~50+ total minutes, 568 cached tickers against a
+110-ticker daily universe). Since every scan (including repeated manual
+testing) adds more tickers to that cache and none are ever pruned, this
+phase's cost is O(every ticker ever scanned), strictly increasing scan
+over scan, not O(today's candidates) -- explaining the climbing times
+directly. Fixed: `execute_pipeline()` gained an optional
+`ticker_universe` parameter; `services/scan_pipeline_service.py`'s
+call site now passes today's real universe, so only those tickers get
+re-detected. Every other caller (`run_full_pipeline.py`,
+`services/screener_service.py`, the module's own `__main__` block, and
+existing tests) omits the argument and keeps its original full-directory
+behavior unchanged. A ticker outside today's universe simply keeps
+whatever `data/patterns/*.parquet` it already has -- the exact staleness
+case `ui/dashboard_data.py`'s `format_stale_data_notice()` already exists
+to surface honestly on its card/chart, not a new failure mode.
+
+**Cause 2 (correctness, more serious than the performance issue)**:
+`market_data/downloader.py`'s `_download_symbol()` computed
+`start_date = last_cached_date + 1 day`, then skipped the fetch entirely
+whenever `start_date >= today`. For a ticker last cached the day before
+(the exact case after any prior day's scan), `start_date == today` --
+and the old `>=` check treated that as "already caught up," so a scan
+run **the same day**, even hours after market close with real EOD data
+already published, never even attempted to fetch that day's own bar.
+Silent, no warning, no error -- the ticker just kept yesterday's cached
+close indefinitely until a scan ran on some *later* day. This is the
+same underlying mechanism independently confirmed on GLAXO.NS earlier
+(2026-08-19/20), except that case was correctly explained by the ticker
+being absent from that day's screened universe entirely; this bug hits
+tickers that ARE in the universe and should have gotten fresh data.
+Fixed: changed `>=` to `>` -- `start_date == today` now always attempts
+the fetch; the existing empty-response handling immediately below
+(`"returned no new data"` / `"already up to date"`, an honest outcome
+already relied on elsewhere, not new) correctly covers the case where
+today's data genuinely isn't published yet, so this doesn't risk
+fabricating a "new" data point that doesn't exist.
+
+Both fixes are minimal, scoped, additive to their respective functions'
+existing default behavior (verified: `git grep` for every other caller
+of both changed functions, all unaffected), full suite green with new
+regression tests for each (`tests/technical_analysis/test_pattern_engine_persistence.py::TestTickerUniverseScoping`,
+`tests/market_data/test_downloader.py::TestFreshnessCheckDoesNotSkipTodaysOwnData`).
+
+---

@@ -112,6 +112,89 @@ class TestPersistedGranularPatternColumns:
         assert pd.isna(last_row["Cup_Handle_Low"])
 
 
+class TestTickerUniverseScoping:
+    """execute_pipeline(ticker_universe=...) -- added 2026-08-22 after a
+    real live scan (2026-08-21) showed pattern detection reprocessing the
+    ENTIRE data/technical/ cache (568+ tickers accumulated across days)
+    every single scan, regardless of how many tickers the day's actual
+    screen matched (~110) -- confirmed as the single largest phase of a
+    real scan (~20 of ~50+ total minutes)."""
+
+    def _write(self, src_dir, name: str):
+        df = _uptrend_flat_base_breakout_df()
+        df.to_parquet(src_dir / f"{name}.parquet")
+
+    def test_none_processes_every_file_unchanged_default_behavior(self, tmp_path):
+        """Every existing caller (run_full_pipeline.py, services/screener_service.py,
+        the __main__ block, and this file's own other tests) calls
+        execute_pipeline() with no argument -- must keep processing the
+        full directory, zero behavior change."""
+        src_dir = tmp_path / "technical"
+        dest_dir = tmp_path / "patterns"
+        src_dir.mkdir()
+        self._write(src_dir, "A.NS")
+        self._write(src_dir, "B.NS")
+
+        engine = PatternEngine(src_dir=str(src_dir), dest_dir=str(dest_dir))
+        engine.execute_pipeline()
+
+        assert (dest_dir / "A.NS.parquet").exists()
+        assert (dest_dir / "B.NS.parquet").exists()
+
+    def test_scoped_universe_only_processes_listed_tickers(self, tmp_path):
+        src_dir = tmp_path / "technical"
+        dest_dir = tmp_path / "patterns"
+        src_dir.mkdir()
+        self._write(src_dir, "A.NS")
+        self._write(src_dir, "B.NS")
+        self._write(src_dir, "C.NS")
+
+        engine = PatternEngine(src_dir=str(src_dir), dest_dir=str(dest_dir))
+        engine.execute_pipeline(ticker_universe=["A.NS", "C.NS"])
+
+        assert (dest_dir / "A.NS.parquet").exists()
+        assert (dest_dir / "C.NS.parquet").exists()
+        assert not (dest_dir / "B.NS.parquet").exists()
+
+    def test_scoped_universe_does_not_touch_or_delete_existing_output_for_excluded_tickers(self, tmp_path):
+        """A ticker outside today's universe keeps whatever
+        data/patterns/*.parquet it already has from whenever it was last
+        scanned -- the staleness case ui/dashboard_data.py's
+        format_stale_data_notice() already exists to surface honestly,
+        not something this scoping should delete or corrupt."""
+        src_dir = tmp_path / "technical"
+        dest_dir = tmp_path / "patterns"
+        src_dir.mkdir()
+        dest_dir.mkdir()
+        self._write(src_dir, "A.NS")
+        self._write(src_dir, "B.NS")
+
+        # B.NS already has an OLD output file, from a prior (unscoped) run.
+        stale_output = _uptrend_flat_base_breakout_df()
+        stale_output.to_parquet(dest_dir / "B.NS.parquet")
+        stale_mtime = (dest_dir / "B.NS.parquet").stat().st_mtime
+
+        engine = PatternEngine(src_dir=str(src_dir), dest_dir=str(dest_dir))
+        engine.execute_pipeline(ticker_universe=["A.NS"])
+
+        assert (dest_dir / "B.NS.parquet").stat().st_mtime == stale_mtime
+
+    def test_universe_with_no_matching_files_reports_the_specific_reason(self, tmp_path, capsys):
+        """Distinct from the genuine 'nothing here at all' error -- the
+        directory has real data, just none of it for today's tickers
+        (e.g. Phase 4 failed for all of them), a different, more
+        actionable situation."""
+        src_dir = tmp_path / "technical"
+        dest_dir = tmp_path / "patterns"
+        src_dir.mkdir()
+        self._write(src_dir, "A.NS")
+
+        engine = PatternEngine(src_dir=str(src_dir), dest_dir=str(dest_dir))
+        engine.execute_pipeline(ticker_universe=["ZZZ.NS"])
+
+        assert "for today's ticker_universe" in capsys.readouterr().out
+
+
 class TestDeliveryPct20dAvg:
 
     def test_rolling_mean_matches_hand_computed_value(self, tmp_path):

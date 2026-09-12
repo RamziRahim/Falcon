@@ -111,7 +111,15 @@ def run_new_scan_pipeline(
     indicator_result = IndicatorEngine().run(symbols=ticker_universe)
 
     _notify("Detecting chart patterns...")
-    PatternEngine().execute_pipeline()
+    # Scoped to today's ticker_universe (2026-08-22) -- execute_pipeline()
+    # used to reprocess data/technical/'s ENTIRE cached history every
+    # scan (568+ tickers accumulated across days of testing), confirmed
+    # live as the single largest phase of a real scan (~20 of ~50+
+    # total minutes). A ticker outside today's universe keeps whatever
+    # data/patterns/*.parquet it already has -- exactly the staleness
+    # case ui/dashboard_data.py's format_stale_data_notice() already
+    # exists to surface, not a new gap.
+    PatternEngine().execute_pipeline(ticker_universe=ticker_universe)
 
     records_df = build_candidate_table(ticker_universe)
 

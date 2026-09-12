@@ -205,16 +205,47 @@ class PatternEngine:
         self.dest_dir = dest_dir
         os.makedirs(self.dest_dir, exist_ok=True)
 
-    def execute_pipeline(self):
+    def execute_pipeline(self, ticker_universe: list[str] | None = None):
+        """
+        ticker_universe : optional -- when given, only re-detects patterns
+            for tickers in this list, skipping every other *.parquet file
+            already sitting in src_dir without touching it. None (default,
+            every existing caller except scan_pipeline_service.py) keeps
+            processing the full directory, unchanged.
+
+            Without this, every live scan reprocessed pattern detection
+            for the ENTIRE historical data/technical/ cache -- not just
+            today's actual candidates -- an O(all tickers ever scanned)
+            cost that only grows as the cache accumulates across days,
+            confirmed live (2026-08-21) as the single largest phase of a
+            real scan (~20 of ~50+ total minutes, for 568 cached tickers
+            against a 110-ticker daily universe). A ticker NOT in today's
+            universe simply keeps whatever data/patterns/*.parquet it
+            already has from whenever it was last scanned -- exactly the
+            case format_stale_data_notice() (ui/dashboard_data.py)
+            already exists to surface honestly, not a new failure mode.
+        """
         print("============================================================")
         print("          FALCON PHASE 5 PATTERN DETECTION ENGINE           ")
         print("============================================================")
-        
+
         search_path = os.path.join(self.src_dir, "*.parquet")
-        files = glob.glob(search_path)
-        
+        all_files = glob.glob(search_path)
+
+        if ticker_universe is None:
+            files = all_files
+        else:
+            universe_set = set(ticker_universe)
+            files = [f for f in all_files if os.path.basename(f).replace(".parquet", "") in universe_set]
+
         if not files:
-            print(f"[ERROR] No parquet datasets found inside {self.src_dir}. Please run Phase 4 first.")
+            if ticker_universe is not None and all_files:
+                # The directory has data, just none of it for today's
+                # specific universe -- a Phase 4 failure for THIS scan's
+                # tickers, not the "nothing here at all" case below.
+                print(f"[ERROR] No parquet datasets found inside {self.src_dir} for today's ticker_universe. Please check Phase 4 output.")
+            else:
+                print(f"[ERROR] No parquet datasets found inside {self.src_dir}. Please run Phase 4 first.")
             return
 
         metrics = {

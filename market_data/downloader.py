@@ -92,7 +92,19 @@ class Downloader:
             if last_cached_date is not None:
                 start_date = last_cached_date.date() + timedelta(days=1)
 
-        if start_date >= today:
+        # Real bug, confirmed live (2026-08-21): with last_cached_date one
+        # day behind today, start_date == today -- the OLD `>=` check
+        # treated that as "nothing new to fetch" and skipped the request
+        # entirely, so a scan run the SAME day (evening, after market
+        # close, real EOD data already published) never even attempted to
+        # fetch today's own bar. `>` only skips when start_date is
+        # strictly AFTER today (already caught up through today, e.g. a
+        # second scan run later the same day) -- start_date == today
+        # always attempts the fetch, and the empty-response handling right
+        # below (an honest "no new data"/"already up to date" outcome,
+        # not a crash) already covers the case where today's data
+        # genuinely isn't published yet.
+        if start_date > today:
             logger.info("%s is already up to date.", symbol)
             return None
 
