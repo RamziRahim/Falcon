@@ -38,6 +38,7 @@ rather than invented:
 from __future__ import annotations
 
 import math
+from datetime import timedelta
 from typing import Optional
 
 import pandas as pd
@@ -45,7 +46,8 @@ import pandas as pd
 GREEN = "oklch(0.72 0.19 150)"
 AMBER = "oklch(0.78 0.16 80)"
 RED = "oklch(0.68 0.2 25)"
-GREY = "oklch(0.55 0.01 250)"
+GREY = "oklch(0.69 0.01 250)"
+BLUE = "oklch(0.7 0.15 230)"
 
 REGIME_STYLE = {
     "FAVORABLE": {"emoji": "🟢", "color": GREEN, "subColor": "oklch(0.65 0.14 150)",
@@ -66,9 +68,44 @@ TREND_STYLE = {
 CATEGORY_STYLE = {
     "EXECUTE": {"label": "EXECUTE", "color": GREEN, "bg": "oklch(0.3 0.09 150 / 0.35)"},
     "ALERT_WATCHLIST": {"label": "WATCHLIST", "color": AMBER, "bg": "oklch(0.32 0.09 80 / 0.35)"},
+    "MONITOR": {"label": "MONITOR", "color": BLUE, "bg": "oklch(0.28 0.09 230 / 0.35)"},
 }
 
 NA = "—"
+
+# Screener-column-name -> readable pattern label, for MONITOR's "what's
+# forming" line. Deliberately NOT the same map as decision_engine's
+# PATTERN_WEIGHTS/PATTERN_COLUMN_MAP (those are about CONFIRMED breakouts
+# feeding the score) -- these are the *_Setup booleans, which exist on
+# every data/patterns/*.parquet row but were never copied into `candidate`
+# by candidate_assembler.py (categorize() never needed "is something
+# forming", only "is something confirmed"), so this reads pattern_row
+# directly rather than going through the candidate dict.
+MONITOR_SETUP_COLUMNS = [
+    ("Is_VCP_Setup", "VCP"),
+    ("Is_Flat_Base_Setup", "Flat Base"),
+    ("Is_Cup_Handle_Setup", "Cup & Handle"),
+    ("Is_Ascending_Triangle_Setup", "Ascending Triangle"),
+    ("Is_Bull_Flag_Setup", "Bull Flag"),
+]
+
+
+def get_monitor_setup_state(latest_pattern_row: dict) -> Optional[str]:
+    """Which pattern(s), if any, are currently forming but not yet
+    confirmed -- for a MONITOR-tier candidate's card. Reads the real
+    Is_X_Setup booleans straight off data/patterns/*.parquet's latest row
+    (the same row build_chart_view() already has via `history`), NOT
+    Pattern_Type (which pattern_engine.py only ever populates for
+    CONFIRMED breakouts -- always empty/None for a MONITOR candidate by
+    definition, so it can't answer this question at all).
+
+    None when no setup detector fired -- an honest "nothing forming yet"
+    rather than always claiming some structure exists just because the
+    candidate reached MONITOR."""
+    forming = [label for column, label in MONITOR_SETUP_COLUMNS if latest_pattern_row.get(column)]
+    if not forming:
+        return None
+    return f"{', '.join(forming)} forming, not yet confirmed"
 
 
 def _fmt_price(value) -> str:
@@ -181,7 +218,71 @@ def build_sector_view(records_df: pd.DataFrame) -> list[dict]:
     return sectors
 
 
-def build_chart_view(history: pd.DataFrame, symbol: str, price: float, change_pct: Optional[float], sector: str) -> dict:
+def _most_recent_trading_day(as_of_date):
+    """Walks backward from as_of_date (inclusive) to the most recent real
+    NSE trading day -- same weekday+holiday-calendar convention
+    ui/header.py's get_market_status() already uses for the OPEN/CLOSED
+    badge, not a new trading-calendar concept. get_nse_holidays() is
+    disk-cached (REFRESH_INTERVAL_DAYS), so calling this once per
+    candidate on every dashboard render is cheap, not a live NSE fetch
+    each time."""
+    from market_data.holiday_calendar import get_nse_holidays
+
+    holidays = get_nse_holidays()
+    d = as_of_date
+    while d.weekday() >= 5 or d in holidays:
+        d -= timedelta(days=1)
+    return d
+
+
+def format_stale_data_notice(symbol: str, data_last_date, scan_date) -> str | None:
+    """Warns when a candidate's own OHLCV history predates the most
+    recent real NSE trading day as of the scan -- catches a silent
+    per-ticker Phase 3/4 fetch failure within an otherwise-successful
+    scan: the ticker still lands in records_df with a real category
+    (categorize() ran fine against whatever stale data was already on
+    disk), so nothing else would otherwise signal that its chart/card is
+    showing day(s)-old data. None when the data is current (the common
+    case).
+
+    Compared against the most recent TRADING day, not the scan's
+    calendar date directly (2026-08-22 fix) -- a scan run on a weekend or
+    NSE holiday has no newer trading data to compare against by
+    definition, so the raw calendar-date comparison this used to do
+    fired a false "not refreshed" warning on every single non-trading-day
+    scan, even though the cached data was already exactly as current as
+    it could possibly be. Confirmed live: a Saturday scan flagged
+    Friday's (correct, complete) data as stale.
+
+    Compared as DATES, not datetimes -- a same-day scan naturally uses
+    whatever the day's own last-published trading data is, regardless of
+    what time within the day the scan itself ran.
+
+    Does NOT cover a ticker that fell out of today's screened universe
+    entirely (e.g. a prior-day mover no longer matching Leadership's
+    screen.query) -- such a ticker has no card/chart anywhere in
+    records_df to attach this notice to; it's simply absent from today's
+    dashboard, not present-but-stale. That's a different, currently
+    unbuilt surface (a "recently dropped from screen" view), not this
+    function's job."""
+    if data_last_date is None or scan_date is None:
+        return None
+
+    data_date = data_last_date.date() if hasattr(data_last_date, "date") else data_last_date
+    scan_only_date = scan_date.date() if hasattr(scan_date, "date") else scan_date
+
+    effective_trading_date = _most_recent_trading_day(scan_only_date)
+
+    if data_date >= effective_trading_date:
+        return None
+
+    return f"Last scanned {data_date:%Y-%m-%d} — {symbol} data not refreshed in the latest scan"
+
+
+def build_chart_view(
+    history: pd.DataFrame, symbol: str, price: float, change_pct: Optional[float], sector: str,
+    scan_date=None,
+) -> dict:
     """Chart panel -- real OHLCV + EMA_20/EMA_50 (already-computed columns
     in data/patterns/*.parquet, not recomputed here). Pre-renders all
     three ranges (1M/3M/6M) server-side rather than a client-side
@@ -250,6 +351,11 @@ def build_chart_view(history: pd.DataFrame, symbol: str, price: float, change_pc
             "ema20Points": points_str(window["EMA_20"]), "ema50Points": points_str(window["EMA_50"]),
         }
 
+    stale_notice = (
+        format_stale_data_notice(symbol, history["Date"].max(), scan_date)
+        if not history.empty else None
+    )
+
     return {
         "symbol": symbol,
         "priceFmt": _fmt_price(price),
@@ -257,6 +363,7 @@ def build_chart_view(history: pd.DataFrame, symbol: str, price: float, change_pc
         "changeColor": _change_color(change_pct),
         "sector": sector or NA,
         "ranges": range_blocks,
+        "staleNotice": stale_notice,
     }
 
 
@@ -348,7 +455,7 @@ def build_score_waterfall(confidence_score: float, contributing_factors: list[st
     return rows
 
 
-def build_candidate_view(row: pd.Series, history: pd.DataFrame | None) -> dict:
+def build_candidate_view(row: pd.Series, history: pd.DataFrame | None, scan_date=None) -> dict:
     """One EXECUTE/WATCHLIST card + its full modal detail. predicted_p
     (not confidence_score) drives the confidence gauge, per the build
     instructions -- the calibrated model's real probability, which is
@@ -371,9 +478,15 @@ def build_candidate_view(row: pd.Series, history: pd.DataFrame | None) -> dict:
     entry, stop_loss, target = row.get("entry"), row.get("stop_loss"), row.get("target")
     reward_risk = row.get("reward_risk")
 
+    stale_notice = (
+        format_stale_data_notice(row["Symbol"], history["Date"].max(), scan_date)
+        if history is not None and not history.empty else None
+    )
+
     return {
         "id": row["Symbol"],
         "symbol": row["Symbol"],
+        "staleNotice": stale_notice,
         "priceFmt": _fmt_price(row.get("Price")),
         "price_raw": row.get("Price"),
         "changeFmt": _fmt_pct(change_pct),
@@ -406,55 +519,156 @@ def build_candidate_view(row: pd.Series, history: pd.DataFrame | None) -> dict:
     }
 
 
+def build_monitor_candidate_view(row: pd.Series, history: pd.DataFrame | None, scan_date=None) -> dict:
+    """MONITOR-tier card + light modal detail -- deliberately missing
+    every field build_candidate_view() computes from the calibrated
+    model or categorize()'s post-model logic (conf/plan/waterfall/
+    fundamentals/riskFlags), since MONITOR candidates are capped BEFORE
+    reaching either (B-8, leadership_decision_engine.py: score>=40 but no
+    confirmed pattern -- the ONLY way to land here, so "why capped" is
+    unconditionally "No confirmed breakout yet", never fabricated
+    per-candidate detail beyond that).
+
+    Shares CATEGORY_STYLE/id/symbol/price/change/sector/conf/factors/
+    riskFlags field NAMES with build_candidate_view()'s output so this
+    can sit in the same all_candidates list ("All Filtered Candidates"
+    table + falconOpenCandidate() click handling) without the template
+    needing a second code path for those shared sections -- conf stays
+    NA and factors/riskFlags stay empty (rendered as NA/blank exactly
+    like a real EXECUTE/WATCHLIST candidate with none), not because
+    MONITOR needs its own conf/factors, but so the shared table row
+    template doesn't need a MONITOR-specific branch.
+    """
+    style = CATEGORY_STYLE["MONITOR"]
+
+    change_pct = compute_day_change_pct(history) if history is not None else None
+
+    rs_rating = row.get("RS_Rating")
+    rs_display = NA if rs_rating is None or pd.isna(rs_rating) else f"{rs_rating:.0f}"
+
+    setup_state = None
+    if history is not None and not history.empty:
+        setup_state = get_monitor_setup_state(history.iloc[-1].to_dict())
+
+    stale_notice = (
+        format_stale_data_notice(row["Symbol"], history["Date"].max(), scan_date)
+        if history is not None and not history.empty else None
+    )
+
+    return {
+        "id": row["Symbol"],
+        "symbol": row["Symbol"],
+        "staleNotice": stale_notice,
+        "priceFmt": _fmt_price(row.get("Price")),
+        "price_raw": row.get("Price"),
+        "changeFmt": _fmt_pct(change_pct),
+        "changeColor": _change_color(change_pct),
+        "category": "MONITOR",
+        "categoryLabel": style["label"],
+        "categoryColor": style["color"],
+        "categoryBg": style["bg"],
+        # NA/empty, not omitted -- the shared "All Filtered Candidates"
+        # table row and modal loop read these same keys for every tier;
+        # MONITOR simply never has real values for them (see docstring).
+        "conf": NA,
+        "factors": [],
+        "riskFlags": [],
+        "sector": row.get("Sector") or NA,
+        "rsRating": rs_display,
+        # MONITOR-specific: real Trend_State (records_df's own column,
+        # not re-derived), the one, always-correct reason this tier caps
+        # here, and whatever real partial pattern state exists.
+        "trendState": row.get("Trend_State") or NA,
+        "monitorReason": "No confirmed breakout yet",
+        "setupState": setup_state,
+    }
+
+
 def build_dashboard_context(
     records_df: pd.DataFrame,
     history_by_symbol: dict[str, pd.DataFrame],
     regime_snapshot: dict | None,
     index_quotes: dict,
     active_strategy_tab: str = "leadership",
+    last_scan_completed_at=None,
 ) -> dict:
     """Top-level orchestrator -- the full template-variable dict for
     ui/dashboard_template.html, mirroring the mockup's own renderVals()
-    output shape."""
+    output shape.
+
+    last_scan_completed_at : the timestamp the current records_df was
+        produced at (st.session_state.last_scan_completed_at) -- threaded
+        into build_candidate_view()/build_chart_view() so each card/chart
+        can carry format_stale_data_notice()'s warning when that specific
+        candidate's own OHLCV history predates this scan (a silent
+        per-ticker Phase 3/4 fetch failure, not a rendering bug). None
+        degrades to no notice on any candidate, same as today's
+        behavior."""
     market_pulse = build_market_pulse(regime_snapshot, index_quotes)
     sectors = build_sector_view(records_df) if not records_df.empty else []
 
-    real = records_df[records_df["category"].isin(["EXECUTE", "ALERT_WATCHLIST"])].copy() if not records_df.empty else records_df
+    # MONITOR included here (not just EXECUTE/ALERT_WATCHLIST) as of the
+    # MONITOR-watchlist-section spec -- real categorize() output that was
+    # previously computed every scan and then silently dropped before
+    # reaching this function at all (confirmed live: a real scan on
+    # 2026-08-20 categorized 20 real MONITOR candidates, 0 EXECUTE, 0
+    # WATCHLIST -- entirely invisible under the old two-category filter).
+    real = records_df[records_df["category"].isin(["EXECUTE", "ALERT_WATCHLIST", "MONITOR"])].copy() if not records_df.empty else records_df
 
     execute_candidates = []
     watchlist_candidates = []
+    monitor_candidates = []
     all_candidates = []
-    # One real chart per EXECUTE/WATCHLIST candidate (not just whichever
-    # one starts visible) -- clicking a candidate re-points the main chart
-    # panel to it client-side (falconOpenCandidate() in
+    # One real chart per EXECUTE/WATCHLIST/MONITOR candidate (not just
+    # whichever one starts visible) -- clicking a candidate re-points the
+    # main chart panel to it client-side (falconOpenCandidate() in
     # dashboard_template.html toggles which [data-chart-panel] is shown,
     # keyed by symbol), so every candidate needs its own real, independently
     # computed EMA/candle/volume data ready ahead of time rather than a
     # relabeled copy of whichever chart happened to render first. Reuses
     # history_by_symbol, which ui/dashboard.py already loads for every real
     # candidate (previously only used for the day-change % on its card) --
-    # no extra I/O.
+    # no extra I/O. Pre-fetching all of them (not a per-click round trip)
+    # is deliberate: a real live scan's EXECUTE+WATCHLIST+MONITOR total was
+    # 20 candidates (2026-08-20) -- build_chart_view() is pure local
+    # pandas/string work per candidate, no network calls, so pre-rendering
+    # even a few hundred of these costs well under a second total, far
+    # cheaper than the actual scan pipeline that produces records_df in
+    # the first place. A round trip would add real complexity (a new
+    # Streamlit callback path, loading states) to solve a cost problem
+    # that doesn't exist at this scale.
     all_charts = []
 
     for _, row in real.iterrows():
         history = history_by_symbol.get(row["Symbol"])
-        view = build_candidate_view(row, history)
-        all_candidates.append(view)
-        if row["category"] == "EXECUTE":
-            execute_candidates.append(view)
+        category = row["category"]
+
+        if category == "MONITOR":
+            view = build_monitor_candidate_view(row, history, scan_date=last_scan_completed_at)
+            monitor_candidates.append(view)
         else:
-            watchlist_candidates.append(view)
+            view = build_candidate_view(row, history, scan_date=last_scan_completed_at)
+            if category == "EXECUTE":
+                execute_candidates.append(view)
+            else:
+                watchlist_candidates.append(view)
+        all_candidates.append(view)
 
         if history is not None and not history.empty:
             change_pct = compute_day_change_pct(history)
             all_charts.append(
-                build_chart_view(history, view["symbol"], view["price_raw"], change_pct, view["sector"])
+                build_chart_view(
+                    history, view["symbol"], view["price_raw"], change_pct, view["sector"],
+                    scan_date=last_scan_completed_at,
+                )
             )
 
     if execute_candidates:
         default_chart_symbol = execute_candidates[0]["symbol"]
     elif watchlist_candidates:
         default_chart_symbol = watchlist_candidates[0]["symbol"]
+    elif monitor_candidates:
+        default_chart_symbol = monitor_candidates[0]["symbol"]
     else:
         default_chart_symbol = None
 
@@ -481,6 +695,7 @@ def build_dashboard_context(
         "active_strategy_tab": active_strategy_tab,
         "execute_candidates": execute_candidates,
         "watchlist_candidates": watchlist_candidates,
+        "monitor_candidates": monitor_candidates,
         "all_candidates": all_candidates,
         "na": NA,
     }

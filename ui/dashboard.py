@@ -61,6 +61,10 @@ _DOCUMENT_SHELL = """<!DOCTYPE html>
      intended effect. */
   .falcon-card-hover:hover{{background:oklch(0.225 0.014 250) !important;}}
   .falcon-row-hover:hover{{background:oklch(0.2 0.014 250) !important;}}
+  /* Which candidate's chart the main panel currently shows -- toggled by
+     falconHighlightChartedCard() in dashboard_template.html on click and
+     on initial page load, so it's never ambiguous after several clicks. */
+  .falcon-card-active{{border-color:oklch(0.72 0.19 150) !important;box-shadow:0 0 0 1px oklch(0.72 0.19 150 / 0.5);}}
 </style>
 </head>
 <body>
@@ -96,7 +100,7 @@ def _load_price_history(symbol: str) -> pd.DataFrame | None:
         return None
 
 
-def render(records_df: pd.DataFrame, height: int = 1400) -> None:
+def render(records_df: pd.DataFrame, height: int = 1400, last_scan_completed_at: datetime | None = None) -> None:
     """Renders the full Falcon dashboard from real scan data.
 
     records_df : the exact DataFrame app.py already stores in
@@ -104,6 +108,12 @@ def render(records_df: pd.DataFrame, height: int = 1400) -> None:
         score_live_candidates()'s own output (category/predicted_p/
         model_version/entry/stop_loss/target/.../RS_Rating/Sector, all
         real, no placeholder columns invented here).
+
+    last_scan_completed_at : st.session_state.last_scan_completed_at --
+        threaded through to build_dashboard_context() so any candidate
+        whose own OHLCV history predates this scan gets a visible
+        staleness notice (format_stale_data_notice()) instead of silently
+        showing old data with no signal that anything's off.
     """
     from ui.header import get_index_quotes, get_market_regime_snapshot
 
@@ -111,7 +121,16 @@ def render(records_df: pd.DataFrame, height: int = 1400) -> None:
 
     real_symbols = []
     if not records_df.empty and "category" in records_df.columns:
-        real_symbols = records_df[records_df["category"].isin(["EXECUTE", "ALERT_WATCHLIST"])]["Symbol"].tolist()
+        # MONITOR included here -- confirmed live (2026-08-21) that
+        # leaving it out of THIS filter (while build_dashboard_context()'s
+        # own internal filter already included MONITOR) meant
+        # history_by_symbol never had an entry for any MONITOR ticker, so
+        # every MONITOR candidate's `history` came through as None: no
+        # chart, no setup-state, no real change% -- clicking a MONITOR
+        # card found no matching [data-chart-panel] to switch to at all.
+        real_symbols = records_df[
+            records_df["category"].isin(["EXECUTE", "ALERT_WATCHLIST", "MONITOR"])
+        ]["Symbol"].tolist()
     history_by_symbol = {sym: _load_price_history(sym) for sym in real_symbols}
 
     context = build_dashboard_context(
@@ -119,6 +138,7 @@ def render(records_df: pd.DataFrame, height: int = 1400) -> None:
         history_by_symbol=history_by_symbol,
         regime_snapshot=get_market_regime_snapshot(),
         index_quotes=get_index_quotes(),
+        last_scan_completed_at=last_scan_completed_at,
     )
     context["session_label"] = _session_label(now)
     context["market_open"] = _is_market_open(now)

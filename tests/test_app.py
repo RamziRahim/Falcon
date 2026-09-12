@@ -120,3 +120,28 @@ class TestLastScanPersistedInSessionState:
             "st.session_state.last_scan_category_breakdown = "
             "compute_category_breakdown(pd.DataFrame())" in APP_SOURCE
         )
+
+
+class TestMonitorTickersGetPriceHistoryLoaded:
+    """Real bug, confirmed live 2026-08-21: build_dashboard_context()'s
+    own internal category filter was updated to include MONITOR, but
+    ui/dashboard.py's render() has a SEPARATE, upstream filter deciding
+    which symbols' price history even gets loaded into history_by_symbol
+    in the first place -- that one still only listed EXECUTE/
+    ALERT_WATCHLIST. Every MONITOR candidate's `history` therefore came
+    through as None regardless of the fix below it, so build_chart_view()
+    was never called for any MONITOR ticker and clicking a MONITOR card
+    found no matching [data-chart-panel] to switch to at all -- not a
+    slow-render/timing issue, a missing chart entry. Source-inspection
+    style, matching this file's own convention (see module docstring):
+    ui/dashboard.py can't be imported directly without triggering live
+    Streamlit/network calls."""
+
+    def test_history_loading_filter_includes_monitor(self):
+        assert (
+            'records_df["category"].isin(["EXECUTE", "ALERT_WATCHLIST", "MONITOR"])'
+            in DASHBOARD_SOURCE
+        )
+        # Guards against silently reverting to the old two-category
+        # filter under a different variable name/formatting.
+        assert '["EXECUTE", "ALERT_WATCHLIST"])["Symbol"]' not in DASHBOARD_SOURCE

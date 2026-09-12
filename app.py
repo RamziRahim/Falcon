@@ -152,4 +152,4 @@ if is_new_scan_triggered:
 # decision_engine.live_scorer.score_live_candidates()'s own output
 # (category/predicted_p/model_version/entry/stop_loss/target/.../
 # RS_Rating/Sector), no placeholder fields.
-dashboard.render(st.session_state.screener_records)
+dashboard.render(st.session_state.screener_records, last_scan_completed_at=st.session_state.last_scan_completed_at)
