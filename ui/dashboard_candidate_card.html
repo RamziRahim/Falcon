@@ -32,6 +32,15 @@ c.category instead of two copy-pasted blocks.
     {% if c.staleNotice %}
     <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.3 0.09 45 / 0.45);color:oklch(0.82 0.13 60);border:1px solid oklch(0.45 0.12 50 / 0.5);">&#9888; {{ c.staleNotice }}</span>
     {% endif %}
+    {% if c.vwapReclaim %}
+      {% if c.vwapReclaim.state == 'reclaimed' %}
+      <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.3 0.1 230 / 0.45);color:oklch(0.82 0.14 230);border:1px solid oklch(0.45 0.13 230 / 0.5);">&#8635; {{ c.vwapReclaim.label }}</span>
+      {% elif c.vwapReclaim.state == 'above_all_day' %}
+      <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.26 0.05 230 / 0.35);color:oklch(0.72 0.09 230);border:1px solid oklch(0.38 0.07 230 / 0.4);">{{ c.vwapReclaim.label }}</span>
+      {% else %}
+      <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.26 0.01 250 / 0.4);color:oklch(0.62 0.01 250);border:1px solid oklch(0.35 0.01 250 / 0.4);">{{ c.vwapReclaim.label }}</span>
+      {% endif %}
+    {% endif %}
   </div>
   <div style="text-align:right;min-width:110px;">
     <div style="font-size:10.5px;color:oklch(0.71 0.01 250);">{{ c.sector }}</div>

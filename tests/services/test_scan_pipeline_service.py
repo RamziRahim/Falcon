@@ -30,7 +30,9 @@ def mocked_pipeline():
          patch.object(svc, "PatternEngine") as mock_pe_cls, \
          patch.object(svc, "build_candidate_table") as mock_build, \
          patch.object(svc, "scoring_engine") as mock_scoring, \
-         patch.object(svc, "score_live_candidates") as mock_score_live:
+         patch.object(svc, "score_live_candidates") as mock_score_live, \
+         patch.object(svc, "is_live_market_hours") as mock_market_hours, \
+         patch.object(svc, "fetch_todays_intraday_bars") as mock_fetch_intraday:
 
         mock_dce_cls.return_value.run.return_value = DataCollectionResult()
         mock_ie_cls.return_value.run.return_value = IndicatorEngineResult()
@@ -40,6 +42,12 @@ def mocked_pipeline():
         # module only needs to prove the *pipeline* calls it, without
         # hitting real Playwright/network fetches per test run.
         mock_score_live.side_effect = lambda df: df
+        # Defaults to "market closed" so existing tests (none of which
+        # assert on vwap_* columns) never trigger a real yfinance fetch
+        # for a fake ticker -- VWAP-reclaim-specific tests below override
+        # this explicitly.
+        mock_market_hours.return_value = False
+        mock_fetch_intraday.return_value = pd.DataFrame()
 
         manager.attach_mock(mock_dce_cls.return_value.run, "data_collection_run")
         manager.attach_mock(mock_ie_cls.return_value.run, "indicator_run")
@@ -54,6 +62,8 @@ def mocked_pipeline():
             "build": mock_build,
             "scoring": mock_scoring,
             "score_live": mock_score_live,
+            "market_hours": mock_market_hours,
+            "fetch_intraday": mock_fetch_intraday,
         }
 
 
@@ -214,6 +224,56 @@ class TestResultComposition:
             "not before -- it needs RS_Rating/Sector already present."
         )
         assert result.records_df.loc[0, "category"] == "EXECUTE"
+
+    def test_vwap_reclaim_skipped_outside_market_hours(self, mocked_pipeline):
+        mocked_pipeline["build"].return_value = pd.DataFrame({"Symbol": ["DEMO.NS"], "Price": [100.0]})
+        mocked_pipeline["score_live"].side_effect = lambda df: df.assign(category=["EXECUTE"])
+        mocked_pipeline["market_hours"].return_value = False
+
+        result = svc.run_new_scan_pipeline(["DEMO.NS"])
+
+        mocked_pipeline["fetch_intraday"].assert_not_called()
+        assert result.records_df.loc[0, "vwap_invalidated_reason"] == "market_closed"
+        assert bool(result.records_df.loc[0, "vwap_reclaimed"]) is False
+
+    def test_vwap_reclaim_fetched_only_for_execute_and_watchlist(self, mocked_pipeline):
+        mocked_pipeline["build"].return_value = pd.DataFrame(
+            {"Symbol": ["EXEC.NS", "WATCH.NS", "MON.NS", "AVOID.NS"], "Price": [100.0] * 4}
+        )
+        mocked_pipeline["score_live"].side_effect = lambda df: df.assign(
+            category=["EXECUTE", "ALERT_WATCHLIST", "MONITOR", "AVOID"]
+        )
+        mocked_pipeline["market_hours"].return_value = True
+        mocked_pipeline["fetch_intraday"].return_value = pd.DataFrame()
+
+        svc.run_new_scan_pipeline(["EXEC.NS", "WATCH.NS", "MON.NS", "AVOID.NS"])
+
+        fetched_symbols = {call.args[0] for call in mocked_pipeline["fetch_intraday"].call_args_list}
+        assert fetched_symbols == {"EXEC.NS", "WATCH.NS"}, (
+            "VWAP Reclaim must be fetched only for the day's EXECUTE/WATCHLIST "
+            "candidates, never MONITOR/AVOID and never the full universe."
+        )
+
+    def test_vwap_reclaim_never_changes_category_or_predicted_p(self, mocked_pipeline):
+        """Acceptance criterion: this field is purely informational and
+        must never feed back into the decision that already happened."""
+        mocked_pipeline["build"].return_value = pd.DataFrame({"Symbol": ["DEMO.NS"], "Price": [100.0]})
+        mocked_pipeline["score_live"].side_effect = lambda df: df.assign(
+            category=["EXECUTE"], predicted_p=[0.77],
+        )
+        mocked_pipeline["market_hours"].return_value = True
+        mocked_pipeline["fetch_intraday"].return_value = pd.DataFrame({
+            "Datetime": pd.date_range("2026-09-04 09:15", periods=20, freq="min"),
+            "High": [100.0] * 20, "Low": [100.0] * 20, "Close": [100.0] * 20,
+            "Volume": [1000.0] * 20,
+        })
+
+        result = svc.run_new_scan_pipeline(["DEMO.NS"])
+
+        assert result.records_df.loc[0, "category"] == "EXECUTE"
+        assert result.records_df.loc[0, "predicted_p"] == pytest.approx(0.77)
+        # And the VWAP fields themselves are real, not just absent.
+        assert result.records_df.loc[0, "vwap_invalidated_reason"] is None
 
     def test_returns_collection_and_indicator_results(self, mocked_pipeline):
         collection = DataCollectionResult(downloaded=5, updated=5, failed=1, warnings=0)

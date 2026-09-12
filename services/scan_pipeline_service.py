@@ -29,11 +29,20 @@ from typing import Callable, Optional
 import pandas as pd
 
 from market_data.data_collection_engine import DataCollectionEngine, DataCollectionResult
+from market_data.intraday_fetcher import fetch_todays_intraday_bars
+from market_data.market_hours import is_live_market_hours
 from technical_analysis.indicator_engine import IndicatorEngine, IndicatorEngineResult
 from technical_analysis.pattern_engine import PatternEngine
 from technical_analysis.candidate_table_builder import build_candidate_table
+from technical_analysis.vwap_reclaim import NO_RECLAIM_RESULT, compute_vwap_reclaim_status
 from scoring.scoring_engine import scoring_engine
 from decision_engine.live_scorer import score_live_candidates
+
+# The only categories VWAP Reclaim is computed for -- the day's already-
+# filtered EXECUTE/WATCHLIST candidates (typically single digits to ~20),
+# never the full universe. See _attach_vwap_reclaim_status()'s own
+# docstring for the cost justification.
+VWAP_RECLAIM_CATEGORIES = {"EXECUTE", "ALERT_WATCHLIST"}
 
 StageCallback = Callable[[str], None]
 
@@ -63,6 +72,57 @@ def _make_download_progress_notifier(notify: StageCallback, total: int) -> Calla
         notify(f"Downloading market data ({completed}/{total_count} tickers, {eta_suffix})...")
 
     return _on_progress
+
+
+def _attach_vwap_reclaim_status(records_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds vwap_reclaimed / currently_above_vwap / vwap_value /
+    dipped_below_vwap_today / vwap_invalidated_reason columns -- purely
+    informational (VWAP Reclaim spec, Part 3). Must run AFTER
+    score_live_candidates() has already set `category`, and reads that
+    column only to decide which rows to fetch for -- it never feeds
+    anything back into category/predicted_p/compute_score(), and this is
+    exactly why it's wired here rather than inside live_scorer.py's own
+    categorize()-calling loop.
+
+    Scoped strictly to today's EXECUTE/WATCHLIST candidates
+    (VWAP_RECLAIM_CATEGORIES) -- confirmed live (Part 1's investigation)
+    that fetching intraday bars for a typical day's count of those
+    (single digits to ~20) takes ~5 seconds total via yfinance, immaterial
+    against a 28-58 minute scan. Fetching this for the FULL universe
+    (100+ tickers) was explicitly out of scope -- that's the real
+    infrastructure cost this design avoids.
+
+    Same-day-only signal: skipped entirely outside live NSE trading hours
+    (market_data.market_hours.is_live_market_hours()) -- every row gets
+    invalidated_reason="market_closed" rather than a stale or fabricated
+    value, matching ui/header.py's own "Market Closed" framing instead of
+    silently showing something that looks like a live reading when it
+    isn't one.
+    """
+    if records_df.empty or "category" not in records_df.columns:
+        return records_df
+
+    records_df = records_df.copy()
+    market_live = is_live_market_hours()
+
+    def _status_for_row(row: pd.Series) -> dict:
+        if not market_live:
+            return dict(NO_RECLAIM_RESULT, invalidated_reason="market_closed")
+        if row["category"] not in VWAP_RECLAIM_CATEGORIES:
+            return dict(NO_RECLAIM_RESULT, invalidated_reason="not_a_filtered_candidate")
+        bars = fetch_todays_intraday_bars(row["Symbol"])
+        return compute_vwap_reclaim_status(bars)
+
+    statuses = [_status_for_row(row) for _, row in records_df.iterrows()]
+
+    records_df["vwap_reclaimed"] = [s["vwap_reclaimed"] for s in statuses]
+    records_df["currently_above_vwap"] = [s["currently_above_vwap"] for s in statuses]
+    records_df["vwap_value"] = [s["vwap_value"] for s in statuses]
+    records_df["dipped_below_vwap_today"] = [s["dipped_below_vwap_today"] for s in statuses]
+    records_df["vwap_invalidated_reason"] = [s["invalidated_reason"] for s in statuses]
+
+    return records_df
 
 
 @dataclass(slots=True)
@@ -130,6 +190,10 @@ def run_new_scan_pipeline(
 
         _notify("Scoring & categorizing candidates...")
         records_df = score_live_candidates(records_df)
+
+        # Runs strictly after categorization -- see _attach_vwap_reclaim_status()'s
+        # own docstring for why this must never move earlier.
+        records_df = _attach_vwap_reclaim_status(records_df)
 
     return ScanPipelineResult(
         records_df=records_df,

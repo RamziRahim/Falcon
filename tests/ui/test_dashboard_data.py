@@ -24,6 +24,7 @@ from ui.dashboard_data import (
     fetch_fundamentals_view,
     format_stale_data_notice,
     get_monitor_setup_state,
+    get_vwap_reclaim_display,
 )
 
 
@@ -86,6 +87,49 @@ class TestCandidateViewUsesPredictedPNotConfidenceScore:
     def test_no_history_gives_honest_na_change_not_zero(self):
         view = build_candidate_view(_row(), history=None)
         assert view["changeFmt"] == NA
+
+
+class TestVwapReclaimDisplay:
+    """get_vwap_reclaim_display() -- three distinct states, never
+    collapsed into a single binary chip (per the spec), and an honest
+    None (no chip) whenever the signal wasn't computed this scan."""
+
+    def test_reclaimed_state(self):
+        row = _row(vwap_reclaimed=True, currently_above_vwap=True,
+                    vwap_invalidated_reason=None, vwap_value=110.0)
+        result = get_vwap_reclaim_display(row)
+        assert result == {"label": "VWAP Reclaimed", "state": "reclaimed"}
+
+    def test_above_all_day_is_distinct_from_reclaimed(self):
+        row = _row(vwap_reclaimed=False, currently_above_vwap=True,
+                    vwap_invalidated_reason=None, vwap_value=110.0)
+        result = get_vwap_reclaim_display(row)
+        assert result == {"label": "Above VWAP All Day", "state": "above_all_day"}
+
+    def test_below_vwap_state(self):
+        row = _row(vwap_reclaimed=False, currently_above_vwap=False,
+                    vwap_invalidated_reason=None, vwap_value=95.0)
+        result = get_vwap_reclaim_display(row)
+        assert result == {"label": "Below VWAP", "state": "below"}
+
+    def test_invalidated_reason_set_hides_the_chip_entirely(self):
+        row = _row(vwap_reclaimed=False, currently_above_vwap=False,
+                    vwap_invalidated_reason="market_closed", vwap_value=None)
+        assert get_vwap_reclaim_display(row) is None
+
+    def test_missing_columns_entirely_hides_the_chip_not_shown_as_below(self):
+        """A records_df from before this feature shipped (or a MONITOR/
+        AVOID row that never gets these columns computed) must not be
+        misread as an honest 'Below VWAP' reading."""
+        row = _row()
+        assert "vwap_reclaimed" not in row.index
+        assert get_vwap_reclaim_display(row) is None
+
+    def test_build_candidate_view_wires_the_field_through(self):
+        row = _row(vwap_reclaimed=True, currently_above_vwap=True,
+                    vwap_invalidated_reason=None, vwap_value=110.0)
+        view = build_candidate_view(row, history=None)
+        assert view["vwapReclaim"] == {"label": "VWAP Reclaimed", "state": "reclaimed"}
 
 
 class TestNoFabricatedDataOnEmptyInput:

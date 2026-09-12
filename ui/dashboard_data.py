@@ -108,6 +108,42 @@ def get_monitor_setup_state(latest_pattern_row: dict) -> Optional[str]:
     return f"{', '.join(forming)} forming, not yet confirmed"
 
 
+def _is_missing(value) -> bool:
+    return value is None or (isinstance(value, float) and math.isnan(value))
+
+
+def get_vwap_reclaim_display(row: pd.Series) -> Optional[dict]:
+    """VWAP Reclaim (technical_analysis/vwap_reclaim.py, via
+    services/scan_pipeline_service.py's live wiring) -- purely
+    informational, same-day-only confluence flag for EXECUTE/WATCHLIST
+    cards. Three real states, deliberately NOT collapsed into a single
+    binary chip (per the spec): "reclaimed" (dipped below VWAP today and
+    has since recovered -- the interesting case), "above_all_day" (never
+    dipped -- a different, simpler state, not the same as a recovery),
+    and "below" (no positive signal here).
+
+    Returns None (render no chip at all) when the signal wasn't computed
+    this scan -- market closed, candidate wasn't EXECUTE/WATCHLIST, the
+    intraday fetch failed, or vwap_reclaim.py's own fail-closed checks
+    tripped (too few bars / too gappy) -- same "honest absence, not a
+    fabricated state" policy as every other field in this module. Also
+    None for a records_df predating this feature (vwap_reclaimed column
+    absent entirely), not misread as "below VWAP"."""
+    invalidated_reason = row.get("vwap_invalidated_reason")
+    reclaimed = row.get("vwap_reclaimed")
+
+    if not _is_missing(invalidated_reason):
+        return None
+    if _is_missing(reclaimed):
+        return None
+
+    if bool(reclaimed):
+        return {"label": "VWAP Reclaimed", "state": "reclaimed"}
+    if bool(row.get("currently_above_vwap")):
+        return {"label": "Above VWAP All Day", "state": "above_all_day"}
+    return {"label": "Below VWAP", "state": "below"}
+
+
 def _fmt_price(value) -> str:
     if value is None or (isinstance(value, float) and math.isnan(value)):
         return NA
@@ -501,6 +537,7 @@ def build_candidate_view(row: pd.Series, history: pd.DataFrame | None, scan_date
                     f"oklch(0.28 0.012 250) {round(conf_frac * 360)}deg)"),
         "factors": factors,
         "riskFlags": risk_flags,
+        "vwapReclaim": get_vwap_reclaim_display(row),
         "cap": ", ".join(caps) if caps else None,
         "sector": row.get("Sector") or NA,
         "rsRating": rs_display,
