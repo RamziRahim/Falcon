@@ -43,6 +43,8 @@ from typing import Optional
 
 import pandas as pd
 
+from ui.flag_descriptions import get_factor_tooltip, get_risk_flag_tooltip
+
 GREEN = "oklch(0.72 0.19 150)"
 AMBER = "oklch(0.78 0.16 80)"
 RED = "oklch(0.68 0.2 25)"
@@ -110,6 +112,18 @@ def get_monitor_setup_state(latest_pattern_row: dict) -> Optional[str]:
 
 def _is_missing(value) -> bool:
     return value is None or (isinstance(value, float) and math.isnan(value))
+
+
+def _factor_chips(names: list[str], row: pd.Series) -> list[dict]:
+    """Chip label + hover tooltip for the Factors column/chips -- shared
+    by build_candidate_view() (EXECUTE/WATCHLIST) and
+    build_monitor_candidate_view() (MONITOR) so both render identically."""
+    return [{"label": name, "tooltip": get_factor_tooltip(name, row)} for name in names]
+
+
+def _risk_flag_chips(names: list[str], row: pd.Series) -> list[dict]:
+    """Risk-flag counterpart to _factor_chips()."""
+    return [{"label": name, "tooltip": get_risk_flag_tooltip(name, row)} for name in names]
 
 
 def get_vwap_reclaim_display(row: pd.Series) -> Optional[dict]:
@@ -535,8 +549,8 @@ def build_candidate_view(row: pd.Series, history: pd.DataFrame | None, scan_date
         "confFraction": conf_frac,
         "gaugeBg": (f"conic-gradient({style['color']} {round(conf_frac * 360)}deg, "
                     f"oklch(0.28 0.012 250) {round(conf_frac * 360)}deg)"),
-        "factors": factors,
-        "riskFlags": risk_flags,
+        "factors": _factor_chips(factors, row),
+        "riskFlags": _risk_flag_chips(risk_flags, row),
         "vwapReclaim": get_vwap_reclaim_display(row),
         "cap": ", ".join(caps) if caps else None,
         "sector": row.get("Sector") or NA,
@@ -560,25 +574,37 @@ def build_monitor_candidate_view(row: pd.Series, history: pd.DataFrame | None, s
     """MONITOR-tier card + light modal detail -- deliberately missing
     every field build_candidate_view() computes from the calibrated
     model or categorize()'s post-model logic (conf/plan/waterfall/
-    fundamentals/riskFlags), since MONITOR candidates are capped BEFORE
-    reaching either (B-8, leadership_decision_engine.py: score>=40 but no
+    fundamentals), since MONITOR candidates are capped BEFORE reaching
+    either (B-8, leadership_decision_engine.py: score>=40 but no
     confirmed pattern -- the ONLY way to land here, so "why capped" is
     unconditionally "No confirmed breakout yet", never fabricated
     per-candidate detail beyond that).
 
-    Shares CATEGORY_STYLE/id/symbol/price/change/sector/conf/factors/
-    riskFlags field NAMES with build_candidate_view()'s output so this
-    can sit in the same all_candidates list ("All Filtered Candidates"
-    table + falconOpenCandidate() click handling) without the template
-    needing a second code path for those shared sections -- conf stays
-    NA and factors/riskFlags stay empty (rendered as NA/blank exactly
-    like a real EXECUTE/WATCHLIST candidate with none), not because
-    MONITOR needs its own conf/factors, but so the shared table row
-    template doesn't need a MONITOR-specific branch.
+    factors/riskFlags are NOT in that "capped before reaching" list --
+    verified directly against leadership_decision_engine.py: categorize()
+    calls get_contributing_factors()/get_fakeout_risk_flags()
+    unconditionally for every non-AVOID candidate, reading only
+    candidate/sector_row technical & fundamental fields (Delivery_Pct,
+    RSI_14, macd_signal, Pct_Uptrend, margin_trend_yoy, promoter_trend),
+    none of which require a confirmed pattern or the model. A prior
+    version of this function hardcoded both to [] anyway, silently
+    discarding real values decision_engine.live_scorer.py had already put
+    on this same row -- fixed here to read them the same way
+    build_candidate_view() does.
+
+    Shares CATEGORY_STYLE/id/symbol/price/change/sector/conf field NAMES
+    with build_candidate_view()'s output so this can sit in the same
+    all_candidates list ("All Filtered Candidates" table +
+    falconOpenCandidate() click handling) without the template needing a
+    second code path for those shared sections -- conf stays NA (the
+    model genuinely was never consulted), unlike factors/riskFlags above.
     """
     style = CATEGORY_STYLE["MONITOR"]
 
     change_pct = compute_day_change_pct(history) if history is not None else None
+
+    factors = [f for f in str(row.get("contributing_factors") or "").split(",") if f]
+    risk_flags = [f for f in str(row.get("fakeout_risk_flags") or "").split(",") if f]
 
     rs_rating = row.get("RS_Rating")
     rs_display = NA if rs_rating is None or pd.isna(rs_rating) else f"{rs_rating:.0f}"
@@ -604,12 +630,12 @@ def build_monitor_candidate_view(row: pd.Series, history: pd.DataFrame | None, s
         "categoryLabel": style["label"],
         "categoryColor": style["color"],
         "categoryBg": style["bg"],
-        # NA/empty, not omitted -- the shared "All Filtered Candidates"
-        # table row and modal loop read these same keys for every tier;
-        # MONITOR simply never has real values for them (see docstring).
+        # conf stays NA -- the model genuinely was never consulted (see
+        # docstring). factors/riskFlags are real when categorize() found
+        # any, same shape (label+tooltip dicts) as build_candidate_view().
         "conf": NA,
-        "factors": [],
-        "riskFlags": [],
+        "factors": _factor_chips(factors, row),
+        "riskFlags": _risk_flag_chips(risk_flags, row),
         "sector": row.get("Sector") or NA,
         "rsRating": rs_display,
         # MONITOR-specific: real Trend_State (records_df's own column,

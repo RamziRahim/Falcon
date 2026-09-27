@@ -60,6 +60,30 @@ def _fake_categorize_recorder(monkeypatch):
     return calls
 
 
+def _fake_categorize_recorder_with_flag_fields(monkeypatch):
+    """Same stub as _fake_categorize_recorder(), plus a real risk flag so
+    tests can confirm the tooltip-source fields (Delivery_Pct, RSI_14,
+    etc.) reach records_df -- read straight off `candidate`/`sector_row`,
+    the same inputs categorize() itself received, not re-fetched."""
+    calls = []
+
+    def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
+                         disable_fundamental_signals=False, enable_microstructure_signals=False):
+        calls.append({"candidate": candidate, "sector_row": sector_row})
+        return {
+            "category": "ALERT_WATCHLIST", "confidence_score": 55.0,
+            "predicted_p": 0.61, "model_version": "test_stub_v1",
+            "entry": 100.0, "stop_loss": 92.0, "target": 118.0,
+            "stop_provenance": "STRUCTURAL", "target_provenance": "MEASURED_MOVE",
+            "reward_risk": 2.25, "max_holding_days": 20,
+            "caps_applied": [], "contributing_factors": [],
+            "fakeout_risk_flags": ["TECHNICALLY_OVEREXTENDED"],
+        }
+
+    monkeypatch.setattr(live_scorer, "categorize", fake_categorize)
+    return calls
+
+
 def _stub_out_market_and_history(monkeypatch, history_rows: int = 25):
     monkeypatch.setattr(live_scorer, "_compute_live_market_verdict", lambda: "FAVORABLE")
 
@@ -141,6 +165,68 @@ class TestDisableFundamentalSignalsIsFalseForLivePath:
         live_scorer.score_live_candidates(_records_df())
 
         assert all(c["enable_microstructure_signals"] is False for c in calls)
+
+
+class TestFlagTooltipSourceFieldsPropagate:
+    """ui/flag_descriptions.py's dynamic tooltips (e.g. LOW_DELIVERY_CONVICTION
+    plugging in the real Delivery_Pct/Delivery_Pct_20d_avg) need these raw
+    fields on records_df, not just the joined flag-name strings -- sourced
+    straight from the same candidate/sector_row categorize() itself was
+    given, never re-fetched, so a tooltip can't disagree with the flag it
+    describes."""
+
+    def test_candidate_fields_reach_records_df(self, monkeypatch):
+        _fake_categorize_recorder_with_flag_fields(monkeypatch)
+        _stub_out_market_and_history(monkeypatch)
+        _stub_no_playwright_session(monkeypatch)
+        _stub_fundamentals_sources(monkeypatch)
+
+        # RSI_14 isn't one of the four fundamentals sources -- it's a
+        # technical field candidate_assembler.py reads off the pattern
+        # history row itself.
+        history = pd.DataFrame({
+            "Date": pd.date_range("2024-01-01", periods=25, freq="D"),
+            "Open": [100.0] * 25, "High": [101.0] * 25, "Low": [99.0] * 25,
+            "Close": [100.0] * 25, "Volume": [100_000] * 25,
+            "Trend_State": ["UPTREND"] * 25, "RSI_14": [78.5] * 25,
+            "Delivery_Pct": [55.91] * 25, "Delivery_Pct_20d_avg": [57.40] * 25,
+        })
+        monkeypatch.setattr(live_scorer, "_load_pattern_history", lambda ticker: history)
+
+        result = live_scorer.score_live_candidates(_records_df())
+
+        assert result.loc[0, "RSI_14"] == pytest.approx(78.5)
+        assert result.loc[0, "Delivery_Pct"] == pytest.approx(55.91)
+        assert result.loc[0, "Delivery_Pct_20d_avg"] == pytest.approx(57.40)
+
+    def test_sector_pct_uptrend_reaches_records_df(self, monkeypatch):
+        _fake_categorize_recorder_with_flag_fields(monkeypatch)
+        _stub_out_market_and_history(monkeypatch)
+        _stub_no_playwright_session(monkeypatch)
+        _stub_fundamentals_sources(monkeypatch)
+
+        result = live_scorer.score_live_candidates(_records_df())
+
+        # _records_df()'s tickers are both Sector="IT" with no matching
+        # row in an (empty, since rank_sectors() has nothing real to
+        # group) sector_ranking -- falls back to the documented 0.0
+        # default, still a real (not missing) column on the result.
+        assert "Pct_Uptrend" in result.columns
+
+    def test_missing_pattern_history_still_has_none_not_a_missing_column(self, monkeypatch):
+        """NO_DATA_RESULT's own None convention -- a ticker that never
+        reached categorize() at all must still produce these columns
+        (as None), not silently omit them from records_df."""
+        _fake_categorize_recorder_with_flag_fields(monkeypatch)
+        monkeypatch.setattr(live_scorer, "_compute_live_market_verdict", lambda: "FAVORABLE")
+        monkeypatch.setattr(live_scorer, "_load_pattern_history", lambda ticker: None)
+        _stub_no_playwright_session(monkeypatch)
+        _stub_fundamentals_sources(monkeypatch)
+
+        result = live_scorer.score_live_candidates(_records_df())
+
+        assert "RSI_14" in result.columns
+        assert result["RSI_14"].isna().all()
 
 
 class TestFundamentalsMergedFromAllFourSources:

@@ -26,6 +26,7 @@ from ui.dashboard_data import (
     get_monitor_setup_state,
     get_vwap_reclaim_display,
 )
+from ui.flag_descriptions import get_factor_tooltip
 
 
 def _row(**overrides) -> pd.Series:
@@ -87,6 +88,48 @@ class TestCandidateViewUsesPredictedPNotConfidenceScore:
     def test_no_history_gives_honest_na_change_not_zero(self):
         view = build_candidate_view(_row(), history=None)
         assert view["changeFmt"] == NA
+
+
+class TestFactorAndRiskFlagChipsCarryTooltips:
+    """factors/riskFlags are {"label", "tooltip"} dicts, not plain
+    strings, so the template can render a hover tooltip per chip
+    (ui/flag_descriptions.py) -- checked here at the build_candidate_view()
+    level since that's where the raw comma-joined column gets turned into
+    the shape the template actually consumes."""
+
+    def test_factor_chip_has_label_and_real_tooltip(self):
+        row = _row(contributing_factors="MACD_MOMENTUM_ALIGNED")
+        view = build_candidate_view(row, history=None)
+
+        assert view["factors"] == [{
+            "label": "MACD_MOMENTUM_ALIGNED",
+            "tooltip": get_factor_tooltip("MACD_MOMENTUM_ALIGNED", row),
+        }]
+
+    def test_risk_flag_chip_plugs_in_real_numbers_from_the_row(self):
+        row = _row(fakeout_risk_flags="LOW_DELIVERY_CONVICTION",
+                    Delivery_Pct=55.91, Delivery_Pct_20d_avg=57.40)
+        view = build_candidate_view(row, history=None)
+
+        assert len(view["riskFlags"]) == 1
+        assert view["riskFlags"][0]["label"] == "LOW_DELIVERY_CONVICTION"
+        assert "55.91%" in view["riskFlags"][0]["tooltip"]
+        assert "57.40%" in view["riskFlags"][0]["tooltip"]
+
+    def test_pattern_on_probation_flag_gets_a_real_tooltip(self):
+        row = _row(fakeout_risk_flags="PATTERN_ON_PROBATION:is_cup_handle_breakout")
+        view = build_candidate_view(row, history=None)
+
+        assert "Cup & Handle" in view["riskFlags"][0]["tooltip"]
+
+    def test_waterfall_still_receives_plain_factor_strings_not_chip_dicts(self):
+        """build_score_waterfall() titles each factor as a row label
+        (factor.replace("_", " ").title()) -- it must keep getting the
+        raw string list, not the {"label","tooltip"} chip shape."""
+        view = build_candidate_view(_row(contributing_factors="MACD_MOMENTUM_ALIGNED"), history=None)
+
+        labels = [row["label"] for row in view["waterfall"] if not row["isBase"]]
+        assert "Macd Momentum Aligned" in labels
 
 
 class TestVwapReclaimDisplay:
@@ -601,10 +644,18 @@ def _monitor_row(**overrides) -> pd.Series:
 
 
 class TestBuildMonitorCandidateView:
-    """MONITOR cards must never carry a trade plan, fakeout-risk flags,
-    or a confidence gauge value -- categorize() never computes any of
-    those for a MONITOR candidate (B-8: capped before the model), so
-    fabricating them here would misrepresent what Falcon actually knows."""
+    """MONITOR cards must never carry a trade plan, a real confidence
+    gauge value, or the model-dependent waterfall/fundamentals panels --
+    categorize() never reaches the model for a MONITOR candidate (B-8:
+    capped before it), so fabricating any of those here would
+    misrepresent what Falcon actually knows.
+
+    Factors/risk flags are NOT in that list -- verified directly against
+    leadership_decision_engine.py: get_contributing_factors()/
+    get_fakeout_risk_flags() are called unconditionally for every
+    non-AVOID candidate, reading only candidate/sector_row fields that
+    don't require a confirmed pattern or the model. See
+    TestMonitorFactorsAndRiskFlagsAreReal below for the real-value case."""
 
     def test_no_trade_plan_field_at_all(self):
         view = build_monitor_candidate_view(_monitor_row(), history=None)
@@ -623,7 +674,10 @@ class TestBuildMonitorCandidateView:
 
         assert view["conf"] == NA
 
-    def test_risk_flags_and_factors_are_empty_not_fabricated(self):
+    def test_risk_flags_and_factors_are_empty_when_none_were_found(self):
+        """Honest absence, not fabrication -- _monitor_row()'s fixture
+        sets no contributing_factors/fakeout_risk_flags, so there's
+        nothing real to show."""
         view = build_monitor_candidate_view(_monitor_row(), history=None)
 
         assert view["riskFlags"] == []
@@ -636,6 +690,34 @@ class TestBuildMonitorCandidateView:
         view = build_monitor_candidate_view(_monitor_row(), history=None)
 
         assert view["monitorReason"] == "No confirmed breakout yet"
+
+
+class TestMonitorFactorsAndRiskFlagsAreReal:
+    """Regression coverage for the confirmed gap: a prior version of
+    build_monitor_candidate_view() hardcoded factors/riskFlags to [] even
+    when decision_engine.live_scorer.py had already put real values on
+    the row (categorize() computes both unconditionally, independent of
+    the model/pattern stage MONITOR never reaches)."""
+
+    def test_real_contributing_factors_are_shown_not_discarded(self):
+        row = _monitor_row(contributing_factors="MACD_MOMENTUM_ALIGNED")
+        view = build_monitor_candidate_view(row, history=None)
+
+        assert [f["label"] for f in view["factors"]] == ["MACD_MOMENTUM_ALIGNED"]
+
+    def test_real_risk_flags_are_shown_not_discarded(self):
+        row = _monitor_row(fakeout_risk_flags="TECHNICALLY_OVEREXTENDED,LOW_DELIVERY_CONVICTION")
+        view = build_monitor_candidate_view(row, history=None)
+
+        assert [f["label"] for f in view["riskFlags"]] == [
+            "TECHNICALLY_OVEREXTENDED", "LOW_DELIVERY_CONVICTION",
+        ]
+
+    def test_risk_flag_chips_carry_real_tooltips(self):
+        row = _monitor_row(fakeout_risk_flags="TECHNICALLY_OVEREXTENDED", RSI_14=82.5)
+        view = build_monitor_candidate_view(row, history=None)
+
+        assert "82.5" in view["riskFlags"][0]["tooltip"]
 
     def test_real_trend_state_and_rs_rating_shown(self):
         view = build_monitor_candidate_view(_monitor_row(Trend_State="UPTREND", RS_Rating=77.0), history=None)

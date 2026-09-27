@@ -24,10 +24,10 @@ c.category instead of two copy-pasted blocks.
   </div>
   <div style="flex:1;display:flex;flex-wrap:wrap;gap:6px;">
     {% for f in c.factors %}
-    <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.27 0.05 150 / 0.5);color:oklch(0.82 0.15 150);border:1px solid oklch(0.4 0.1 150 / 0.4);">{{ f }}</span>
+    <span title="{{ f.tooltip|e }}" style="cursor:help;font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.27 0.05 150 / 0.5);color:oklch(0.82 0.15 150);border:1px solid oklch(0.4 0.1 150 / 0.4);">{{ f.label }}</span>
     {% endfor %}
     {% for r in c.riskFlags %}
-    <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.3 0.09 45 / 0.45);color:oklch(0.82 0.13 60);border:1px solid oklch(0.45 0.12 50 / 0.5);">&#9888; {{ r }}</span>
+    <span title="{{ r.tooltip|e }}" style="cursor:help;font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.3 0.09 45 / 0.45);color:oklch(0.82 0.13 60);border:1px solid oklch(0.45 0.12 50 / 0.5);">&#9888; {{ r.label }}</span>
     {% endfor %}
     {% if c.staleNotice %}
     <span style="font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:12px;background:oklch(0.3 0.09 45 / 0.45);color:oklch(0.82 0.13 60);border:1px solid oklch(0.45 0.12 50 / 0.5);">&#9888; {{ c.staleNotice }}</span>

@@ -99,6 +99,17 @@ NO_DATA_RESULT = {
     "caps_applied": "",
     "contributing_factors": "",
     "fakeout_risk_flags": "",
+    # Raw fields behind the fakeout_risk_flags/contributing_factors chip
+    # tooltips (ui/flag_descriptions.py) -- the specific numbers a flag's
+    # tooltip plugs in, e.g. LOW_DELIVERY_CONVICTION's own Delivery_Pct
+    # vs. Delivery_Pct_20d_avg. None here (never fabricated) when a
+    # candidate never reached categorize() at all.
+    "Delivery_Pct": None,
+    "Delivery_Pct_20d_avg": None,
+    "RSI_14": None,
+    "Pct_Uptrend": None,
+    "margin_trend_yoy": None,
+    "promoter_trend": None,
 }
 
 DECISION_COLUMNS = list(NO_DATA_RESULT.keys())
@@ -294,6 +305,16 @@ def _decide_for_ticker(
         "caps_applied": ",".join(result["caps_applied"]),
         "contributing_factors": ",".join(result["contributing_factors"]),
         "fakeout_risk_flags": ",".join(result["fakeout_risk_flags"]),
+        # Same raw fields as NO_DATA_RESULT's own comment -- sourced
+        # straight from the same candidate/sector_row categorize() itself
+        # was just given, not re-fetched, so this can never disagree with
+        # what actually decided the flags above.
+        "Delivery_Pct": candidate.get("Delivery_Pct"),
+        "Delivery_Pct_20d_avg": candidate.get("Delivery_Pct_20d_avg"),
+        "RSI_14": candidate.get("RSI_14"),
+        "Pct_Uptrend": sector_row.get("Pct_Uptrend"),
+        "margin_trend_yoy": candidate.get("margin_trend_yoy"),
+        "promoter_trend": candidate.get("promoter_trend"),
     }
 
 
