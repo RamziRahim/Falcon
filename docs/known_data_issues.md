@@ -487,3 +487,62 @@ regression tests for each (`tests/technical_analysis/test_pattern_engine_persist
 `tests/market_data/test_downloader.py::TestFreshnessCheckDoesNotSkipTodaysOwnData`).
 
 ---
+
+## 7. Zero EXECUTE/WATCHLIST across a 93-ticker scan (2026-09-27) -- not yet root-caused, may be correct
+
+**Found**: while verifying the MONITOR-tier/tooltip work end-to-end on a
+real live scan (2026-09-27), the run screened 93 tickers from the
+Leadership query and produced 0 EXECUTE, 0 ALERT_WATCHLIST, 10 MONITOR,
+82 AVOID.
+
+**Not yet investigated**: this could be genuinely correct (a market-
+regime-driven `UNFAVORABLE`/`CAUTION` day, or a real scarcity of pattern-
+confirmed, model-cleared setups on this particular date -- the market
+regime badge that same scan showed UNFAVORABLE with NIFTY in a DOWNTREND,
+which is at least consistent with a defensively-skewed outcome) -- or it
+could mean an upstream filter (a disqualifier, a cap, the ROCE/D-E gate
+now living in Screener's own query per item #3, or the calibrated
+model's execute_cutoff) is being overly restrictive in a way that isn't
+actually intended. One 93-ticker sample on one date isn't enough to tell
+the difference.
+
+**How to check, if this recurs or is worth confirming now**: same
+diagnostic method already used for the ROCE/D-E investigation in item
+#3 -- a real live scan's AVOID breakdown by exact disqualifier/cap
+reason (not just the aggregate AVOID count), to see whether the 82 AVOID
+tickers are failing for a plausible, expected spread of reasons or
+whether one single check is doing nearly all of the rejecting.
+
+**Status: open, not blocking** -- flagged as a diagnostic follow-up, not
+a confirmed bug. Nothing about this session's MONITOR/tooltip/VWAP work
+touches any disqualifier, cap, or the model's cutoff, so it's unrelated
+to what was actually being verified that day.
+
+---
+
+## 8. VWAP Reclaim chip -- never visually confirmed rendering in a real browser
+
+**Status as of 2026-09-27**: the VWAP Reclaim mechanism itself (VWAP
+computation, coverage-ratio fail-closed check, market-hours gating,
+EXECUTE/WATCHLIST-only scoping) is covered by 18 unit/integration tests
+across `tests/technical_analysis/test_vwap_reclaim.py`,
+`tests/market_data/test_market_hours.py`,
+`tests/market_data/test_intraday_fetcher.py`, and
+`tests/services/test_scan_pipeline_service.py`, plus a Jinja-level render
+check with synthetic data confirming the three chip states produce valid
+HTML. **None of that is the same as having actually seen the chip render
+in a live browser against a real EXECUTE/WATCHLIST candidate** -- every
+real live scan run so far either happened outside market hours (a
+weekend, so `is_live_market_hours()` correctly suppressed the whole
+feature) or, on 2026-09-27, produced zero EXECUTE/WATCHLIST candidates
+for the chip to appear on regardless of market hours (see item #7 above).
+
+**Do not treat "tests pass" as "confirmed working" for this specific
+feature** -- close this out with an actual screenshot, not another round
+of code-reading, the next time a weekday scan during live NSE hours
+(9:15-15:30 IST) produces at least one EXECUTE or ALERT_WATCHLIST
+candidate. Once confirmed, update this entry to reflect that (or move it
+to a "Resolved" state per this doc's own convention) rather than leaving
+it open indefinitely once it's actually been seen.
+
+---
