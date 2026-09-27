@@ -56,6 +56,7 @@ st.markdown("""
 <style>
     body, .main, .block-container { background-color: #0A0F1D !important; color: #E2E8F0; padding-top: 1.5rem !important; }
     [data-testid="stSidebar"] { background-color: #050810 !important; }
+    [data-testid="stSidebar"] * { color: oklch(0.92 0.008 250) !important; }
     .panel-box { background-color: #111827; border: 1px solid #1F2937; padding: 20px; border-radius: 12px; min-height: 480px; }
     .panel-box-ai { background-color: #111827; border-left: 3px solid #10B981; padding: 20px; border-radius: 12px; min-height: 480px; }
     .badge { padding: 4px 12px; border-radius: 6px; font-weight: 700; font-size: 12px; text-transform: uppercase; display: inline-block; }
