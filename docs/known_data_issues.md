@@ -128,6 +128,62 @@ boundary-case exposure found doesn't touch either. The underlying
 corruption is still open/unfixed; this is a re-verification at a third,
 larger scale, not a resolution.
 
+**New concrete downstream impact found, 2026-09/10 (Trailing-Exit Backtest
+Experiment)**: building `tests/run_trailing_exit_experiment.py` (a
+post-processing exit-rule comparison against run #4's raw episode log)
+surfaced the SAME corruption in a new, previously-unmeasured way: for 10
+of 213 EXECUTE/ALERT_WATCHLIST episodes, run #4's own recorded
+`entry_price` disagrees with `data/technical/{ticker}.parquet`'s CURRENT
+cached `Close` on that same entry date by a factor of 1.53x-5.29x (e.g.
+NAUKRI.NS 2024-09-19: entry_price 1494.58 vs cached Close 7902.10, a
+5.29x gap) -- clear evidence that at least these tickers' cached price
+series has been rebased (a real stock split/bonus corrected in the cache)
+*after* run #4's own entry_price was captured, so the two numbers are on
+different price bases, not evidence of a real move. Left undetected, this
+single-handedly fabricated >400% "returns" in the trailing-exit
+simulation once real forward price-walking was attempted against
+today's cache (the original run #4 backtest itself is NOT affected --
+its own entry/exit/return_pct are entirely self-contained within
+whatever price basis existed when it ran, no dependency on today's
+cache).
+
+Affected tickers/dates found this way (a strictly *ratio-based* detection,
+[0.67x, 1.5x] bounds -- confirmed NOT exhaustive, see caveat below):
+NAUKRI.NS (2024-09-19, 5.29x), METROPOLIS.NS (2024-10-04/2025-06-12/
+2025-07-10, 4.17x-4.64x), LALPATHLAB.NS (2024-10-04, 2.06x),
+PIDILITIND.NS (2025-05-15, 2.11x), SHILPAMED.NS (2025-05-22, 2.07x),
+GLENMARK.NS (2025-07-17, 1.53x), ANANDRATHI.NS (2025-07-17, 2.36x),
+HFCL.NS (2026-05-05, 1.69x) -- overlapping partially, but not entirely,
+with the ~34-ticker list this item's earlier checks already tracked.
+
+**Caveat, investigated not assumed**: the ratio threshold has a real
+false-negative gap -- a second GLENMARK.NS episode (2025-07-10,
+entry_price 1455.0, cached Close 1904.0, ratio 1.31x, same entry_price
+value recorded 9 days apart for two separate signals) sits just under
+the 1.5x cutoff and could not be confidently classified as corruption vs.
+a legitimate pivot-below-current-price reading (a breakout's `entry_price`
+is the pattern's pivot level, not necessarily that day's Close --
+`get_entry_target_stop()`'s own `entry = pivot_level`, so some
+entry-vs-Close divergence is expected by design, not itself a bug).
+Checked whether this ambiguity matters: it doesn't touch this
+experiment's own headline numbers either way -- neither GLENMARK.NS
+episode was among the 5-slot-selected "taken" episodes in the trailing-
+exit portfolio simulation, confirmed by re-running the comparison with
+GLENMARK.NS excluded entirely and getting an identical result (92.20%
+total return, 27.09 Calmar, both runs).
+
+**Status: still open, same as the rest of this item** -- this is
+additional confirmed evidence of the corruption's real downstream cost
+(fabricating a >400% return in a naive replay), not a new issue and not
+a resolution. Any future backtest experiment that joins an OLD episode
+log's `entry_price` against the CURRENT `data/technical/` cache must
+repeat this same entry-price-vs-cached-Close sanity check before trusting
+results -- see `tests/run_trailing_exit_experiment.py`'s own
+`_price_basis_mismatch()`/`filter_price_basis_mismatches()` for a
+reusable reference implementation of the check (not promoted to a shared
+module here, since this item's root cause -- and therefore the "right"
+place to fix it once -- is still unresolved).
+
 ---
 
 ## 2. Full test suite runtime (~3h47m) not explained by Phase 4.6 (downgraded: not reproducing)
@@ -544,5 +600,53 @@ of code-reading, the next time a weekday scan during live NSE hours
 candidate. Once confirmed, update this entry to reflect that (or move it
 to a "Resolved" state per this doc's own convention) rather than leaving
 it open indefinitely once it's actually been seen.
+
+---
+
+## 9. Exit-rule parameter tuning is underpowered at the current backtest universe/window (open)
+
+**Found**: while tuning `trailing_exit_simulator.py`'s parameters (partial-
+exit trigger %, trailing MA period) on the Trailing-Exit Backtest
+Experiment's own tuning split (`tests/run_trailing_exit_experiment.py`,
+episodes entered <= 2025-09-21, n=121 candidate episodes -> 29-31 actually
+taken trades after 5-slot selection depending on config), a 10-day
+trailing MA appeared to beat the spec's 20-day baseline on Calmar (25.72
+vs 23.73). A leave-top-3-out robustness check (drop the 3 largest-
+magnitude taken trades from each config, recompute) **flipped the
+ranking**: baseline 20-day Calmar fell to 13.84, 10-day fell further to
+9.30 -- 20-day came out ahead once those 3 trades were removed from each.
+Confirmed this wasn't hidden price corruption (item #1) driving it: the
+single largest contributor in both configs, RPOWER.NS, was checked
+directly against its cached price history and shows a continuous,
+non-discontinuous price path -- a genuine large winner, not a data
+artifact.
+
+**Root cause: sample size, not a data bug.** Top-1/top-3 log-growth
+concentration on this tuning split ranges 13.6%-20.0% (top-1) and
+31.8%-39.9% (top-3) across the four configs tested -- meaning each
+config's own result is substantially decided by 2-3 trades out of
+~29-31 taken, not a stable population-level difference. At this n, a
+parameter ranking is not a safe signal to select on, and switching to a
+"more robust" selection rule after seeing the naive one flip would just
+be tuning the tuning method post-hoc -- the same overfitting risk this
+project guards against everywhere else, one level removed. The parameter
+search was left explicitly marked inconclusive rather than resolved
+either way; no parameter was carried into the experiment's validation-
+split run (which used the spec's original, pre-registered 8%/50%/20DMA
+defaults instead).
+
+**Status: open, not a blocker for anything already shipped** -- this
+doesn't touch any live/production code (the trailing-exit rule was never
+wired into `categorize()` or the live scan). It IS a blocker for trusting
+any *future* per-trade exit-rule (or similar) parameter tuning done
+against this same run #4 episode population: any such attempt needs a
+materially larger sample before the tuning step itself can be trusted --
+a bigger corruption-exclusion population (item #1) does not by itself
+fix this, since the underlying constraint is the total number of
+EXECUTE/ALERT_WATCHLIST episodes run #4's window+universe ever produced
+(213 candidates, ~55-60 actually taken across the full population), not
+how many of those are corrupted. Extending the backtest window,
+widening the universe, or accumulating more real trading history are the
+only things that actually address this.
 
 ---
