@@ -713,3 +713,50 @@ widening the universe, or accumulating more real trading history are the
 only things that actually address this.
 
 ---
+
+---
+
+## 10. Run #4 headline is an artifact of unrealistic entry fills (OPEN, critical, found 2026-10-20)
+
+**Found** during the factor check (is Falcon's edge real alpha?). The first pass looked
+excellent (alpha ~32%/yr, t~4.3, market beta 0.10, not explained by size, momentum or an
+RS>=90 basket), which is exactly why the fills were then checked.
+
+**The problem.** `get_entry_target_stop()` sets `entry = pivot_level`, and
+`outcome_measurement.measure_forward_outcome()` walks forward from the signal date using
+that entry. But a signal is only known at the signal-day close, which is typically far
+above the pivot on a breakout day:
+
+- 59 taken EXECUTE trades: entry below the signal-day LOW (a price that never traded that
+  day) in **46**; median entry 7.8% below the signal-day close.
+- Targets are measured from the pivot, so **18 of 59** trades had a target already below
+  the signal-day close and were recorded as next-day TARGET_HIT wins.
+
+**Re-simulated (same signals, same stop/target levels, same 5-slot simulator, clean cache):**
+
+| fill model | total return | taken | mean net/episode | win rate |
+|---|---|---|---|---|
+| as recorded (pivot fill) | +82.7% | 59 | +7.8% | 80% |
+| next-day open (realistic) | **-2.8%** | 42 | -0.6% | 58% |
+| buy-stop at pivot on breakout day (generous upper bound*) | +20.1% | 54 | +3.6% | 70% |
+| next-day open + fresh-breakout filter (close <= pivot+1..5%) | -1.5% to -6.0% | 4-19 | negative | 25-47% |
+| NIFTY buy-and-hold, same window | -1.1% | | | |
+
+*Upper bound with selection look-ahead: a buy-stop placed before the breakout would also
+fill on breakouts that later failed and were never classified EXECUTE; those losers are
+missing here.
+
+Also: the simulator's equity curve only updates at exits; daily mark-to-market drawdown of
+the recorded trades is -3.7%, not -2.1%.
+
+**Consequences (everything that used run #3/#4 outcomes inherits this bias):**
+- run #3/#4 headline returns, Gate 1-3 conclusions, the calibrated model's training labels
+  (outcomes measured with pivot fills), and the trailing-exit experiment.
+- **Live dashboard:** EXECUTE cards show entry = pivot, which can be far below the current
+  price (GLENMARK 2025-07-17: pivot 1,455 vs close 2,227; target 1,596 below market).
+
+**Status: OPEN, blocking any claim that Falcon has a demonstrated edge.** Fix direction:
+measure outcomes from an achievable fill (next-day open, or an explicitly modelled
+pre-breakout buy-stop with no selection look-ahead), re-run, and re-validate the model on
+honest labels before trusting any downstream result.
+
