@@ -8,7 +8,24 @@ re-verified.
 
 ---
 
-## 1. ~34-ticker price corruption (open)
+## 1. ~34-ticker price corruption (RESOLVED 2026-10-20, 7 genuine-move tickers left as-is)
+
+**Resolution, verified 2026-10-20.** Laptop run of `repair_price_cache.py --apply`
+(587 tickers, corporate actions refreshed to 2026-10-20): 27 SERIES_FLIP tickers
+re-downloaded and verified CLEAN; TDPOWERSYS's 2026-08-24 step confirmed and adjusted;
+552 unchanged (including the 72 already repaired offline). Spot checks against known
+history pass (SBIN ~Rs 640 Jan-2024, ~Rs 814 Jun-2025; its largest daily move, +27.7% on
+2017-10-25, is the real PSU-bank recapitalisation rally). Correction to the original
+write-up below: NTPC's real Jan-2024 close was ~Rs 317, not Rs 1,100-1,300.
+
+Left untouched by design (big moves with no NSE corporate-action record, most likely
+genuine): ABFRL, IDEA, INDUSINDBK, MCDOWELL-N, NOVARTIND, PNB, YESBANK. Review by eye
+only if one of them becomes a live candidate.
+
+Follow-up still open: decide whether run #3/#4 results need re-running on the repaired
+cache (they were each re-verified against this issue at the time, but the repair changed
+history for ~100 tickers).
+
 
 **ROOT CAUSES FOUND, fix in review (2026-10-20, branch `claude/fix-nse-series-corruption`).**
 Two independent defects, both in the data layer; neither is in scoring or
