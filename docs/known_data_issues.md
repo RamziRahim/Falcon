@@ -51,6 +51,26 @@ anything unconfirmed for a human). Offline dry run on a copy of the real
 files: 9/9 confirmed steps repaired and verified clean; ABFRL (demerger-era
 jumps) correctly left UNRESOLVED.
 
+**Full-universe scan + offline repair applied to the laptop cache (2026-10-20).**
+Scanned all 589 `data/technical` files and all 69 `data/raw` (live) files.
+
+| | technical | raw (live universe) |
+|---|---|---|
+| clean | 501 | 46 |
+| unadjusted split/bonus step | 59 | 20 |
+| series flip | 27 | 0 |
+
+- **Repaired in place (originals backed up to `data/technical_backup_pre_integrity_repair/`
+  and `data/raw_backup_pre_integrity_repair/`):** 52 technical + 20 raw files whose steps NSE
+  corporate-action records confirm; indicators recomputed; latest bar unchanged; laptop copies
+  re-read and verified byte-identical. **20 of 66 live tickers (30%) were being scored on
+  unadjusted prices before this.**
+- **Partially repaired:** TDPOWERSYS -- 2022 step fixed; a 2026-08-24 step is newer than the
+  cached corporate-action list (ends 2026-07-29) and will be confirmed by the laptop run.
+- **Still needing the laptop run (NSE re-download):** 27 SERIES_FLIP tickers:
+  BLUEDART, BRITANNIA, CREDITACC, HDFCBANK, HUDCO, IDFCFIRSTB, IFCI, IIFL, IREDA, IRFC, JSWSTEEL, LTF, M&MFIN, MANAPPURAM, MUTHOOTFIN, NHPC, NTPC, PFC, POONAWALLA, RECLTD, SAMMAANCAP, SBIN, SHRIRAMFIN, TATASTEEL, UPL, VEDL, ZEEL.
+- **Left for a human (no matching corporate action; likely genuine moves):** ABFRL, IDEA, INDUSINDBK, MCDOWELL-N, NOVARTIND, PNB, YESBANK.
+
 **Status: stays OPEN until the repair has been run on the real cache and the
 full-universe scan report is clean.** Backtest results already produced
 (run #3/#4) are unchanged by this PR; whether any need re-running is a
