@@ -512,7 +512,12 @@ def _fake_real_trade_categorize_factory(category, confidence_score, sector_healt
             "category": category, "market_regime_verdict": market_verdict,
             "sector_health_verdict": sector_health_verdict, "confidence_score": confidence_score,
             "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
-            "entry": 100.0, "stop_loss": 90.0, "target": 120.0, "max_holding_days": 20,
+            # Plan priced around the candidate's own close (as categorize()
+            # now does), so the next-day-open fill lands between stop and
+            # target on this random walk instead of a fixed 100/90/120 that
+            # the walk may have left behind.
+            "entry": candidate["Close"], "stop_loss": candidate["Close"] * 0.9,
+            "target": candidate["Close"] * 1.2, "max_holding_days": 20,
             "stop_provenance": "STRUCTURAL", "target_provenance": "MEASURED_MOVE", "reward_risk": 3.0,
             "bars_since_breakout": 1, "breakout_within_last_k_bars": True,
             "supporting_data": candidate,
