@@ -682,9 +682,18 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
             "stop_provenance": "ATR_FALLBACK_NO_PATTERN",
             "target_provenance": "ATR_FALLBACK_NO_PATTERN",
             "proximal_low": None,
+            "pivot_level": None,
         }
 
-    entry = best_pattern_result.get("pivot_level", candidate["Close"])
+    # The pattern's pivot anchors the stop/target LEVELS (structure), but it
+    # is not a price anyone can still pay: the signal is only known at the
+    # close, often well above the pivot (docs/known_data_issues.md item 10).
+    # Levels are computed off the pivot below; the returned "entry" is the
+    # close, so reward:risk (and the RR floor) reflect the price actually
+    # available. A breakout that has already run toward its target fails
+    # the floor instead of being shown as a buy at a price that is gone.
+    achievable_entry = candidate["Close"]
+    entry = best_pattern_result.get("pivot_level", achievable_entry)
     proximal_low = best_pattern_result.get("proximal_low")
     structural_low = best_pattern_result.get("structural_low")
 
@@ -694,13 +703,14 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
         # flat-ATR fallback as the no-pattern case, for both legs, since
         # there's no near support to price a stop off at all.
         return {
-            "entry": entry,
-            "stop_loss": entry - 2 * atr,
-            "target": entry + 2.5 * atr,
+            "entry": achievable_entry,
+            "stop_loss": achievable_entry - 2 * atr,
+            "target": achievable_entry + 2.5 * atr,
             "max_holding_days": MAX_HOLDING_TRADING_DAYS,
             "stop_provenance": "ATR_FALLBACK_NO_PROXIMAL_LOW",
             "target_provenance": "ATR_FALLBACK_NO_PROXIMAL_LOW",
             "proximal_low": proximal_low,
+            "pivot_level": entry,
         }
 
     raw_proximal_distance = (entry - proximal_low) + STOP_BUFFER_ATR_MULTIPLE * atr
@@ -740,13 +750,14 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
             target_provenance = "MEASURED_MOVE"
 
     return {
-        "entry": entry,
+        "entry": achievable_entry,
         "stop_loss": entry - stop_distance,
         "target": target,
         "max_holding_days": MAX_HOLDING_TRADING_DAYS,
         "stop_provenance": stop_provenance,
         "target_provenance": target_provenance,
         "proximal_low": proximal_low,
+        "pivot_level": entry,
     }
 
 
@@ -845,6 +856,8 @@ def categorize(
                 "target_provenance": None,
                 "reward_risk": None,
                 "proximal_low": None,
+                "pivot_level": None,
+                "extension_above_pivot_pct": None,
                 "bars_since_breakout": None,
                 "breakout_within_last_k_bars": False,
                 "supporting_data": candidate,
@@ -911,13 +924,14 @@ def categorize(
 
     if final_category == "AVOID":
         entry = stop_loss = target = max_holding_days = None
-        stop_provenance = target_provenance = reward_risk = proximal_low = None
+        stop_provenance = target_provenance = reward_risk = proximal_low = pivot_level = None
     else:
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
         max_holding_days = ets["max_holding_days"]
         stop_provenance, target_provenance = ets["stop_provenance"], ets["target_provenance"]
         proximal_low = ets["proximal_low"]
+        pivot_level = ets.get("pivot_level")
 
         # entry - stop_loss <= 0 would mean a broken stop (at or above
         # entry) -- can't compute a meaningful RR from that.
@@ -928,6 +942,11 @@ def categorize(
         if final_category == "EXECUTE" and reward_risk is not None and reward_risk < min_reward_risk:
             final_category = "ALERT_WATCHLIST"
             caps_applied = caps_applied + ["RR_BELOW_FLOOR"]
+        elif final_category == "EXECUTE" and reward_risk is None:
+            # Price already at/below the stop level: no valid plan exists
+            # at the achievable entry.
+            final_category = "ALERT_WATCHLIST"
+            caps_applied = caps_applied + ["PRICE_BEYOND_STOP"]
 
     fakeout_risk_flags = get_fakeout_risk_flags(candidate, sector_row, disable_fundamental_signals=disable_fundamental_signals)
     if best_field in PATTERNS_ON_PROBATION:
@@ -971,6 +990,12 @@ def categorize(
         # was actually priced off, alongside the provenance fields above --
         # None for AVOID/no-pattern/no-usable-proximal-low.
         "proximal_low": proximal_low,
+        # The pattern pivot the stop/target levels are anchored to, and how
+        # far the achievable entry (close) already sits above it.
+        "pivot_level": pivot_level,
+        "extension_above_pivot_pct": (
+            (entry / pivot_level - 1) * 100 if (entry and pivot_level) else None
+        ),
         # A-5 breakout-recency contract, surfaced for the SELECTED pattern
         # (the one that actually drove the score/entry) rather than
         # requiring a consumer to dig into supporting_data/pattern_details

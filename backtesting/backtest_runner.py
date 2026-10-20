@@ -217,6 +217,9 @@ def run_backtest(
             dates_to_tickers[as_of_date].append(ticker)
 
     trade_records = list(resume_trade_records) if resume_trade_records else []
+    # Signals whose plan couldn't be executed at the next open (already
+    # past target / below stop) -- see outcome_measurement's fill model.
+    no_fill_counts: dict[str, int] = {}
     sorted_dates = sorted(dates_to_tickers.keys())
     total_dates = len(sorted_dates)
     run_started_at = time.monotonic()
@@ -300,6 +303,12 @@ def run_backtest(
 
                 if avoid_outcome["exit_reason"] == "NO_DATA":
                     continue
+                if avoid_outcome["exit_reason"].startswith("NO_FILL"):
+                    no_fill_counts[avoid_outcome["exit_reason"]] = no_fill_counts.get(avoid_outcome["exit_reason"], 0) + 1
+                    continue
+                # Record the ACHIEVABLE fill (next-day open), not the plan's
+                # reference price -- see outcome_measurement's fill model.
+                hypothetical_entry = avoid_outcome["fill_price"]
 
                 trade_records.append({
                     "ticker": ticker,
@@ -363,8 +372,16 @@ def run_backtest(
 
             if outcome["exit_reason"] == "NO_DATA":
                 continue
+            if outcome["exit_reason"].startswith("NO_FILL"):
+                # The plan couldn't be executed: the next open was already
+                # past the target (or below the stop). Counted, not traded.
+                no_fill_counts[outcome["exit_reason"]] = no_fill_counts.get(outcome["exit_reason"], 0) + 1
+                continue
 
-            entry_price = decision["entry"]
+            # The price actually paid (next-day open), not categorize()'s
+            # reference entry -- stop_pct/target_pct/return are all
+            # measured from this.
+            entry_price = outcome["fill_price"]
 
             trade_records.append({
                 "ticker": ticker,
@@ -423,6 +440,9 @@ def run_backtest(
             (date_index + 1) % checkpoint_every_n_dates == 0 or date_index == total_dates - 1
         ):
             _write_checkpoint(date_index, as_of_date)
+
+    if no_fill_counts:
+        logger.info("Signals not fillable at the next open (not traded): %s", no_fill_counts)
 
     return pd.DataFrame(trade_records)
 
