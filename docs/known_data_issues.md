@@ -10,6 +10,52 @@ re-verified.
 
 ## 1. ~34-ticker price corruption (open)
 
+**ROOT CAUSES FOUND, fix in review (2026-10-20, branch `claude/fix-nse-series-corruption`).**
+Two independent defects, both in the data layer; neither is in scoring or
+the decision engine. The earlier "~34 tickers, cause unknown" and "cache was
+rebased after run #4" readings below were each half right.
+
+1. **Mixed NSE trading series (the ~34-ticker corruption).**
+   `nse_session_client` requests `series=ALL`; `NSEProvider.get_history()`
+   never filtered by series and then kept `drop_duplicates(keep="last")` per
+   date, i.e. an arbitrary row. Symbols that also have bonds/debentures/
+   rights under the same code (SBIN, NTPC, TATASTEEL, HDFCBANK, ...) therefore
+   alternate between two price levels (SBIN: ~Rs 245 <-> ~Rs 11,700,
+   400+ flips). On NTPC the flips also fooled `confirm_and_adjust()` into
+   "confirming" a flip as a split and rescaling history to ~1e7-1e8.
+   Fix: `_select_primary_series()` (EQ > BE > BZ > BL > SM > ST; any other
+   series ignored; dates with no equity row dropped, never fabricated).
+2. **Split adjustment was never part of the live path (the NAUKRI-style
+   price-basis mismatches).** Adjustment ran once, as a manual script
+   (2026-07-29). `cache_synchronizer` deletes any symbol's raw cache when it
+   leaves the day's candidate list; when it returns, its full history is
+   re-downloaded RAW and indicators are recomputed from it, silently undoing
+   the adjustment. Evidence: every step-affected ticker found in the first
+   55 scanned has a `data/technical` mtime AFTER the 07-29 bulk run, and 9 of
+   10 steps are confirmed by NSE corporate-action records (NAUKRI, AFFLE,
+   ANANDRATHI bonus 1:1 2026-06-03, AIIL bonus 4:1 2026-01-13, ...).
+   Fix: `merge_and_adjust()` now runs on every cache write in
+   `DataCollectionEngine` (idempotent; corporate actions refreshed daily;
+   degrades to no-adjustment, never a crash, if NSE is unreachable).
+
+**Live impact (important):** while defect 2 is unrepaired, any live
+candidate with a split inside its indicator/RS lookback is scored on a fake
+crash. Defect 1 matters less for results than for hygiene: the affected
+names are mostly banks/NBFCs/high-D-E PSUs that the D/E < 0.33 and
+financial-services exclusions already remove.
+
+**Repair tool:** `python repair_price_cache.py` (scan only) then `--apply`
+(backs up to `data/technical_backup_pre_integrity_repair/`, re-downloads
+SERIES_FLIP tickers, adjusts confirmed steps, recomputes indicators, leaves
+anything unconfirmed for a human). Offline dry run on a copy of the real
+files: 9/9 confirmed steps repaired and verified clean; ABFRL (demerger-era
+jumps) correctly left UNRESOLVED.
+
+**Status: stays OPEN until the repair has been run on the real cache and the
+full-universe scan report is clean.** Backtest results already produced
+(run #3/#4) are unchanged by this PR; whether any need re-running is a
+follow-up once the full scan quantifies exposure.
+
 **Found**: 2026-07-29/30, while fixing the separate unadjusted-stock-split
 issue (`market_data/corporate_actions.py`) for run #3's momentum baseline.
 `market_data/corporate_actions.py`'s `confirm_and_adjust()` correctly
