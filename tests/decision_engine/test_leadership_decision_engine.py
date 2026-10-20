@@ -959,3 +959,60 @@ class TestMicrostructureSignalsAreFeatureFlagged:
         score_flag_on = compute_score(candidate, sector_row, enable_microstructure_signals=True)
 
         assert score_flag_off == pytest.approx(score_flag_on)
+
+
+class TestEntryPricedFromAchievableClose:
+    """2026-10-20 (docs/known_data_issues.md item 10): stop/target LEVELS stay
+    anchored to the pattern pivot, but entry is the close -- the price
+    actually available when the signal is known -- so reward:risk and the RR
+    floor reflect what a trader can really get."""
+
+    # proximal 75 -> stop clamped to 3xATR ceiling = 85; structural 70 ->
+    # target 130. At Close == pivot (100) RR = 30/15 = 2.0 -> EXECUTE.
+    BEST = {"pivot_level": 100.0, "proximal_low": 75.0, "structural_low": 70.0}
+
+    def _decide(self, close):
+        candidate = _candidate(
+            Close=close, is_vcp_breakout=True, RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True,
+            institutional_sponsorship_pct=25.0, has_buy_activity=True, ATR_14=5.0,
+        )
+        return categorize(
+            candidate, _sector_row(Rank=2, Total_Sectors=10), market_verdict="FAVORABLE",
+            pattern_details={"is_vcp_breakout": self.BEST}, model_artifact=_always_execute_artifact(),
+        )
+
+    def test_entry_is_close_and_levels_stay_anchored_to_the_pivot(self):
+        result = get_entry_target_stop(_candidate(Close=104.0, ATR_14=5.0), "is_vcp_breakout", self.BEST)
+
+        assert result["entry"] == pytest.approx(104.0)
+        assert result["pivot_level"] == pytest.approx(100.0)
+        assert result["stop_loss"] == pytest.approx(85.0)    # same level as when Close == pivot
+        assert result["target"] == pytest.approx(130.0)
+
+    def test_control_breakout_at_the_pivot_is_execute(self):
+        result = self._decide(100.0)
+
+        assert result["category"] == "EXECUTE"
+        assert result["reward_risk"] == pytest.approx(2.0)
+        assert result["extension_above_pivot_pct"] == pytest.approx(0.0)
+
+    def test_extended_breakout_fails_the_rr_floor(self):
+        # Close 115: RR at the real price = (130-115)/(115-85) = 0.5.
+        result = self._decide(115.0)
+
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert "RR_BELOW_FLOOR" in result["caps_applied"]
+        assert result["entry"] == pytest.approx(115.0)
+        assert result["extension_above_pivot_pct"] == pytest.approx(15.0)
+
+    def test_price_already_past_target_is_never_execute(self):
+        result = self._decide(135.0)   # target 130 already exceeded
+
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert result["reward_risk"] < 0
+
+    def test_price_below_the_stop_level_is_never_execute(self):
+        result = self._decide(84.0)    # below the 85 stop level
+
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert "PRICE_BEYOND_STOP" in result["caps_applied"]

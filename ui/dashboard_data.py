@@ -505,6 +505,19 @@ def build_score_waterfall(confidence_score: float, contributing_factors: list[st
     return rows
 
 
+EXTENSION_WARN_PCT = 5.0
+
+
+def _extension_note(extension_pct, target, entry) -> str | None:
+    """Plain-language warning for the trade-plan block, or None."""
+    if target is not None and entry is not None and not pd.isna(target) and not pd.isna(entry) and target <= entry:
+        return "Price is already at or above the target -- this breakout has run; no buy at today's price."
+    if extension_pct is not None and extension_pct > EXTENSION_WARN_PCT:
+        return (f"Extended: price is {extension_pct:.1f}% above the breakout pivot. Entry and reward:risk "
+                f"are measured from today's close; consider waiting for a pullback toward the pivot.")
+    return None
+
+
 def build_candidate_view(row: pd.Series, history: pd.DataFrame | None, scan_date=None) -> dict:
     """One EXECUTE/WATCHLIST card + its full modal detail. predicted_p
     (not confidence_score) drives the confidence gauge, per the build
@@ -527,6 +540,9 @@ def build_candidate_view(row: pd.Series, history: pd.DataFrame | None, scan_date
 
     entry, stop_loss, target = row.get("entry"), row.get("stop_loss"), row.get("target")
     reward_risk = row.get("reward_risk")
+    pivot_level = row.get("pivot_level")
+    extension = row.get("extension_above_pivot_pct")
+    extension = None if extension is None or pd.isna(extension) else float(extension)
 
     stale_notice = (
         format_stale_data_notice(row["Symbol"], history["Date"].max(), scan_date)
@@ -563,6 +579,12 @@ def build_candidate_view(row: pd.Series, history: pd.DataFrame | None, scan_date
             "rr": NA if reward_risk is None or pd.isna(reward_risk) else f"{reward_risk:.1f}",
             "stopProvenance": row.get("stop_provenance") or NA,
             "targetProvenance": row.get("target_provenance") or NA,
+            # Entry is the scan-day close (what can actually be paid); the
+            # stop/target levels come from the pattern pivot. Show both so
+            # a stretched breakout is visible, not hidden behind the pivot.
+            "pivot": _fmt_price(pivot_level),
+            "extensionFmt": NA if extension is None else f"{extension:+.1f}%",
+            "extensionNote": _extension_note(extension, target, entry),
         },
         "confidenceScore": row.get("confidence_score"),
         "waterfall": build_score_waterfall(row.get("confidence_score") or 0.0, factors),

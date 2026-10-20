@@ -880,3 +880,28 @@ class TestUniversalChartViewingIncludesMonitor:
         assert e1_ema20 != ""
         assert m1_ema20 != ""
         assert e1_ema20 != m1_ema20
+
+
+class TestTradePlanShowsPivotAndExtension:
+    """2026-10-20 (docs/known_data_issues.md item 10): entry is the close;
+    the card must show the pivot and warn when the breakout has run."""
+
+    def test_fresh_breakout_has_no_warning(self):
+        view = build_candidate_view(_row(pivot_level=99.0, extension_above_pivot_pct=1.0), history=None)
+        assert view["plan"]["pivot"] != NA
+        assert view["plan"]["extensionFmt"] == "+1.0%"
+        assert view["plan"]["extensionNote"] is None
+
+    def test_extended_breakout_gets_a_pullback_warning(self):
+        view = build_candidate_view(_row(pivot_level=90.0, extension_above_pivot_pct=11.1), history=None)
+        assert "11.1% above the breakout pivot" in view["plan"]["extensionNote"]
+
+    def test_target_at_or_below_price_says_no_buy(self):
+        view = build_candidate_view(_row(entry=120.0, target=118.0, extension_above_pivot_pct=30.0), history=None)
+        assert "no buy at today's price" in view["plan"]["extensionNote"]
+
+    def test_missing_pivot_fields_are_honest_na_not_a_crash(self):
+        view = build_candidate_view(_row(), history=None)
+        assert view["plan"]["pivot"] == NA
+        assert view["plan"]["extensionFmt"] == NA
+        assert view["plan"]["extensionNote"] is None

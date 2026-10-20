@@ -138,8 +138,17 @@ print(f"  Sector indices resolved: {len(sector_index_histories)}/{len(distinct_s
 # -- reused as-is, not recomputed from today's date, which would silently
 # shift the whole sampling grid on a later calendar day and misalign the
 # resume point.
+# Run #5 (2026-10-20): identical to run #4 except the fill model -- trades
+# are now filled at the next-day open (backtesting/outcome_measurement.py)
+# and categorize() prices entry from the close (docs/known_data_issues.md
+# item 10). Fresh output/checkpoint paths so run #4's files are never
+# resumed into or overwritten, and run #4's exact window so the two runs are
+# directly comparable.
+RUN_LABEL = "run5_honest_fills"
+RUN5_WINDOW = (pd.Timestamp("2024-08-14"), pd.Timestamp("2026-08-14"))
+
 CHECKPOINT_PATH = (
-    "data/backtest_results_run4_calibrated_model_checkpoint.csv" if UNIVERSE_MODE == "wide"
+    f"data/backtest_results_{RUN_LABEL}_checkpoint.csv" if UNIVERSE_MODE == "wide"
     else "data/backtest_results_checkpoint.csv"
 )
 CHECKPOINT_META_PATH = f"{CHECKPOINT_PATH}.meta.json"
@@ -157,6 +166,10 @@ if os.path.exists(CHECKPOINT_META_PATH):
     print(f"\nResuming from checkpoint: {len(resume_trade_records)} rows already recorded, "
           f"date_index {resume_from_date_index}/{checkpoint_meta['total_dates']} "
           f"(original window {start_date.date()} -> {end_date.date()}, reused as-is)")
+elif UNIVERSE_MODE == "wide":
+    start_date, end_date = RUN5_WINDOW
+    resume_trade_records = None
+    resume_from_date_index = 0
 else:
     end_date = pd.Timestamp(date.today())
     start_date = pd.Timestamp(date.today() - timedelta(days=365 * 2))
@@ -196,7 +209,7 @@ trades = run_backtest(
 # rather than silently overwriting run #3's historical data. Run #3 stays
 # on disk as historical context; this becomes the new canonical baseline.
 output_path = (
-    "data/backtest_results_run4_calibrated_model.csv" if UNIVERSE_MODE == "wide" else "data/backtest_results.csv"
+    f"data/backtest_results_{RUN_LABEL}.csv" if UNIVERSE_MODE == "wide" else "data/backtest_results.csv"
 )
 trades.to_csv(output_path, index=False)
 print(f"\nRaw trade log saved -> {output_path}  ({len(trades)} trades)")

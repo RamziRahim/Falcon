@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import pandas as pd
 
+import pytest
+
 from backtesting.outcome_measurement import measure_forward_outcome
 from config import MAX_HOLDING_TRADING_DAYS
 
@@ -60,3 +62,66 @@ class TestTimeStopDefault:
 
         assert result["exit_reason"] == "TIME_EXIT"
         assert result["days_held"] == MAX_HOLDING_TRADING_DAYS
+
+
+def _bars(opens, highs=None, lows=None, closes=None):
+    n = len(opens)
+    dates = pd.date_range("2024-01-01", periods=n, freq="D")
+    return dates, pd.DataFrame({
+        "Date": dates, "Open": opens,
+        "High": highs or opens, "Low": lows or opens, "Close": closes or opens,
+    })
+
+
+class TestNextOpenFillModel:
+    """Fill model added 2026-10-20 (docs/known_data_issues.md item 10): the
+    position is bought at the NEXT day's open, not at the plan's reference
+    entry, because the signal is only known at the signal-day close."""
+
+    def test_fill_is_next_day_open_and_return_is_measured_from_it(self):
+        dates, df = _bars([100, 104, 104, 104, 104], highs=[100, 104, 104, 112, 104])
+
+        result = measure_forward_outcome(dates[0], entry_price=100.0, stop_loss=95.0, target=110.0,
+                                         full_history=df, max_holding_days=5)
+
+        assert result["fill_price"] == 104.0
+        assert result["exit_reason"] == "TARGET_HIT"
+        assert result["return_pct"] == pytest.approx((110.0 / 104.0 - 1) * 100)
+
+    def test_next_open_already_past_target_is_not_a_trade(self):
+        # The run #4 failure mode: plan says buy 100 / target 110, but the
+        # stock opens at 115 the next morning.
+        dates, df = _bars([112, 115, 116])
+
+        result = measure_forward_outcome(dates[0], entry_price=100.0, stop_loss=95.0, target=110.0,
+                                         full_history=df, max_holding_days=5)
+
+        assert result["exit_reason"] == "NO_FILL_PAST_TARGET"
+        assert result["return_pct"] is None
+
+    def test_next_open_at_or_below_stop_is_not_a_trade(self):
+        dates, df = _bars([100, 94, 94])
+
+        result = measure_forward_outcome(dates[0], entry_price=100.0, stop_loss=95.0, target=110.0,
+                                         full_history=df, max_holding_days=5)
+
+        assert result["exit_reason"] == "NO_FILL_BELOW_STOP"
+
+    def test_gap_down_through_stop_exits_at_the_open_not_the_stop(self):
+        dates, df = _bars([100, 100, 90], lows=[100, 99, 88])
+
+        result = measure_forward_outcome(dates[0], entry_price=100.0, stop_loss=95.0, target=110.0,
+                                         full_history=df, max_holding_days=5)
+
+        assert result["exit_reason"] == "STOP_HIT"
+        assert result["exit_price"] == 90.0   # the stop at 95 could not be filled
+
+    def test_legacy_as_given_fill_reproduces_old_behaviour(self):
+        dates, df = _bars([112, 115, 116], highs=[112, 115, 116])
+
+        result = measure_forward_outcome(dates[0], entry_price=100.0, stop_loss=95.0, target=110.0,
+                                         full_history=df, max_holding_days=5, fill="as_given")
+
+        # Exactly the run #4 artifact: a "win" on a price that never traded.
+        assert result["exit_reason"] == "TARGET_HIT"
+        assert result["return_pct"] == 10.0
