@@ -151,6 +151,11 @@ class NSEProvider(BaseProvider):
                 # on the dataframe for whatever consumes it later.
                 "Deliverable_Qty": ["deliverableqty"],
                 "Delivery_Pct": ["%dlyqttotradedqty", "dlyqttotradedqty"],
+                # Needed to pick ONE trading series per date -- see
+                # _select_primary_series(). Optional so a payload without
+                # it still ingests (with a warning), same as the delivery
+                # columns above.
+                "Series": ["series"],
             }
 
             mapped_columns = {}
@@ -196,6 +201,15 @@ class NSEProvider(BaseProvider):
             # Drop entries that failed schema parsers or dates that are invalid
             df = df.dropna(subset=["Date"])
             
+            # NSE's priceVolumeDeliverable endpoint is requested with
+            # series=ALL, so one symbol can return several rows per date --
+            # one per trading series (EQ plus, for example, debentures or
+            # perpetual bonds issued under the same symbol, whose prices
+            # are in a completely different range). Keep ONE series per
+            # date BEFORE the generic de-duplication below, which would
+            # otherwise keep whichever row happens to come last.
+            df = self._select_primary_series(df, symbol)
+
             # Sort chronologically, deduplicate, and flush structural indexes
             df = df.sort_values(by="Date", ascending=True)
             df = df.drop_duplicates(subset=["Date"], keep="last")
@@ -212,6 +226,50 @@ class NSEProvider(BaseProvider):
             raise ProviderError(msg)
 
     # endregion
+
+    # Preference order when a symbol trades in several series on one date.
+    # EQ is the normal rolling-settlement equity series. BE/BZ/BL are the
+    # same equity in trade-for-trade/block segments; SM/ST are SME board
+    # equity. Anything else (N*/Y*/W* debentures and bonds, E1 rights
+    # entitlements, partly-paid shares, GB gold bonds, ...) is a different
+    # security that merely shares the symbol and must never be mixed into
+    # the equity price series.
+    _SERIES_PRIORITY = {"EQ": 0, "BE": 1, "BZ": 2, "BL": 3, "SM": 4, "ST": 5}
+
+    def _select_primary_series(self, df: pd.DataFrame, symbol: str) -> pd.DataFrame:
+        """Return `df` with exactly one equity-series row per Date and
+        without the Series column.
+
+        Dates whose only rows belong to non-equity series are dropped and
+        logged -- a missing day is recoverable, a fabricated price is not.
+        If the payload carries no Series column at all, the frame is
+        returned unchanged apart from a warning (legacy behavior).
+        """
+        if "Series" not in df.columns:
+            logger.warning(
+                f"[{self.name}] {symbol}: payload has no Series column; cannot guard "
+                f"against mixed-series rows."
+            )
+            return df
+
+        ranked = df.copy()
+        ranked["_series"] = ranked["Series"].astype(str).str.strip().str.upper()
+        ranked["_rank"] = ranked["_series"].map(self._SERIES_PRIORITY).fillna(99).astype(int)
+
+        non_equity_rows = int((ranked["_rank"] == 99).sum())
+        ranked = ranked.sort_values(["Date", "_rank"], kind="mergesort")
+        ranked = ranked.drop_duplicates(subset=["Date"], keep="first")
+
+        dropped_dates = int((ranked["_rank"] == 99).sum())
+        ranked = ranked[ranked["_rank"] < 99]
+
+        if non_equity_rows:
+            logger.info(
+                f"[{self.name}] {symbol}: ignored {non_equity_rows} non-equity series row(s); "
+                f"{dropped_dates} date(s) had no equity-series row and were dropped."
+            )
+
+        return ranked.drop(columns=["Series", "_series", "_rank"]).reset_index(drop=True)
 
     # region Unsupported Abstract Methods Placeholder Implementations
 

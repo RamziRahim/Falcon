@@ -158,3 +158,80 @@ class TestGracefulDegradationWithoutDeliveryColumns:
                     datetime.date(2024, 1, 1),
                     datetime.date(2024, 1, 2),
                 )
+
+
+def _mixed_series_payload(order: list[str]) -> pd.DataFrame:
+    """Same symbol, same dates, but with a second security (a bond-like
+    N-series, priced ~100x higher) and a rights entitlement (priced far
+    lower) sharing the symbol -- the real shape that corrupted SBIN/NTPC/
+    TATASTEEL/HDFCBANK history. `order` controls row order per date so the
+    test can prove the result does not depend on it."""
+    rows = []
+    prices = {"EQ": 250.0, "N5": 11700.0, "E1": 10.65}
+    for day in ("01-Jan-2024", "02-Jan-2024"):
+        for series in order:
+            p = prices[series]
+            rows.append({
+                "Symbol": "SBIN", "Series": series, "Date": day,
+                "OpenPrice": str(p), "HighPrice": str(p * 1.01), "LowPrice": str(p * 0.99),
+                "ClosePrice": str(p), "TotalTradedQuantity": "1000",
+            })
+    return pd.DataFrame(rows)
+
+
+class TestSeriesSelection:
+
+    @pytest.mark.parametrize("order", [["EQ", "N5", "E1"], ["N5", "E1", "EQ"], ["E1", "EQ", "N5"]])
+    def test_equity_series_wins_regardless_of_row_order(self, provider, order):
+        with patch(
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
+            return_value=_mixed_series_payload(order),
+        ):
+            df = provider.get_history("SBIN.NS", datetime.date(2024, 1, 1), datetime.date(2024, 1, 31))
+
+        assert len(df) == 2
+        assert df["Close"].tolist() == [250.0, 250.0]
+        assert "Series" not in df.columns
+
+    def test_be_series_used_when_eq_absent_that_day(self, provider):
+        payload = pd.DataFrame({
+            "Symbol": ["ABC", "ABC", "ABC"],
+            "Series": ["BE", "EQ", "N1"],
+            "Date": ["01-Jan-2024", "02-Jan-2024", "02-Jan-2024"],
+            "OpenPrice": ["50", "51", "9000"], "HighPrice": ["51", "52", "9100"],
+            "LowPrice": ["49", "50", "8900"], "ClosePrice": ["50", "51", "9000"],
+            "TotalTradedQuantity": ["10", "10", "10"],
+        })
+        with patch(
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
+            return_value=payload,
+        ):
+            df = provider.get_history("ABC.NS", datetime.date(2024, 1, 1), datetime.date(2024, 1, 31))
+
+        assert df["Close"].tolist() == [50.0, 51.0]
+
+    def test_dates_with_only_non_equity_rows_are_dropped_not_fabricated(self, provider):
+        payload = pd.DataFrame({
+            "Symbol": ["ABC", "ABC"],
+            "Series": ["EQ", "N1"],
+            "Date": ["01-Jan-2024", "02-Jan-2024"],
+            "OpenPrice": ["50", "9000"], "HighPrice": ["51", "9100"],
+            "LowPrice": ["49", "8900"], "ClosePrice": ["50", "9000"],
+            "TotalTradedQuantity": ["10", "10"],
+        })
+        with patch(
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
+            return_value=payload,
+        ):
+            df = provider.get_history("ABC.NS", datetime.date(2024, 1, 1), datetime.date(2024, 1, 31))
+
+        assert df["Close"].tolist() == [50.0]
+
+    def test_payload_without_series_column_still_ingests(self, provider):
+        with patch(
+            "market_data.providers.nse_provider.NseSessionClient.price_volume_and_deliverable_position_data",
+            return_value=_raw_payload_without_delivery(),
+        ):
+            df = provider.get_history("MARKSANS.NS", datetime.date(2024, 1, 1), datetime.date(2024, 1, 31))
+
+        assert len(df) == 2

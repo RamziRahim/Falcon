@@ -54,6 +54,7 @@ from market_data.cache_manager import cache_manager
 from market_data.cache_synchronizer import cache_synchronizer
 from market_data.downloader import downloader
 from market_data.data_validator import market_data_validator
+from market_data.corporate_actions import load_corporate_actions, merge_and_adjust
 
 logger = get_logger(__name__)
 
@@ -143,6 +144,8 @@ class DataCollectionEngine:
         # Validate + Cache
         # ---------------------------------------------------------- #
 
+        corporate_actions = load_corporate_actions() if datasets else None
+
         for symbol, dataframe in datasets.items():
 
             validation = (
@@ -173,10 +176,28 @@ class DataCollectionEngine:
                     validation.warnings,
                 )
 
-            cache_manager.update(
-                symbol,
-                dataframe,
+            # Keep the cache split/bonus-adjusted on EVERY write, not just
+            # after a one-off manual script: a ticker re-entering the
+            # universe is re-downloaded raw, and a split can land between
+            # two scans. See market_data/corporate_actions.py.
+            existing = cache_manager.load(symbol) if cache_manager.exists(symbol) else None
+            full_history, adjustments = merge_and_adjust(
+                symbol, existing, dataframe, corporate_actions,
             )
+
+            if adjustments:
+                logger.info(
+                    "%s: applied %d split/bonus adjustment(s) on ingest (%s)",
+                    symbol,
+                    len(adjustments),
+                    ", ".join(str(e["date"].date()) for e in adjustments),
+                )
+                cache_manager.save(symbol, full_history)
+            else:
+                cache_manager.update(
+                    symbol,
+                    dataframe,
+                )
 
             result.updated += 1
 

@@ -184,3 +184,99 @@ def confirm_and_adjust(
         })
 
     return ordered, log
+
+
+# =============================================================================
+# Ingestion-time adjustment (keeps the cache split-adjusted in the live path)
+# =============================================================================
+#
+# confirm_and_adjust() above used to run ONLY as a one-off manual script
+# (tests/apply_split_adjustment.py, 2026-07-29). The live pipeline never
+# called it, so any ticker whose raw cache was (re)built afterwards --
+# cache_synchronizer deletes a symbol's cache the day it leaves the
+# candidate universe, and the next scan re-downloads its full history raw --
+# silently reverted to UNADJUSTED prices (found 2026-10-20: NAUKRI's cached
+# Close was 5.29x run #4's own entry_price). These helpers make adjustment a
+# normal part of every cache write.
+
+CORPORATE_ACTIONS_MAX_AGE_DAYS = 1
+_ACTIONS_HISTORY_START = dt.date(2016, 1, 1)
+
+
+def load_corporate_actions(max_age_days: int = CORPORATE_ACTIONS_MAX_AGE_DAYS) -> pd.DataFrame | None:
+    """Corporate-actions table for ingestion-time adjustment.
+
+    Refreshes the on-disk cache when it is older than `max_age_days` so a
+    split announced after the last refresh is still known. Never raises:
+    if the refresh fails the stale cache is used (with a warning), and if
+    there is no cache at all, returns None -- the caller then skips
+    adjustment rather than failing the whole scan.
+    """
+    import time
+
+    cache_exists = CORPORATE_ACTIONS_CACHE_PATH.exists()
+    stale = True
+    if cache_exists:
+        age_days = (time.time() - CORPORATE_ACTIONS_CACHE_PATH.stat().st_mtime) / 86400
+        stale = age_days > max_age_days
+
+    try:
+        if cache_exists and not stale:
+            return fetch_all_corporate_actions(_ACTIONS_HISTORY_START, dt.date.today())
+        return fetch_all_corporate_actions(_ACTIONS_HISTORY_START, dt.date.today(), force_refresh=True)
+    except Exception as ex:  # noqa: BLE001 - network/parse failures must not break a scan
+        if cache_exists:
+            logger.warning("Corporate-actions refresh failed (%s); using stale cache.", ex)
+            return fetch_all_corporate_actions(_ACTIONS_HISTORY_START, dt.date.today())
+        logger.warning("Corporate-actions unavailable (%s); skipping ingestion-time adjustment.", ex)
+        return None
+
+
+def merge_and_adjust(
+    symbol: str,
+    existing: pd.DataFrame | None,
+    new_rows: pd.DataFrame,
+    corporate_actions: pd.DataFrame | None,
+) -> tuple[pd.DataFrame, list[dict]]:
+    """Combine cached history with freshly downloaded rows and backward-
+    adjust for any confirmed split/bonus visible in the combined series.
+
+    Returns (full_history, confirmed_events). `confirmed_events` is empty
+    when nothing needed adjusting; the caller can then keep the cheap
+    append-only cache update. When it is non-empty, `full_history` replaces
+    the cached file (everything before each event date has been rescaled).
+
+    Idempotent: history that was already adjusted has no remaining
+    discontinuity at the event date, so re-running changes nothing.
+    """
+    if corporate_actions is None or corporate_actions.empty:
+        return new_rows, []
+
+    parts = [p for p in (existing, new_rows) if p is not None and not p.empty]
+    combined = pd.concat(parts, ignore_index=True)
+    combined["Date"] = pd.to_datetime(combined["Date"])
+    if combined["Date"].dt.tz is not None:
+        combined["Date"] = combined["Date"].dt.tz_localize(None)
+    combined = combined.drop_duplicates(subset="Date", keep="last").sort_values("Date").reset_index(drop=True)
+
+    base_columns = [c for c in ("Date", "Open", "High", "Low", "Close", "Volume") if c in combined.columns]
+    adjusted_base, log = confirm_and_adjust(combined[base_columns], symbol, corporate_actions)
+    confirmed = [e for e in log if e["confirmed"]]
+
+    if not confirmed:
+        return combined, []
+
+    result = combined.copy()
+    price_volume = [c for c in base_columns if c != "Date"]
+    for column in price_volume:
+        result[column] = adjusted_base[column].values
+
+    if "Deliverable_Qty" in result.columns:
+        for event in confirmed:
+            if event["factor"] != 0:
+                before = result["Date"] < event["date"]
+                result.loc[before, "Deliverable_Qty"] = (
+                    result.loc[before, "Deliverable_Qty"] / event["factor"]
+                ).round()
+
+    return result, confirmed
