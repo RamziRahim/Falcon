@@ -84,6 +84,22 @@ def _fake_categorize_recorder_with_flag_fields(monkeypatch):
     return calls
 
 
+def _stub_benchmark_history(monkeypatch, history_rows: int = 25):
+    # score_live_candidates() fetches benchmark history once per batch.
+    # Without this stub the tests silently hit Yahoo Finance for ^NSEI and
+    # only pass when the machine is online. The raw benchmark Date column
+    # is tz-aware, so the stub mirrors that.
+    benchmark = pd.DataFrame({
+        "Date": pd.date_range("2024-01-01", periods=history_rows, freq="D", tz="Asia/Kolkata"),
+        "Open": [100.0] * history_rows,
+        "High": [101.0] * history_rows,
+        "Low": [99.0] * history_rows,
+        "Close": [100.0] * history_rows,
+        "Volume": [100_000] * history_rows,
+    })
+    monkeypatch.setattr(live_scorer, "get_benchmark_history", lambda: benchmark.copy())
+
+
 def _stub_out_market_and_history(monkeypatch, history_rows: int = 25):
     monkeypatch.setattr(live_scorer, "_compute_live_market_verdict", lambda: "FAVORABLE")
 
@@ -97,6 +113,7 @@ def _stub_out_market_and_history(monkeypatch, history_rows: int = 25):
         "Trend_State": ["UPTREND"] * history_rows,
     })
     monkeypatch.setattr(live_scorer, "_load_pattern_history", lambda ticker: history)
+    _stub_benchmark_history(monkeypatch, history_rows)
 
 
 def _stub_no_playwright_session(monkeypatch):
@@ -220,6 +237,7 @@ class TestFlagTooltipSourceFieldsPropagate:
         _fake_categorize_recorder_with_flag_fields(monkeypatch)
         monkeypatch.setattr(live_scorer, "_compute_live_market_verdict", lambda: "FAVORABLE")
         monkeypatch.setattr(live_scorer, "_load_pattern_history", lambda ticker: None)
+        _stub_benchmark_history(monkeypatch)
         _stub_no_playwright_session(monkeypatch)
         _stub_fundamentals_sources(monkeypatch)
 
@@ -334,6 +352,7 @@ class TestEmptyAndMissingHistory:
         _fake_categorize_recorder(monkeypatch)
         monkeypatch.setattr(live_scorer, "_compute_live_market_verdict", lambda: "FAVORABLE")
         monkeypatch.setattr(live_scorer, "_load_pattern_history", lambda ticker: None)
+        _stub_benchmark_history(monkeypatch)
         _stub_no_playwright_session(monkeypatch)
         _stub_fundamentals_sources(monkeypatch)
 
