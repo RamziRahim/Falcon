@@ -22,9 +22,25 @@ Left untouched by design (big moves with no NSE corporate-action record, most li
 genuine): ABFRL, IDEA, INDUSINDBK, MCDOWELL-N, NOVARTIND, PNB, YESBANK. Review by eye
 only if one of them becomes a live candidate.
 
-Follow-up still open: decide whether run #3/#4 results need re-running on the repaired
-cache (they were each re-verified against this issue at the time, but the repair changed
-history for ~100 tickers).
+**Follow-up closed (2026-10-20): run #4 does NOT need re-running; run #3 is superseded.**
+Exposure check of all 357 run #4 EXECUTE/ALERT_WATCHLIST signals (59 taken EXECUTE
+episodes behind the +82.74% headline) against the pre-repair vs repaired cache:
+
+- Split-step tickers: for every one with run #4 rows on affected dates (16 tickers), run #4's
+  own recorded prices match the ADJUSTED series, i.e. run #4 ran on correctly adjusted data.
+  The revert bug (cache_synchronizer re-download) happened after run #4, so it only ever hurt
+  the live scan. The 36 others have no run #4 rows on affected dates.
+- Series-flip tickers: 24 signals in flip tickers; only 2 (SHRIRAMFIN 2024-09-12, NTPC
+  2025-03-27, both untaken ALERT_WATCHLIST) had bad days inside their lookback/holding
+  window. The only taken ones (IFCI x2, 2026) are clean: IFCI's last bad day was 2024-05-06.
+- Cross-sectional RS rank: median shift 1 pt, p95 2 pts; the large shifts are artifacts of
+  the post-run revert (run #4 saw adjusted data for those tickers). Taken trades: one at
+  the 3-pt bar (AVALON 2024-09-19), immaterial.
+
+Note for future checks: the earlier exposure checks (run #3, Phase 4, run #4) only flagged
+UNCONFIRMED jumps, so by construction they could not see unadjusted splits (which DO
+have a corporate-action record) or flips that confirm_and_adjust mis-confirmed. Use
+`market_data/price_integrity.classify_price_series()` for future integrity checks instead.
 
 
 **ROOT CAUSES FOUND, fix in review (2026-10-20, branch `claude/fix-nse-series-corruption`).**
