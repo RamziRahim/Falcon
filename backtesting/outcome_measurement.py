@@ -26,6 +26,10 @@ NO_OUTCOME_RESULT = {
 
 FILL_NEXT_OPEN = "next_open"
 FILL_AS_GIVEN = "as_given"
+# Pre-registered variant B (docs/run5_preregistration.md): a resting limit
+# buy at limit_price, valid for limit_valid_days trading days after the
+# signal. See _measure_limit_order_outcome().
+FILL_LIMIT = "limit"
 
 
 def measure_forward_outcome(
@@ -36,6 +40,8 @@ def measure_forward_outcome(
     full_history: pd.DataFrame,
     max_holding_days: int = MAX_HOLDING_TRADING_DAYS,
     fill: str = FILL_NEXT_OPEN,
+    limit_price: float | None = None,
+    limit_valid_days: int | None = None,
 ) -> dict:
     """
     Walks forward from entry_date up to max_holding_days trading days.
@@ -80,6 +86,11 @@ def measure_forward_outcome(
     if window.empty:
         return dict(NO_OUTCOME_RESULT)
 
+    if fill == FILL_LIMIT:
+        return _measure_limit_order_outcome(
+            ordered, entry_idx, limit_price, stop_loss, target, max_holding_days, limit_valid_days,
+        )
+
     if fill == FILL_NEXT_OPEN:
         fill_price = float(window.iloc[0]["Open"])
         if fill_price >= target:
@@ -120,4 +131,87 @@ def measure_forward_outcome(
     return {
         "exit_date": last_row["Date"], "exit_price": exit_price, "exit_reason": "TIME_EXIT",
         "return_pct": return_pct, "days_held": len(window), "fill_price": fill_price,
+    }
+
+
+def _measure_limit_order_outcome(
+    ordered: pd.DataFrame,
+    signal_idx: int,
+    limit_price: float,
+    stop_loss: float,
+    target: float,
+    max_holding_days: int,
+    limit_valid_days: int,
+) -> dict:
+    """Variant B's limit buy at limit_price (the pattern pivot), placed
+    after the signal-day close and valid for limit_valid_days trading days.
+    Rules, exactly as pre-registered (docs/run5_preregistration.md):
+
+      * Each day the order is live, in order:
+          - Open <= stop_loss: the stop level traded before (or as) the
+            order could fill -> cancelled, NO_FILL_STOP_FIRST.
+          - Open <= limit: gapped below the limit -> filled at the OPEN.
+          - Low <= limit: traded down to the limit -> filled AT the limit.
+      * Never reached within limit_valid_days -> NO_FILL_LIMIT_EXPIRED.
+
+    After the fill the trade is managed exactly like a next-open fill (same
+    stop/target levels, stop wins a same-day tie, later gaps fill at the
+    open), with two conservative rules for the fill day itself, because
+    daily bars can't show intraday order:
+      * filled at the limit intraday: the day's High may have come BEFORE
+        the dip, so the target is not counted that day; the stop is (the
+        price kept falling after it reached the limit).
+      * filled at a gapped-down open: everything after the open counts --
+        stop first, then target.
+    The time stop counts the fill day as day 1, so a filled trade gets the
+    same max_holding_days of holding as any other.
+
+    Returns measure_forward_outcome()'s dict plus fill_date and
+    fill_offset (trading days after the signal the order filled).
+    """
+    if limit_price is None or limit_valid_days is None:
+        raise ValueError("FILL_LIMIT needs limit_price and limit_valid_days")
+
+    pending = ordered.iloc[signal_idx + 1: signal_idx + 1 + limit_valid_days]
+    fill_offset = fill_price = filled_intraday = None
+    for offset, (_, row) in enumerate(pending.iterrows(), start=1):
+        if row["Open"] <= stop_loss:
+            return {**NO_OUTCOME_RESULT, "exit_reason": "NO_FILL_STOP_FIRST", "fill_date": None, "fill_offset": None}
+        if row["Open"] <= limit_price:
+            fill_offset, fill_price, filled_intraday = offset, float(row["Open"]), False
+            break
+        if row["Low"] <= limit_price:
+            fill_offset, fill_price, filled_intraday = offset, float(limit_price), True
+            break
+    if fill_offset is None:
+        return {**NO_OUTCOME_RESULT, "exit_reason": "NO_FILL_LIMIT_EXPIRED", "fill_date": None, "fill_offset": None}
+
+    fill_idx = signal_idx + fill_offset
+    window = ordered.iloc[fill_idx: fill_idx + max_holding_days]
+    fill_date = window.iloc[0]["Date"]
+
+    for day, (_, row) in enumerate(window.iterrows(), start=1):
+        hit_stop = row["Low"] <= stop_loss
+        hit_target = row["High"] >= target and not (day == 1 and filled_intraday)
+        gap_open = row["Open"] if day > 1 else None
+        if hit_stop:
+            exit_price = min(stop_loss, gap_open) if gap_open is not None else stop_loss
+            exit_reason = "STOP_HIT"
+        elif hit_target:
+            exit_price = max(target, gap_open) if gap_open is not None else target
+            exit_reason = "TARGET_HIT"
+        else:
+            continue
+        return {
+            "exit_date": row["Date"], "exit_price": exit_price, "exit_reason": exit_reason,
+            "return_pct": ((exit_price - fill_price) / fill_price) * 100, "days_held": day,
+            "fill_price": fill_price, "fill_date": fill_date, "fill_offset": fill_offset,
+        }
+
+    last_row = window.iloc[-1]
+    exit_price = last_row["Close"]
+    return {
+        "exit_date": last_row["Date"], "exit_price": exit_price, "exit_reason": "TIME_EXIT",
+        "return_pct": ((exit_price - fill_price) / fill_price) * 100, "days_held": len(window),
+        "fill_price": fill_price, "fill_date": fill_date, "fill_offset": fill_offset,
     }

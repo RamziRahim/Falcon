@@ -188,6 +188,19 @@ TARGET_MIN_ATR_MULTIPLE = 2.0
 # call for tuning-split experiments without touching call sites.
 MIN_REWARD_RISK = 1.25
 
+# Entry models (docs/run5_preregistration.md). ENTRY_NEXT_OPEN is the default
+# and what the live dashboard shows: buy at the next open, reward:risk
+# measured from the close. ENTRY_RETRACEMENT is pre-registered variant B,
+# used only by the backtest that tests it: a breakout that closed more than
+# RETRACEMENT_EXTENSION_PCT above its pivot is not chased -- a limit buy is
+# placed at the pivot, valid for RETRACEMENT_LIMIT_VALID_DAYS trading days.
+# These two numbers were fixed before any variant-B result existed; do not
+# tune them against the run #5 window.
+ENTRY_NEXT_OPEN = "next_open"
+ENTRY_RETRACEMENT = "retracement"
+RETRACEMENT_EXTENSION_PCT = 3.0
+RETRACEMENT_LIMIT_VALID_DAYS = 5
+
 NIFTY50 = "^NSEI"
 NIFTY_MIDCAP_150 = "NIFTYMIDCAP150.NS"   # renamed from MIDCAP100 — it was never Midcap 100
 NIFTY_SMALLCAP_250 = "NIFTYSMLCAP250.NS"  # renamed from SMALLCAP100 — it was never Smallcap 100

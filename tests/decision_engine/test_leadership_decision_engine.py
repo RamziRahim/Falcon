@@ -29,6 +29,10 @@ its own separate, real-data-backed test coverage
 """
 from __future__ import annotations
 
+from config import ENTRY_NEXT_OPEN, ENTRY_RETRACEMENT
+from decision_engine.leadership_decision_engine import (
+    ENTRY_ORDER_LIMIT_AT_PIVOT, ENTRY_ORDER_MARKET, choose_entry_order,
+)
 import pytest
 
 from config import MAX_HOLDING_TRADING_DAYS
@@ -1016,3 +1020,51 @@ class TestEntryPricedFromAchievableClose:
 
         assert result["category"] == "ALERT_WATCHLIST"
         assert "PRICE_BEYOND_STOP" in result["caps_applied"]
+
+
+class TestRetracementEntryModel:
+    """Pre-registered variant B (docs/run5_preregistration.md): with
+    entry_model=ENTRY_RETRACEMENT a breakout that closed > 3% above its
+    pivot becomes a limit buy at the pivot, and reward:risk is judged from
+    the pivot. The default (live) model is unchanged."""
+
+    BEST = TestEntryPricedFromAchievableClose.BEST   # pivot 100, stop 85, target 130
+
+    def _decide(self, close, entry_model):
+        candidate = _candidate(
+            Close=close, is_vcp_breakout=True, RS_Rating=100.0, has_active_fvg=True, has_liquidity_sweep=True,
+            institutional_sponsorship_pct=25.0, has_buy_activity=True, ATR_14=5.0,
+        )
+        return categorize(
+            candidate, _sector_row(Rank=2, Total_Sectors=10), market_verdict="FAVORABLE",
+            pattern_details={"is_vcp_breakout": self.BEST}, model_artifact=_always_execute_artifact(),
+            entry_model=entry_model,
+        )
+
+    def test_default_model_is_unchanged_market_order(self):
+        result = self._decide(115.0, ENTRY_NEXT_OPEN)
+        assert result["category"] == "ALERT_WATCHLIST"
+        assert result["entry_order"] == ENTRY_ORDER_MARKET
+
+    def test_stretched_breakout_becomes_limit_at_pivot_and_keeps_execute(self):
+        result = self._decide(115.0, ENTRY_RETRACEMENT)
+        assert result["entry_order"] == ENTRY_ORDER_LIMIT_AT_PIVOT
+        assert result["entry"] == pytest.approx(100.0)
+        assert result["reward_risk"] == pytest.approx(2.0)
+        assert result["category"] == "EXECUTE"
+        assert result["stop_loss"] == pytest.approx(85.0) and result["target"] == pytest.approx(130.0)
+        assert result["extension_above_pivot_pct"] == pytest.approx(15.0)   # still measured from the close
+
+    def test_within_three_percent_stays_a_market_order(self):
+        result = self._decide(102.9, ENTRY_RETRACEMENT)
+        assert result["entry_order"] == ENTRY_ORDER_MARKET
+        assert result["entry"] == pytest.approx(102.9)
+
+    def test_choose_entry_order_boundaries(self):
+        assert choose_entry_order(103.0, 100.0, 85.0, ENTRY_RETRACEMENT) == (103.0, ENTRY_ORDER_MARKET)
+        assert choose_entry_order(103.01, 100.0, 85.0, ENTRY_RETRACEMENT) == (100.0, ENTRY_ORDER_LIMIT_AT_PIVOT)
+        # levels not anchored on the pivot (stop at/above it) -> market
+        assert choose_entry_order(110.0, 100.0, 100.0, ENTRY_RETRACEMENT) == (110.0, ENTRY_ORDER_MARKET)
+        assert choose_entry_order(110.0, None, 80.0, ENTRY_RETRACEMENT) == (110.0, ENTRY_ORDER_MARKET)
+        with pytest.raises(ValueError):
+            choose_entry_order(110.0, 100.0, 80.0, "bogus")
