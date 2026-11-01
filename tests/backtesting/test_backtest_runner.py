@@ -765,3 +765,60 @@ class TestCheckpointingAndResume:
         assert meta["total_dates"] >= trades["entry_date"].nunique()
         assert meta["start_date"] == str(start_date.date())
         assert meta["end_date"] == str(end_date.date())
+
+
+class TestRetracementLimitOrdersInTheRunner:
+    """Pre-registered variant B end-to-end through run_backtest(): the entry
+    model reaches categorize(), a LIMIT_AT_PIVOT plan is filled by the limit
+    model, and entry_date is the trading day before the fill (so the ledger
+    and the scorecard's fill check see the real fill day)."""
+
+    def _history(self):
+        n = 60
+        price = np.full(n, 110.0)
+        lows = price * 0.99
+        lows[33] = 99.0                       # 3 days after the signal, trades down to the 100 limit
+        return pd.DataFrame({
+            "Date": pd.date_range("2022-01-01", periods=n, freq="D"),
+            "Open": price, "High": price * 1.01, "Low": lows, "Close": price,
+            "Volume": [100_000] * n, "Volume_SMA_20": [100_000] * n,
+        })
+
+    def test_limit_order_fills_and_entry_date_is_the_day_before_the_fill(self, monkeypatch):
+        import backtesting.replay_engine as replay_engine
+        from config import ENTRY_RETRACEMENT
+        from decision_engine.leadership_decision_engine import ENTRY_ORDER_LIMIT_AT_PIVOT
+
+        seen = []
+
+        def fake_categorize(candidate, sector_row, market_verdict, pattern_details=None,
+                            disable_fundamental_signals=False, enable_microstructure_signals=False,
+                            min_reward_risk=1.25, entry_model=None):
+            seen.append(entry_model)
+            return {
+                "category": "EXECUTE", "market_regime_verdict": market_verdict,
+                "sector_health_verdict": "NEUTRAL", "confidence_score": 90.0,
+                "caps_applied": [], "fakeout_risk_flags": [], "contributing_factors": [],
+                "entry": 100.0, "stop_loss": 85.0, "target": 130.0, "max_holding_days": 10,
+                "entry_order": ENTRY_ORDER_LIMIT_AT_PIVOT, "supporting_data": candidate,
+            }
+
+        monkeypatch.setattr(replay_engine, "categorize", fake_categorize)
+        monkeypatch.setattr(replay_engine.sector_map, "get_sector", lambda symbol: "Unknown")
+        history = self._history()
+        signal = history["Date"].iloc[30]
+
+        trades = run_backtest(
+            universe_histories={"TEST.NS": history}, benchmark_history=_random_walk_df(seed=99, n=60),
+            vix_history=None, start_date=signal, end_date=signal, sample_every_n_days=1,
+            entry_model=ENTRY_RETRACEMENT,
+        )
+
+        assert seen == [ENTRY_RETRACEMENT]
+        assert len(trades) == 1
+        row = trades.iloc[0]
+        assert row["entry_price"] == 100.0
+        assert row["signal_date"] == signal
+        assert row["fill_offset"] == 3
+        assert row["entry_date"] == history["Date"].iloc[32]
+        assert row["entry_order"] == ENTRY_ORDER_LIMIT_AT_PIVOT

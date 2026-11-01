@@ -59,3 +59,62 @@ Reference points already computed with this exact scorecard:
   it gaps below). Cancelled if the stop level trades first or the order expires.
 - Same stop/target levels, same scorecard, same window. No other variants or
   parameter values will be tried on this window.
+
+---
+
+## Dated notes (added after run #5; the rules above are unchanged)
+
+### 2026-11-01: run #5 result
+
+`python tests/evaluate_backtest_run.py data/backtest_results_run5_honest_fills.csv` on
+the laptop (full output in `data/run5_scorecard.txt`):
+
+- **Verdict: NO DEMONSTRATED EDGE.** Checks 1-5 fail; check 6 (fill realism) passes
+  (1.000).
+- Total return −1.48% vs Nifty −2.85%. Max drawdown −1.71%. Alpha −2.6%/yr (t −1.26).
+  Mean net return per trade −1.64% (t −0.87). First half −0.44%, second half −1.02%.
+- **Only 6 trades were taken** (11 EXECUTE signals, vs 82 in run #4). Average gross
+  exposure was 7.2%. Pricing the entry from the close sent most stretched breakouts
+  below the RR floor (ALERT_WATCHLIST). The run is too thin to show an edge either way.
+- 474 signals could not be filled at the next open: 148 past target, 326 below stop.
+
+Per the rules above, the next step is variant B, unchanged.
+
+**Observation recorded, not acted on.** ALERT_WATCHLIST + MONITOR signals (about 1,800
+rows) averaged +0.7% raw return per signal, vs +0.1% for AVOID. This was noticed
+*after* seeing run #5's results on this window. It is NOT evidence and must not be used
+to change the strategy on this window. It is written down here as a hypothesis for
+data the system has never seen (paper trading / a later window).
+
+### 2026-11-01: how variant B is implemented (interpretation of the rules, fixed before running it)
+
+Code: `config.ENTRY_RETRACEMENT`, `RETRACEMENT_EXTENSION_PCT = 3.0`,
+`RETRACEMENT_LIMIT_VALID_DAYS = 5`; `leadership_decision_engine.choose_entry_order()`;
+`outcome_measurement._measure_limit_order_outcome()`; output
+`data/backtest_results_run6_variant_b_retracement.csv`.
+
+- **"More than 3% above the pivot"** means signal-day close > pivot × 1.03. Only plans
+  whose stop/target levels are anchored on the pivot (stop below the pivot) become limit
+  orders. A plan priced from the close (no usable proximal low) stays a next-open order.
+- **Reward:risk for a limit order** is measured from the pivot, the price the order would
+  pay. So stretched breakouts are no longer pushed below the RR floor by the run-up.
+  Every other part of categorize() is unchanged.
+- **Order handling** for each of the 5 days after the signal:
+  - open ≤ stop → cancelled ("stop traded first");
+  - open ≤ limit → filled at the open;
+  - low ≤ limit → filled at the limit;
+  - otherwise the order expires.
+- **Fill day, conservatively:**
+  - after an intraday fill at the limit, the day's high may have come first, so the
+    target is not counted that day; the stop is;
+  - after a gapped-open fill, stop then target count as usual.
+  - The time stop counts the fill day as day 1.
+- **Record and scorecard compatibility:**
+  - `entry_date` is the trading day before the fill, so the MTM ledger opens the position
+    on the real fill day and the scorecard's fill-realism check looks at the fill day.
+  - `signal_date` keeps the original signal date.
+  - The scorecard script is not changed.
+- **Pending limit orders don't reserve capital or a slot** in the ledger. This is slightly
+  optimistic: in practice an order resting for up to 5 days ties up margin.
+- **AVOID's hypothetical trades** still use next-open fills. The scorecard is
+  EXECUTE-only, so this doesn't affect the verdict.

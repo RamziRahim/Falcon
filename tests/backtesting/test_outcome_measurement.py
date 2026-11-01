@@ -12,7 +12,7 @@ import pandas as pd
 
 import pytest
 
-from backtesting.outcome_measurement import measure_forward_outcome
+from backtesting.outcome_measurement import FILL_LIMIT, measure_forward_outcome
 from config import MAX_HOLDING_TRADING_DAYS
 
 
@@ -125,3 +125,57 @@ class TestNextOpenFillModel:
         # Exactly the run #4 artifact: a "win" on a price that never traded.
         assert result["exit_reason"] == "TARGET_HIT"
         assert result["return_pct"] == 10.0
+
+
+class TestLimitOrderFill:
+    """Pre-registered variant B: a limit buy at the pivot (100), valid 5
+    days after the signal; stop 85, target 130. Signal day is dates[0]."""
+
+    def _run(self, df, dates, max_holding_days=10, valid=5):
+        return measure_forward_outcome(dates[0], entry_price=100.0, stop_loss=85.0, target=130.0,
+                                       full_history=df, max_holding_days=max_holding_days, fill=FILL_LIMIT,
+                                       limit_price=100.0, limit_valid_days=valid)
+
+    def test_fills_at_the_limit_when_the_low_reaches_it(self):
+        #         signal  d1   d2(dips to 99) d3   d4 (target)
+        dates, df = _bars([115, 112, 108, 105, 120], highs=[116, 113, 109, 110, 131], lows=[110, 109, 99, 104, 118])
+        r = self._run(df, dates)
+        assert (r["fill_price"], r["fill_offset"], r["fill_date"]) == (100.0, 2, dates[2])
+        assert r["exit_reason"] == "TARGET_HIT" and r["exit_price"] == 130.0
+        assert r["return_pct"] == pytest.approx(30.0)
+        assert r["days_held"] == 3        # fill day counts as day 1
+
+    def test_gap_below_the_limit_fills_at_the_open(self):
+        dates, df = _bars([115, 96, 100], highs=[116, 99, 101], lows=[110, 95, 99])
+        r = self._run(df, dates, max_holding_days=2)
+        assert (r["fill_price"], r["fill_offset"]) == (96.0, 1)
+        assert r["exit_reason"] == "TIME_EXIT" and r["exit_price"] == 100
+
+    def test_open_at_or_below_stop_cancels_the_order(self):
+        dates, df = _bars([115, 84, 90], lows=[110, 80, 88])
+        assert self._run(df, dates)["exit_reason"] == "NO_FILL_STOP_FIRST"
+
+    def test_expires_after_the_valid_days(self):
+        dates, df = _bars([115, 112, 111, 110, 109, 108, 99], lows=[115, 111, 110, 109, 108, 107, 98])
+        r = self._run(df, dates)          # day 6 dips to 98 but the order expired after day 5
+        assert r["exit_reason"] == "NO_FILL_LIMIT_EXPIRED" and r["return_pct"] is None
+
+    def test_intraday_fill_day_does_not_count_the_target_but_counts_the_stop(self):
+        # Fill-day high 131 may have printed before the dip -> not a target hit.
+        dates, df = _bars([115, 120, 110], highs=[116, 131, 112], lows=[110, 99, 105], closes=[115, 105, 110])
+        r = self._run(df, dates, max_holding_days=2)
+        assert r["exit_reason"] == "TIME_EXIT" and r["fill_price"] == 100.0
+        # Same day falling through the stop after the fill -> stopped out that day.
+        dates, df = _bars([115, 110, 110], lows=[110, 80, 105])
+        r = self._run(df, dates)
+        assert r["exit_reason"] == "STOP_HIT" and r["exit_price"] == 85.0 and r["days_held"] == 1
+
+    def test_gap_down_through_stop_after_fill_exits_at_the_open(self):
+        dates, df = _bars([115, 110, 80], lows=[110, 99, 78])
+        r = self._run(df, dates)
+        assert r["exit_reason"] == "STOP_HIT" and r["exit_price"] == 80
+
+    def test_limit_needs_its_parameters(self):
+        dates, df = _bars([115, 110])
+        with pytest.raises(ValueError):
+            measure_forward_outcome(dates[0], 100.0, 85.0, 130.0, df, fill=FILL_LIMIT)

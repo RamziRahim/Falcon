@@ -110,11 +110,14 @@ from __future__ import annotations
 from config import (
     ATR_STOP_CEILING_MULTIPLE,
     ATR_STOP_FLOOR_MULTIPLE,
+    ENTRY_NEXT_OPEN,
+    ENTRY_RETRACEMENT,
     EXCLUDED_SECTORS,
     EXCLUDED_TICKERS,
     MAX_HOLDING_TRADING_DAYS,
     MIN_REWARD_RISK,
     STOP_BUFFER_ATR_MULTIPLE,
+    RETRACEMENT_EXTENSION_PCT,
     TARGET_MIN_ATR_MULTIPLE,
 )
 from scoring.consolidation_quality_model import load_model_artifact, predict_consolidation_quality
@@ -761,6 +764,36 @@ def get_entry_target_stop(candidate: dict, best_pattern_field: str | None, best_
     }
 
 
+ENTRY_ORDER_MARKET = "MARKET_NEXT_OPEN"
+ENTRY_ORDER_LIMIT_AT_PIVOT = "LIMIT_AT_PIVOT"
+
+
+def choose_entry_order(close: float, pivot_level: float | None, stop_loss: float, entry_model: str = ENTRY_NEXT_OPEN) -> tuple[float, str]:
+    """(reference entry price, order type) for a priced trade plan.
+
+    ENTRY_NEXT_OPEN (default, live): buy at the next open; the close is the
+    reference price for reward:risk.
+
+    ENTRY_RETRACEMENT (pre-registered variant B, backtest only): if the
+    close is more than RETRACEMENT_EXTENSION_PCT above the pattern pivot,
+    don't chase -- place a limit buy at the pivot instead, and judge
+    reward:risk from the pivot (the price that order would pay). Only when
+    the stop/target levels are actually anchored on that pivot (stop below
+    the pivot); a plan whose levels came from the close (no usable
+    proximal low) stays a market order.
+    """
+    if entry_model == ENTRY_NEXT_OPEN:
+        return close, ENTRY_ORDER_MARKET
+    if entry_model != ENTRY_RETRACEMENT:
+        raise ValueError(f"Unknown entry model: {entry_model!r}")
+    if (
+        pivot_level is not None and pivot_level > 0 and stop_loss < pivot_level
+        and close > pivot_level * (1 + RETRACEMENT_EXTENSION_PCT / 100)
+    ):
+        return pivot_level, ENTRY_ORDER_LIMIT_AT_PIVOT
+    return close, ENTRY_ORDER_MARKET
+
+
 def categorize(
     candidate: dict,
     sector_row: dict,
@@ -770,6 +803,7 @@ def categorize(
     enable_microstructure_signals: bool = False,
     min_reward_risk: float = MIN_REWARD_RISK,
     model_artifact: dict | None = None,
+    entry_model: str = ENTRY_NEXT_OPEN,
 ) -> dict:
     """Full Leadership-strategy decision: disqualifiers first (AVOID
     immediately, regardless of market/sector/score), then the 0-100 score
@@ -858,6 +892,7 @@ def categorize(
                 "proximal_low": None,
                 "pivot_level": None,
                 "extension_above_pivot_pct": None,
+                "entry_order": None,
                 "bars_since_breakout": None,
                 "breakout_within_last_k_bars": False,
                 "supporting_data": candidate,
@@ -925,6 +960,7 @@ def categorize(
     if final_category == "AVOID":
         entry = stop_loss = target = max_holding_days = None
         stop_provenance = target_provenance = reward_risk = proximal_low = pivot_level = None
+        entry_order = None
     else:
         ets = get_entry_target_stop(candidate, best_field, best_result)
         entry, stop_loss, target = ets["entry"], ets["stop_loss"], ets["target"]
@@ -932,6 +968,9 @@ def categorize(
         stop_provenance, target_provenance = ets["stop_provenance"], ets["target_provenance"]
         proximal_low = ets["proximal_low"]
         pivot_level = ets.get("pivot_level")
+        # entry_model (see choose_entry_order): the default leaves entry as
+        # the close; variant B may move it to the pivot as a limit order.
+        entry, entry_order = choose_entry_order(entry, pivot_level, stop_loss, entry_model)
 
         # entry - stop_loss <= 0 would mean a broken stop (at or above
         # entry) -- can't compute a meaningful RR from that.
@@ -994,8 +1033,10 @@ def categorize(
         # far the achievable entry (close) already sits above it.
         "pivot_level": pivot_level,
         "extension_above_pivot_pct": (
-            (entry / pivot_level - 1) * 100 if (entry and pivot_level) else None
+            (candidate["Close"] / pivot_level - 1) * 100 if (entry and pivot_level and candidate.get("Close")) else None
         ),
+        # MARKET_NEXT_OPEN or LIMIT_AT_PIVOT (variant B only); None for AVOID.
+        "entry_order": entry_order,
         # A-5 breakout-recency contract, surfaced for the SELECTED pattern
         # (the one that actually drove the score/entry) rather than
         # requiring a consumer to dig into supporting_data/pattern_details

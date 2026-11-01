@@ -144,7 +144,14 @@ print(f"  Sector indices resolved: {len(sector_index_histories)}/{len(distinct_s
 # item 10). Fresh output/checkpoint paths so run #4's files are never
 # resumed into or overwritten, and run #4's exact window so the two runs are
 # directly comparable.
-RUN_LABEL = "run5_honest_fills"
+# Variant B (2026-11-01, pre-registered in docs/run5_preregistration.md
+# before run #5's result existed): identical to run #5 except stretched
+# breakouts (close > 3% above pivot) become a 5-day limit buy at the pivot.
+# Set ENTRY_MODEL = ENTRY_NEXT_OPEN to reproduce run #5. Each model writes
+# its own output/checkpoint files, so one never resumes into the other.
+from config import ENTRY_NEXT_OPEN, ENTRY_RETRACEMENT
+ENTRY_MODEL = ENTRY_RETRACEMENT
+RUN_LABEL = "run6_variant_b_retracement" if ENTRY_MODEL == ENTRY_RETRACEMENT else "run5_honest_fills"
 RUN5_WINDOW = (pd.Timestamp("2024-08-14"), pd.Timestamp("2026-08-14"))
 
 CHECKPOINT_PATH = (
@@ -179,6 +186,7 @@ else:
 print(f"\nTest window: {start_date.date()} -> {end_date.date()}")
 print(f"Universe:    {len(universe_histories)} tickers")
 print(f"Sampling:    every 5 trading days")
+print(f"Entry model: {ENTRY_MODEL}  (run label {RUN_LABEL})")
 print(f"Microstructure signals (liquidity sweep + FVG): {'ON' if ENABLE_MICROSTRUCTURE_SIGNALS else 'off'}")
 print("\nStarting backtest -- progress + a computed time-remaining estimate "
       "will be logged every 10 sampled dates.")
@@ -200,6 +208,7 @@ trades = run_backtest(
     checkpoint_every_n_dates=5,   # 20 lost up to 2 hours on sleep/close at run #5 speeds
     resume_trade_records=resume_trade_records,
     resume_from_date_index=resume_from_date_index,
+    entry_model=ENTRY_MODEL,
 )
 
 # ── 6. Save raw results ────────────────────────────────────────────────────────

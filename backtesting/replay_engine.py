@@ -79,7 +79,7 @@ from scoring.sector_indices import get_sector_index_trend
 from scoring.sector_index_rs import compute_sector_index_rs
 from scoring.market_regime import count_distribution_days, get_recalibrated_market_trend_state
 from decision_engine.candidate_assembler import assemble_candidate, assemble_sector_row, assemble_pattern_details
-from config import MIN_REWARD_RISK
+from config import ENTRY_NEXT_OPEN, MIN_REWARD_RISK
 from decision_engine.leadership_decision_engine import categorize, get_market_regime_verdict
 
 # Same floor pattern_engine.py's execute_pipeline() uses -- a shorter
@@ -236,6 +236,7 @@ def replay_decision_as_of(
     precomputed_universe_scoring: tuple | None = None,
     enable_microstructure_signals: bool = False,
     min_reward_risk: float = MIN_REWARD_RISK,
+    entry_model: str = ENTRY_NEXT_OPEN,
 ) -> dict:
     """
     Truncates full_history to rows <= as_of_date, re-runs the full
@@ -278,6 +279,8 @@ def replay_decision_as_of(
         False (identical behavior to before liquidity-sweep/FVG existed).
     min_reward_risk : passed straight through to categorize() (2.2, I-6) --
         see that function's own docstring. Defaults to config.MIN_REWARD_RISK.
+    entry_model : passed straight through to categorize() -- config.ENTRY_NEXT_OPEN
+        (default) or ENTRY_RETRACEMENT (pre-registered variant B).
 
     Returns
     -------
@@ -396,6 +399,9 @@ def replay_decision_as_of(
         disable_fundamental_signals=True,
         enable_microstructure_signals=enable_microstructure_signals,
         min_reward_risk=min_reward_risk,
+        # Only passed when not the default, so categorize() test doubles
+        # written before entry models existed keep working unchanged.
+        **({"entry_model": entry_model} if entry_model != ENTRY_NEXT_OPEN else {}),
     )
     # A-4 detector funnel diagnostics -- built from `analysis` (already
     # computed above for pattern_row), not a second detection pass.

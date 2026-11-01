@@ -39,8 +39,14 @@ from common.logger import get_logger
 from backtesting.detector_funnel import tally_funnel
 from backtesting.portfolio_simulator import policy_sector_aware_caution
 from backtesting.replay_engine import build_scored_universe_as_of, replay_decision_as_of
-from backtesting.outcome_measurement import measure_forward_outcome
-from config import MAX_HOLDING_TRADING_DAYS, MIN_REWARD_RISK
+from backtesting.outcome_measurement import FILL_LIMIT, measure_forward_outcome
+from config import (
+    ENTRY_NEXT_OPEN,
+    MAX_HOLDING_TRADING_DAYS,
+    MIN_REWARD_RISK,
+    RETRACEMENT_LIMIT_VALID_DAYS,
+)
+from decision_engine.leadership_decision_engine import ENTRY_ORDER_LIMIT_AT_PIVOT
 from decision_engine.leadership_decision_engine import get_best_pattern_points, get_entry_target_stop
 from scoring.sector_map import sector_map
 
@@ -97,6 +103,12 @@ def _pattern_used(candidate: dict) -> str | None:
     return field_name
 
 
+def _trading_day_before(history: pd.DataFrame, date: pd.Timestamp) -> pd.Timestamp:
+    """The last trading day in history strictly before date."""
+    dates = history["Date"].sort_values()
+    return dates[dates < date].iloc[-1]
+
+
 def _hypothetical_trade_plan(candidate: dict, pattern_details: dict) -> dict:
     """A-1: categorize() never prices an AVOID decision (entry/stop_loss/
     target are all None) -- there's no real trade to plan. This reuses the
@@ -129,6 +141,7 @@ def run_backtest(
     checkpoint_every_n_dates: int = 20,
     resume_trade_records: list | None = None,
     resume_from_date_index: int = 0,
+    entry_model: str = ENTRY_NEXT_OPEN,
 ) -> pd.DataFrame:
     """
     Returns one row per signal generated (Part C's schema) across every
@@ -277,6 +290,7 @@ def run_backtest(
                 precomputed_universe_scoring=universe_scoring,
                 enable_microstructure_signals=enable_microstructure_signals,
                 min_reward_risk=min_reward_risk,
+                entry_model=entry_model,
             )
 
             if funnel_counts is not None:
@@ -313,6 +327,11 @@ def run_backtest(
                 trade_records.append({
                     "ticker": ticker,
                     "entry_date": as_of_date,
+                    # AVOID's hypothetical trade always buys at the next open
+                    # (no entry model applies to a plan nobody would place).
+                    "signal_date": as_of_date,
+                    "entry_order": None,
+                    "fill_offset": 1,
                     "entry_price": hypothetical_entry,
                     "category": "AVOID",
                     "pattern_used": _pattern_used(candidate),
@@ -356,6 +375,10 @@ def run_backtest(
             if decision["category"] not in SIGNAL_CATEGORIES or decision["entry"] is None:
                 continue
 
+            # Variant B (entry_model=ENTRY_RETRACEMENT) may turn a stretched
+            # breakout into a limit order at the pivot; otherwise buy at
+            # the next open.
+            is_limit_order = decision.get("entry_order") == ENTRY_ORDER_LIMIT_AT_PIVOT
             outcome = measure_forward_outcome(
                 entry_date=as_of_date,
                 entry_price=decision["entry"],
@@ -368,6 +391,11 @@ def run_backtest(
                 # function parameter only if a decision dict doesn't carry
                 # one (e.g. a test double stubbing categorize()).
                 max_holding_days=decision.get("max_holding_days") or max_holding_days,
+                **(
+                    {"fill": FILL_LIMIT, "limit_price": decision["entry"],
+                     "limit_valid_days": RETRACEMENT_LIMIT_VALID_DAYS}
+                    if is_limit_order else {}
+                ),
             )
 
             if outcome["exit_reason"] == "NO_DATA":
@@ -383,9 +411,22 @@ def run_backtest(
             # measured from this.
             entry_price = outcome["fill_price"]
 
+            # entry_date keeps its meaning for every downstream tool (episode
+            # builder, MTM ledger, the scorecard's fill check): the close
+            # after which the position is bought at the next session. For a
+            # limit order that filled k days after the signal, that is the
+            # trading day before the fill, not the signal day; signal_date
+            # keeps the original date.
+            effective_entry_date = (
+                _trading_day_before(full_history, outcome["fill_date"]) if is_limit_order else as_of_date
+            )
+
             trade_records.append({
                 "ticker": ticker,
-                "entry_date": as_of_date,
+                "entry_date": effective_entry_date,
+                "signal_date": as_of_date,
+                "entry_order": decision.get("entry_order"),
+                "fill_offset": outcome.get("fill_offset", 1),
                 "entry_price": entry_price,
                 "category": decision["category"],
                 "pattern_used": _pattern_used(decision["supporting_data"]),
@@ -442,7 +483,7 @@ def run_backtest(
             _write_checkpoint(date_index, as_of_date)
 
     if no_fill_counts:
-        logger.info("Signals not fillable at the next open (not traded): %s", no_fill_counts)
+        logger.info("Signals not filled (not traded): %s", no_fill_counts)
 
     return pd.DataFrame(trade_records)
 
