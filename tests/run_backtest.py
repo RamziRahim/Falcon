@@ -197,7 +197,7 @@ trades = run_backtest(
     funnel_counts=funnel_counts,
     avoid_sample_rate=AVOID_SAMPLE_RATE,
     checkpoint_path=CHECKPOINT_PATH,
-    checkpoint_every_n_dates=5,   # ~2-3 min per date on the laptop; 20 lost up to an hour on sleep/close
+    checkpoint_every_n_dates=5,   # 20 lost up to 2 hours on sleep/close at run #5 speeds
     resume_trade_records=resume_trade_records,
     resume_from_date_index=resume_from_date_index,
 )

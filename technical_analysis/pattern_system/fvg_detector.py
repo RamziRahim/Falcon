@@ -7,6 +7,7 @@ Package     : Technical Analysis / Pattern System
 ===============================================================================
 """
 from __future__ import annotations
+import numpy as np
 import pandas as pd
 
 class FVGDetector:
@@ -28,20 +29,19 @@ class FVGDetector:
         if df_len < 3:
             return results
 
-        active_fvgs = []
-
-        # 1. Rolling 3-candle structural scans across history
-        for i in range(1, df_len - 1):
-            c1_high = df.loc[i - 1, "High"]
-            c3_low = df.loc[i + 1, "Low"]
-
-            # Check if an imbalance exists
-            if c3_low > c1_high:
-                active_fvgs.append({
-                    "top": float(c3_low),
-                    "bottom": float(c1_high),
-                    "index": i
-                })
+        # 1. Rolling 3-candle structural scans across history. Vectorised
+        # 2026-11-01 (was a per-bar loop of scalar df.loc reads); same
+        # comparison on the same values, so the same gaps in the same order
+        # -- see tests/technical_analysis/test_fvg_detector_equivalence.py.
+        highs = df["High"].to_numpy()
+        lows = df["Low"].to_numpy()
+        c1_highs = highs[:-2]                  # candle i-1 for i = 1..n-2
+        c3_lows = lows[2:]                     # candle i+1
+        gap_positions = np.flatnonzero(c3_lows > c1_highs)
+        active_fvgs = [
+            {"top": float(c3_lows[k]), "bottom": float(c1_highs[k]), "index": int(k) + 1}
+            for k in gap_positions
+        ]
 
         if not active_fvgs:
             return results
@@ -52,7 +52,7 @@ class FVGDetector:
 
         # Suffix-min of Low, so "did any candle after index j dip to/below X"
         # is an O(1) lookup instead of an O(n) inner scan per FVG.
-        suffix_min_low = df["Low"].iloc[::-1].cummin().iloc[::-1]
+        suffix_min_low = df["Low"].iloc[::-1].cummin().iloc[::-1].to_numpy()
 
         # Check from the most recent FVG backward
         for fvg in reversed(active_fvgs):
@@ -61,7 +61,7 @@ class FVGDetector:
 
             mitigated = (
                 scan_start < df_len
-                and suffix_min_low.iloc[scan_start] <= fvg["bottom"]
+                and suffix_min_low[scan_start] <= fvg["bottom"]
             )
 
             if not mitigated:
