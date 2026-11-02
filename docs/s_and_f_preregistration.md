@@ -159,3 +159,45 @@ and Falcon's trade plan alone, which are what F is about.
   buy-stop level.
 - **Passes only one window, or none:** no demonstrated edge. Report plainly; no
   re-tuning.
+
+---
+
+## W1 results, 2026-11-02 (`data/s_and_f_result_W1.txt`)
+
+| W1 2019-01-01 → 2026-10-30 | S | F | Nifty 50 | PIT equal-weight |
+|---|---|---|---|---|
+| CAGR | −2.9% | −6.3% | 10.1% | 15.2% |
+| Max drawdown | −60.5% | −45.3% | −38.4% | |
+| Monthly excess t | −1.20 | −4.63 | | |
+| Years beating Nifty | 2/8 | 0/8 | | |
+| Closed trades | 1,342 | 491 | | |
+| Win rate | 33% | 40% | | |
+| Average win / loss | +14.2% / −6.4% | +9.9% / −7.2% | | |
+| Checks passed | 0/6 | 1/6 | | |
+
+**S.** Trades that ran to the 30-session time stop averaged +30%, but:
+- 677 trend exits averaged +0.6%;
+- 472 stops averaged −8.2%.
+
+**Sensitivity (does not change the verdict).** On 61 fill days the day's low was below
+the stop. The frozen rule counts these as stopped out, because daily bars can't show
+whether the low came before the breakout. Those trades lost ₹5.8 lakh. Treating them all
+as neutral would leave S at about +4%/yr, still far below the Nifty.
+
+**F.** Falcon's setups:
+
+| Pattern | Setups found |
+|---|---|
+| ascending triangle | 7,621 |
+| flat base | 5,805 |
+| VCP | 966 |
+| bull flag | 206 |
+| **Total** | **14,598** |
+
+- Median plan RR is 1.76.
+- Entered with a pivot buy-stop, they averaged +0.16% gross and **−0.30% net** per trade.
+- 260 stops (−7.5%) against 129 targets (+11.7%) and 96 time stops (+3.2%).
+- Only 6 same-day exits, so the fill-day assumption doesn't matter here.
+
+**Both fail W1.** A pass needs both windows, so **both are NO DEMONSTRATED EDGE**. W2 will
+be run for the record when the 2007-2017 data is built. Nothing is re-tuned.
