@@ -65,14 +65,13 @@ def main():
 
     # Sanity: big one-day moves left after adjustment while the stock was in
     # that month's universe (real crashes/rallies, or a missed action)
-    p = prices.sort_values(["entity_id", "Date"])
-    move = p.groupby("entity_id")["Close"].pct_change()
+    p = prices[["entity_id", "Date", "Symbol", "current_symbol", "Close"]].sort_values(["entity_id", "Date"])
+    p["move"] = p.groupby("entity_id")["Close"].pct_change()
+    p = p[p["move"].abs() > 0.4]
     ends = np.sort(universe["month_end"].unique())
     k = ends.searchsorted(p["Date"].to_numpy(), side="right") - 1
-    month = np.where(k >= 0, ends[np.clip(k, 0, None)], np.datetime64("NaT"))
-    key = set(zip(universe["month_end"].to_numpy(), universe["entity_id"]))
-    member = np.fromiter(((m, e) in key for m, e in zip(month, p["entity_id"])), bool, len(p))
-    big = p[(move.abs() > 0.4).to_numpy() & member].assign(move=move)
+    p = p[k >= 0].assign(month_end=ends[k[k >= 0]])
+    big = p.merge(universe[["month_end", "entity_id"]], on=["month_end", "entity_id"])
     big[["Date", "Symbol", "current_symbol", "move"]].to_csv(f"{OUT}/big_moves_in_universe.csv", index=False)
     lines.append(f"one-day moves > 40% while in the universe: {len(big)} (listed in {OUT}/big_moves_in_universe.csv)")
 

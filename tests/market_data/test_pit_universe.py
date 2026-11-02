@@ -45,6 +45,13 @@ def test_split_is_adjusted_from_corporate_action_record():
     ("Bonus 2:1/Dividend- Rs 1.60 Per Share", 1 / 3),
     ("Fv Split Rs.10/- To Re.2/", 0.2), ("Fv Split Rs.2/- To Re.1/-", 0.5),
     ("Face Value Split From Rs.10/- To Rs.6/-", 0.6),
+    ("Bonus - 1:1 And Face Value Split From Rs. 10 To Rs. 2", 0.1), ("Fv Spl-Rs10tore1/Div-1.50", 0.1),
+    ("Agm/Div-Rs.2/Fv Rs10tors5", 0.5), ("Bonus-1:1", 0.5), ("Div-Rs.5.50 Pr Sh/Bon 5:1purpose Revised", 1 / 6),
+    ("Fv Spl-Rs10tors2/Bon-1:1", 0.1), ("Agm/Div-20%/Fv Rs10tors2 Purpose Revised", 0.2), ("Bonus Issue 1 : 1", 0.5),
+    ("Bonus Shares In The Ratio Of 1:1", 0.5), ("Fv Spl-Rs10tors5/Bon-2:1", 0.5 / 3),
+    ("Spl Int Div-Rs.100 P Shr Purpose Revised", None), ("Intdiv-Rs 3persh/Bonus1:1", 0.5),
+    ("Fv Spl 100 To 10/Div150%", 0.1), ("Agm/Div-5%/Spl-Rs10tors2 Purpose Revised", 0.2), ("Fv Spl-Rs10to2/Div-Rs2.50", 0.2),
+    ("Bonus 1 Dvr : 10 Eq Share", None), ("Div Fin-Rs18+Spl-18 Pr Sh", None), ("Div Int-Rs12.50+Spl-Rs16 Purpose Revised", None), ("Agm/Centenary Div. -100%", None),
     ("Bonus Ncrps 1:116", None),
     ("Dividend - Rs 5 Per Share", None),
 ])

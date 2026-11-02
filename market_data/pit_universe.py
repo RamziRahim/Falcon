@@ -115,8 +115,11 @@ def primary_rows(bhav: pd.DataFrame, symbol_changes: list[tuple[str, str]] | Non
     return df.drop_duplicates(["entity_id", "Date"]).drop(columns="_prio").reset_index(drop=True)
 
 
-_BONUS = re.compile(r"bonus\s*(\d+)\s*:\s*(\d+)", re.I)
-_SPLIT = re.compile(r"(?:rs|re)\.?\s*([\d.]+)\D*?to\s*(?:rs|re)\.?\s*([\d.]+)", re.I)   # "From Rs 10 To Rs 2", "Fv Split Rs.10/- To Re.2/"
+_BONUS = re.compile(r"\bbon(?:us)?(?![a-z])[^0-9:]{0,40}?(\d+)\s*:\s*(\d+)", re.I)
+# "From Rs 10 To Rs 2", "Fv Split Rs.10/- To Re.2/", "Fv Spl-Rs10tors2", "Fv Rs10tors5"
+_SPLIT = re.compile(r"(?:rs|re)?\.?\s*([\d.]+)\D{0,30}?(?<![a-z])to\s*(?:rs|re)?\.?\s*([\d.]+)", re.I)
+_SPLIT_WORDS = ("fv", "face value", "split", "sub-division", "subdivision", "consolidat", "spl-rs")
+_NOT_EQUITY_BONUS = ("ncrps", "debenture", "preference", "pref ", "dvr")
 SANITY_BAND = (0.6, 1.6)
 DEMERGER = -1.0                    # marker: factor = ex-date open / previous close
 # Overnight gaps that exactly match a common split/bonus ratio, on a date
@@ -130,28 +133,32 @@ INFER_EXCLUSION_DAYS = 10          # observed / parsed factor outside this is lo
 
 def parse_factor(subject: str) -> float | None:
     """Price multiplier for history before the ex-date, or None if the
-    record isn't an equity split/bonus/consolidation."""
+    record isn't an equity split/bonus/consolidation/demerger. Handles NSE's
+    many phrasings across 2005-2026: "Bonus 1:1", "Bonus - 1:1",
+    "Bonus Issue 1 : 1", "Bonus Shares In The Ratio Of 1:1", "Bon 5:1",
+    "Face Value Split (Sub-Division) - From Rs 10/- ... To Rs 2/-",
+    "Fv Split Rs.10/- To Re.2/", "Fv Spl-Rs10tors2", "Fv Rs10tors5", and
+    combinations ("Bonus - 1:1 And Face Value Split From Rs. 10 To Rs. 2")."""
     text = str(subject)
     low = text.lower()
-    factor = 1.0
-    found = False
+    factor, found = 1.0, False
     for part in re.split(r"/(?!-)", text):          # "Rs 10/-" is not a separator
         p = part.lower()
-        if "bonus" in p and not any(w in p for w in ("ncrps", "debenture", "preference", "pref ")):
+        if not any(w in p for w in _NOT_EQUITY_BONUS):
             m = _BONUS.search(part)
-            if m and int(m.group(1)) > 0:
+            if m and int(m.group(1)) > 0 and int(m.group(2)) > 0:
                 a, b = int(m.group(1)), int(m.group(2))
                 factor *= b / (a + b)
                 found = True
-        elif "split" in p or "sub-division" in p or "subdivision" in p or "consolidat" in p:
+        if any(w in p for w in _SPLIT_WORDS):
             m = _SPLIT.search(part)
-            if m and float(m.group(1)) > 0:
+            if m and float(m.group(1)) > 0 and float(m.group(2)) > 0 and m.group(1) != m.group(2):
                 factor *= float(m.group(2)) / float(m.group(1))
                 found = True
     if not found and ("demerger" in low or "scheme of arrangement" in low or "scheme of arangement" in low):
         # value moved to a new company; taken from the ex-date drop (only when
         # that drop is 5-90%, see adjust_entity -- an amalgamation with no drop is ignored)
-        return DEMERGER                       # value is taken from the ex-date price, see adjust_entity
+        return DEMERGER
     return factor if found and factor != 1.0 else None
 
 
