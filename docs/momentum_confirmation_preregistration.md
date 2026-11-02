@@ -95,3 +95,18 @@ Re-running 2019-24 with the same fix leaves every verdict unchanged:
 period-specific. It fell 36% in the 2024-25 correction against the Nifty's 16%, and its
 later recovery came from one stock. Paper trading may still run as a learning exercise,
 but no real-money plan follows from these results. Nothing is re-tuned.
+
+### Dated note, 2026-11-02 ~19:45 IST: ETF exclusion re-run, verdict unchanged
+
+Strategy A held silver ETFs in 2026: 11 positions, −₹36.7k. With ETFs excluded from
+the universe (see the redesign doc's note of the same time), the re-run is in
+`data/momentum_confirmation_result_etf_excluded.txt`:
+
+| | Result | Check |
+|---|---|---|
+| CAGR | 14.8% vs Nifty −3.6% | |
+| Max drawdown | −35.5% | still FAILS (limit −30.8%) |
+| Top-3 share of profit | 1.11 | still FAILS |
+| Period returns | 2024 −8.5%, 2025 +3.9%, 2026 +43.4% | |
+
+**Verdict unchanged: NOT CONFIRMED.**
