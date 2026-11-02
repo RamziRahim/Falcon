@@ -1,0 +1,27 @@
+Strategy A, confirmation window 2024-08-01 -> 2026-10-30
+======================================================================
+  cagr_pct                     10.28
+  nifty_cagr_pct               -3.57
+  ew_universe_cagr_pct         -2.58
+  max_drawdown_pct             -35.57
+  nifty_max_drawdown_pct       -15.77
+  monthly_excess_mean_pct      1.427
+  monthly_excess_t_nw3         1.13
+  years_beating_nifty          1/3
+  n_closed_positions           198
+  top3_profit_share            1.62
+  avg_gross_exposure_pct       95.9
+  total_return_pct             24.6
+  (monthly excess t is reported only; not a criterion for this window)
+  Pre-registered confirmation checks:
+    [PASS] CAGR beats Nifty
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] max drawdown within Nifty's - 15 pp
+    [FAIL] top-3 positions < 50% of profit
+
+VERDICT: NOT CONFIRMED on the later window
+
+Calendar-period returns (strategy vs Nifty):
+  2024: strategy -8.5%   Nifty -5.5%
+  2025: strategy +2.7%   Nifty +10.5%
+  2026: strategy +32.6%   Nifty -11.8%

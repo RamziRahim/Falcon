@@ -330,8 +330,18 @@ def run_pullback(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, nifty_clo
 
 
 def _result(ledger: Ledger):
+    """Equity curve and positions. Positions still open at the end are
+    included (exit_reason OPEN_AT_END, valued at their last close, no exit
+    cost) so profit concentration counts every position, not only closed
+    ones -- added 2026-11-02 after the confirmation run showed nearly all of
+    a window's profit can sit in one open position."""
     eq = pd.DataFrame(ledger.equity, columns=["Date", "equity", "gross_exposure"]).set_index("Date")
-    return eq, pd.DataFrame(ledger.trades)
+    end = eq.index[-1] if len(eq) else None
+    open_rows = [{"entity_id": e, "entry_date": m["entry_date"], "exit_date": end, "cost_basis": m["cost_basis"],
+                  "proceeds": ledger.shares[e] * m["last_mark"],
+                  "pnl": ledger.shares[e] * m["last_mark"] - m["cost_basis"] - m["costs"], "exit_reason": "OPEN_AT_END"}
+                 for e, m in ledger.meta.items() if e in ledger.shares]
+    return eq, pd.DataFrame(ledger.trades + open_rows)
 
 
 def equal_weight_universe(panel: Panel, start, end) -> pd.Series:
