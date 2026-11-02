@@ -43,7 +43,9 @@ def test_split_is_adjusted_from_corporate_action_record():
     ("Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share", 0.2),
     ("Bonus 1:1/Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share", 0.1),
     ("Bonus 2:1/Dividend- Rs 1.60 Per Share", 1 / 3),
-    ("Bonus Ncrps 1:116", None), ("Scheme Of Arangement- Bonus - 1 Debenture For 1 Equity Share Held", None),
+    ("Fv Split Rs.10/- To Re.2/", 0.2), ("Fv Split Rs.2/- To Re.1/-", 0.5),
+    ("Face Value Split From Rs.10/- To Rs.6/-", 0.6),
+    ("Bonus Ncrps 1:116", None),
     ("Dividend - Rs 5 Per Share", None),
 ])
 def test_parse_factor(subject, factor):

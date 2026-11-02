@@ -116,7 +116,7 @@ def primary_rows(bhav: pd.DataFrame, symbol_changes: list[tuple[str, str]] | Non
 
 
 _BONUS = re.compile(r"bonus\s*(\d+)\s*:\s*(\d+)", re.I)
-_SPLIT = re.compile(r"from\s*(?:rs|re)\.?\s*([\d.]+).*?to\s*(?:rs|re)\.?\s*([\d.]+)", re.I)
+_SPLIT = re.compile(r"(?:rs|re)\.?\s*([\d.]+)\D*?to\s*(?:rs|re)\.?\s*([\d.]+)", re.I)   # "From Rs 10 To Rs 2", "Fv Split Rs.10/- To Re.2/"
 SANITY_BAND = (0.6, 1.6)
 DEMERGER = -1.0                    # marker: factor = ex-date open / previous close
 # Overnight gaps that exactly match a common split/bonus ratio, on a date
@@ -148,10 +148,10 @@ def parse_factor(subject: str) -> float | None:
             if m and float(m.group(1)) > 0:
                 factor *= float(m.group(2)) / float(m.group(1))
                 found = True
-    if not found and "demerger" in low:
+    if not found and ("demerger" in low or "scheme of arrangement" in low or "scheme of arangement" in low):
+        # value moved to a new company; taken from the ex-date drop (only when
+        # that drop is 5-90%, see adjust_entity -- an amalgamation with no drop is ignored)
         return DEMERGER                       # value is taken from the ex-date price, see adjust_entity
-    if "scheme of arrangement" in low and not found:
-        return None
     return factor if found and factor != 1.0 else None
 
 

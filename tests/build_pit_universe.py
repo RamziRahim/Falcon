@@ -17,6 +17,7 @@ sys.path.insert(0, ".")
 import glob
 import os
 
+import numpy as np
 import pandas as pd
 
 from market_data.pit_universe import (
@@ -62,11 +63,18 @@ def main():
                  f"({universe['month_end'].min().date()} -> {universe['month_end'].max().date()}), "
                  f"{universe['entity_id'].nunique():,} distinct stocks ever in the universe")
 
-    # Sanity: big one-day moves left after adjustment (real crashes/rallies, or a missed action)
+    # Sanity: big one-day moves left after adjustment while the stock was in
+    # that month's universe (real crashes/rallies, or a missed action)
     p = prices.sort_values(["entity_id", "Date"])
     move = p.groupby("entity_id")["Close"].pct_change()
-    in_uni = p["entity_id"].isin(universe["entity_id"].unique())
-    lines.append(f"one-day moves > 40% among universe stocks after adjustment: {int(((move.abs() > 0.4) & in_uni).sum())}")
+    ends = np.sort(universe["month_end"].unique())
+    k = ends.searchsorted(p["Date"].to_numpy(), side="right") - 1
+    month = np.where(k >= 0, ends[np.clip(k, 0, None)], np.datetime64("NaT"))
+    key = set(zip(universe["month_end"].to_numpy(), universe["entity_id"]))
+    member = np.fromiter(((m, e) in key for m, e in zip(month, p["entity_id"])), bool, len(p))
+    big = p[(move.abs() > 0.4).to_numpy() & member].assign(move=move)
+    big[["Date", "Symbol", "current_symbol", "move"]].to_csv(f"{OUT}/big_moves_in_universe.csv", index=False)
+    lines.append(f"one-day moves > 40% while in the universe: {len(big)} (listed in {OUT}/big_moves_in_universe.csv)")
 
     # Survivorship: how much of each year's universe is missing from today's data/technical/
     today = {os.path.basename(f)[:-11] for f in glob.glob("data/technical/*.NS.parquet")}
