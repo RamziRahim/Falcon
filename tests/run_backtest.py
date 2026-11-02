@@ -150,8 +150,15 @@ print(f"  Sector indices resolved: {len(sector_index_histories)}/{len(distinct_s
 # Set ENTRY_MODEL = ENTRY_NEXT_OPEN to reproduce run #5. Each model writes
 # its own output/checkpoint files, so one never resumes into the other.
 from config import ENTRY_NEXT_OPEN, ENTRY_RETRACEMENT
-ENTRY_MODEL = ENTRY_RETRACEMENT
-RUN_LABEL = "run6_variant_b_retracement" if ENTRY_MODEL == ENTRY_RETRACEMENT else "run5_honest_fills"
+# Step 2 of the pre-registration (docs/refit_preregistration.md): re-run
+# run #5 exactly (next-open fills, model v1) with the model's inputs now
+# recorded on every signal row, under a new label so neither run #5's nor
+# variant B's files are touched. Decisions must match run #5 row for row.
+ENTRY_MODEL = ENTRY_NEXT_OPEN
+RUN_LABEL = {
+    ENTRY_RETRACEMENT: "run6_variant_b_retracement",
+    ENTRY_NEXT_OPEN: "run5b_honest_fills_with_model_features",
+}[ENTRY_MODEL]
 RUN5_WINDOW = (pd.Timestamp("2024-08-14"), pd.Timestamp("2026-08-14"))
 
 CHECKPOINT_PATH = (

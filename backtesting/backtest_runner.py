@@ -60,6 +60,18 @@ logger = get_logger(__name__)
 # excluding it from this backtest log.
 SIGNAL_CATEGORIES = ("EXECUTE", "ALERT_WATCHLIST", "MONITOR")
 
+# Inputs of the calibrated consolidation-quality model, recorded on every
+# real signal row (prefixed "mf_") so the model can be refit on a run's own
+# honest outcomes without recomputing features in a separate script (which
+# could drift from what categorize() actually saw). Same names as the
+# frozen artifact's numeric/boolean features plus macd_signal.
+MODEL_FEATURE_COLUMNS = (
+    "prior_trend_pct_gain", "prior_trend_slope", "base_depth_pct", "base_length_bars",
+    "contraction_slope", "volume_dryup_ratio", "volume_down_up_ratio",
+    "pivot_proximity", "breakout_volume_ratio", "dist_52w_high", "RS_Rating",
+    "rs_line_new_high", "macd_signal",
+)
+
 
 def populate_sector_cache(universe: list[str]) -> None:
     """
@@ -475,6 +487,10 @@ def run_backtest(
                 "recommended_risk_fraction": (
                     None if decision["category"] == "MONITOR" else policy_sector_aware_caution(decision)
                 ),
+                # The model's own output and inputs for this decision (None
+                # where the model wasn't consulted, e.g. MONITOR).
+                "predicted_p": decision.get("predicted_p"),
+                **{f"mf_{name}": (decision.get("supporting_data") or {}).get(name) for name in MODEL_FEATURE_COLUMNS},
             })
 
         if checkpoint_path is not None and (

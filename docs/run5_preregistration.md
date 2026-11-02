@@ -118,3 +118,22 @@ Code: `config.ENTRY_RETRACEMENT`, `RETRACEMENT_EXTENSION_PCT = 3.0`,
   optimistic: in practice an order resting for up to 5 days ties up margin.
 - **AVOID's hypothetical trades** still use next-open fills. The scorecard is
   EXECUTE-only, so this doesn't affect the verdict.
+
+### 2026-11-02: variant B result
+
+`data/run6_scorecard.txt` on the laptop. The run took 1 h 56 min after the speed-up
+(run #5 took ~3 days).
+
+- **Verdict: NO DEMONSTRATED EDGE.** Checks 1-4 fail; check 5 (both halves profitable)
+  and check 6 (fill realism, 1.000) pass.
+- Total return +0.68% vs Nifty −4.57%. Max drawdown −3.54%. Alpha −0.03%/yr (t −0.01).
+  Mean net return per trade +1.0% (t 0.47). Win rate 46%. Top-3 profit share 3.3.
+- **13 trades taken.** There were 18 EXECUTE signals: 9 limit-at-pivot and 9
+  next-open. Average gross exposure was 7.9%.
+- Signals not filled: 154 limits expired, 103 past target at the open, 326 below
+  stop at the open.
+- Observation, too small to mean anything: the 9 limit-fill EXECUTE rows averaged +2.6%
+  raw and the 9 next-open rows −3.7%. Recorded, not acted on.
+
+Per the rules above, next is step 2 (refit on honest labels). Its rules are in
+`docs/refit_preregistration.md`, written before any refit.
