@@ -42,3 +42,4 @@ Thumbs.db
 # Quarantined old files — keep the README but not the dead code weight in git
 _deprecated/*.py
 data/bhavcopy/
+data/pit/
