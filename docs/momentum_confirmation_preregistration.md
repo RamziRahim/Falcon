@@ -60,3 +60,38 @@ contains one. A breach would still be reported prominently.
   period-specific luck. Paper trading can still run as a learning exercise, but no
   real-money plan follows from it.
 - **Nothing is re-tuned either way.**
+
+---
+
+## Result, 2026-11-02 (`data/momentum_confirmation_result.txt`)
+
+**Data:** 452 new sessions, 2025-01-01 → 2026-10-30, no download errors. Rebuilt
+`data/pit/` has 719 split/bonus adjustments. The 2019-24 results reproduce exactly
+(CAGR 42.35%).
+
+| 2024-08-01 → 2026-10-30 | Strategy A | Nifty 50 | PIT equal-weight |
+|---|---|---|---|
+| CAGR | 10.3% | −3.6% | −2.6% |
+| Max drawdown | **−35.6%** (peak 2024-09-20 → trough 2025-03-03) | −15.8% | |
+| Period returns | 2024 (Aug-Dec) −8.5%, 2025 +2.7%, 2026 (Jan-Oct) +32.6% | −5.5%, +10.5%, −11.8% | |
+
+**Verdict: NOT CONFIRMED on the later window.**
+- Checks 1-2 pass.
+- **Check 3 (drawdown) fails:** −35.6% vs the −30.8% limit.
+- **Check 4 (concentration) fails.** Of the window's ₹2.46 lakh gain, a single stock
+  still held at the end (CUPID, a genuine ~15× move, correctly adjusted for its 4:1 bonus
+  in 2026-03) contributes ₹3.12 lakh. Without it the strategy lost money in this window.
+
+**Implementation note.** The first concentration output was `inf`, because `judge()`
+counted only closed positions and the closed ones summed to a loss. `_result()` now also
+reports positions still open at the end (OPEN_AT_END). With them included the share is
+1.62, so the check fails either way.
+
+Re-running 2019-24 with the same fix leaves every verdict unchanged:
+- top-3 share A 0.18 (was 0.24), B 0.32, C 0.17;
+- recorded in `data/redesign_result_concentration_incl_open.txt`.
+
+**Consequence, as pre-registered:** strategy A's 2019-2024 pass is treated as likely
+period-specific. It fell 36% in the 2024-25 correction against the Nifty's 16%, and its
+later recovery came from one stock. Paper trading may still run as a learning exercise,
+but no real-money plan follows from these results. Nothing is re-tuned.

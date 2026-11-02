@@ -26,7 +26,7 @@ def test_momentum_holds_the_strongest_names(monkeypatch):
     eq, trades = run_momentum(panel, DAYS[260], DAYS[-1], FREE)
     # the two fastest growers (S5, S4) are bought once and never sold
     assert eq["gross_exposure"].iloc[-1] > 0.99
-    assert trades.empty
+    assert set(trades["exit_reason"]) == {"OPEN_AT_END"} and len(trades) == 2   # never sold, reported as open
     assert eq["equity"].iloc[-1] > eq["equity"].iloc[0]
 
 
@@ -93,7 +93,7 @@ def test_pullback_stands_aside_when_market_below_200_sma():
     panel = _pullback_panel()
     nifty = pd.Series(100 * 0.999 ** np.arange(len(DAYS)), index=DAYS)      # falling market
     eq, trades = run_pullback(panel, DAYS[260], DAYS[-1], nifty, FREE)
-    assert trades.empty and eq["gross_exposure"].max() == 0
+    assert trades.empty and eq["gross_exposure"].max() == 0      # no positions at all
 
 
 def test_judge_uses_last_nifty_close_when_nifty_skips_the_first_session():
