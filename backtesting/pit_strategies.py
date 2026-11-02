@@ -371,7 +371,8 @@ def judge(equity: pd.DataFrame, trades: pd.DataFrame, nifty_close: pd.Series, ew
 
     strat = equity["equity"]
     days = strat.index
-    nifty = nifty_close.reindex(days).ffill()
+    # last Nifty close on or before each session (Yahoo's ^NSEI skips a few NSE sessions, e.g. 2019-01-01)
+    nifty = nifty_close.reindex(nifty_close.index.union(days)).ffill().reindex(days)
     ew = (1 + ew_returns.reindex(days).fillna(0)).cumprod()
     m_s, m_n = strat.resample("ME").last().pct_change().dropna(), nifty.resample("ME").last().pct_change().dropna()
     excess = (m_s - m_n).dropna()

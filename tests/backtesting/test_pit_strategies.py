@@ -94,3 +94,12 @@ def test_pullback_stands_aside_when_market_below_200_sma():
     nifty = pd.Series(100 * 0.999 ** np.arange(len(DAYS)), index=DAYS)      # falling market
     eq, trades = run_pullback(panel, DAYS[260], DAYS[-1], nifty, FREE)
     assert trades.empty and eq["gross_exposure"].max() == 0
+
+
+def test_judge_uses_last_nifty_close_when_nifty_skips_the_first_session():
+    days = pd.bdate_range("2019-01-01", "2024-07-31")
+    nifty = pd.Series(100 * 1.0004 ** np.arange(len(days) + 1), index=days.insert(0, pd.Timestamp("2018-12-31")))
+    nifty = nifty.drop(pd.Timestamp("2019-01-01"))
+    eq = pd.DataFrame({"equity": pd.Series(1e6 * 1.0004 ** np.arange(len(days)), index=days), "gross_exposure": 1.0})
+    report = judge(eq, pd.DataFrame({"pnl": [1.0] * 5}), nifty, pd.Series(0.0, index=days))
+    assert np.isfinite(report["nifty_cagr_pct"])

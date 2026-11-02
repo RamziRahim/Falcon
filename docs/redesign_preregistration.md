@@ -166,3 +166,39 @@ Diagnostics before the run:
   unadjusted −32% day there), so the PIT series is the more accurate one.
 
 The strategy rules, window and checks are unchanged.
+
+### Dated note, 2026-11-02 ~18:50 IST: benchmark alignment bug fixed after the first run
+
+The first run printed `nifty_cagr_pct nan`. Yahoo's ^NSEI series has no row for
+2019-01-01, the window's first session, so the benchmark's starting value was missing.
+That broke check 1 for all three strategies, and the first-year comparison in check 4,
+for a mechanical reason, not a result.
+
+`judge()` now uses the last Nifty close on or before each session. Nothing else changed,
+and no rule, threshold or strategy was touched. The first run's output is kept verbatim
+in `data/redesign_result_run1_nifty_nan_bug.txt` for the record.
+
+## Result, 2026-11-02 (`data/redesign_result.txt`)
+
+| | A momentum | B breakout | C dip-buy | Nifty | PIT equal-weight |
+|---|---|---|---|---|---|
+| CAGR 2019-01 → 2024-07 | **42.4%** | 23.6% | 8.0% | 16.1% | 22.9% |
+| Max drawdown | −40.5% | −37.3% | −39.1% | −38.4% | |
+| Monthly excess t (NW3) | **2.39** | 0.73 | −0.84 | | |
+| Years beating Nifty | 4/6 | 4/6 | 1/6 | | |
+| Checks passed | **6/6** | 5/6 | 2/6 | | |
+
+- **A: EDGE DEMONSTRATED, provisional.** B and C: no demonstrated edge.
+- Three strategies were tested, so A's pass is the kind that can happen by luck. Its
+  t-stat of 2.39 is modest.
+- The window was an exceptionally strong period for Indian small/mid-cap momentum.
+
+**Checks made on A before accepting the number:**
+- An independent, vectorised re-implementation (full monthly re-weighting, no costs)
+  gives 42.3% gross CAGR, so the ledger result is consistent.
+- The top contributors are well-known real momentum winners (Titagarh, Adani Green,
+  Apar, FACT, Mazagon Dock, Dixon).
+- No winning position contains a >35% one-day jump, so no data glitch is driving it.
+- The top 3 positions are 24% of profit.
+
+**Next, per the rules:** forward paper trading of A. Real money only after that.

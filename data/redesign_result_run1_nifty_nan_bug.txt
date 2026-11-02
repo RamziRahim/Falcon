@@ -1,0 +1,79 @@
+1
+
+======================================================================
+Strategy A: monthly momentum rotation  (2019-01-01 -> 2024-07-31)
+======================================================================
+  cagr_pct                     42.35
+  nifty_cagr_pct               nan
+  ew_universe_cagr_pct         22.89
+  max_drawdown_pct             -40.54
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      1.982
+  monthly_excess_t_nw3         2.39
+  years_beating_nifty          4/6
+  n_closed_positions           478
+  top3_profit_share            0.24
+  avg_gross_exposure_pct       97.9
+  total_return_pct             617.2
+  verdict                      NO DEMONSTRATED EDGE
+  Pre-registered checks:
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [PASS] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+Strategy B: simple breakout  (2019-01-01 -> 2024-07-31)
+======================================================================
+  cagr_pct                     23.59
+  nifty_cagr_pct               nan
+  ew_universe_cagr_pct         22.89
+  max_drawdown_pct             -37.29
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.621
+  monthly_excess_t_nw3         0.73
+  years_beating_nifty          4/6
+  n_closed_positions           465
+  top3_profit_share            0.37
+  avg_gross_exposure_pct       92.7
+  total_return_pct             226.0
+  verdict                      NO DEMONSTRATED EDGE
+  Pre-registered checks:
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+Strategy C: dip in a strong stock (2-4 weeks)  (2019-01-01 -> 2024-07-31)
+======================================================================
+  cagr_pct                     7.99
+  nifty_cagr_pct               nan
+  ew_universe_cagr_pct         22.89
+  max_drawdown_pct             -39.14
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.576
+  monthly_excess_t_nw3         -0.84
+  years_beating_nifty          1/6
+  n_closed_positions           792
+  top3_profit_share            0.16
+  avg_gross_exposure_pct       72.0
+  total_return_pct             53.6
+  verdict                      NO DEMONSTRATED EDGE
+  Pre-registered checks:
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+real	0m32.591s
+user	0m21.886s
+sys	0m12.614s
+
+[exited with code 0]
