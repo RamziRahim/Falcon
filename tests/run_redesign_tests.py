@@ -13,7 +13,9 @@ sys.path.insert(0, ".")
 
 import pandas as pd
 
-from backtesting.pit_strategies import equal_weight_universe, judge, make_panel, run_breakout, run_momentum
+from backtesting.pit_strategies import (
+    equal_weight_universe, judge, make_panel, run_breakout, run_momentum, run_pullback,
+)
 
 START, END = pd.Timestamp("2019-01-01"), pd.Timestamp("2024-07-31")
 PREREG = "docs/redesign_preregistration.md"
@@ -33,8 +35,13 @@ def main():
     nifty.index = nifty.index.normalize()
     ew = equal_weight_universe(panel, START, END)
 
-    for name, runner in (("A: monthly momentum rotation", run_momentum), ("B: simple breakout", run_breakout)):
-        equity, trades = runner(panel, START, END)
+    strategies = (
+        ("A: monthly momentum rotation", lambda: run_momentum(panel, START, END)),
+        ("B: simple breakout", lambda: run_breakout(panel, START, END)),
+        ("C: dip in a strong stock (2-4 weeks)", lambda: run_pullback(panel, START, END, nifty)),
+    )
+    for name, run in strategies:
+        equity, trades = run()
         trades.to_csv(f"data/redesign_trades_{name[0]}.csv", index=False)
         report = judge(equity, trades, nifty, ew)
         print(f"\n{'=' * 70}\nStrategy {name}  ({START.date()} -> {END.date()})\n{'=' * 70}")
