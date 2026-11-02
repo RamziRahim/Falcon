@@ -97,7 +97,7 @@ Also reported: CAGR, Nifty CAGR, average holding days, exposure and trades per y
 | Years profitable | 5/8 | |
 
 **W1: FAIL** (checks 1, 3, 5 and 6). The win rate is what the literature predicts, but
-the average winner is too small to cover the average loser plus costs. The
+the average winner (+2.21%) is smaller than the average loser (−3.31%). The gross edge of +0.33% per trade (65% gross win rate) is almost exactly what costs take (about 0.33% per round trip). The
 3×ATR-stop variant (reported only) is no better: −1.0% CAGR.
 
 Because both windows must pass, **the overall verdict is already NO DEMONSTRATED
