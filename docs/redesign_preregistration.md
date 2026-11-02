@@ -1,8 +1,8 @@
 # Redesign pre-registration: two simple strategies on unseen, survivorship-free data
 
-**Status: DRAFT, not yet frozen.** It becomes binding when IA approves it and it is
-merged, before any backtest of these strategies is run. After that, never edit the rules.
-Add dated notes instead.
+**Status: FROZEN on 2026-11-02.** IA approved it by merging PR #14, before any backtest
+of these strategies was run and before the survivorship-free data was even downloaded.
+Never edit the rules; add dated notes instead.
 
 ## Why
 
