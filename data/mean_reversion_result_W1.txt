@@ -1,0 +1,58 @@
+Universe: top 100 by traded value; benchmark: Yahoo ^NSEI
+
+======================================================================
+W1 2019-01-01 -> 2026-10-30  MR (primary)
+======================================================================
+  cagr_pct                   -0.4
+  nifty_cagr_pct             10.09
+  sharpe                     0.03
+  nifty_sharpe               0.65
+  max_drawdown_pct           -33.2
+  nifty_max_drawdown_pct     -38.44
+  n_trades                   1646
+  trades_per_year            205.8
+  win_rate_pct               60.1
+  mean_net_per_trade_pct     0.006
+  trade_t                    0.06
+  avg_calendar_days_held     6.0
+  years_profitable           5/8
+  top3_profit_share          inf
+  avg_gross_exposure_pct     34.5
+  verdict                    FAIL
+    [FAIL] mean net per trade > 0 with t >= 2
+    [PASS] win rate after costs >= 55%
+    [FAIL] Sharpe > Nifty Sharpe
+    [PASS] max drawdown no worse than Nifty
+    [FAIL] profitable in >= 70% of calendar years
+    [FAIL] top-3 trades < 20% of profit
+
+======================================================================
+W1 2019-01-01 -> 2026-10-30  MR + 3xATR disaster stop (reported only)
+======================================================================
+  cagr_pct                   -1.01
+  nifty_cagr_pct             10.09
+  sharpe                     -0.02
+  nifty_sharpe               0.65
+  max_drawdown_pct           -29.04
+  nifty_max_drawdown_pct     -38.44
+  n_trades                   1748
+  trades_per_year            218.5
+  win_rate_pct               60.7
+  mean_net_per_trade_pct     -0.017
+  trade_t                    -0.17
+  avg_calendar_days_held     5.5
+  years_profitable           5/8
+  top3_profit_share          inf
+  avg_gross_exposure_pct     33.2
+  verdict                    FAIL
+    [FAIL] mean net per trade > 0 with t >= 2
+    [PASS] win rate after costs >= 55%
+    [FAIL] Sharpe > Nifty Sharpe
+    [PASS] max drawdown no worse than Nifty
+    [FAIL] profitable in >= 70% of calendar years
+    [FAIL] top-3 trades < 20% of profit
+
+W2 2008-01-01 -> 2017-12-31: data/pit/ does not cover it yet -- skipped
+
+Window verdicts: {'W1': 'FAIL'}
+OVERALL: pending -- W2 needs the 2007-2017 data

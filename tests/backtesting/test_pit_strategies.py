@@ -103,3 +103,34 @@ def test_judge_uses_last_nifty_close_when_nifty_skips_the_first_session():
     eq = pd.DataFrame({"equity": pd.Series(1e6 * 1.0004 ** np.arange(len(days)), index=days), "gross_exposure": 1.0})
     report = judge(eq, pd.DataFrame({"pnl": [1.0] * 5}), nifty, pd.Series(0.0, index=days))
     assert np.isfinite(report["nifty_cagr_pct"])
+
+
+def test_wilder_rsi_bounds_and_oversold():
+    from backtesting.pit_strategies import wilder_rsi
+    c = pd.DataFrame({"X": [100, 101, 102, 103, 99, 95, 92, 93]}, index=DAYS[:8])
+    r = wilder_rsi(c, 2)["X"]
+    assert (r.dropna().between(0, 100)).all() and r.iloc[6] < 5 and r.iloc[7] > r.iloc[6]
+
+
+def test_mean_reversion_buys_oversold_uptrend_stock_and_exits_on_bounce():
+    from backtesting.pit_strategies import run_mean_reversion
+    n = len(DAYS)
+    price = 100 * 1.002 ** np.arange(n)
+    price[300:303] *= np.array([0.97, 0.94, 0.91])          # sharp 3-day drop -> RSI(2) < 5
+    price[303:] *= 1.0
+    close = pd.DataFrame({"X": price}, index=DAYS)
+    nifty = pd.Series(100 * 1.0005 ** np.arange(n), index=DAYS)
+    eq, trades = run_mean_reversion(_panel(close), DAYS[260], DAYS[-1], nifty, FREE)
+    first = trades.iloc[0]
+    assert first["entry_date"] == DAYS[302] or first["entry_date"] == DAYS[303]
+    assert first["exit_reason"] == "BOUNCE_EXIT" and first["pnl"] > 0
+
+
+def test_mean_reversion_respects_market_filter():
+    from backtesting.pit_strategies import run_mean_reversion
+    n = len(DAYS)
+    price = 100 * 1.002 ** np.arange(n)
+    price[300:303] *= np.array([0.97, 0.94, 0.91])
+    falling = pd.Series(100 * 0.999 ** np.arange(n), index=DAYS)
+    eq, trades = run_mean_reversion(_panel(pd.DataFrame({"X": price}, index=DAYS)), DAYS[260], DAYS[-1], falling, FREE)
+    assert trades.empty
