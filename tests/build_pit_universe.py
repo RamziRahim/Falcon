@@ -22,6 +22,7 @@ import pandas as pd
 from market_data.pit_universe import build_adjusted_prices, last_trading_dates, monthly_universe
 
 SRC = "data/bhavcopy/bhavcopy_equity.parquet"
+ACTIONS = "data/corporate_actions_cache.parquet"   # market_data/corporate_actions.py (2016 onwards)
 OUT = "data/pit"
 
 
@@ -32,10 +33,11 @@ def main():
     lines = [f"bhavcopy rows {len(bhav):,}, {bhav['Date'].nunique()} sessions, "
              f"{bhav['Date'].min().date()} -> {bhav['Date'].max().date()}"]
 
-    prices, adjustments = build_adjusted_prices(bhav)
+    prices, adjustments = build_adjusted_prices(bhav, pd.read_parquet(ACTIONS))
     prices.to_parquet(f"{OUT}/prices_adjusted.parquet", index=False)
     adjustments.to_csv(f"{OUT}/adjustments.csv", index=False)
-    lines.append(f"entities {prices['entity_id'].nunique():,}; corporate-action adjustments applied {len(adjustments):,}")
+    lines.append(f"entities {prices['entity_id'].nunique():,}; split/bonus adjustments applied {len(adjustments):,} "
+                 f"({int(adjustments['suspect'].sum()) if len(adjustments) else 0} where the observed open/close ratio disagrees with the record)")
 
     universe = monthly_universe(prices)
     universe.to_parquet(f"{OUT}/universe_monthly.parquet", index=False)

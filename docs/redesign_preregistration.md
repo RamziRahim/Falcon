@@ -138,3 +138,31 @@ Same cost model, delisting rule (last close − 5%), window and six checks as A 
 **Multiple testing:** three strategies are now tested, so a lucky pass is more likely.
 Any pass is provisional, and the next step is forward paper trading, never real money.
 If two or more pass, that is reported, not cherry-picked.
+
+---
+
+## Dated note, 2026-11-02 ~18:40 IST: data-preparation fix, before any strategy was run
+
+The download completed (1,727 sessions, 2018-01-01 → 2024-12-31, no errors).
+
+Building `data/pit/` showed that the bhavcopy **PrevClose is not adjusted on ex-dates**.
+For example, RELIANCE's 1:1 bonus on 2024-10-28 shows PrevClose 2655.70 against a close of
+1334.35. So the "split/bonus-adjusted with NSE's own PrevClose" method above would have
+corrupted prices.
+
+It was replaced, before any strategy was run, by NSE's corporate-action records:
+- "Bonus A:B" → B/(A+B); a face-value split from Rs X to Rs Y → Y/X;
+- several actions on the same day are combined;
+- demergers use the ex-date drop (only when it is 5–90%);
+- where a record disagrees with the observed ex-date move, the observed factor is used.
+  This happened 5 times.
+
+Diagnostics before the run:
+- 535 adjustments; 28 one-day moves over 40% remain among universe stocks. These are
+  mostly real events, such as the Yes Bank 2020 crash, DHFL and Jet Airways.
+- Against the project's own adjusted `data/technical` series (73 overlapping stocks),
+  the 2019-24 return differs by >3% for 16. Spot checks (IOC, APLAPOLLO, IRCON) show
+  `data/technical` missed smaller bonuses (e.g. IOC's 1:2 bonus in 2022 is still an
+  unadjusted −32% day there), so the PIT series is the more accurate one.
+
+The strategy rules, window and checks are unchanged.
