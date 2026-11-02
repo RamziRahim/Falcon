@@ -27,19 +27,35 @@ def test_rename_and_isin_change_are_one_entity():
     assert ids.iloc[:15].nunique() == 1 and ids.iloc[15:].nunique() == 1 and ids.iloc[0] != ids.iloc[15]
 
 
-def test_split_is_adjusted_from_nse_prevclose():
-    # 2:1 split on day 3: close drops 100 -> 50, NSE's PrevClose that day says 50
-    rows = _rows("X", "I", [100, 102, 51, 52], prev=[100, 100, 51, 51])
-    adjusted, events = adjust_entity(rows)
-    assert [e["factor"] for e in events] == pytest.approx([0.5])
+def test_split_is_adjusted_from_corporate_action_record():
+    # 2:1 split ex day 3: close drops 100 -> 51
+    rows = _rows("X", "I", [100, 102, 51, 52])
+    actions = pd.DataFrame({"exDate": [DATES[2]], "factor": [0.5], "subject": ["split"]})
+    adjusted, events = adjust_entity(rows, actions)
+    assert [e["factor"] for e in events] == pytest.approx([0.5]) and not events[0]["suspect"]
     assert adjusted["Close"].tolist() == pytest.approx([50, 51, 51, 52])
     assert adjusted["Volume"].tolist() == pytest.approx([2000, 2000, 1000, 1000])
 
 
-def test_rounding_noise_is_not_an_adjustment():
-    rows = _rows("X", "I", [100, 101], prev=[100, 100.05])
-    _, events = adjust_entity(rows)
-    assert events == []
+@pytest.mark.parametrize("subject,factor", [
+    ("Bonus 1:1", 0.5), ("Bonus 4:1", 0.2), ("Bonus 1:4", 0.8), ("Bonus 17:25", 25 / 42),
+    ("Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share", 0.2),
+    ("Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share", 0.2),
+    ("Bonus 1:1/Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share", 0.1),
+    ("Bonus 2:1/Dividend- Rs 1.60 Per Share", 1 / 3),
+    ("Bonus Ncrps 1:116", None), ("Scheme Of Arangement- Bonus - 1 Debenture For 1 Equity Share Held", None),
+    ("Dividend - Rs 5 Per Share", None),
+])
+def test_parse_factor(subject, factor):
+    from market_data.pit_universe import parse_factor
+    assert parse_factor(subject) == (pytest.approx(factor) if factor is not None else None)
+
+
+def test_build_matches_action_by_symbol():
+    bhav = _rows("X", "I", [100, 102, 51, 52])
+    actions = pd.DataFrame({"symbol": ["X"], "isin": ["I"], "exDate": [DATES[2]], "subject": ["Bonus 1:1"]})
+    prices, log = build_adjusted_prices(bhav, actions)
+    assert prices["Close"].tolist() == pytest.approx([50, 51, 51, 52]) and len(log) == 1
 
 
 def test_primary_series_prefers_eq():
@@ -70,3 +86,16 @@ def test_universe_never_uses_future_turnover():
     uni = monthly_universe(prices, size=1, lookback=126)
     first_month = uni["month_end"].min()
     assert uni.loc[uni["month_end"] == first_month, "symbol_then"].tolist() == ["A"]
+
+
+def test_demerger_uses_the_ex_date_drop_and_bonus_plus_split_combine():
+    from market_data.pit_universe import parse_factor, DEMERGER
+    assert parse_factor("Demerger") == DEMERGER
+    rows = _rows("X", "I", [100, 100, 70, 71])
+    rows.loc[2, "Open"] = 70.0
+    adjusted, events = adjust_entity(rows, pd.DataFrame({"exDate": [DATES[2]], "factor": [DEMERGER], "subject": ["Demerger"]}))
+    assert adjusted["Close"].tolist() == pytest.approx([70, 70, 70, 71])
+    combo = pd.DataFrame({"exDate": [DATES[2]] * 2, "factor": [0.5, 0.1], "subject": ["Bonus 1:1", "split"]})
+    rows2 = _rows("Y", "J", [100, 100, 5.1, 5.2])
+    adjusted2, events2 = adjust_entity(rows2, combo)
+    assert len(events2) == 1 and events2[0]["factor"] == pytest.approx(0.05) and not events2[0]["suspect"]

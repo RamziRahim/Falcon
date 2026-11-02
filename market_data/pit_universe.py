@@ -16,12 +16,18 @@ This module rebuilds, from NSE's whole-market daily bhavcopies
    same symbol) by linking every (symbol, ISIN) pair seen on the same day
    into one connected component.
 
-2. ADJUSTED PRICES. NSE publishes each day's PrevClose already adjusted for
-   that day's corporate actions (split, bonus, rights). So
-   factor_t = PrevClose_t / Close_(t-1) is the exact adjustment factor, with
-   no need to parse corporate-action text. Prices before t are multiplied by
-   it (volume divided), latest first. Factors within ADJUST_TOLERANCE of 1
-   are rounding noise and ignored.
+2. ADJUSTED PRICES. Splits, bonuses and consolidations are taken from NSE's
+   own corporate-action records (market_data/corporate_actions.py's cache):
+   "Bonus A:B" -> factor B/(A+B); "Face Value Split ... From Rs X To Rs Y" ->
+   factor Y/X (also covers consolidations). Prices before the ex-date are
+   multiplied by the factor (volume divided). Bonus debentures/preference
+   shares (NCRPS) are not equity dilution and are ignored. Demergers take
+   their factor from the ex-date open / previous close (the drop is value
+   moved to the new company, not a loss), only when that drop is 5-90%. (A first version
+   used the bhavcopy's PrevClose column, assuming NSE adjusts it on ex-dates;
+   it does not -- e.g. RELIANCE's 1:1 bonus on 2024-10-28 shows PrevClose
+   2655.70 against a close of 1334.35 -- so that approach was dropped before
+   any strategy was run.)
 
 3. MONTHLY UNIVERSE. At each month end, the 500 most liquid stocks, ranked
    by median daily traded value over the previous LOOKBACK_DAYS sessions.
@@ -37,11 +43,12 @@ This module rebuilds, from NSE's whole-market daily bhavcopies
 """
 from __future__ import annotations
 
+import re
+
 import numpy as np
 import pandas as pd
 
 SERIES_PRIORITY = {"EQ": 0, "BE": 1, "BZ": 2, "BL": 3, "SM": 4, "ST": 5}
-ADJUST_TOLERANCE = 0.001
 LOOKBACK_DAYS = 126
 MIN_ACTIVE_SHARE = 0.8
 UNIVERSE_SIZE = 500
@@ -84,21 +91,74 @@ def primary_rows(bhav: pd.DataFrame) -> pd.DataFrame:
     return df.drop_duplicates(["entity_id", "Date"]).drop(columns="_prio").reset_index(drop=True)
 
 
-def adjust_entity(rows: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
-    """Backward-adjust one entity's rows (sorted by Date) using NSE's own
-    PrevClose. Returns (adjusted rows, list of applied adjustments)."""
+_BONUS = re.compile(r"bonus\s*(\d+)\s*:\s*(\d+)", re.I)
+_SPLIT = re.compile(r"from\s*(?:rs|re)\.?\s*([\d.]+).*?to\s*(?:rs|re)\.?\s*([\d.]+)", re.I)
+SANITY_BAND = (0.6, 1.6)
+DEMERGER = -1.0                    # marker: factor = ex-date open / previous close          # observed / parsed factor outside this is logged as suspect
+
+
+def parse_factor(subject: str) -> float | None:
+    """Price multiplier for history before the ex-date, or None if the
+    record isn't an equity split/bonus/consolidation."""
+    text = str(subject)
+    low = text.lower()
+    factor = 1.0
+    found = False
+    for part in re.split(r"/(?!-)", text):          # "Rs 10/-" is not a separator
+        p = part.lower()
+        if "bonus" in p and not any(w in p for w in ("ncrps", "debenture", "preference", "pref ")):
+            m = _BONUS.search(part)
+            if m and int(m.group(1)) > 0:
+                a, b = int(m.group(1)), int(m.group(2))
+                factor *= b / (a + b)
+                found = True
+        elif "split" in p or "sub-division" in p or "subdivision" in p or "consolidat" in p:
+            m = _SPLIT.search(part)
+            if m and float(m.group(1)) > 0:
+                factor *= float(m.group(2)) / float(m.group(1))
+                found = True
+    if not found and "demerger" in low:
+        return DEMERGER                       # value is taken from the ex-date price, see adjust_entity
+    if "scheme of arrangement" in low and not found:
+        return None
+    return factor if found and factor != 1.0 else None
+
+
+def adjust_entity(rows: pd.DataFrame, actions: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
+    """Backward-adjust one entity's rows (any order) for the corporate
+    actions given (columns exDate, factor, subject). Latest first."""
     rows = rows.sort_values("Date").reset_index(drop=True).copy()
-    prev_close = rows["Close"].shift(1)
-    factor = (rows["PrevClose"] / prev_close).where(prev_close > 0)
-    events = []
     cumulative = np.ones(len(rows))
-    running = 1.0
-    for i in range(len(rows) - 1, 0, -1):
-        f = factor.iloc[i]
-        if pd.notna(f) and f > 0 and abs(f - 1) > ADJUST_TOLERANCE:
-            running *= f
-            events.append({"Date": rows.at[i, "Date"], "factor": float(f)})
-        cumulative[i - 1] = running
+    events = []
+    dates = rows["Date"].to_numpy()
+    # several records on one ex-date (e.g. bonus + split) combine into one factor
+    for ex_date, same_day in sorted(actions.groupby("exDate"), key=lambda kv: kv[0], reverse=True):
+        pos = int(np.searchsorted(dates, np.datetime64(ex_date)))
+        if pos >= len(rows) or pos == 0:
+            continue
+        if (rows.at[pos, "Date"] - ex_date).days > 10:           # not traded near the ex-date
+            continue
+        observed = rows.at[pos, "Open"] / rows.at[pos - 1, "Close"] if rows.at[pos - 1, "Close"] > 0 else np.nan
+        factors = same_day["factor"].to_numpy()
+        if (factors == DEMERGER).any():
+            # Demerger: shareholders receive the new company's shares, so the
+            # ex-date drop is not a loss. Its size is only known from the
+            # price; used only when it is a plausible drop (5-90%).
+            if not (np.isfinite(observed) and 0.1 <= observed <= 0.95):
+                continue
+            factor = float(observed) * float(np.prod(factors[factors != DEMERGER]))
+            suspect = False
+        else:
+            factor = float(np.prod(factors))
+            ratio = observed / factor if np.isfinite(observed) else np.nan
+            suspect = bool(not (SANITY_BAND[0] <= ratio <= SANITY_BAND[1])) if np.isfinite(ratio) else True
+            if suspect and np.isfinite(observed) and 0.05 <= observed <= 0.95:
+                # the record is incomplete (e.g. a second action on the same
+                # day missing from the feed): the price shows the real factor
+                factor = float(observed)
+        cumulative[:pos] *= factor
+        events.append({"Date": rows.at[pos, "Date"], "factor": factor, "subject": " + ".join(same_day["subject"]),
+                       "observed_open_ratio": float(observed) if np.isfinite(observed) else None, "suspect": suspect})
     for col in ("Open", "High", "Low", "Close", "PrevClose"):
         rows[col] = rows[col] * cumulative
     rows["Volume"] = rows["Volume"] / cumulative
@@ -106,18 +166,38 @@ def adjust_entity(rows: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
     return rows, events[::-1]
 
 
-def build_adjusted_prices(bhav: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """(adjusted daily prices for every entity, log of adjustments)."""
+def prepare_actions(corporate_actions: pd.DataFrame) -> pd.DataFrame:
+    ca = corporate_actions.copy()
+    ca["exDate"] = pd.to_datetime(ca["exDate"])
+    ca["factor"] = ca["subject"].map(parse_factor)
+    ca = ca[ca["factor"].notna()]
+    ca["symbol"] = ca["symbol"].astype(str).str.strip().str.upper()
+    return ca.drop_duplicates(["symbol", "exDate", "factor"])[["symbol", "isin", "exDate", "factor", "subject"]]
+
+
+def build_adjusted_prices(bhav: pd.DataFrame, corporate_actions: pd.DataFrame | None = None
+                          ) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """(adjusted daily prices for every entity, log of adjustments). An
+    action is matched to an entity by the symbol (or ISIN) the entity
+    traded under around the ex-date."""
     base = primary_rows(bhav)
+    actions = prepare_actions(corporate_actions) if corporate_actions is not None else pd.DataFrame(
+        columns=["symbol", "isin", "exDate", "factor", "subject"])
+    sym_entity = base.groupby("Symbol")["entity_id"].first()
+    isin_entity = base.dropna(subset=["ISIN"]).groupby("ISIN")["entity_id"].first()
+    actions["entity_id"] = actions["symbol"].map(sym_entity)
+    actions["entity_id"] = actions["entity_id"].fillna(actions["isin"].map(isin_entity))
+    by_entity = {e: g for e, g in actions.dropna(subset=["entity_id"]).groupby("entity_id")}
+    empty = actions.iloc[0:0]
     out, log = [], []
     for entity, rows in base.groupby("entity_id", sort=False):
-        adjusted, events = adjust_entity(rows)
+        adjusted, events = adjust_entity(rows, by_entity.get(entity, empty))
         out.append(adjusted)
         log.extend({"entity_id": entity, **e} for e in events)
     prices = pd.concat(out, ignore_index=True)
     latest = prices.sort_values("Date").groupby("entity_id")["Symbol"].last()
     prices["current_symbol"] = prices["entity_id"].map(latest)
-    return prices, pd.DataFrame(log, columns=["entity_id", "Date", "factor"])
+    return prices, pd.DataFrame(log, columns=["entity_id", "Date", "factor", "subject", "observed_open_ratio", "suspect"])
 
 
 def monthly_universe(prices: pd.DataFrame, size: int = UNIVERSE_SIZE, lookback: int = LOOKBACK_DAYS,
