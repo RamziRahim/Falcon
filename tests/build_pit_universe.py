@@ -17,9 +17,12 @@ sys.path.insert(0, ".")
 import glob
 import os
 
+import numpy as np
 import pandas as pd
 
-from market_data.pit_universe import build_adjusted_prices, last_trading_dates, monthly_universe, primary_rows
+from market_data.pit_universe import (
+    build_adjusted_prices, last_trading_dates, load_symbol_changes, monthly_universe, primary_rows,
+)
 
 SRC = "data/bhavcopy/bhavcopy_equity.parquet"
 ACTIONS = [
@@ -43,8 +46,12 @@ def main():
     # The universe depends only on traded value, series and activity (none
     # of which split adjustment changes), so it is built first and used to
     # decide which stocks get unrecorded-split inference.
-    universe = monthly_universe(primary_rows(bhav))
-    prices, adjustments = build_adjusted_prices(bhav, actions, infer_for=set(universe["entity_id"]))
+    changes_path = "data/pit_sources/symbol_changes.csv"
+    changes = load_symbol_changes(changes_path) if os.path.exists(changes_path) else None
+    lines.append(f"symbol changes linked: {len(changes) if changes else 0} NSE records"
+                 + ("" if changes else " (data/pit_sources/symbol_changes.csv missing -- pre-2011 renames NOT linked)"))
+    universe = monthly_universe(primary_rows(bhav, changes))
+    prices, adjustments = build_adjusted_prices(bhav, actions, infer_for=set(universe["entity_id"]), symbol_changes=changes)
     prices.to_parquet(f"{OUT}/prices_adjusted.parquet", index=False)
     adjustments.to_csv(f"{OUT}/adjustments.csv", index=False)
     lines.append(f"entities {prices['entity_id'].nunique():,}; split/bonus adjustments applied {len(adjustments):,} "
@@ -56,11 +63,17 @@ def main():
                  f"({universe['month_end'].min().date()} -> {universe['month_end'].max().date()}), "
                  f"{universe['entity_id'].nunique():,} distinct stocks ever in the universe")
 
-    # Sanity: big one-day moves left after adjustment (real crashes/rallies, or a missed action)
-    p = prices.sort_values(["entity_id", "Date"])
-    move = p.groupby("entity_id")["Close"].pct_change()
-    in_uni = p["entity_id"].isin(universe["entity_id"].unique())
-    lines.append(f"one-day moves > 40% among universe stocks after adjustment: {int(((move.abs() > 0.4) & in_uni).sum())}")
+    # Sanity: big one-day moves left after adjustment while the stock was in
+    # that month's universe (real crashes/rallies, or a missed action)
+    p = prices[["entity_id", "Date", "Symbol", "current_symbol", "Close"]].sort_values(["entity_id", "Date"])
+    p["move"] = p.groupby("entity_id")["Close"].pct_change()
+    p = p[p["move"].abs() > 0.4]
+    ends = np.sort(universe["month_end"].unique())
+    k = ends.searchsorted(p["Date"].to_numpy(), side="right") - 1
+    p = p[k >= 0].assign(month_end=ends[k[k >= 0]])
+    big = p.merge(universe[["month_end", "entity_id"]], on=["month_end", "entity_id"])
+    big[["Date", "Symbol", "current_symbol", "move"]].to_csv(f"{OUT}/big_moves_in_universe.csv", index=False)
+    lines.append(f"one-day moves > 40% while in the universe: {len(big)} (listed in {OUT}/big_moves_in_universe.csv)")
 
     # Survivorship: how much of each year's universe is missing from today's data/technical/
     today = {os.path.basename(f)[:-11] for f in glob.glob("data/technical/*.NS.parquet")}

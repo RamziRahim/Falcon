@@ -43,7 +43,16 @@ def test_split_is_adjusted_from_corporate_action_record():
     ("Face Value Split (Sub-Division) - From Rs 5/- Per Share To Re 1/- Per Share", 0.2),
     ("Bonus 1:1/Face Value Split (Sub-Division) - From Rs 10/- Per Share To Rs 2/- Per Share", 0.1),
     ("Bonus 2:1/Dividend- Rs 1.60 Per Share", 1 / 3),
-    ("Bonus Ncrps 1:116", None), ("Scheme Of Arangement- Bonus - 1 Debenture For 1 Equity Share Held", None),
+    ("Fv Split Rs.10/- To Re.2/", 0.2), ("Fv Split Rs.2/- To Re.1/-", 0.5),
+    ("Face Value Split From Rs.10/- To Rs.6/-", 0.6),
+    ("Bonus - 1:1 And Face Value Split From Rs. 10 To Rs. 2", 0.1), ("Fv Spl-Rs10tore1/Div-1.50", 0.1),
+    ("Agm/Div-Rs.2/Fv Rs10tors5", 0.5), ("Bonus-1:1", 0.5), ("Div-Rs.5.50 Pr Sh/Bon 5:1purpose Revised", 1 / 6),
+    ("Fv Spl-Rs10tors2/Bon-1:1", 0.1), ("Agm/Div-20%/Fv Rs10tors2 Purpose Revised", 0.2), ("Bonus Issue 1 : 1", 0.5),
+    ("Bonus Shares In The Ratio Of 1:1", 0.5), ("Fv Spl-Rs10tors5/Bon-2:1", 0.5 / 3),
+    ("Spl Int Div-Rs.100 P Shr Purpose Revised", None), ("Intdiv-Rs 3persh/Bonus1:1", 0.5),
+    ("Fv Spl 100 To 10/Div150%", 0.1), ("Agm/Div-5%/Spl-Rs10tors2 Purpose Revised", 0.2), ("Fv Spl-Rs10to2/Div-Rs2.50", 0.2),
+    ("Bonus 1 Dvr : 10 Eq Share", None), ("Div Fin-Rs18+Spl-18 Pr Sh", None), ("Div Int-Rs12.50+Spl-Rs16 Purpose Revised", None), ("Agm/Centenary Div. -100%", None),
+    ("Bonus Ncrps 1:116", None),
     ("Dividend - Rs 5 Per Share", None),
 ])
 def test_parse_factor(subject, factor):
@@ -99,3 +108,11 @@ def test_demerger_uses_the_ex_date_drop_and_bonus_plus_split_combine():
     rows2 = _rows("Y", "J", [100, 100, 5.1, 5.2])
     adjusted2, events2 = adjust_entity(rows2, combo)
     assert len(events2) == 1 and events2[0]["factor"] == pytest.approx(0.05) and not events2[0]["suspect"]
+
+
+def test_symbol_change_links_pre_isin_rename():
+    a = _rows("OLDCO", None, [10] * 5, DATES[:5])
+    b = _rows("NEWCO", None, [10] * 5, DATES[5:10])
+    bhav = pd.concat([a, b], ignore_index=True)
+    assert link_entities(bhav).nunique() == 2
+    assert link_entities(bhav, [("OLDCO", "NEWCO")]).nunique() == 1
