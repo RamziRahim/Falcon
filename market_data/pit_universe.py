@@ -29,11 +29,17 @@ This module rebuilds, from NSE's whole-market daily bhavcopies
    2655.70 against a close of 1334.35 -- so that approach was dropped before
    any strategy was run.)
 
+   Before 2016 the feed is thin, so for stocks ever in a universe an
+   overnight gap matching a standard ratio (1/2, 1/3, 1/5, 1/10 ...) within
+   2%, with no record within 10 days, is treated as an unrecorded
+   split/bonus and logged as INFERRED.
+
 3. MONTHLY UNIVERSE. At each month end, the 500 most liquid stocks, ranked
    by median daily traded value over the previous LOOKBACK_DAYS sessions.
    Only stocks trading in the normal EQ series on that date, and that traded
    on at least MIN_ACTIVE_SHARE of those sessions, are eligible. This is a
-   rule-based stand-in for the Nifty 500 (which also ranks by size and
+   rule-based stand-in for the Nifty 500; ETFs and fund units (ISIN
+   prefix INF) are excluded (which also ranks by size and
    liquidity), built only from data available on that date.
 
 4. EXIT DATES. last_date per entity: a stock that stops appearing has
@@ -94,7 +100,14 @@ def primary_rows(bhav: pd.DataFrame) -> pd.DataFrame:
 _BONUS = re.compile(r"bonus\s*(\d+)\s*:\s*(\d+)", re.I)
 _SPLIT = re.compile(r"from\s*(?:rs|re)\.?\s*([\d.]+).*?to\s*(?:rs|re)\.?\s*([\d.]+)", re.I)
 SANITY_BAND = (0.6, 1.6)
-DEMERGER = -1.0                    # marker: factor = ex-date open / previous close          # observed / parsed factor outside this is logged as suspect
+DEMERGER = -1.0                    # marker: factor = ex-date open / previous close
+# Overnight gaps that exactly match a common split/bonus ratio, on a date
+# with no NSE record nearby, are treated as an unrecorded split/bonus
+# (the corporate-action feed is thin before 2016). Standard factors only,
+# within INFER_TOLERANCE; logged as "INFERRED" for review.
+STANDARD_FACTORS = (1 / 2, 1 / 3, 2 / 3, 1 / 4, 1 / 5, 1 / 6, 2 / 5, 1 / 8, 1 / 10, 1 / 20)
+INFER_TOLERANCE = 0.02
+INFER_EXCLUSION_DAYS = 10          # observed / parsed factor outside this is logged as suspect
 
 
 def parse_factor(subject: str) -> float | None:
@@ -122,6 +135,26 @@ def parse_factor(subject: str) -> float | None:
     if "scheme of arrangement" in low and not found:
         return None
     return factor if found and factor != 1.0 else None
+
+
+def infer_actions(rows: pd.DataFrame, recorded: pd.Series) -> pd.DataFrame:
+    """Unrecorded split/bonus candidates in one entity's raw rows: the
+    opening gap Open_t / Close_(t-1) within INFER_TOLERANCE of a standard
+    factor, with no recorded action within INFER_EXCLUSION_DAYS."""
+    rows = rows.sort_values("Date").reset_index(drop=True)
+    gap = rows["Open"] / rows["Close"].shift(1)
+    out = []
+    rec = pd.to_datetime(pd.Series(recorded)).to_numpy() if len(recorded) else np.array([], dtype="datetime64[ns]")
+    for i in np.flatnonzero((gap < 0.7).to_numpy()):
+        g = gap.iloc[i]
+        f = min(STANDARD_FACTORS, key=lambda x: abs(g / x - 1))
+        if abs(g / f - 1) > INFER_TOLERANCE:
+            continue
+        d = rows.at[i, "Date"]
+        if len(rec) and (np.abs((rec - np.datetime64(d)) / np.timedelta64(1, "D")) <= INFER_EXCLUSION_DAYS).any():
+            continue
+        out.append({"exDate": d, "factor": f, "subject": f"INFERRED from opening gap {g:.4f}"})
+    return pd.DataFrame(out, columns=["exDate", "factor", "subject"])
 
 
 def adjust_entity(rows: pd.DataFrame, actions: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
@@ -175,8 +208,8 @@ def prepare_actions(corporate_actions: pd.DataFrame) -> pd.DataFrame:
     return ca.drop_duplicates(["symbol", "exDate", "factor"])[["symbol", "isin", "exDate", "factor", "subject"]]
 
 
-def build_adjusted_prices(bhav: pd.DataFrame, corporate_actions: pd.DataFrame | None = None
-                          ) -> tuple[pd.DataFrame, pd.DataFrame]:
+def build_adjusted_prices(bhav: pd.DataFrame, corporate_actions: pd.DataFrame | None = None,
+                          infer_for: set | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     """(adjusted daily prices for every entity, log of adjustments). An
     action is matched to an entity by the symbol (or ISIN) the entity
     traded under around the ex-date."""
@@ -191,7 +224,14 @@ def build_adjusted_prices(bhav: pd.DataFrame, corporate_actions: pd.DataFrame | 
     empty = actions.iloc[0:0]
     out, log = [], []
     for entity, rows in base.groupby("entity_id", sort=False):
-        adjusted, events = adjust_entity(rows, by_entity.get(entity, empty))
+        recorded = by_entity.get(entity, empty)
+        # unrecorded splits are inferred only for stocks that matter for
+        # backtests (ever in a universe): on thin small/SME stocks a 1/3
+        # overnight gap is too often real
+        inferred = (infer_actions(rows, recorded["exDate"]) if infer_for is not None and entity in infer_for
+                    else empty.iloc[0:0])
+        combined = pd.concat([recorded, inferred], ignore_index=True) if len(inferred) else recorded
+        adjusted, events = adjust_entity(rows, combined)
         out.append(adjusted)
         log.extend({"entity_id": entity, **e} for e in events)
     prices = pd.concat(out, ignore_index=True)
@@ -207,6 +247,8 @@ def monthly_universe(prices: pd.DataFrame, size: int = UNIVERSE_SIZE, lookback: 
     sessions = np.sort(prices["Date"].unique())
     month_ends = pd.Series(sessions).groupby(pd.Series(sessions).dt.to_period("M")).max().to_numpy()
     turnover = prices.pivot_table(index="Date", columns="entity_id", values="Turnover", aggfunc="first")
+    # ETFs and other fund units (ISIN prefix INF) trade in the EQ series but are not stocks
+    funds = set(prices.loc[prices["ISIN"].astype(str).str.startswith("INF"), "entity_id"])
     series_today = prices.pivot_table(index="Date", columns="entity_id", values="Series", aggfunc="first")
     rows = []
     for me in month_ends:
@@ -216,7 +258,7 @@ def monthly_universe(prices: pd.DataFrame, size: int = UNIVERSE_SIZE, lookback: 
         window = turnover.iloc[pos + 1 - lookback: pos + 1]
         active = window.notna().mean()
         median_tv = window.median()
-        eq_today = series_today.iloc[pos] == "EQ"
+        eq_today = (series_today.iloc[pos] == "EQ") & ~series_today.columns.isin(funds)
         eligible = median_tv[(active >= min_active_share) & eq_today.reindex(median_tv.index, fill_value=False)]
         top = eligible.sort_values(ascending=False).head(size)
         rows.append(pd.DataFrame({"month_end": pd.Timestamp(me), "entity_id": top.index,

@@ -19,10 +19,13 @@ import os
 
 import pandas as pd
 
-from market_data.pit_universe import build_adjusted_prices, last_trading_dates, monthly_universe
+from market_data.pit_universe import build_adjusted_prices, last_trading_dates, monthly_universe, primary_rows
 
 SRC = "data/bhavcopy/bhavcopy_equity.parquet"
-ACTIONS = "data/corporate_actions_cache.parquet"   # market_data/corporate_actions.py (2016 onwards)
+ACTIONS = [
+    "data/corporate_actions_cache.parquet",                    # market_data/corporate_actions.py, 2016 onwards
+    "data/pit_sources/corporate_actions_2005_2015.parquet",    # tests/download_history_sources.py
+]
 OUT = "data/pit"
 
 
@@ -33,13 +36,21 @@ def main():
     lines = [f"bhavcopy rows {len(bhav):,}, {bhav['Date'].nunique()} sessions, "
              f"{bhav['Date'].min().date()} -> {bhav['Date'].max().date()}"]
 
-    prices, adjustments = build_adjusted_prices(bhav, pd.read_parquet(ACTIONS))
+    actions = pd.concat([pd.read_parquet(p) for p in ACTIONS if os.path.exists(p)], ignore_index=True)
+    actions["exDate"] = pd.to_datetime(actions["exDate"], errors="coerce", dayfirst=True)
+    lines.append(f"corporate-action records {len(actions):,} ({actions['exDate'].min().date()} -> {actions['exDate'].max().date()})")
+
+    # The universe depends only on traded value, series and activity (none
+    # of which split adjustment changes), so it is built first and used to
+    # decide which stocks get unrecorded-split inference.
+    universe = monthly_universe(primary_rows(bhav))
+    prices, adjustments = build_adjusted_prices(bhav, actions, infer_for=set(universe["entity_id"]))
     prices.to_parquet(f"{OUT}/prices_adjusted.parquet", index=False)
     adjustments.to_csv(f"{OUT}/adjustments.csv", index=False)
     lines.append(f"entities {prices['entity_id'].nunique():,}; split/bonus adjustments applied {len(adjustments):,} "
-                 f"({int(adjustments['suspect'].sum()) if len(adjustments) else 0} where the observed open/close ratio disagrees with the record)")
+                 f"({int(adjustments['suspect'].sum()) if len(adjustments) else 0} where the observed open/close ratio disagrees with the record, "
+                 f"{int(adjustments['subject'].astype(str).str.startswith('INFERRED').sum()) if len(adjustments) else 0} inferred from standard-ratio gaps)")
 
-    universe = monthly_universe(prices)
     universe.to_parquet(f"{OUT}/universe_monthly.parquet", index=False)
     lines.append(f"monthly universes {universe['month_end'].nunique()} "
                  f"({universe['month_end'].min().date()} -> {universe['month_end'].max().date()}), "

@@ -202,3 +202,30 @@ in `data/redesign_result_run1_nifty_nan_bug.txt` for the record.
 - The top 3 positions are 24% of profit.
 
 **Next, per the rules:** forward paper trading of A. Real money only after that.
+
+### Dated note, 2026-11-02 ~19:45 IST: ETFs were in the universe; excluding them changes no verdict
+
+While preparing the 2007-onwards history, I found that ETFs and fund units (ISIN prefix
+INF, e.g. NIFTYBEES, GOLDBEES, silver ETFs) trade in the EQ series. About 11 of each
+month's "top 500 stocks" were funds, not stocks.
+
+**Impact on the results already recorded:**
+- A held none on 2019-24, and C held none.
+- B held 11 ETF positions (−₹22.9k of ₹19.5 lakh).
+
+The universe now excludes them. Four unrecorded splits inferred from standard-ratio gaps
+were also added, all genuine on inspection (e.g. IIFL's 2019 demerger, Heritage Foods'
+2023 bonus).
+
+**Re-run with the corrected universe** (`data/redesign_result_etf_excluded.txt`):
+
+| | CAGR | Max drawdown | Monthly excess t | Checks | Verdict |
+|---|---|---|---|---|---|
+| A | 42.31% (was 42.35%) | −41.4% | 2.29 | 6/6 | EDGE DEMONSTRATED (provisional), unchanged |
+| B | 14.65% (was 23.6%) | −44.6% | 0.02 | 2/6 | NO DEMONSTRATED EDGE, unchanged |
+| C | 8.76% | | | | NO DEMONSTRATED EDGE, unchanged |
+
+- **A:** drawdown is still within Nifty's −38.4% − 10 points, so the check still passes.
+- **B:** path-dependent slot competition means a different universe gives different
+  trades, which shows how fragile B's earlier 23.6% was.
+- The PIT equal-weight benchmark is now 23.37%.
