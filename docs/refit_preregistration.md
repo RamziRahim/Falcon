@@ -74,3 +74,25 @@ parameters, which is fewer than v1's 169. The fit may be unstable, and the valid
 may contain few trades, so the scorecard may fail for lack of power alone. That is
 accepted. The point of this step is to apply the pre-registered rule honestly, not to
 engineer a pass.
+
+---
+
+## Dated notes (added after the result; the rules above are unchanged)
+
+### 2026-11-02: step 2 result
+
+`data/refit_result.txt` on the laptop:
+
+- **Run #5b reproduced run #5 exactly:** 54,162 rows, all 24 shared columns equal.
+- **Fitting population:**
+  - tuning half: 91 episodes, win rate 0.516;
+  - validation half: 56 episodes.
+- **The logistic fit did not converge** on 91 rows for v1's ~20-parameter specification.
+- **Verdict, as pre-registered: REFIT NOT ESTIMABLE, so step 2 FAILS.** No second try,
+  no reduced specification, no regularisation on this window.
+
+Consequence, per `docs/run5_preregistration.md`: the Leadership breakout strategy as
+built is treated as **unproven**. The model v1 / RR-floor pipeline produces too few
+EXECUTE-grade setups under honest fills to be evaluated, and nothing pre-registered
+remains to try on the 2024-08 → 2026-08 window. The next work is a redesign, to be
+pre-registered on its own before it is run. `config.ACTIVE_MODEL_VERSION` stays `v1`.
