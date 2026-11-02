@@ -19,7 +19,9 @@ import os
 
 import pandas as pd
 
-from market_data.pit_universe import build_adjusted_prices, last_trading_dates, monthly_universe, primary_rows
+from market_data.pit_universe import (
+    build_adjusted_prices, last_trading_dates, load_symbol_changes, monthly_universe, primary_rows,
+)
 
 SRC = "data/bhavcopy/bhavcopy_equity.parquet"
 ACTIONS = [
@@ -43,8 +45,12 @@ def main():
     # The universe depends only on traded value, series and activity (none
     # of which split adjustment changes), so it is built first and used to
     # decide which stocks get unrecorded-split inference.
-    universe = monthly_universe(primary_rows(bhav))
-    prices, adjustments = build_adjusted_prices(bhav, actions, infer_for=set(universe["entity_id"]))
+    changes_path = "data/pit_sources/symbol_changes.csv"
+    changes = load_symbol_changes(changes_path) if os.path.exists(changes_path) else None
+    lines.append(f"symbol changes linked: {len(changes) if changes else 0} NSE records"
+                 + ("" if changes else " (data/pit_sources/symbol_changes.csv missing -- pre-2011 renames NOT linked)"))
+    universe = monthly_universe(primary_rows(bhav, changes))
+    prices, adjustments = build_adjusted_prices(bhav, actions, infer_for=set(universe["entity_id"]), symbol_changes=changes)
     prices.to_parquet(f"{OUT}/prices_adjusted.parquet", index=False)
     adjustments.to_csv(f"{OUT}/adjustments.csv", index=False)
     lines.append(f"entities {prices['entity_id'].nunique():,}; split/bonus adjustments applied {len(adjustments):,} "

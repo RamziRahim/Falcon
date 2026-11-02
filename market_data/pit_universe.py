@@ -39,7 +39,8 @@ This module rebuilds, from NSE's whole-market daily bhavcopies
    Only stocks trading in the normal EQ series on that date, and that traded
    on at least MIN_ACTIVE_SHARE of those sessions, are eligible. This is a
    rule-based stand-in for the Nifty 500; ETFs and fund units (ISIN
-   prefix INF) are excluded (which also ranks by size and
+   prefix INF) and stocks closing below Rs 5 (raw) on the ranking date are
+   excluded (which also ranks by size and
    liquidity), built only from data available on that date.
 
 4. EXIT DATES. last_date per entity: a stock that stops appearing has
@@ -58,9 +59,21 @@ SERIES_PRIORITY = {"EQ": 0, "BE": 1, "BZ": 2, "BL": 3, "SM": 4, "ST": 5}
 LOOKBACK_DAYS = 126
 MIN_ACTIVE_SHARE = 0.8
 UNIVERSE_SIZE = 500
+# Penny stocks: at a Rs 0.05 tick, a Rs 0.10-1 stock moves 5-50% per tick, which
+# breaks split inference and isn't investable anyway. Raw (unadjusted) close.
+MIN_PRICE = 5.0
 
 
-def link_entities(bhav: pd.DataFrame) -> pd.Series:
+def load_symbol_changes(path: str) -> list[tuple[str, str]]:
+    """(old, new) symbol pairs from NSE's symbolchange.csv (columns: company
+    name, old symbol, new symbol, date -- header text varies, so by position)."""
+    df = pd.read_csv(path, header=None, dtype=str, encoding="latin-1")
+    df = df[df[1].notna() & df[2].notna()]
+    df = df[~df[1].str.strip().str.upper().str.contains("SYMBOL")]
+    return [(a.strip().upper(), b.strip().upper()) for a, b in zip(df[1], df[2]) if a.strip() and b.strip()]
+
+
+def link_entities(bhav: pd.DataFrame, symbol_changes: list[tuple[str, str]] | None = None) -> pd.Series:
     """entity_id for each row: connected components of symbols and ISINs
     that appear together on any day. Returns a Series aligned to bhav."""
     parent: dict[str, str] = {}
@@ -83,15 +96,20 @@ def link_entities(bhav: pd.DataFrame) -> pd.Series:
         find(s)
         if isinstance(isin, str) and isin.strip():
             union(s, f"I:{isin.strip()}")
+    # NSE-documented renames (needed before 2011, when bhavcopies carry no ISIN)
+    known = set(pairs["Symbol"].unique())
+    for old_sym, new_sym in symbol_changes or []:
+        if old_sym in known and new_sym in known:
+            union(f"S:{old_sym}", f"S:{new_sym}")
     roots = {sym: find(f"S:{sym}") for sym in pairs["Symbol"].unique()}
     return bhav["Symbol"].map(roots)
 
 
-def primary_rows(bhav: pd.DataFrame) -> pd.DataFrame:
+def primary_rows(bhav: pd.DataFrame, symbol_changes: list[tuple[str, str]] | None = None) -> pd.DataFrame:
     """One row per (entity, Date): the most liquid-normal series wins
     (EQ before BE before BZ ...), then the higher traded value."""
     df = bhav.copy()
-    df["entity_id"] = link_entities(df)
+    df["entity_id"] = link_entities(df, symbol_changes)
     df["_prio"] = df["Series"].map(SERIES_PRIORITY).fillna(99)
     df = df.sort_values(["entity_id", "Date", "_prio", "Turnover"], ascending=[True, True, True, False])
     return df.drop_duplicates(["entity_id", "Date"]).drop(columns="_prio").reset_index(drop=True)
@@ -145,7 +163,8 @@ def infer_actions(rows: pd.DataFrame, recorded: pd.Series) -> pd.DataFrame:
     gap = rows["Open"] / rows["Close"].shift(1)
     out = []
     rec = pd.to_datetime(pd.Series(recorded)).to_numpy() if len(recorded) else np.array([], dtype="datetime64[ns]")
-    for i in np.flatnonzero((gap < 0.7).to_numpy()):
+    prev_close = rows["Close"].shift(1)
+    for i in np.flatnonzero(((gap < 0.7) & (prev_close >= MIN_PRICE)).to_numpy()):
         g = gap.iloc[i]
         f = min(STANDARD_FACTORS, key=lambda x: abs(g / x - 1))
         if abs(g / f - 1) > INFER_TOLERANCE:
@@ -209,11 +228,12 @@ def prepare_actions(corporate_actions: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_adjusted_prices(bhav: pd.DataFrame, corporate_actions: pd.DataFrame | None = None,
-                          infer_for: set | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
+                          infer_for: set | None = None, symbol_changes: list[tuple[str, str]] | None = None
+                          ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """(adjusted daily prices for every entity, log of adjustments). An
     action is matched to an entity by the symbol (or ISIN) the entity
     traded under around the ex-date."""
-    base = primary_rows(bhav)
+    base = primary_rows(bhav, symbol_changes)
     actions = prepare_actions(corporate_actions) if corporate_actions is not None else pd.DataFrame(
         columns=["symbol", "isin", "exDate", "factor", "subject"])
     sym_entity = base.groupby("Symbol")["entity_id"].first()
@@ -250,6 +270,9 @@ def monthly_universe(prices: pd.DataFrame, size: int = UNIVERSE_SIZE, lookback: 
     # ETFs and other fund units (ISIN prefix INF) trade in the EQ series but are not stocks
     funds = set(prices.loc[prices["ISIN"].astype(str).str.startswith("INF"), "entity_id"])
     series_today = prices.pivot_table(index="Date", columns="entity_id", values="Series", aggfunc="first")
+    # raw close for the price floor: undo any backward adjustment if present
+    raw_close = prices["Close"] / prices["adj_factor"] if "adj_factor" in prices.columns else prices["Close"]
+    close_today = prices.assign(_raw=raw_close).pivot_table(index="Date", columns="entity_id", values="_raw", aggfunc="first")
     rows = []
     for me in month_ends:
         pos = int(np.searchsorted(sessions, me))
@@ -258,7 +281,8 @@ def monthly_universe(prices: pd.DataFrame, size: int = UNIVERSE_SIZE, lookback: 
         window = turnover.iloc[pos + 1 - lookback: pos + 1]
         active = window.notna().mean()
         median_tv = window.median()
-        eq_today = (series_today.iloc[pos] == "EQ") & ~series_today.columns.isin(funds)
+        eq_today = ((series_today.iloc[pos] == "EQ") & ~series_today.columns.isin(funds)
+                    & (close_today.iloc[pos].reindex(series_today.columns) >= MIN_PRICE))
         eligible = median_tv[(active >= min_active_share) & eq_today.reindex(median_tv.index, fill_value=False)]
         top = eligible.sort_values(ascending=False).head(size)
         rows.append(pd.DataFrame({"month_end": pd.Timestamp(me), "entity_id": top.index,

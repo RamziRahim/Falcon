@@ -43,3 +43,4 @@ Thumbs.db
 _deprecated/*.py
 data/bhavcopy/
 data/pit/
+data/pit_sources/

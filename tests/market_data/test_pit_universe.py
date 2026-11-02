@@ -99,3 +99,11 @@ def test_demerger_uses_the_ex_date_drop_and_bonus_plus_split_combine():
     rows2 = _rows("Y", "J", [100, 100, 5.1, 5.2])
     adjusted2, events2 = adjust_entity(rows2, combo)
     assert len(events2) == 1 and events2[0]["factor"] == pytest.approx(0.05) and not events2[0]["suspect"]
+
+
+def test_symbol_change_links_pre_isin_rename():
+    a = _rows("OLDCO", None, [10] * 5, DATES[:5])
+    b = _rows("NEWCO", None, [10] * 5, DATES[5:10])
+    bhav = pd.concat([a, b], ignore_index=True)
+    assert link_entities(bhav).nunique() == 2
+    assert link_entities(bhav, [("OLDCO", "NEWCO")]).nunique() == 1

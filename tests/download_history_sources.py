@@ -12,6 +12,8 @@ skipped):
    fetched in 85-day chunks (NSE's index API silently truncates longer
    requests, see tests/backfill_rs_macd.py)
    -> data/pit_sources/indices.parquet  (Index, Date, Open, High, Low, Close)
+3. NSE symbol-change list -> data/pit_sources/symbol_changes.csv
+   (run just this part with: python tests/download_history_sources.py symbols)
 
 The stock prices themselves come from tests/download_bhavcopies.py.
 """
@@ -28,6 +30,7 @@ OUT = "data/pit_sources"
 ACTIONS_PATH = os.path.join(OUT, "corporate_actions_2005_2015.parquet")
 INDEX_DIR = os.path.join(OUT, "indices")
 INDICES_PATH = os.path.join(OUT, "indices.parquet")
+SYMBOL_CHANGES_PATH = os.path.join(OUT, "symbol_changes.csv")
 INDICES = [
     "NIFTY 50", "NIFTY NEXT 50", "NIFTY 100", "NIFTY 200", "NIFTY 500",
     "NIFTY MIDCAP 100", "NIFTY SMALLCAP 100", "NIFTY BANK", "NIFTY IT", "NIFTY FINANCIAL SERVICES",
@@ -108,12 +111,34 @@ def download_indices(start=date(2006, 1, 1), end=None):
     print(f"  saved {INDICES_PATH}: {combined['Index'].nunique()} indices, {len(combined):,} rows")
 
 
+def download_symbol_changes():
+    """NSE's list of every symbol change (old symbol, new symbol, date).
+    Needed because the 2007-2011 bhavcopies carry no ISIN, so a renamed
+    company would otherwise look like one stock dying and another being born."""
+    import requests
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+               "Referer": "https://www.nseindia.com/"}
+    session = requests.Session()
+    session.get("https://www.nseindia.com", headers=headers, timeout=30)
+    r = session.get("https://nsearchives.nseindia.com/content/equities/symbolchange.csv", headers=headers, timeout=60)
+    r.raise_for_status()
+    with open(SYMBOL_CHANGES_PATH, "wb") as fh:
+        fh.write(r.content)
+    print(f"  saved {SYMBOL_CHANGES_PATH} ({len(r.content.splitlines())} lines)")
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
+    if len(sys.argv) > 1 and sys.argv[1] == "symbols":
+        print("Symbol changes")
+        download_symbol_changes()
+        return
     print("1. Corporate actions 2005-2015")
     download_actions()
     print("2. Index history")
     download_indices()
+    print("3. Symbol changes")
+    download_symbol_changes()
 
 
 if __name__ == "__main__":
