@@ -46,6 +46,9 @@ PB_ATR_LEN, PB_ATR_MULT, PB_REWARD_MULT = 14, 2.0, 2.0
 PB_TIME_STOP, PB_RISK, PB_SLOTS = 20, 0.01, 10
 PB_MIN_TURNOVER = 2e8                    # Rs 20 crore median daily traded value (20 sessions)
 PB_MARKET_SMA = 200
+# Strategy MR (docs/mean_reversion_preregistration.md)
+MR_RSI_LEN, MR_RSI_MAX, MR_TREND_SMA, MR_EXIT_SMA = 2, 5.0, 200, 5
+MR_TIME_STOP, MR_POSITION, MR_SLOTS, MR_MARKET_SMA = 10, 0.10, 10, 200
 
 
 @dataclass
@@ -327,6 +330,115 @@ def run_pullback(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, nifty_clo
         hits.sort(key=lambda e: -mom_today[e])
         queued_entries = [(e, ind["atr"].iloc[i][e]) for e in hits]
     return _result(ledger)
+
+
+def wilder_rsi(close: pd.DataFrame, length: int) -> pd.DataFrame:
+    delta = close.diff()
+    gain = delta.clip(lower=0).ewm(alpha=1 / length, adjust=False).mean()
+    loss = (-delta.clip(upper=0)).ewm(alpha=1 / length, adjust=False).mean()
+    rs = gain / loss
+    return 100 - 100 / (1 + rs)
+
+
+def run_mean_reversion(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, nifty_close: pd.Series,
+                       cost: CostModel | None = None, stop_atr_mult: float | None = None):
+    """Strategy MR: classic Connors RSI-2 on the liquid universe. The
+    panel's universe should already be the top-100 subset."""
+    ledger = Ledger(cost or CostModel())
+    c, h, l = panel.close, panel.high, panel.low
+    rsi = wilder_rsi(c, MR_RSI_LEN)
+    trend = c.rolling(MR_TREND_SMA, min_periods=MR_TREND_SMA).mean()
+    exit_sma = c.rolling(MR_EXIT_SMA, min_periods=MR_EXIT_SMA).mean()
+    tr = pd.concat([(h - l), (h - c.shift(1)).abs(), (l - c.shift(1)).abs()]).groupby(level=0).max()
+    atr = tr.rolling(14, min_periods=14).mean()
+    nifty = nifty_close.reindex(nifty_close.index.union(c.index)).ffill()
+    market_ok = (nifty > nifty.rolling(MR_MARKET_SMA, min_periods=MR_MARKET_SMA).mean()).reindex(c.index).fillna(False)
+    sessions = panel.sessions
+    queued_entries, queued_exits = [], {}
+    for i, day in enumerate(sessions):
+        if day < start or day > end:
+            continue
+        _delisting_exits(panel, ledger, i, day)
+        opens, lows, closes = panel.open.iloc[i], panel.low.iloc[i], panel.close.iloc[i]
+        for e, reason in list(queued_exits.items()):
+            if e not in ledger.shares:
+                queued_exits.pop(e)
+                continue
+            if np.isfinite(opens.get(e, np.nan)):
+                ledger.sell(day, e, opens[e], _adv(panel, i, e), reason)
+                queued_exits.pop(e)
+        for e, a in queued_entries:
+            if e in ledger.shares or len(ledger.shares) >= MR_SLOTS:
+                continue
+            o = opens.get(e, np.nan)
+            if not np.isfinite(o):
+                continue
+            equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
+            stop = o - stop_atr_mult * a if stop_atr_mult and np.isfinite(a) else -np.inf
+            ledger.buy(day, e, o, min(MR_POSITION * equity_now, ledger.cash * 0.999), _adv(panel, i, e),
+                       {"stop": stop, "entry_idx": i})
+        queued_entries = []
+        if stop_atr_mult:
+            for e in list(ledger.shares):
+                st, lo, o = ledger.meta[e]["stop"], lows.get(e, np.nan), opens.get(e, np.nan)
+                if np.isfinite(lo) and lo <= st:
+                    ledger.sell(day, e, o if np.isfinite(o) and o < st else st, _adv(panel, i, e), "STOP")
+        ledger.mark(day, closes)
+        if day >= end:
+            continue
+        for e in ledger.shares:
+            x, sma = closes.get(e, np.nan), exit_sma.iloc[i].get(e, np.nan)
+            if np.isfinite(x) and np.isfinite(sma) and x > sma:
+                queued_exits[e] = "BOUNCE_EXIT"
+            elif i - ledger.meta[e]["entry_idx"] + 1 >= MR_TIME_STOP:
+                queued_exits[e] = "TIME_STOP"
+        if not bool(market_ok.iloc[i]):
+            continue
+        members = [e for e in panel.universe_on(day) if e in c.columns]
+        r, tdy, tnd = rsi.iloc[i][members], closes[members], trend.iloc[i][members]
+        hits = r[(r < MR_RSI_MAX) & (tdy > tnd)].dropna().sort_values()
+        queued_entries = [(e, atr.iloc[i][e]) for e in hits.index if e not in ledger.shares]
+    return _result(ledger)
+
+
+def judge_mean_reversion(equity: pd.DataFrame, trades: pd.DataFrame, nifty_close: pd.Series) -> dict:
+    strat = equity["equity"]
+    days = strat.index
+    nifty = nifty_close.reindex(nifty_close.index.union(days)).ffill().reindex(days)
+    closed = trades[trades["exit_reason"] != "OPEN_AT_END"] if not trades.empty else trades
+    net = (closed["pnl"] / closed["cost_basis"]) if not closed.empty else pd.Series(dtype=float)
+    t_stat = net.mean() / (net.std() / np.sqrt(len(net))) if len(net) > 1 else float("nan")
+    sharpe = lambda x: float(x.pct_change().mean() / x.pct_change().std() * np.sqrt(252))
+    yearly_pnl = closed.groupby(pd.to_datetime(closed["exit_date"]).dt.year)["pnl"].sum() if not closed.empty else pd.Series(dtype=float)
+    years = sorted(set(days.year))
+    profitable_years = sum(yearly_pnl.get(y, 0.0) > 0 for y in years)
+    pnl = trades["pnl"] if not trades.empty else pd.Series(dtype=float)
+    top3 = float(pnl.sort_values(ascending=False).head(3).sum() / pnl.sum()) if pnl.sum() > 0 else float("inf")
+    held = (pd.to_datetime(closed["exit_date"]) - pd.to_datetime(closed["entry_date"])).dt.days if not closed.empty else pd.Series(dtype=float)
+    report = {
+        "cagr_pct": round(_cagr(strat), 2), "nifty_cagr_pct": round(_cagr(nifty), 2),
+        "sharpe": round(sharpe(strat), 2), "nifty_sharpe": round(sharpe(nifty), 2),
+        "max_drawdown_pct": round(_max_dd(strat), 2), "nifty_max_drawdown_pct": round(_max_dd(nifty), 2),
+        "n_trades": len(closed), "trades_per_year": round(len(closed) / max(len(years), 1), 1),
+        "win_rate_pct": round(float((net > 0).mean() * 100), 1) if len(net) else None,
+        "mean_net_per_trade_pct": round(float(net.mean() * 100), 3) if len(net) else None,
+        "trade_t": round(float(t_stat), 2),
+        "avg_calendar_days_held": round(float(held.mean()), 1) if len(held) else None,
+        "years_profitable": f"{profitable_years}/{len(years)}",
+        "top3_profit_share": round(top3, 3),
+        "avg_gross_exposure_pct": round(equity["gross_exposure"].mean() * 100, 1),
+    }
+    checks = {
+        "mean net per trade > 0 with t >= 2": bool(len(net) > 1 and net.mean() > 0 and t_stat >= 2),
+        "win rate after costs >= 55%": bool(len(net) and (net > 0).mean() >= 0.55),
+        "Sharpe > Nifty Sharpe": report["sharpe"] > report["nifty_sharpe"],
+        "max drawdown no worse than Nifty": report["max_drawdown_pct"] >= report["nifty_max_drawdown_pct"],
+        "profitable in >= 70% of calendar years": profitable_years >= 0.7 * len(years),
+        "top-3 trades < 20% of profit": top3 < 0.2,
+    }
+    report["checks"] = checks
+    report["verdict"] = "PASS" if all(checks.values()) else "FAIL"
+    return report
 
 
 def _result(ledger: Ledger):
