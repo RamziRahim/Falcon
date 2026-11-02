@@ -81,3 +81,24 @@ Also reported: CAGR, Nifty CAGR, average holding days, exposure and trades per y
 - **Both windows pass:** provisional edge; forward paper trading next.
 - **Only W1 passes:** treated as period-specific; no real-money plan.
 - **No re-tuning** of RSI level, exits, universe size or filters on either window.
+
+---
+
+## W1 result, 2026-11-02 (`data/mean_reversion_result_W1.txt`)
+
+| W1 2019-01-01 → 2026-10-30 | Strategy MR | Nifty 50 |
+|---|---|---|
+| Trades | 1,646 (about 206 a year, held about 6 calendar days) | |
+| Win rate after costs | **60.1%** | |
+| Mean net per trade | **+0.006%** (t 0.06) | |
+| CAGR | −0.4% | 10.1% |
+| Sharpe | 0.03 | 0.65 |
+| Max drawdown | −33.2% | −38.4% |
+| Years profitable | 5/8 | |
+
+**W1: FAIL** (checks 1, 3, 5 and 6). The win rate is what the literature predicts, but
+the average winner is too small to cover the average loser plus costs. The
+3×ATR-stop variant (reported only) is no better: −1.0% CAGR.
+
+Because both windows must pass, **the overall verdict is already NO DEMONSTRATED
+EDGE**. W2 will still be run when the 2007-2017 data is ready, for the record only.
