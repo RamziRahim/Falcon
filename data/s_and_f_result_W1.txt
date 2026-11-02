@@ -1,0 +1,57 @@
+Benchmark: Yahoo ^NSEI
+
+======================================================================
+Strategy S  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  cagr_pct                     -2.86
+  nifty_cagr_pct               10.09
+  ew_universe_cagr_pct         15.17
+  max_drawdown_pct             -60.52
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.9
+  monthly_excess_t_nw3         -1.2
+  years_beating_nifty          2/8
+  n_closed_positions           1342
+  top3_profit_share            inf
+  avg_gross_exposure_pct       79.2
+  total_return_pct             -20.3
+  verdict                      NO DEMONSTRATED EDGE
+  win_rate_pct (closed)        33.2
+  exit reasons                 {'TREND_EXIT': 677, 'STOP': 472, 'TIME_STOP': 123, 'GROUP_EXIT': 42, 'MOMENTUM_EXIT': 23, 'DELISTED': 2}
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+Strategy F  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  cagr_pct                     -6.33
+  nifty_cagr_pct               10.09
+  ew_universe_cagr_pct         15.17
+  max_drawdown_pct             -45.28
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -1.418
+  monthly_excess_t_nw3         -4.63
+  years_beating_nifty          0/8
+  n_closed_positions           491
+  top3_profit_share            inf
+  avg_gross_exposure_pct       65.0
+  total_return_pct             -40.1
+  verdict                      NO DEMONSTRATED EDGE
+  win_rate_pct (closed)        40.3
+  exit reasons                 {'STOP': 260, 'TARGET': 129, 'TIME_STOP': 96, 'DELISTED': 1}
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+W2: data/pit/ does not cover 2008-01-01 -> 2017-12-31 yet -- skipped
+
+Window verdicts: {'S': {'W1': 'FAIL'}, 'F': {'W1': 'FAIL'}}
+Strategy S OVERALL: pending (missing ['W2'])
+Strategy F OVERALL: pending (missing ['W2'])
