@@ -96,3 +96,45 @@ All of the following must pass to say "edge demonstrated":
   understate total return roughly equally on all sides.
 - **The 5% haircut on disappearing stocks** is an assumption. Most disappearances are
   mergers paid near market price, so this probably understates returns slightly.
+
+---
+
+## Dated addendum, 2026-11-02 18:05 IST: Strategy C added before any result exists
+
+IA chose to add a third strategy before any of these strategies had been run. At the time
+of writing, the bhavcopy download had only just started on the laptop:
+`data/pit/` and all universes, panels and strategy results did not exist yet. Strategies
+A and B and the judgement above are unchanged.
+
+**Why C:** it fits IA's 2–4 week horizon, and it follows the only clues seen on the
+2024-26 window. Those clues were limit-at-pivot entries beating chased entries in variant
+B (9 vs 9 trades), and watchlist signals being mildly positive in run #5. They were
+recorded at the time as hypotheses, not evidence. This window, 2019-2024, is where the
+hypothesis is tested.
+
+### Strategy C: buy the short dip in a strong stock (2–4 week swing)
+
+**Signal on day t**, all of these must hold:
+- **Market:** Nifty 50 close_t > its 200-session SMA. Otherwise there are no new entries;
+  open positions are managed normally.
+- **Leader:** the stock is in the current month's universe and in the top 30% of that
+  universe by 126-session return (close_t / close_(t−126) − 1).
+- **Uptrend:** close_t > 200-SMA, 50-SMA > 200-SMA, close_t > 50-SMA.
+- **Dip:** close_t < 10-session SMA and close_t / close_(t−3) − 1 ≤ −3%.
+- **Liquidity:** median traded value over the last 20 sessions ≥ ₹20 crore.
+
+**Entry:** buy at the open of t+1. If more signals arrive than free slots, take the highest
+126-session return first.
+
+**Exits**, whichever comes first:
+- stop: 2 × ATR(14) below the fill;
+- target: the fill + 2 × (fill − stop);
+- the stop wins a same-day tie, and a gap through either level fills at the open;
+- time stop: 20 sessions, sold at the next open.
+
+**Sizing:** 1% of equity at risk per trade, at most 10 positions and 100% gross exposure.
+Same cost model, delisting rule (last close − 5%), window and six checks as A and B.
+
+**Multiple testing:** three strategies are now tested, so a lucky pass is more likely.
+Any pass is provisional, and the next step is forward paper trading, never real money.
+If two or more pass, that is reported, not cherry-picked.

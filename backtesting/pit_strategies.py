@@ -38,6 +38,14 @@ MOM_LOOKBACK, MOM_SKIP, MOM_HOLD = 252, 21, 20
 BO_HIGH_LOOKBACK, BO_VOL_MULT, BO_VOL_LEN = 252, 1.5, 50
 BO_SMA_FAST, BO_SMA_SLOW, BO_ATR_LEN, BO_ATR_MULT = 50, 200, 14, 2.0
 BO_MAX_GAP, BO_TIME_STOP, BO_RISK, BO_SLOTS = 0.05, 60, 0.01, 10
+# Strategy C (dated addendum, docs/redesign_preregistration.md)
+PB_MOM_LEN, PB_MOM_TOP = 126, 0.30
+PB_DIP_LEN, PB_DIP = 3, -0.03
+PB_SMA_SHORT, PB_SMA_FAST, PB_SMA_SLOW = 10, 50, 200
+PB_ATR_LEN, PB_ATR_MULT, PB_REWARD_MULT = 14, 2.0, 2.0
+PB_TIME_STOP, PB_RISK, PB_SLOTS = 20, 0.01, 10
+PB_MIN_TURNOVER = 2e8                    # Rs 20 crore median daily traded value (20 sessions)
+PB_MARKET_SMA = 200
 
 
 @dataclass
@@ -237,6 +245,87 @@ def run_breakout(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
         hits = [e for e in today[today.fillna(False)].index if e in members and e not in ledger.shares]
         hits.sort(key=lambda e: -ind["vol_ratio"].iloc[i][e])
         queued_entries = [(e, closes[e], ind["atr"].iloc[i][e]) for e in hits if np.isfinite(ind["atr"].iloc[i][e])]
+    return _result(ledger)
+
+
+def pullback_signals(panel: Panel, nifty_close: pd.Series) -> dict:
+    c, h, l = panel.close, panel.high, panel.low
+    sma_short = c.rolling(PB_SMA_SHORT, min_periods=PB_SMA_SHORT).mean()
+    sma_f = c.rolling(PB_SMA_FAST, min_periods=PB_SMA_FAST).mean()
+    sma_s = c.rolling(PB_SMA_SLOW, min_periods=PB_SMA_SLOW).mean()
+    tr = pd.concat([(h - l), (h - c.shift(1)).abs(), (l - c.shift(1)).abs()]).groupby(level=0).max()
+    atr = tr.rolling(PB_ATR_LEN, min_periods=PB_ATR_LEN).mean()
+    mom = c / c.shift(PB_MOM_LEN) - 1
+    dip = c / c.shift(PB_DIP_LEN) - 1
+    med_tv = panel.turnover.rolling(20, min_periods=15).median()
+    nifty = nifty_close.reindex(c.index).ffill()
+    market_ok = nifty > nifty.rolling(PB_MARKET_SMA, min_periods=PB_MARKET_SMA).mean()
+    setup = (c > sma_s) & (sma_f > sma_s) & (c > sma_f) & (c < sma_short) & (dip <= PB_DIP) & (med_tv >= PB_MIN_TURNOVER)
+    return {"setup": setup, "mom": mom, "atr": atr, "market_ok": market_ok}
+
+
+def run_pullback(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, nifty_close: pd.Series,
+                 cost: CostModel | None = None):
+    """Strategy C: buy a short dip in a strong, liquid stock in an uptrend,
+    only while the Nifty is above its 200-session average."""
+    ledger = Ledger(cost or CostModel())
+    ind = pullback_signals(panel, nifty_close)
+    sessions = panel.sessions
+    queued_entries, queued_exits = [], {}
+    for i, day in enumerate(sessions):
+        if day < start or day > end:
+            continue
+        _delisting_exits(panel, ledger, i, day)
+        opens, highs, lows, closes = panel.open.iloc[i], panel.high.iloc[i], panel.low.iloc[i], panel.close.iloc[i]
+        for e, reason in list(queued_exits.items()):
+            if e not in ledger.shares:
+                queued_exits.pop(e)
+                continue
+            if np.isfinite(opens.get(e, np.nan)):
+                ledger.sell(day, e, opens[e], _adv(panel, i, e), reason)
+                queued_exits.pop(e)
+        for e, atr in queued_entries:
+            if e in ledger.shares or len(ledger.shares) >= PB_SLOTS:
+                continue
+            o = opens.get(e, np.nan)
+            if not np.isfinite(o):
+                continue
+            stop = o - PB_ATR_MULT * atr
+            if stop <= 0:
+                continue
+            target = o + PB_REWARD_MULT * (o - stop)
+            equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
+            gross = sum(ledger.value(x, opens) for x in ledger.shares)
+            value = min(PB_RISK * equity_now / ((o - stop) / o), max(equity_now - gross, 0.0))
+            if value > 0:
+                ledger.buy(day, e, o, value, _adv(panel, i, e), {"stop": stop, "target": target, "entry_idx": i})
+        queued_entries = []
+        # stop first (wins a same-day tie), then target; gaps fill at the open
+        for e in list(ledger.shares):
+            m = ledger.meta[e]
+            lo, hi, o = lows.get(e, np.nan), highs.get(e, np.nan), opens.get(e, np.nan)
+            if np.isfinite(lo) and lo <= m["stop"]:
+                ledger.sell(day, e, o if np.isfinite(o) and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
+            elif np.isfinite(hi) and hi >= m["target"]:
+                ledger.sell(day, e, o if np.isfinite(o) and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+        ledger.mark(day, closes)
+        if day >= end:
+            continue
+        for e in ledger.shares:
+            if i - ledger.meta[e]["entry_idx"] + 1 >= PB_TIME_STOP:
+                queued_exits[e] = "TIME_STOP"
+        if not bool(ind["market_ok"].iloc[i]):
+            continue
+        members = [e for e in panel.universe_on(day) if e in panel.close.columns]
+        mom_today = ind["mom"].iloc[i][members].dropna()
+        if mom_today.empty:
+            continue
+        leaders = set(mom_today[mom_today >= mom_today.quantile(1 - PB_MOM_TOP)].index)
+        today = ind["setup"].iloc[i]
+        hits = [e for e in today[today.fillna(False)].index
+                if e in leaders and e not in ledger.shares and np.isfinite(ind["atr"].iloc[i][e])]
+        hits.sort(key=lambda e: -mom_today[e])
+        queued_entries = [(e, ind["atr"].iloc[i][e]) for e in hits]
     return _result(ledger)
 
 

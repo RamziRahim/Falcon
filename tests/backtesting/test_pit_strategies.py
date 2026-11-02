@@ -64,3 +64,33 @@ def test_judge_flags_no_edge_for_a_copy_of_the_benchmark():
     report = judge(eq, trades, nifty, pd.Series(0.0004, index=days))
     assert report["verdict"] == "NO DEMONSTRATED EDGE"
     assert not report["checks"]["CAGR beats Nifty by >= 5 pp/yr"]
+
+
+def _pullback_panel(dip_day=320, recover=True):
+    n = len(DAYS)
+    strong = 100 * 1.003 ** np.arange(n)
+    strong[dip_day - 2: dip_day + 1] *= np.array([0.985, 0.97, 0.955])   # 3-day dip > 3%, below 10-SMA
+    if recover:
+        strong[dip_day + 1:] *= 1.0                                          # back on trend next day
+    weak = np.full(n, 100.0) * 0.9995 ** np.arange(n)
+    close = pd.DataFrame({"STRONG": strong, "WEAK": weak}, index=DAYS)
+    vol = close * 0 + 1e7
+    return _panel(close, volume=vol)
+
+
+def test_pullback_buys_dip_in_leader_and_hits_target_or_time():
+    from backtesting.pit_strategies import run_pullback
+    panel = _pullback_panel()
+    nifty = pd.Series(100 * 1.0005 ** np.arange(len(DAYS)), index=DAYS)
+    eq, trades = run_pullback(panel, DAYS[260], DAYS[-1], nifty, FREE)
+    first = trades.iloc[0]
+    assert first["entity_id"] == "STRONG" and first["entry_date"] == DAYS[321]
+    assert first["exit_reason"] in {"TARGET", "TIME_STOP"}
+
+
+def test_pullback_stands_aside_when_market_below_200_sma():
+    from backtesting.pit_strategies import run_pullback
+    panel = _pullback_panel()
+    nifty = pd.Series(100 * 0.999 ** np.arange(len(DAYS)), index=DAYS)      # falling market
+    eq, trades = run_pullback(panel, DAYS[260], DAYS[-1], nifty, FREE)
+    assert trades.empty and eq["gross_exposure"].max() == 0
