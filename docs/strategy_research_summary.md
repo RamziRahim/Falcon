@@ -21,6 +21,7 @@ Full output: `data/final_results_2026-11-03.txt`.
 | **C** dip in a momentum leader, 20-day hold | 8.8% vs 16.1% (2019-24) | — | No edge |
 | **MR** RSI-2 mean reversion, top 100 | −0.5%/yr vs 10.0%; 60% win rate; +0.00% net per trade | 3.1%/yr vs 5.5%; 62% win rate; +0.22% net per trade (t 1.71); drawdown −27% vs −60% | No edge (fails both) |
 | **S** strong stock + strong peer group, 20-day-high buy-stop | −3.8%/yr, −62% drawdown, 33% wins | −11.5%/yr, −81% drawdown | No edge |
+| **Fixed brackets** (stop −2%/+6% and −3%/+6%, 5 × 20%) on F, S, B, MR entries | All 8 lose: −10% to −85%/yr; best win rate 33.5% (MR −3/+6) | All 8 lose: −12% to −88%/yr | No edge (16/16 fail; tight stops sit inside daily noise, 6% cap removes big winners) |
 | **F** Falcon's own setups, pivot buy-stop on breakout day | −5.8%/yr, 0/8 years beat Nifty | 1.8%/yr vs 5.5%, drawdown −40% vs −60% | No edge |
 
 ## What the evidence says
