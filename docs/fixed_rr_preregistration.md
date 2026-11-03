@@ -68,3 +68,38 @@ not finished.
 - Break-even win rate is about 33% before costs, about 36% after.
 - Output: `data/fixed_rr_3_6_result.txt`, with trades in `data/fixed_rr_3_6_trades_*.csv`.
 - This adds four more combinations, eight in total, so a single pass is weaker evidence.
+
+---
+
+## Results, 2026-11-03
+
+Full output: `data/fixed_rr_result.txt` (1:3) and `data/fixed_rr_3_6_result.txt` (3:6).
+
+**All 16 combinations fail** (4 entries × 2 brackets × 2 windows):
+
+| Entry | Bracket | Win % W1 / W2 | Mean net per trade W1 / W2 | CAGR W1 / W2 |
+|---|---|---|---|---|
+| MR | −2/+6 | 25.6 / 25.5 | −0.35% / −0.40% | −11.3% / −13.0% |
+| MR | −3/+6 | 33.5 / 33.3 | −0.41% / −0.46% | −10.2% / −11.9% |
+| B | −2/+6 | 22.7 / 21.4 | −0.62% / −1.08% | −47.2% / −63.9% |
+| B | −3/+6 | 31.9 / 29.2 | −0.59% / −1.19% | −37.1% / −58.8% |
+| F | −2/+6 | 17.5 / 17.5 | −1.15% / −1.43% | −50.1% / −57.9% |
+| F | −3/+6 | 29.6 / 28.3 | −0.92% / −1.37% | −32.4% / −46.0% |
+| S | −2/+6 | 11.8 / 10.6 | −1.49% / −1.90% | −84.7% / −88.3% |
+| S | −3/+6 | 20.7 / 18.7 | −1.57% / −2.08% | −77.4% / −83.4% |
+
+Nifty over the same periods: +10.0% (W1) and +5.5% (W2) a year.
+
+Break-even win rates after costs are about 29% (1:3) and about 36% (1:2). No combination
+reached break-even:
+- the best, MR −3/+6, won 33.5% of trades;
+- the average loss exceeds the stop distance because of costs and gaps;
+- the 6% target caps the large winners that drove momentum's earlier gains.
+
+### Sensitivity, reported only (`data/fixed_rr_sensitivity.txt`)
+
+For the buy-stop entries (F, S), the run was repeated with a fill-day stop that counts
+only on a close at or below it, the most generous reading of daily bars. Win rates rise
+to 28-37%. The only non-negative result is S −2/+6 on W1, at +2.6%/yr, still well below
+the Nifty's 10.0%. Every other combination still loses money. **The verdicts don't
+depend on the intraday-ordering assumption.**
