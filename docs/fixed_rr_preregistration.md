@@ -53,3 +53,18 @@ ATR(14) is about 2-3.5% of price. On daily bars, many trades will touch both −
 within a day or two, and the stop-wins-tie rule makes those losses. The result therefore
 tests this bracket as it would be traded with resting orders, under conservative
 intraday ordering.
+
+---
+
+### Dated addendum, 2026-11-03 ~19:56 IST: parallel 3:6 bracket (requested by IA before any result)
+
+IA asked for a second, separately reported bracket, run in parallel. It was added before
+either bracket had produced any result: the 1:3 run had started minutes earlier and had
+not finished.
+
+- **Stop** = fill × 0.97 (−3%). **Target** = fill × 1.06 (+6%). That makes R:R 1:2.
+- Everything else is identical to the 1:3 bracket: entries, 20-session time stop,
+  5 × 20% sizing, costs, windows and the six checks.
+- Break-even win rate is about 33% before costs, about 36% after.
+- Output: `data/fixed_rr_3_6_result.txt`, with trades in `data/fixed_rr_3_6_trades_*.csv`.
+- This adds four more combinations, eight in total, so a single pass is weaker evidence.
