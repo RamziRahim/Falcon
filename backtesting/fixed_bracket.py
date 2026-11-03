@@ -26,8 +26,15 @@ from backtesting.pit_strategies import Ledger, Panel, _adv, _delisting_exits, _r
 STOP_PCT, TARGET_PCT, TIME_STOP, POSITION, SLOTS = 0.02, 0.06, 20, 0.20, 5
 
 
-def run_bracket(panel: Panel, start, end, order_fn, cost: CostModel | None = None):
-    """order_fn(i, day, held:set) -> list of orders placed at day's close."""
+def run_bracket(panel: Panel, start, end, order_fn, cost: CostModel | None = None,
+                optimistic_stop_fill_day: bool = False):
+    """order_fn(i, day, held:set) -> list of orders placed at day's close.
+
+    optimistic_stop_fill_day (SENSITIVITY ONLY, never the verdict): for a
+    position entered by a BUY-STOP, assume the fill day's low came before
+    the breakout, so on that day the stop counts only if the CLOSE is at or
+    below it. Market-open entries are unaffected (any low after the open is
+    after the fill)."""
     ledger = Ledger(cost or CostModel())
     sessions = panel.sessions
     live, queued_exits = [], set()
@@ -61,7 +68,8 @@ def run_bracket(panel: Panel, start, end, order_fn, cost: CostModel | None = Non
                 value = min(POSITION * equity_now, ledger.cash * 0.999)
                 if value > 0:
                     ledger.buy(day, e, fill, value, _adv(panel, i, e),
-                               {"stop": fill * (1 - STOP_PCT), "target": fill * (1 + TARGET_PCT), "entry_idx": i})
+                               {"stop": fill * (1 - STOP_PCT), "target": fill * (1 + TARGET_PCT), "entry_idx": i,
+                                "via_stop": od["type"] == "stop"})
                 continue
             # unfilled: market orders last one session; stop orders until expiry / cancel level
             if od["type"] == "stop" and i < od["expires_idx"] and not (
@@ -73,6 +81,8 @@ def run_bracket(panel: Panel, start, end, order_fn, cost: CostModel | None = Non
             m = ledger.meta[e]
             o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
             gap_ok = m["entry_idx"] < i and np.isfinite(o)
+            if optimistic_stop_fill_day and m.get("via_stop") and m["entry_idx"] == i:
+                lo = closes.get(e, np.nan)
             if np.isfinite(lo) and lo <= m["stop"]:
                 ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
             elif np.isfinite(hi) and hi >= m["target"]:
