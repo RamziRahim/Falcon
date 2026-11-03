@@ -74,6 +74,10 @@ class Panel:
 
 
 def make_panel(prices: pd.DataFrame, universe: pd.DataFrame) -> Panel:
+    # Only stocks that are ever in the given universe can be traded or held,
+    # so the wide frames are limited to them (memory: ~1,600 of ~4,600
+    # entities over 2007-2026; results are unchanged).
+    prices = prices[prices["entity_id"].isin(set(universe["entity_id"]))]
     wide = {c: prices.pivot_table(index="Date", columns="entity_id", values=c, aggfunc="first")
             for c in ("Open", "High", "Low", "Close", "Volume", "Turnover")}
     uni = {pd.Timestamp(m): set(g["entity_id"]) for m, g in universe.groupby("month_end")}

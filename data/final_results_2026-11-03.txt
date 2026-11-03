@@ -1,0 +1,337 @@
+##### tests/run_mean_reversion.py
+Universe: top 100 by traded value; benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet)
+
+======================================================================
+W1 2019-01-01 -> 2026-10-30  MR (primary)
+======================================================================
+  cagr_pct                   -0.48
+  nifty_cagr_pct             10.03
+  sharpe                     0.03
+  nifty_sharpe               0.65
+  max_drawdown_pct           -33.2
+  nifty_max_drawdown_pct     -38.44
+  n_trades                   1648
+  trades_per_year            206.0
+  win_rate_pct               60.0
+  mean_net_per_trade_pct     0.002
+  trade_t                    0.02
+  avg_calendar_days_held     6.0
+  years_profitable           5/8
+  top3_profit_share          inf
+  avg_gross_exposure_pct     34.5
+  verdict                    FAIL
+    [FAIL] mean net per trade > 0 with t >= 2
+    [PASS] win rate after costs >= 55%
+    [FAIL] Sharpe > Nifty Sharpe
+    [PASS] max drawdown no worse than Nifty
+    [FAIL] profitable in >= 70% of calendar years
+    [FAIL] top-3 trades < 20% of profit
+
+======================================================================
+W1 2019-01-01 -> 2026-10-30  MR + 3xATR disaster stop (reported only)
+======================================================================
+  cagr_pct                   -1.19
+  nifty_cagr_pct             10.03
+  sharpe                     -0.04
+  nifty_sharpe               0.65
+  max_drawdown_pct           -29.04
+  nifty_max_drawdown_pct     -38.44
+  n_trades                   1750
+  trades_per_year            218.8
+  win_rate_pct               60.6
+  mean_net_per_trade_pct     -0.025
+  trade_t                    -0.25
+  avg_calendar_days_held     5.5
+  years_profitable           5/8
+  top3_profit_share          inf
+  avg_gross_exposure_pct     33.2
+  verdict                    FAIL
+    [FAIL] mean net per trade > 0 with t >= 2
+    [PASS] win rate after costs >= 55%
+    [FAIL] Sharpe > Nifty Sharpe
+    [PASS] max drawdown no worse than Nifty
+    [FAIL] profitable in >= 70% of calendar years
+    [FAIL] top-3 trades < 20% of profit
+
+======================================================================
+W2 2008-01-01 -> 2017-12-31  MR (primary)
+======================================================================
+  cagr_pct                   3.12
+  nifty_cagr_pct             5.54
+  sharpe                     0.3
+  nifty_sharpe               0.36
+  max_drawdown_pct           -26.74
+  nifty_max_drawdown_pct     -59.86
+  n_trades                   1775
+  trades_per_year            177.5
+  win_rate_pct               62.3
+  mean_net_per_trade_pct     0.215
+  trade_t                    1.71
+  avg_calendar_days_held     5.7
+  years_profitable           5/10
+  top3_profit_share          0.192
+  avg_gross_exposure_pct     27.6
+  verdict                    FAIL
+    [FAIL] mean net per trade > 0 with t >= 2
+    [PASS] win rate after costs >= 55%
+    [FAIL] Sharpe > Nifty Sharpe
+    [PASS] max drawdown no worse than Nifty
+    [FAIL] profitable in >= 70% of calendar years
+    [PASS] top-3 trades < 20% of profit
+
+======================================================================
+W2 2008-01-01 -> 2017-12-31  MR + 3xATR disaster stop (reported only)
+======================================================================
+  cagr_pct                   1.82
+  nifty_cagr_pct             5.54
+  sharpe                     0.21
+  nifty_sharpe               0.36
+  max_drawdown_pct           -28.76
+  nifty_max_drawdown_pct     -59.86
+  n_trades                   1884
+  trades_per_year            188.4
+  win_rate_pct               61.7
+  mean_net_per_trade_pct     0.143
+  trade_t                    1.19
+  avg_calendar_days_held     5.2
+  years_profitable           4/10
+  top3_profit_share          0.389
+  avg_gross_exposure_pct     26.5
+  verdict                    FAIL
+    [FAIL] mean net per trade > 0 with t >= 2
+    [PASS] win rate after costs >= 55%
+    [FAIL] Sharpe > Nifty Sharpe
+    [PASS] max drawdown no worse than Nifty
+    [FAIL] profitable in >= 70% of calendar years
+    [FAIL] top-3 trades < 20% of profit
+
+Window verdicts: {'W1': 'FAIL', 'W2': 'FAIL'}
+OVERALL: NO DEMONSTRATED EDGE
+##### tests/run_s_and_f.py
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet)
+
+======================================================================
+Strategy S  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  cagr_pct                     -3.76
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -61.54
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.861
+  monthly_excess_t_nw3         -1.16
+  years_beating_nifty          2/8
+  n_closed_positions           1355
+  top3_profit_share            inf
+  avg_gross_exposure_pct       80.1
+  total_return_pct             -25.9
+  verdict                      NO DEMONSTRATED EDGE
+  win_rate_pct (closed)        33.1
+  exit reasons                 {'TREND_EXIT': 696, 'STOP': 473, 'TIME_STOP': 117, 'GROUP_EXIT': 41, 'MOMENTUM_EXIT': 23, 'DELISTED': 2}
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+Strategy F  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  cagr_pct                     -5.76
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -42.61
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -1.369
+  monthly_excess_t_nw3         -4.58
+  years_beating_nifty          0/8
+  n_closed_positions           489
+  top3_profit_share            inf
+  avg_gross_exposure_pct       65.0
+  total_return_pct             -37.1
+  verdict                      NO DEMONSTRATED EDGE
+  win_rate_pct (closed)        40.5
+  exit reasons                 {'STOP': 258, 'TARGET': 128, 'TIME_STOP': 97, 'DELISTED': 1}
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+Strategy S  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  cagr_pct                     -11.51
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -81.41
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -1.605
+  monthly_excess_t_nw3         -2.68
+  years_beating_nifty          2/10
+  n_closed_positions           1585
+  top3_profit_share            inf
+  avg_gross_exposure_pct       72.2
+  total_return_pct             -70.5
+  verdict                      NO DEMONSTRATED EDGE
+  win_rate_pct (closed)        31.2
+  exit reasons                 {'TREND_EXIT': 822, 'STOP': 548, 'TIME_STOP': 124, 'GROUP_EXIT': 60, 'MOMENTUM_EXIT': 16, 'DELISTED': 5}
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+Strategy F  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  cagr_pct                     1.75
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -40.18
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.468
+  monthly_excess_t_nw3         -1.11
+  years_beating_nifty          5/10
+  n_closed_positions           587
+  top3_profit_share            0.73
+  avg_gross_exposure_pct       61.6
+  total_return_pct             18.9
+  verdict                      NO DEMONSTRATED EDGE
+  win_rate_pct (closed)        44.7
+  exit reasons                 {'STOP': 280, 'TARGET': 188, 'TIME_STOP': 111, 'DELISTED': 3}
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+Window verdicts: {'S': {'W1': 'FAIL', 'W2': 'FAIL'}, 'F': {'W1': 'FAIL', 'W2': 'FAIL'}}
+Strategy S OVERALL: NO DEMONSTRATED EDGE
+Strategy F OVERALL: NO DEMONSTRATED EDGE
+##### tests/run_momentum_w2.py
+Strategy A on W2 2008-01-01 -> 2017-12-31 (benchmark NSE NIFTY 50 (data/pit_sources/indices.parquet))
+  cagr_pct                     8.43
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -80.09
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.398
+  monthly_excess_t_nw3         0.51
+  years_beating_nifty          5/10
+  n_closed_positions           734
+  top3_profit_share            0.36
+  avg_gross_exposure_pct       98.5
+  total_return_pct             124.5
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+##### tests/run_redesign_tests.py
+
+======================================================================
+Strategy A: monthly momentum rotation  (2019-01-01 -> 2024-07-31)
+======================================================================
+  cagr_pct                     41.98
+  nifty_cagr_pct               16.07
+  ew_universe_cagr_pct         23.35
+  max_drawdown_pct             -42.11
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      1.967
+  monthly_excess_t_nw3         2.26
+  years_beating_nifty          4/6
+  n_closed_positions           499
+  top3_profit_share            0.18
+  avg_gross_exposure_pct       97.9
+  total_return_pct             606.9
+  verdict                      EDGE DEMONSTRATED (provisional; next is paper trading)
+  Pre-registered checks:
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [PASS] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+Strategy B: simple breakout  (2019-01-01 -> 2024-07-31)
+======================================================================
+  cagr_pct                     18.16
+  nifty_cagr_pct               16.07
+  ew_universe_cagr_pct         23.35
+  max_drawdown_pct             -39.21
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.278
+  monthly_excess_t_nw3         0.36
+  years_beating_nifty          3/6
+  n_closed_positions           462
+  top3_profit_share            0.38
+  avg_gross_exposure_pct       92.3
+  total_return_pct             153.7
+  verdict                      NO DEMONSTRATED EDGE
+  Pre-registered checks:
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+Strategy C: dip in a strong stock (2-4 weeks)  (2019-01-01 -> 2024-07-31)
+======================================================================
+  cagr_pct                     8.76
+  nifty_cagr_pct               16.07
+  ew_universe_cagr_pct         23.35
+  max_drawdown_pct             -39.41
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.517
+  monthly_excess_t_nw3         -0.72
+  years_beating_nifty          2/6
+  n_closed_positions           796
+  top3_profit_share            0.16
+  avg_gross_exposure_pct       72.3
+  total_return_pct             59.8
+  verdict                      NO DEMONSTRATED EDGE
+  Pre-registered checks:
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+##### tests/run_momentum_confirmation.py
+Strategy A, confirmation window 2024-08-01 -> 2026-10-30
+======================================================================
+  cagr_pct                     14.76
+  nifty_cagr_pct               -3.57
+  ew_universe_cagr_pct         -2.64
+  max_drawdown_pct             -35.47
+  nifty_max_drawdown_pct       -15.77
+  monthly_excess_mean_pct      1.855
+  monthly_excess_t_nw3         1.19
+  years_beating_nifty          1/3
+  n_closed_positions           198
+  top3_profit_share            1.11
+  avg_gross_exposure_pct       96.0
+  total_return_pct             36.2
+  (monthly excess t is reported only; not a criterion for this window)
+  Pre-registered confirmation checks:
+    [PASS] CAGR beats Nifty
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] max drawdown within Nifty's - 15 pp
+    [FAIL] top-3 positions < 50% of profit
+
+VERDICT: NOT CONFIRMED on the later window
+
+Calendar-period returns (strategy vs Nifty):
+  2024: strategy -8.5%   Nifty -5.5%
+  2025: strategy +3.9%   Nifty +10.5%
+  2026: strategy +43.4%   Nifty -11.8%
