@@ -59,3 +59,43 @@ and MR. They use the same generators (`backtesting/fixed_bracket.py`).
 - 8 combinations (4 entries × 2 targets), so any pass is provisional, and the next step
   is paper trading.
 - Same costs, data, delisting rule and universe as all earlier tests.
+
+---
+
+## Results, 2026-11-04
+
+Full output: `data/swing_risk_1to2_result.txt` and `data/swing_risk_1to3_result.txt`,
+with trades in `data/swing_risk_1to{2,3}_trades_*.csv`.
+
+**Process note:** the first 1:3 run was killed out of memory at load, because it was
+started in parallel with 1:2. It was re-run alone with no changes.
+
+**All 8 combinations fail** (each needs a pass in both windows):
+
+| Entry | R | Win % W1 / W2 | CAGR W1 / W2 | Max drawdown W1 / W2 | Checks W1 |
+|---|---|---|---|---|---|
+| S | 1:2 | 48.5 / 42.9 | +14.2 / −3.6 | −22.9 / — | 2/6 |
+| S | **1:3** | **49.5 / 42.8** | **+20.4 / −0.2** | −22.6 / −56.6 | **5/6** (t = 1.66 < 2) |
+| B | 1:2 | 46.7 / 46.0 | +2.1 / −3.4 | −42.6 / — | 1/6 |
+| B | 1:3 | 45.6 / 46.0 | −0.1 / −3.2 | −43.8 / −50.3 | |
+| F | 1:2 | 44.8 / 43.1 | −3.3 / −8.7 | | |
+| F | 1:3 | 44.2 / 41.3 | −0.4 / −7.7 | −36.5 / −68.8 | |
+| MR | 1:2 | 38.5 / 39.1 | −2.2 / −2.2 | | |
+| MR | 1:3 | 36.7 / 35.8 | −0.7 / −1.8 | −39.6 / −44.0 | |
+
+*Nifty CAGR: +10.0% (W1) / +5.5% (W2). PIT equal-weight: +15.2% (W1) / +4.2% (W2).*
+
+**Reading:**
+- Exits based on swing-low stops and 1% risk are far better than the fixed brackets
+  (whose CAGR ranged from −10% to −88%).
+- **S with 1:3 on 2019–26 passes 5 of 6 checks:** +20.4% a year against the Nifty's
+  +10.0%, a −22.6% drawdown against −38.4%, and 5 of 8 years ahead. Only the
+  statistical-significance check fails (t = 1.66).
+- **The same rules on 2008–17 make −0.2% a year.** That window is what decides the
+  result: it is not confirmed.
+- **Common to all eight:**
+  - **60–75% of trades end at the 20-session time stop.** Swing-low stops are 5–10% away,
+    so the targets (10–30%) are rarely reached in 4 weeks.
+  - **S and B skip about 2,100–2,750 signals each,** because the last swing low is more
+    than 15% below the price.
+- **Verdict per the rules:** no demonstrated edge. Nothing is re-tuned on these windows.
