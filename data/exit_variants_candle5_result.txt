@@ -29,3 +29,93 @@ S entries + breakout-candle stop, target +5%  W1 2019-01-01 -> 2026-10-30
     [FAIL] beats Nifty in >= 4 calendar years
     [FAIL] max drawdown within Nifty's - 10 pp
     [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+B entries + breakout-candle stop, target +5%  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              3228
+  win rate after costs         56.2%
+  avg win / avg loss           +4.55% / -6.33%
+  mean net per trade           -0.216%
+  half exits taken             0
+  exit mix                     {'TARGET': 1769, 'STOP': 1311, 'TIME_STOP': 148}
+  signals skipped              {'no_stop_level': 0, 'gap_below_stop': 6, 'stop_too_wide': 201}
+  cagr_pct                     -13.7
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -71.24
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -2.014
+  monthly_excess_t_nw3         -3.91
+  years_beating_nifty          1/8
+  n_closed_positions           3235
+  top3_profit_share            inf
+  avg_gross_exposure_pct       73.8
+  total_return_pct             -68.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+F entries + breakout-candle stop, target +5%  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              3137
+  win rate after costs         37.4%
+  avg win / avg loss           +4.51% / -3.48%
+  mean net per trade           -0.493%
+  half exits taken             0
+  exit mix                     {'STOP': 1940, 'TARGET': 1143, 'TIME_STOP': 52, 'DELISTED': 2}
+  signals skipped              {'no_stop_level': 0, 'gap_below_stop': 5, 'stop_too_wide': 1}
+  cagr_pct                     -19.43
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -81.57
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -2.576
+  monthly_excess_t_nw3         -4.62
+  years_beating_nifty          0/8
+  n_closed_positions           3143
+  top3_profit_share            inf
+  avg_gross_exposure_pct       69.2
+  total_return_pct             -81.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+S entries + breakout-candle stop, target +5%  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              4269
+  win rate after costs         48.3%
+  avg win / avg loss           +4.30% / -5.74%
+  mean net per trade           -0.892%
+  half exits taken             0
+  exit mix                     {'STOP': 2170, 'TARGET': 2052, 'TIME_STOP': 43, 'DELISTED': 4}
+  signals skipped              {'no_stop_level': 0, 'gap_below_stop': 0, 'stop_too_wide': 291}
+  cagr_pct                     -32.39
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -98.1
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -3.926
+  monthly_excess_t_nw3         -6.48
+  years_beating_nifty          1/10
+  n_closed_positions           4277
+  top3_profit_share            inf
+  avg_gross_exposure_pct       57.7
+  total_return_pct             -98.0
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
