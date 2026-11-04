@@ -62,7 +62,7 @@ def last_confirmed_swing_high(high: np.ndarray) -> np.ndarray:
     return pd.DataFrame(confirmed).ffill().to_numpy()
 
 
-def find_breakouts(panel, vol_mult):
+def find_breakouts(panel, vol_mult, with_bos=False):
     hi, lo = panel.high.to_numpy(float), panel.low.to_numpy(float)
     cl, vol = panel.close.to_numpy(float), panel.volume.to_numpy(float)
     vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
@@ -98,7 +98,7 @@ def find_breakouts(panel, vol_mult):
             if not cl[t, j] > level or t - last_t < GAP:
                 continue
             last_t = t
-            out.append((j, t, level))
+            out.append((j, t, level, b) if with_bos else (j, t, level))
     return out
 
 
