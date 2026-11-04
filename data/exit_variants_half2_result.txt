@@ -59,3 +59,33 @@ S entries + swing-low stop, 1:2, half at 1R + break-even  W1 2019-01-01 -> 2026-
     [PASS] beats Nifty in >= 4 calendar years
     [PASS] max drawdown within Nifty's - 10 pp
     [PASS] top-3 positions < 50% of profit
+
+======================================================================
+B entries + swing-low stop, 1:2, half at 1R + break-even  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              1037
+  win rate after costs         49.8%
+  avg win / avg loss           +7.74% / -7.14%
+  mean net per trade           +0.261%
+  half exits taken             287
+  exit mix                     {'TIME_STOP': 520, 'STOP': 229, 'HALF+TIME_STOP': 134, 'HALF+TARGET': 90, 'HALF+BREAKEVEN': 63, 'DELISTED': 1}
+  signals skipped              {'no_stop_level': 0, 'gap_below_stop': 0, 'stop_too_wide': 2338}
+  cagr_pct                     1.86
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -42.37
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.676
+  monthly_excess_t_nw3         -1.62
+  years_beating_nifty          1/8
+  n_closed_positions           1045
+  top3_profit_share            0.47
+  avg_gross_exposure_pct       73.7
+  total_return_pct             15.5
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
