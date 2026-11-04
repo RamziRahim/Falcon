@@ -149,3 +149,33 @@ F entries + swing-low stop, 1:3, half at 1.5R + break-even  W2 2008-01-01 -> 201
     [FAIL] beats Nifty in >= 4 calendar years
     [FAIL] max drawdown within Nifty's - 10 pp
     [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+S entries + swing-low stop, 1:3, half at 1.5R + break-even  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1162
+  win rate after costs         44.1%
+  avg win / avg loss           +9.87% / -7.98%
+  mean net per trade           -0.118%
+  half exits taken             237
+  exit mix                     {'TIME_STOP': 579, 'STOP': 343, 'HALF+TIME_STOP': 140, 'HALF+TARGET': 64, 'HALF+BREAKEVEN': 31, 'DELISTED': 4, 'HALF+DELISTED': 1}
+  signals skipped              {'no_stop_level': 0, 'gap_below_stop': 0, 'stop_too_wide': 2785}
+  cagr_pct                     -3.62
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -60.44
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.994
+  monthly_excess_t_nw3         -2.08
+  years_beating_nifty          3/10
+  n_closed_positions           1172
+  top3_profit_share            inf
+  avg_gross_exposure_pct       66.7
+  total_return_pct             -30.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
