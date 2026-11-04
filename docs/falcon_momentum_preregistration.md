@@ -94,3 +94,31 @@ The trade is skipped if the fill is at or below the stop.
 
 - `data/falcon_momentum_t40_result.txt` and `data/falcon_momentum_t20_result.txt`
 - trades in `data/falcon_momentum_*_trades_*.csv`
+
+---
+
+## Results, 2026-11-04
+
+Full output: `data/falcon_momentum_t40_result.txt` and `data/falcon_momentum_t20_result.txt`.
+
+| | t40 W1 | t40 W2 | t20 W1 | t20 W2 | Nifty W1 / W2 |
+|---|---|---|---|---|---|
+| CAGR | **11.2%** | **8.6%** | 5.7% | 5.3% | 10.0% / 5.5% |
+| Max drawdown | −25.6% | −27.0% | −26.2% | −27.0% | −38.4% / −59.9% |
+| Win rate | 39.8% | 43.7% | 45.3% | 44.1% | |
+| Avg win / avg loss | +17.9 / −9.3% | +17.4 / −10.3% | +12.3 / −8.3% | +12.5 / −8.4% | |
+| Mean net per trade | +1.56% | +1.81% | +1.03% | +0.79% | |
+| Monthly excess t | 0.23 | 0.02 | −0.63 | −0.48 | |
+| Checks | 2/6 | 4/6 | 2/6 | 4/6 | |
+
+**Verdict per the rules:** no demonstrated edge on either track.
+
+**Reading:** t40 is the first strategy in this research that:
+- beats the Nifty on **both** windows;
+- with a positive mean trade on both;
+- and less than half the Nifty's worst drawdown on W2 (−27% vs −60%).
+
+But the margin over the Nifty is 1-3 points a year, not 5. The monthly excess is
+statistically indistinguishable from zero (t ≈ 0), and it trails the equal-weight
+universe on W1. Much of the benefit is from avoiding crashes: entries were blocked in
+27-34% of weeks.
