@@ -1,0 +1,31 @@
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet); breakout-candle stop, target +5%
+
+======================================================================
+S entries + breakout-candle stop, target +5%  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              3923
+  win rate after costs         48.8%
+  avg win / avg loss           +4.63% / -5.10%
+  mean net per trade           -0.347%
+  half exits taken             0
+  exit mix                     {'STOP': 1981, 'TARGET': 1905, 'TIME_STOP': 37}
+  signals skipped              {'no_stop_level': 0, 'gap_below_stop': 0, 'stop_too_wide': 175}
+  cagr_pct                     -19.74
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -82.17
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -2.555
+  monthly_excess_t_nw3         -4.23
+  years_beating_nifty          0/8
+  n_closed_positions           3926
+  top3_profit_share            inf
+  avg_gross_exposure_pct       63.5
+  total_return_pct             -82.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
