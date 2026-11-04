@@ -71,3 +71,29 @@ so any pass is provisional, and the next step is paper trading.
 
 - `data/fm_entries_{breakout,sweep,fvg}_result.txt`
 - trades in `data/fm_entries_*_trades_*.csv`
+
+---
+
+## Results, 2026-11-04
+
+Full output: `data/fm_entries_{breakout,sweep,fvg}_result.txt`. **All three fail**, and
+none beats E0 (FM's next-open entry) on CAGR in either window.
+
+| Entry | CAGR W1 / W2 | Max DD W1 / W2 | Win % W1 / W2 | Mean net/trade W1 / W2 | Trades W1 / W2 | Avg exposure W1 / W2 |
+|---|---|---|---|---|---|---|
+| E0 next open (FM) | **11.2 / 8.6** | −25.6 / −27.0 | 39.8 / 43.7 | +1.56 / +1.81 | 610 / 691 | 53 / 47 |
+| E1 range breakout | 2.4 / 5.7 | **−14.3 / −8.0** | 40.4 / **51.7** | +0.66 / **+4.25** | 156 / 143 | 20 / 16 |
+| E2 liquidity sweep | 4.8 / 5.2 | −32.1 / −27.2 | 32.5 / 37.6 | +0.83 / +0.93 | 793 / 814 | 43 / 38 |
+| E3 FVG retest | −4.9 / −8.7 | −37.1 / −79.0 | 30.0 / 31.1 | +0.07 / −0.09 | 1831 / 2039 | 55 / 47 |
+
+*Nifty: 10.0 / 5.5% CAGR, −38 / −60% drawdown.*
+
+**Reading:**
+- **E3:** FVGs are mostly narrow, so the stop is very close and is hit by noise (about
+  70% of trades). Many small losses plus costs.
+- **E2:** a tighter stop (about 5% average loss vs 9%) but a lower win rate. Positive
+  per trade in both windows, but below E0.
+- **E1:** the best per trade on W2 (+4.2%, a 52% win rate) and the smallest drawdowns,
+  but it triggers rarely: about 15-20 trades a year and 16-20% capital in use. So its
+  CAGR is low. It is not consistent: per trade on W1 (+0.66%) is below E0.
+- No re-tuning on these windows.
