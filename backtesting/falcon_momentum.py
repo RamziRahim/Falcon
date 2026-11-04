@@ -92,7 +92,11 @@ def sector_maps(panel: Panel, indices: pd.DataFrame):
 
 
 def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, time_stop: int,
-           cost: CostModel | None = None):
+           cost: CostModel | None = None, review_at: int | None = None, review_gain: float = 0.02,
+           review_rank: int = 50):
+    """review_at (docs/fm_review_preregistration.md): at the close of that many
+    sessions held, sell at the next open unless the close is >= fill x (1 +
+    review_gain) AND the latest weekly rank <= review_rank. None = off (FM as frozen)."""
     ledger = Ledger(cost or CostModel())
     s = panel.sessions
     c = panel.close
@@ -115,8 +119,8 @@ def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, ti
         k = dates.searchsorted(np.datetime64(day), side="right") - 1
         return store[pd.Timestamp(dates[k])] if k >= 0 else {}
 
-    queued, queued_exits = [], set()
-    stats = {"weeks": 0, "weeks_blocked_by_market": 0, "candidates": 0, "sector_rejected": 0,
+    queued, queued_exits, last_rank = [], set(), {}
+    stats = {"review_exits": 0, "review_kept": 0, "weeks": 0, "weeks_blocked_by_market": 0, "candidates": 0, "sector_rejected": 0,
              "by_index": 0, "by_peers": 0, "gap_skip": 0, "stop_skip": 0}
     for i, day in enumerate(s):
         if day < start or day > end:
@@ -127,7 +131,8 @@ def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, ti
             if e not in ledger.shares:
                 queued_exits.discard(e)
             elif np.isfinite(opens.get(e, np.nan)):
-                ledger.sell(day, e, opens[e], _adv(panel, i, e), "MOMENTUM_EXIT" if ledger.meta[e].get("rank_exit") else "TIME_STOP")
+                ledger.sell(day, e, opens[e], _adv(panel, i, e), "MOMENTUM_EXIT" if ledger.meta[e].get("rank_exit")
+                            else "REVIEW_EXIT" if ledger.meta[e].get("review_exit") else "TIME_STOP")
                 queued_exits.discard(e)
         for od in queued:                                   # entries at the open, in rank order
             e = od["entity"]
@@ -148,7 +153,7 @@ def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, ti
             value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
             if value > 0:
                 ledger.buy(day, e, o, value, _adv(panel, i, e),
-                           {"stop": stop, "target": o + R_MULT * (o - stop), "entry_idx": i})
+                           {"stop": stop, "target": o + R_MULT * (o - stop), "entry_idx": i, "fill": o})
         queued = []
         for e in list(ledger.shares):
             m = ledger.meta[e]
@@ -164,9 +169,20 @@ def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, ti
         for e in ledger.shares:
             if i - ledger.meta[e]["entry_idx"] + 1 >= time_stop:
                 queued_exits.add(e)
+            elif review_at is not None and i - ledger.meta[e]["entry_idx"] + 1 == review_at:
+                m = ledger.meta[e]
+                px = closes.get(e, np.nan)
+                keep = np.isfinite(px) and px >= m["fill"] * (1 + review_gain) and last_rank.get(e, np.inf) <= review_rank
+                if keep:
+                    stats["review_kept"] += 1
+                else:
+                    stats["review_exits"] += 1
+                    m["review_exit"] = True
+                    queued_exits.add(e)
         if i not in ranks:
             continue
         rk = ranks[i]
+        last_rank = rk.to_dict()
         stats["weeks"] += 1
         for e in ledger.shares:                              # momentum exit
             if rk.get(e, np.inf) > EXIT_RANK:

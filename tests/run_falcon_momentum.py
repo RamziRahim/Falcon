@@ -2,6 +2,7 @@
 Falcon -- FM backtest per docs/falcon_momentum_preregistration.md.
 
     python tests/run_falcon_momentum.py            # both tracks: t40 (primary), t20 (secondary)
+    python tests/run_falcon_momentum.py review     # t40 + 4-week review (docs/fm_review_preregistration.md)
 """
 import sys
 sys.path.insert(0, ".")
@@ -15,6 +16,7 @@ from backtesting.pit_strategies import equal_weight_universe, judge, make_panel
 from tests.run_mean_reversion import _nifty
 
 PREREG = "docs/falcon_momentum_preregistration.md"
+REVIEW_PREREG = "docs/fm_review_preregistration.md"
 WINDOWS = {"W1": ("2019-01-01", "2026-10-30"), "W2": ("2008-01-01", "2017-12-31")}
 
 
@@ -30,14 +32,18 @@ def main():
     ix = pd.read_parquet("data/pit_sources/indices.parquet")
     indices = ix[ix["Index"].isin(SECTOR_INDICES)].pivot_table(index="Date", columns="Index", values="Close").sort_index()
     ew = {w: equal_weight_universe(panel, pd.Timestamp(a), pd.Timestamp(b)) for w, (a, b) in WINDOWS.items()}
-    for ts in (40, 20):
-        out = open(f"data/falcon_momentum_t{ts}_result.txt", "w", encoding="utf-8")
-        out.write(f"Benchmark: {src}; FM with a {ts}-session time stop\n")
+    review = len(sys.argv) > 1 and sys.argv[1] == "review"
+    if review and "**Status: FROZEN" not in open(REVIEW_PREREG, encoding="utf-8").read():
+        raise SystemExit(f"{REVIEW_PREREG} is not frozen.")
+    for ts in ((40,) if review else (40, 20)):
+        tag = "fm_review" if review else f"falcon_momentum_t{ts}"
+        out = open(f"data/{tag}_result.txt", "w", encoding="utf-8")
+        out.write(f"Benchmark: {src}; FM with a {ts}-session time stop{' + 4-week review' if review else ''}\n")
         verdict = {}
         for name, (a, b) in WINDOWS.items():
             a, b = pd.Timestamp(a), pd.Timestamp(b)
-            equity, trades, stats = run_fm(panel, a, b, nifty, indices, ts)
-            trades.to_csv(f"data/falcon_momentum_t{ts}_trades_{name}.csv", index=False)
+            equity, trades, stats = run_fm(panel, a, b, nifty, indices, ts, review_at=20 if review else None)
+            trades.to_csv(f"data/{tag}_trades_{name}.csv", index=False)
             report = judge(equity, trades, nifty, ew[name])
             closed = trades[trades["exit_reason"] != "OPEN_AT_END"] if not trades.empty else trades
             net = closed["pnl"] / closed["cost_basis"] if len(closed) else pd.Series(dtype=float)
