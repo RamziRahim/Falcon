@@ -29,3 +29,33 @@ S entries + breakout-candle stop, target +8%  W1 2019-01-01 -> 2026-10-30
     [FAIL] beats Nifty in >= 4 calendar years
     [FAIL] max drawdown within Nifty's - 10 pp
     [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+B entries + breakout-candle stop, target +8%  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              2288
+  win rate after costs         47.6%
+  avg win / avg loss           +7.10% / -6.26%
+  mean net per trade           +0.103%
+  half exits taken             0
+  exit mix                     {'STOP': 1054, 'TARGET': 970, 'TIME_STOP': 263, 'DELISTED': 1}
+  signals skipped              {'no_stop_level': 0, 'gap_below_stop': 6, 'stop_too_wide': 168}
+  cagr_pct                     -1.62
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -44.32
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.898
+  monthly_excess_t_nw3         -1.89
+  years_beating_nifty          1/8
+  n_closed_positions           2298
+  top3_profit_share            inf
+  avg_gross_exposure_pct       80.1
+  total_return_pct             -12.0
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
