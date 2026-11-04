@@ -39,3 +39,20 @@ tuned; no other values will be tried on these windows.
 
 - `data/fm_review_result.txt`
 - trades in `data/fm_review_trades_*.csv`
+
+---
+
+## Result, 2026-11-04 (`data/fm_review_result.txt`)
+
+| | W1 CAGR | W2 CAGR | Max DD W1 / W2 | Win % W1 / W2 | Mean net/trade W1 / W2 |
+|---|---|---|---|---|---|
+| FM t40 (no review) | **11.2%** | **8.6%** | −25.6 / −27.0 | 39.8 / 43.7 | +1.56 / +1.81 |
+| **FM t40 + 4-week review** | 8.0% | 6.7% | −24.2 / −27.8 | 37.9 / 38.1 | +1.52 / +1.63 |
+| FM t20 | 5.7% | 5.3% | −26.2 / −27.0 | 45.3 / 44.1 | +1.03 / +0.79 |
+
+**Verdict:** no demonstrated edge, with 3/6 checks on W1 and 4/6 on W2.
+- The review sits between t20 and t40, and is below t40 on both windows.
+- 136 (W1) and 168 (W2) positions were sold at the review.
+- **Reading:** in momentum trades, many positions that are flat at 4 weeks later go on
+  to win. Cutting them lowers the win rate (40 → 38%, 44 → 38%) without making the
+  losses meaningfully smaller.
