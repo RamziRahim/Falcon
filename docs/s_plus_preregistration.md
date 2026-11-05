@@ -65,3 +65,42 @@ The real proof remains paper trading.
 
 - `data/s_plus_result.txt`
 - trades in `data/s_plus_trades_*.csv`
+
+---
+
+## Dated addendum, 2026-11-05 ~23:10 IST, after seeing the W1/W2 results and before this run
+
+The single-change runs show that only the market filter helped on both windows, while
+the 40-session hold and the ATR cap each hurt both. "Original + market filter only"
+was not part of the 2018 hold-out. It is run **once** on 2018 now. This variant was
+chosen after seeing W1/W2, so only the 2018 figure says anything about it out-of-sample.
+No other variant will be run.
+
+## Results, 2026-11-05 (`data/s_plus_result.txt`)
+
+| Variant | W1 2019-26 | W2 2008-17 | 2018 hold-out | Max DD W1 / W2 |
+|---|---|---|---|---|
+| Original #3 | 20.4% | −0.2% | −21.4% | −22.6 / −56.6 |
+| S+ (all three changes) | 10.8% | 4.9% | −16.0% | −34.1 / −51.9 |
+| Only market filter | **17.3%** (5/6 checks, t 1.17) | **5.5%** (4/6) | −14.3% (addendum) | **−24.3 / −34.4** |
+| Only 40-session hold | 12.8% | 1.2% | — | −29.2 / −50.3 |
+| Only ATR-capped stop | 12.5% | −4.1% | — | −31.0 / −59.8 |
+
+*Nifty: 10.0% / 5.5% / +4.1% (2018). Equal-weight universe: 15.2% / 4.2% / −24.4%.*
+
+**Verdict per the rules:** no variant passes. S+ as pre-registered is worse than the
+original on W1.
+
+**Reading:**
+- **The 40-session hold and the ATR cap each hurt on both windows.**
+  - The ATR cap admits the extended stocks that #3 used to skip, and those trades lose.
+  - For breakout entries, extra holding time adds risk without adding return. This is
+    the opposite of FM's weekly-ranked entries.
+- **The market filter alone helps on both windows.** W2 goes from −0.2% to +5.5% (equal
+  to the Nifty), and the W2 drawdown goes from −57% to −34%, at a cost of 3 points on W1.
+- **2018 (unseen):** all three variants lost 14-21% while the Nifty rose 4%. That was
+  the small/mid-cap crash, when the equal-weight universe fell 24%. The filter-only
+  variant lost the least.
+- **Conclusion:** "#3 + market filter" is the best version of this strategy. It is not
+  proven: it fails on W2 (+5 pp), on the t-test, and on 2018. Per the rules, no further
+  variants will be tried on 2008-2026; the next step is paper trading.
