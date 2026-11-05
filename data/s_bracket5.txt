@@ -1,0 +1,24 @@
+
+2019-26: 5778 breakouts, stop -5% / target +5%
+  target hit directly (never back to entry)              967 ( 16.7%)  median 1 sessions
+  target hit after coming back to entry (dip < 2.5%)     919 ( 15.9%)  median 4 sessions
+  target hit after a deeper dip (2.5% to 5%)             702 ( 12.1%)  median 7 sessions
+  stop hit (-5%) before target                          2833 ( 49.0%)  median 3 sessions
+  neither within 20 sessions (sold at close)             357 (  6.2%)  median result -0.4%
+  total target hits 44.8%  | mean result before costs -0.23% per trade  | after ~0.4% round-trip costs -0.63%
+
+2008-17: 5914 breakouts, stop -5% / target +5%
+  target hit directly (never back to entry)              994 ( 16.8%)  median 1 sessions
+  target hit after coming back to entry (dip < 2.5%)     990 ( 16.7%)  median 4 sessions
+  target hit after a deeper dip (2.5% to 5%)             756 ( 12.8%)  median 7 sessions
+  stop hit (-5%) before target                          2979 ( 50.4%)  median 3 sessions
+  neither within 20 sessions (sold at close)             195 (  3.3%)  median result -0.8%
+  total target hits 46.3%  | mean result before costs -0.22% per trade  | after ~0.4% round-trip costs -0.62%
+
+2018: 918 breakouts, stop -5% / target +5%
+  target hit directly (never back to entry)              111 ( 12.1%)  median 1 sessions
+  target hit after coming back to entry (dip < 2.5%)     155 ( 16.9%)  median 5 sessions
+  target hit after a deeper dip (2.5% to 5%)             112 ( 12.2%)  median 10 sessions
+  stop hit (-5%) before target                           437 ( 47.6%)  median 4 sessions
+  neither within 20 sessions (sold at close)             103 ( 11.2%)  median result -0.1%
+  total target hits 41.2%  | mean result before costs -0.33% per trade  | after ~0.4% round-trip costs -0.73%
