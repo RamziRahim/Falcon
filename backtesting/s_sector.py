@@ -52,7 +52,11 @@ def bucket_indices(panel: Panel, universe: pd.DataFrame) -> pd.DataFrame:
 
 
 class SectorFilter:
-    def __init__(self, panel: Panel, universe: pd.DataFrame, nifty: pd.Series, indices_long: pd.DataFrame):
+    def __init__(self, panel: Panel, universe: pd.DataFrame, nifty: pd.Series, indices_long: pd.DataFrame,
+                 fallback: str = "bucket"):
+        """fallback: "bucket" (size-bucket index) or "nifty" (Nifty 50) when no sector index fits."""
+        assert fallback in ("bucket", "nifty")
+        self.fallback = fallback
         s = panel.sessions
         sect = indices_long[indices_long["Index"].isin(SECTOR_INDICES)].pivot_table(
             index="Date", columns="Index", values="Close").sort_index()
@@ -74,6 +78,9 @@ class SectorFilter:
         name = self._latest(self.sdates, self.smaps, day).get(e)
         if name is not None:
             self.used["sector"] += 1
+        elif self.fallback == "nifty":
+            name = "NIFTY 50"
+            self.used["bucket"] += 1
         else:
             r = self._latest(self.rdates, self.ranks, day)
             rank = r.get(e, 500) if hasattr(r, "get") else 500

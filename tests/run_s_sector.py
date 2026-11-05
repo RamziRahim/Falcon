@@ -3,6 +3,7 @@ Falcon -- #3 with the sector filter and five exit variants, per
 docs/s_sector_preregistration.md. One process; shared panel, filter and entries.
 
     python tests/run_s_sector.py > data/s_sector.log
+    python tests/run_s_sector.py nifty > data/s_sector_nifty.log   # Nifty 50 fallback, R3 and R2
 """
 import sys
 sys.path.insert(0, ".")
@@ -16,7 +17,9 @@ from backtesting.pit_strategies import equal_weight_universe, judge, make_panel
 from backtesting.s_sector import SectorFilter, run_s_sector
 from tests.run_mean_reversion import _nifty
 
-PREREG = "docs/s_sector_preregistration.md"
+NIFTY_FALLBACK = len(sys.argv) > 1 and sys.argv[1] == "nifty"
+PREREG = "docs/s_sector_nifty_preregistration.md" if NIFTY_FALLBACK else "docs/s_sector_preregistration.md"
+TAG = "s_sector_nifty" if NIFTY_FALLBACK else "s_sector"
 WINDOWS = {"W1": ("2019-01-01", "2026-10-30"), "W2": ("2008-01-01", "2017-12-31"), "Y2018": ("2018-01-01", "2018-12-31")}
 VARIANTS = {
     "R3": dict(mode="swing", r_multiple=3),
@@ -36,17 +39,20 @@ def main():
     del prices
     gc.collect()
     nifty, src = _nifty()
-    flt = SectorFilter(panel, universe, nifty, pd.read_parquet("data/pit_sources/indices.parquet"))
+    flt = SectorFilter(panel, universe, nifty, pd.read_parquet("data/pit_sources/indices.parquet"),
+                       fallback="nifty" if NIFTY_FALLBACK else "bucket")
     fn = entries_s(panel, nifty)
     ew = {w: equal_weight_universe(panel, pd.Timestamp(a), pd.Timestamp(b)) for w, (a, b) in WINDOWS.items()}
-    out = open("data/s_sector_result.txt", "w", encoding="utf-8")
+    out = open(f"data/{TAG}_result.txt", "w", encoding="utf-8")
     out.write(f"Benchmark: {src}; #3 entries + sector filter\n")
     for code, kw in VARIANTS.items():
+        if NIFTY_FALLBACK and code not in ("R3", "R2"):
+            continue
         for w, (a, b) in WINDOWS.items():
             a, b = pd.Timestamp(a), pd.Timestamp(b)
             flt.used = {"sector": 0, "bucket": 0}
             equity, trades, st = run_s_sector(panel, a, b, fn, flt, **kw)
-            trades.to_csv(f"data/s_sector_trades_{code}_{w}.csv", index=False)
+            trades.to_csv(f"data/{TAG}_trades_{code}_{w}.csv", index=False)
             report = judge(equity, trades, nifty, ew[w])
             closed = trades[trades["exit_reason"] != "OPEN_AT_END"] if not trades.empty else trades
             net = closed["pnl"] / closed["cost_basis"] if len(closed) else pd.Series(dtype=float)
