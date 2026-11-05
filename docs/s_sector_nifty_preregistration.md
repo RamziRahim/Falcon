@@ -33,7 +33,7 @@ below its 50-SMA, try the Nifty instead".
 
 ---
 
-## Dated addendum, 2026-11-05 ~23:45 IST, before any result of this file existed
+## Dated addendum, 2026-11-05 ~23:45 IST, before any result of these two variants existed (R3/R2 runs were in progress)
 
 IA added: "no need to take half profit; instead, if it reaches 5%, trail the stop to
 the entry price". Two more variants, under the same sector-or-Nifty filter:
