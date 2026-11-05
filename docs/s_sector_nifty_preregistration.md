@@ -45,3 +45,23 @@ the entry price". Two more variants, under the same sector-or-Nifty filter:
 
 If the 3R or 2R target is at or below +5%, the break-even rule does not apply.
 Everything else is as above. Results are appended to `data/s_sector_nifty_result.txt`.
+
+## Results, 2026-11-06 (`data/s_sector_nifty_result.txt`)
+
+| Variant (sector index, else Nifty 50) | W1 2019-26 | W2 2008-17 | 2018 | Win % W1 / W2 | Net per trade W1 / W2 | Checks W1 / W2 |
+|---|---|---|---|---|---|---|
+| **R3** | **18.0%** (DD −26%) | 5.2% (DD −43%) | −18.8% | 49.8 / 46.1 | +2.01 / +0.91% | **5/6 / 4/6** |
+| R2 | 12.3% (−33%) | 2.8% (−39%) | −17.1% | 48.1 / 46.9 | +1.36 / +0.52% | 3/6 / 3/6 |
+| R3BE (stop to entry at +5%) | 8.8% (−36%) | −0.5% (−51%) | −14.7% | 30.2 / 27.5 | +0.98 / −0.05% | 3/6 / 1/6 |
+| R2BE | 5.0% (−36%) | −2.7% (−46%) | −17.3% | 30.7 / 28.0 | +0.64 / −0.24% | 3/6 / 1/6 |
+| *#3 + Nifty filter (S+)* | *17.3% (−24%)* | *5.5% (−34%)* | *−14.3%* | | | *5/6 / 4/6* |
+
+**Verdict:** no variant passes both windows.
+- R3 under the sector-or-Nifty filter is about level with the Nifty-only filter: +0.7 pp on
+  W1, −0.3 pp on W2, deeper W2 and 2018 drawdowns.
+- About 3 in 4 filter decisions fell back to the Nifty.
+- **Moving the stop to entry at +5% hurts in every window.**
+  - On W1, 358 of 1,016 R3BE trades ended at break-even. They had been shaken out on a
+    normal pullback after +5%, and many would otherwise have gone on to a time-stop gain
+    or the target.
+  - CAGR falls from 18.0% to 8.8% on W1, and from 5.2% to −0.5% on W2.

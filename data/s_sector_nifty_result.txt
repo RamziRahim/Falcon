@@ -179,3 +179,184 @@ R2 {'mode': 'swing', 'r_multiple': 2}  Y2018 2018-01-01 -> 2018-12-31
     [FAIL] beats Nifty in >= 4 calendar years
     [FAIL] max drawdown within Nifty's - 10 pp
     [FAIL] top-3 positions < 50% of profit
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet); #3 entries + sector filter
+
+======================================================================
+R3BE {'mode': 'swing', 'r_multiple': 3, 'be_at': 0.05}  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              1016
+  win rate after costs         30.2%
+  avg win / avg loss           +13.74% / -4.54%
+  mean net per trade           +0.982%
+  exit mix                     {'TIME_STOP': 372, 'BREAKEVEN': 358, 'STOP': 227, 'TARGET': 59}
+  stats                        {'no_swing_low': 0, 'gap_below_stop': 0, 'stop_too_wide': 2111, 'filtered_out': 15094, 'halves': 628}
+  filter decided by            {'sector': 16708, 'bucket': 48373}
+  cagr_pct                     8.79
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -35.57
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.043
+  monthly_excess_t_nw3         -0.08
+  years_beating_nifty          4/8
+  n_closed_positions           1016
+  top3_profit_share            0.26
+  avg_gross_exposure_pct       63.2
+  total_return_pct             93.3
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+R3BE {'mode': 'swing', 'r_multiple': 3, 'be_at': 0.05}  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1144
+  win rate after costs         27.5%
+  avg win / avg loss           +13.08% / -5.04%
+  mean net per trade           -0.049%
+  exit mix                     {'TIME_STOP': 414, 'BREAKEVEN': 406, 'STOP': 265, 'TARGET': 58, 'DELISTED': 1}
+  stats                        {'no_swing_low': 0, 'gap_below_stop': 0, 'stop_too_wide': 2699, 'filtered_out': 15676, 'halves': 712}
+  filter decided by            {'sector': 16546, 'bucket': 52093}
+  cagr_pct                     -0.48
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -50.67
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.751
+  monthly_excess_t_nw3         -1.58
+  years_beating_nifty          2/10
+  n_closed_positions           1154
+  top3_profit_share            inf
+  avg_gross_exposure_pct       54.7
+  total_return_pct             -4.7
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+R3BE {'mode': 'swing', 'r_multiple': 3, 'be_at': 0.05}  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              112
+  win rate after costs         27.7%
+  avg win / avg loss           +8.46% / -5.52%
+  mean net per trade           -1.652%
+  exit mix                     {'STOP': 41, 'TIME_STOP': 39, 'BREAKEVEN': 28, 'TARGET': 4}
+  stats                        {'no_swing_low': 0, 'gap_below_stop': 0, 'stop_too_wide': 111, 'filtered_out': 1666, 'halves': 51}
+  filter decided by            {'sector': 1146, 'bucket': 6380}
+  cagr_pct                     -14.74
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -24.94
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.16
+  monthly_excess_t_nw3         -1.75
+  years_beating_nifty          0/1
+  n_closed_positions           117
+  top3_profit_share            inf
+  avg_gross_exposure_pct       58.8
+  total_return_pct             -14.7
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+R2BE {'mode': 'swing', 'r_multiple': 2, 'be_at': 0.05}  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              1071
+  win rate after costs         30.7%
+  avg win / avg loss           +12.55% / -4.64%
+  mean net per trade           +0.638%
+  exit mix                     {'BREAKEVEN': 367, 'TIME_STOP': 319, 'STOP': 247, 'TARGET': 138}
+  stats                        {'no_swing_low': 0, 'gap_below_stop': 0, 'stop_too_wide': 2333, 'filtered_out': 15101, 'halves': 659}
+  filter decided by            {'sector': 16759, 'bucket': 48535}
+  cagr_pct                     5.03
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -36.27
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.341
+  monthly_excess_t_nw3         -0.65
+  years_beating_nifty          4/8
+  n_closed_positions           1071
+  top3_profit_share            0.33
+  avg_gross_exposure_pct       61.6
+  total_return_pct             46.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+R2BE {'mode': 'swing', 'r_multiple': 2, 'be_at': 0.05}  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1186
+  win rate after costs         28.0%
+  avg win / avg loss           +12.03% / -5.01%
+  mean net per trade           -0.241%
+  exit mix                     {'BREAKEVEN': 418, 'TIME_STOP': 358, 'STOP': 273, 'TARGET': 135, 'DELISTED': 2}
+  stats                        {'no_swing_low': 0, 'gap_below_stop': 0, 'stop_too_wide': 2877, 'filtered_out': 15717, 'halves': 737}
+  filter decided by            {'sector': 16508, 'bucket': 52254}
+  cagr_pct                     -2.69
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -45.82
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.958
+  monthly_excess_t_nw3         -2.07
+  years_beating_nifty          2/10
+  n_closed_positions           1196
+  top3_profit_share            inf
+  avg_gross_exposure_pct       53.3
+  total_return_pct             -23.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+R2BE {'mode': 'swing', 'r_multiple': 2, 'be_at': 0.05}  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              117
+  win rate after costs         27.4%
+  avg win / avg loss           +8.25% / -5.65%
+  mean net per trade           -1.845%
+  exit mix                     {'STOP': 43, 'TIME_STOP': 38, 'BREAKEVEN': 29, 'TARGET': 7}
+  stats                        {'no_swing_low': 0, 'gap_below_stop': 0, 'stop_too_wide': 117, 'filtered_out': 1665, 'halves': 53}
+  filter decided by            {'sector': 1166, 'bucket': 6395}
+  cagr_pct                     -17.28
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -26.03
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.529
+  monthly_excess_t_nw3         -2.26
+  years_beating_nifty          0/1
+  n_closed_positions           122
+  top3_profit_share            inf
+  avg_gross_exposure_pct       58.2
+  total_return_pct             -17.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
