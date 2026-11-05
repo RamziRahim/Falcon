@@ -30,3 +30,18 @@ below its 50-SMA, try the Nifty instead".
 
 - `data/s_sector_nifty_result.txt`
 - trades in `data/s_sector_nifty_trades_*.csv`
+
+---
+
+## Dated addendum, 2026-11-05 ~23:45 IST, before any result of this file existed
+
+IA added: "no need to take half profit; instead, if it reaches 5%, trail the stop to
+the entry price". Two more variants, under the same sector-or-Nifty filter:
+
+- **R3BE:** swing-low stop and 3R target. Once the high reaches entry × 1.05, the stop
+  moves to the entry from the next session. Nothing is sold at +5%; the full position
+  goes for the target.
+- **R2BE:** the same with a 2R target.
+
+If the 3R or 2R target is at or below +5%, the break-even rule does not apply.
+Everything else is as above. Results are appended to `data/s_sector_nifty_result.txt`.

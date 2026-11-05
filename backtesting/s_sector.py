@@ -90,7 +90,8 @@ class SectorFilter:
 
 
 def run_s_sector(panel: Panel, start, end, order_fn, flt: SectorFilter, *, mode: str = "swing",
-                 r_multiple: float = 3.0, half_at: float | None = None, time_stop: int = 20,
+                 r_multiple: float = 3.0, half_at: float | None = None, be_at: float | None = None,
+                 time_stop: int = 20,
                  cost: CostModel | None = None):
     assert mode in ("swing", "fixed")
     ledger = PartialLedger(cost or CostModel())
@@ -144,7 +145,8 @@ def run_s_sector(panel: Panel, start, end, order_fn, flt: SectorFilter, *, mode:
                     half = fill * (1 + half_at) if half_at is not None and fill * (1 + half_at) < target else None
                     ledger.buy(day, e, fill, value, _adv(panel, i, e),
                                {"stop": stop, "target": target, "entry_idx": i, "fill": fill, "half": half,
-                                "be_from": None})
+                                "be_from": None,
+                                "be_level": fill * (1 + be_at) if be_at is not None and fill * (1 + be_at) < target else None})
                 continue
             if od["type"] == "stop" and i < od["expires_idx"] and not (
                     od.get("cancel_below") is not None and np.isfinite(lo) and lo <= od["cancel_below"]):
@@ -161,6 +163,9 @@ def run_s_sector(panel: Panel, start, end, order_fn, flt: SectorFilter, *, mode:
                 ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], adv,
                             "BREAKEVEN" if m["be_from"] is not None and m["stop"] >= m["fill"] else "STOP")
                 continue
+            if m.get("be_level") is not None and m["be_from"] is None and np.isfinite(hi) and hi >= m["be_level"]:
+                m["be_from"] = i + 1                      # stop to entry from the next session, no sale
+                st["halves"] += 1
             if m["half"] is not None and m["be_from"] is None and np.isfinite(hi) and hi >= m["half"]:
                 ledger.sell_half(e, o if gap_ok and o > m["half"] else m["half"], adv)
                 m["be_from"] = i + 1

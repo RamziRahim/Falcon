@@ -4,6 +4,7 @@ docs/s_sector_preregistration.md. One process; shared panel, filter and entries.
 
     python tests/run_s_sector.py > data/s_sector.log
     python tests/run_s_sector.py nifty > data/s_sector_nifty.log   # Nifty 50 fallback, R3 and R2
+    python tests/run_s_sector.py nifty R3BE R2BE                    # + break-even at +5% (appends)
 """
 import sys
 sys.path.insert(0, ".")
@@ -27,7 +28,10 @@ VARIANTS = {
     "F5": dict(mode="fixed"),
     "R3H": dict(mode="swing", r_multiple=3, half_at=0.05),
     "R2H": dict(mode="swing", r_multiple=2, half_at=0.05),
+    "R3BE": dict(mode="swing", r_multiple=3, be_at=0.05),
+    "R2BE": dict(mode="swing", r_multiple=2, be_at=0.05),
 }
+ONLY = [a for a in sys.argv[2:]]
 
 
 def main():
@@ -43,10 +47,10 @@ def main():
                        fallback="nifty" if NIFTY_FALLBACK else "bucket")
     fn = entries_s(panel, nifty)
     ew = {w: equal_weight_universe(panel, pd.Timestamp(a), pd.Timestamp(b)) for w, (a, b) in WINDOWS.items()}
-    out = open(f"data/{TAG}_result.txt", "w", encoding="utf-8")
+    out = open(f"data/{TAG}_result.txt", "a" if ONLY else "w", encoding="utf-8")
     out.write(f"Benchmark: {src}; #3 entries + sector filter\n")
     for code, kw in VARIANTS.items():
-        if NIFTY_FALLBACK and code not in ("R3", "R2"):
+        if NIFTY_FALLBACK and code not in (ONLY or ("R3", "R2")):
             continue
         for w, (a, b) in WINDOWS.items():
             a, b = pd.Timestamp(a), pd.Timestamp(b)
