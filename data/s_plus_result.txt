@@ -1,0 +1,30 @@
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet)
+
+======================================================================
+S+ (all three)  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              603
+  win rate after costs         44.3%
+  avg win / avg loss           +17.73% / -10.68%
+  mean net per trade           +1.904%
+  exit mix                     {'STOP': 293, 'TIME_STOP': 216, 'TARGET': 93, 'DELISTED': 1}
+  skipped                      {'no_swing_low': 0, 'gap_below_stop': 0, 'stop_too_wide': 194, 'market_filter_days': 703}
+  cagr_pct                     10.76
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -34.14
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.19
+  monthly_excess_t_nw3         0.32
+  years_beating_nifty          5/8
+  n_closed_positions           603
+  top3_profit_share            0.2
+  avg_gross_exposure_pct       70.2
+  total_return_pct             122.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
