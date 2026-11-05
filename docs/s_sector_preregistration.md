@@ -77,3 +77,35 @@ The Nifty-50-above-50-SMA filter from S+ is **not** used.
 
 - `data/s_sector_result.txt`
 - trades in `data/s_sector_trades_*.csv`
+
+---
+
+## Results, 2026-11-06 (`data/s_sector_result.txt`)
+
+CAGR, with max drawdown in brackets. Nifty: W1 10.0% / W2 5.5% / 2018 +4.1%.
+
+| Variant (sector filter) | W1 2019-26 | W2 2008-17 | 2018 | Win % W1 / W2 | Net per trade W1 / W2 |
+|---|---|---|---|---|---|
+| R3 | 11.1% (−37%) | 0.2% (−46%) | −9.2% | 47.9 / 43.2 | +1.19 / +0.31% |
+| R2 | 5.8% (−40%) | −0.8% (−45%) | −8.9% | 46.0 / 44.1 | +0.76 / +0.16% |
+| F5 (±5%) | −47.5% (−99%) | −61.9% (−100%) | −37.1% | 43.6 / 39.3 | −1.03 / −1.77% |
+| R3H | 3.9% (−31%) | −5.2% (−49%) | −10.1% | **65.7 / 61.7** | +0.44 / −0.49% |
+| R2H | 0.1% (−37%) | −6.0% (−52%) | −13.5% | 64.0 / 62.0 | +0.13 / −0.56% |
+| *Reference: #3 + Nifty filter (S+)* | *17.3% (−24%)* | *5.5% (−34%)* | *−14.3%* | | |
+| *Reference: original #3* | *20.4% (−23%)* | *−0.2% (−57%)* | *−21.4%* | | |
+
+**Verdict:** no variant passes. The best is R3, at 3/6 checks on W1 and 1/6 on W2.
+
+**Reading:**
+- **The sector filter did worse than the plain Nifty filter in both decades,** with
+  deeper drawdowns. It was better only in 2018: −9% vs −14% for the Nifty-filtered
+  version.
+- Most stocks (about 3 in 4) are judged by the mid- or small-cap bucket index. The
+  filter blocks good momentum stocks when that bucket dips. It also lets trades through
+  when the broad market is falling but a sector index is still above its 50-SMA, which is
+  why the W2 drawdown is −46% vs −34%.
+- **±5% 1:1 is ruinous as a portfolio.** At 1% risk, a 5% stop means about 20% positions.
+  At about 450 trades a year, losing −1 to −1.8% per trade compounds to near-total loss.
+- **Half at +5% then break-even** raises the win rate to 55-66%, but lowers net per
+  trade and CAGR in every window. The same pattern was seen with the half exit on
+  2026-11-04.
