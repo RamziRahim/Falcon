@@ -20,8 +20,11 @@ from tests.run_mean_reversion import _nifty
 PREREG = "docs/fm_variants_preregistration.md"
 WINDOWS = {"W1": ("2019-01-01", "2026-10-30"), "W2": ("2008-01-01", "2017-12-31"), "Y2018": ("2018-01-01", "2018-12-31")}
 VARIANTS = {"R3": dict(r_mult=3.0), "R2": dict(r_mult=2.0),
-            "R3BE": dict(r_mult=3.0, be_at=0.05), "R2BE": dict(r_mult=2.0, be_at=0.05)}
-LABEL = {"R3": "1:3", "R2": "1:2", "R3BE": "1:3 + stop to cost at 5%", "R2BE": "1:2 + stop to cost at 5%"}
+            "R3BE": dict(r_mult=3.0, be_at=0.05), "R2BE": dict(r_mult=2.0, be_at=0.05),
+            "F510": dict(fixed_stop=0.05, fixed_tgt=0.10)}
+ONLY = sys.argv[1:]
+SUFFIX = ("_" + "_".join(ONLY)) if ONLY else ""
+LABEL = {"F510": "-5% stop / +10% target", "R3": "1:3", "R2": "1:2", "R3BE": "1:3 + stop to cost at 5%", "R2BE": "1:2 + stop to cost at 5%"}
 
 
 def main():
@@ -40,10 +43,12 @@ def main():
     cols = {e: j for j, e in enumerate(panel.close.columns)}
     pos = {d: k for k, d in enumerate(panel.sessions)}
     n = len(panel.sessions)
-    out = open("data/fm_variants_result.txt", "w", encoding="utf-8")
+    out = open(f"data/fm_variants{SUFFIX}_result.txt", "w", encoding="utf-8")
     out.write(f"Benchmark: {src}; FM (40-session time stop) exit variants\n")
     paths = []
     for code, kw in VARIANTS.items():
+        if (ONLY and code not in ONLY) or (not ONLY and code == "F510"):
+            continue
         for w, (a, b) in WINDOWS.items():
             a, b = pd.Timestamp(a), pd.Timestamp(b)
             levels = []
@@ -78,19 +83,19 @@ def main():
                                   "cls": classify(lo, hi, r.fill, r.stop, r.target)})
     out.close()
     d = pd.DataFrame(paths)
-    d.to_csv("data/fm_trade_paths.csv", index=False)
-    with open("data/fm_trade_paths.txt", "w", encoding="utf-8") as fh:
+    d.to_csv(f"data/fm_trade_paths{SUFFIX}.csv", index=False)
+    with open(f"data/fm_trade_paths{SUFFIX}.txt", "w", encoding="utf-8") as fh:
         for pname, ps in [("all 2008-2026", ["W1", "W2", "Y2018"]), ("2019-26", ["W1"]), ("2008-17", ["W2"]), ("2018", ["Y2018"])]:
             fh.write(f"\n=== FM | {pname} ===\n")
             fh.write(f"  {'version':28s} {'days':>4s} {'trades':>6s}  " + "  ".join(f"{c:>13s}" for c in CLASSES) + "\n")
-            for code in VARIANTS:
+            for code in (ONLY or [c for c in VARIANTS if c != "F510"]):
                 for wl in (20, 40):
                     x = d[(d.version == code) & (d.period.isin(ps)) & (d.days == wl)]
                     if x.empty:
                         continue
                     sh = x.cls.value_counts(normalize=True) * 100
                     fh.write(f"  {LABEL[code]:28s} {wl:4d} {len(x):6d}  " + "  ".join(f"{sh.get(c, 0):12.1f}%" for c in CLASSES) + "\n")
-    print(open("data/fm_trade_paths.txt").read())
+    print(open(f"data/fm_trade_paths{SUFFIX}.txt").read())
 
 
 if __name__ == "__main__":

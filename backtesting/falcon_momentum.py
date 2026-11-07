@@ -94,7 +94,7 @@ def sector_maps(panel: Panel, indices: pd.DataFrame):
 def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, time_stop: int,
            cost: CostModel | None = None, review_at: int | None = None, review_gain: float = 0.02,
            review_rank: int = 50, r_mult: float = R_MULT, be_at: float | None = None,
-           levels: list | None = None):
+           levels: list | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None):
     """review_at (docs/fm_review_preregistration.md): at the close of that many
     sessions held, sell at the next open unless the close is >= fill x (1 +
     review_gain) AND the latest weekly rank <= review_rank. None = off (FM as frozen).
@@ -151,6 +151,8 @@ def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, ti
                 stats["gap_skip"] += 1
                 continue
             stop = max(od["swing"] if od["swing"] is not None else -np.inf, o - ATR_CAP * od["atr"])
+            if fixed_stop is not None:                      # docs/fm_variants_preregistration.md addendum
+                stop = o * (1 - fixed_stop)
             if o <= stop:
                 stats["stop_skip"] += 1
                 continue
@@ -158,7 +160,7 @@ def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, ti
             equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
             value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
             if value > 0:
-                tgt = o + r_mult * (o - stop)
+                tgt = o * (1 + fixed_tgt) if fixed_tgt is not None else o + r_mult * (o - stop)
                 ledger.buy(day, e, o, value, _adv(panel, i, e),
                            {"stop": stop, "target": tgt, "entry_idx": i, "fill": o, "be_from": None,
                             "be_level": o * (1 + be_at) if be_at is not None and o * (1 + be_at) < tgt else None})

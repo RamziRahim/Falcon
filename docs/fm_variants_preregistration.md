@@ -61,3 +61,19 @@ R3 reproduces frozen FM exactly (W1 11.19%, W2 8.63%).
 
 "Stop, then up" is higher than in #3 (1.6%), because FM's stop is capped at 3 ATR, so it
 sits closer to the price.
+
+---
+
+## Dated addendum, 2026-11-07 ~22:35 IST, before this run
+
+IA asked: "what if I keep 5% SL and 10% target and buy in both strategies". A
+descriptive per-trade check was made first (`data/fixed_long_5_10.txt`): FM entries came
+out at about +0.3-0.4% per trade after costs in every period, and #3 entries at about
+−0.3%. That check ignores sizing and slot competition.
+
+So FM is now run as a full portfolio backtest with **F510**:
+- stop = fill × 0.95, target = fill × 1.10;
+- everything else as frozen FM: 1% risk, so about 20% positions, at most 25% of equity;
+  10 slots, cash-limited; rank exit; 40-session time stop.
+
+**Windows:** W1, W2 and 2018. **Output:** `data/fm_variants_F510_result.txt`.
