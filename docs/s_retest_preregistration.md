@@ -64,8 +64,8 @@ stock is watched for the next **10 sessions** (b+1 … b+10).
 **Reading:**
 - About 90% of breakouts retested within 10 sessions, as the descriptive study found.
 - **Limit at the level** buys at about the same price as the breakout entry, but later.
-  It misses the breakouts that never come back, which are the best ones. By the time
-  the retest comes, the last swing low is often further away (about 840-1,170
-  "stop > 15%" skips per window), so the trades it does take are the weaker ones.
+  It misses the breakouts that never come back, which are the best ones. It also loses
+  the slot priority of the breakout day, so it fills a different, weaker set of trades.
+  Drawdowns are about twice the baseline's.
 - **Retest + reclaim:** the stop just under the retest low is too tight for these
   stocks. Most trades are stopped out, giving a 33-38% win rate and deep drawdowns.
