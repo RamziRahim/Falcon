@@ -30,3 +30,29 @@ Test A exactly as frozen (`docs/redesign_preregistration.md`):
 ## Output
 
 `data/a_stop_result.txt`
+
+---
+
+## Results, 2026-11-07 (`data/a_stop_result.txt`)
+
+| | A (no stop) | A10 (10% stop) | Nifty |
+|---|---|---|---|
+| W1 2019-26 CAGR | **33.0%** (6/6 checks, t 2.45) | 26.4% (5/6; fails only t = 1.74) | 10.0% |
+| W1 max DD | −42.1% | −39.4% | −38.4% |
+| W2 2008-17 CAGR | 8.4% (3/6) | **13.2%** (5/6; fails only t = 0.85) | 5.5% |
+| W2 max DD | **−80.1%** | **−59.1%** | −59.9% |
+| 2008 calendar year | −76.9% | −53.4% | |
+| 2018 | −23.7% | **−38.9%** (7.6% wins) | +4.1% |
+| Win % W1 / W2 | 52.4 / 49.3 | 39.1 / 32.4 | |
+| Avg win / loss W1 | +28.0 / −12.5% | +27.6 / −9.7% | |
+
+**Reading:**
+- The 10% stop costs about 7 points a year in the 2019-26 bull market, but adds about 5
+  points a year on 2008-17. It cuts the 2008-17 drawdown from −80% to −59%, about the
+  Nifty's.
+- A10 is the first strategy to pass 5 of the 6 checks in **both** decades. In each it
+  fails only the luck test.
+- **2018 is worse with the stop:** −38.9% vs −23.7%. In a steady mid-cap decline, the
+  stop sells near lows, and the next rebalance buys again into the fall.
+- Not proven. All windows are in-sample, and these are the same windows that shaped the
+  stop idea.
