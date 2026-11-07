@@ -56,3 +56,12 @@ Test A exactly as frozen (`docs/redesign_preregistration.md`):
   stop sells near lows, and the next rebalance buys again into the fall.
 - Not proven. All windows are in-sample, and these are the same windows that shaped the
   stop idea.
+
+---
+
+## Dated addendum, 2026-11-07 ~23:00 IST, before these runs
+
+IA asked: "what if test A considered top 10 and top 15 instead of top 20". The same
+rules are run with **hold = 10** and **hold = 15** (equal weights of 1/10 and 1/15),
+each without a stop and with the 10% stop. The windows and checks are the same.
+**Output:** `data/a_topn_result.txt`.

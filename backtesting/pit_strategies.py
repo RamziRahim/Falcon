@@ -152,7 +152,7 @@ def _delisting_exits(panel, ledger, day_idx, day):
 
 
 def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: CostModel | None = None,
-                 stop_pct: float | None = None):
+                 stop_pct: float | None = None, hold: int = MOM_HOLD):
     """stop_pct (docs/a_stop_preregistration.md): sell a holding whose low reaches
     fill x (1 - stop_pct) -- at the stop, or at the open if it gaps through after the
     fill day. It is not re-bought before the next month-end rebalance. None = test A as frozen."""
@@ -173,7 +173,7 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             equity_now = ledger.cash + sum(ledger.value(e, opens) for e in ledger.shares)
             # equal slots of equity/MOM_HOLD, limited by the cash on hand
             # (split evenly across the new names before any is bought)
-            per_name = min(equity_now / MOM_HOLD, ledger.cash / max(len(new), 1) * 0.995)
+            per_name = min(equity_now / hold, ledger.cash / max(len(new), 1) * 0.995)
             for e in new:
                 ledger.buy(day, e, opens[e], per_name, _adv(panel, i, e),
                            {"stop": opens[e] * (1 - stop_pct), "entry_idx": i} if stop_pct is not None else None)
@@ -193,7 +193,7 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             past = closes_ff.iloc[i - MOM_SKIP][members]
             base = closes_ff.iloc[i - MOM_LOOKBACK][members]
             mom = (past / base - 1).dropna()
-            pending_target = set(mom.sort_values(ascending=False).head(MOM_HOLD).index)
+            pending_target = set(mom.sort_values(ascending=False).head(hold).index)
     return _result(ledger)
 
 
