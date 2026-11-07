@@ -26,3 +26,20 @@ per-trade check proved misleading. Never edit; add dated notes.
 ## Output
 
 `data/fixed_5_15_result.txt`
+
+---
+
+## Results, 2026-11-07 (`data/fixed_5_15_result.txt`)
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | Win % W1 / W2 | Avg win / loss W1 | Stops / targets W1 |
+|---|---|---|---|---|---|---|
+| FM-F515 | −0.5% (DD −36%) | −4.2% (−50%) | −24.3% | 29.4 / 30.6 | +13.8 / −5.5% | 869 / 332 |
+| S3-F515 | −23.2% (−89%) | −36.5% (−99%) | −39.4% | 28.2 / 24.1 | +11.9 / −5.4% | 1,314 / 370 |
+| *FM 1:3 (swing-low/3-ATR stop)* | *11.2%* | *8.6%* | *−26.7%* | | | |
+| *#3 + Nifty filter* | *17.3%* | *5.5%* | *−14.3%* | | | |
+
+**Verdict:** both fail. Both are far below their swing-low-stop versions.
+- **FM-F515** is about break-even per trade (+0.17% / 0.00%). Its win rate (29-31%) sits
+  just above the 1:3 break-even line, but costs and gap losses (an average loss of −5.5%
+  to −6.0%, not −5%) eat the margin.
+- **S3-F515** is ruinous. Breakout-day entries are stopped at −5% about 70% of the time.
