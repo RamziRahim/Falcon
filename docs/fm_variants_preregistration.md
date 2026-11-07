@@ -77,3 +77,24 @@ So FM is now run as a full portfolio backtest with **F510**:
   10 slots, cash-limited; rank exit; 40-session time stop.
 
 **Windows:** W1, W2 and 2018. **Output:** `data/fm_variants_F510_result.txt`.
+
+### F510 result, 2026-11-07 (`data/fm_variants_F510_result.txt`)
+
+| | W1 2019-26 | W2 2008-17 | 2018 |
+|---|---|---|---|
+| CAGR | −7.1% (DD −49%) | −10.1% (DD −71%) | −28.3% |
+| Trades / win % | 1,530 / 36.3% | 1,843 / 37.6% | 204 / 28.4% |
+| Net per trade | −0.05% | −0.32% | −1.21% |
+| Checks | 0/6 | 0/6 | 0/6 |
+
+**Verdict:** fails. It is far below FM's 1:3 (11.2% / 8.6%).
+
+**Why the per-trade check was misleading:**
+- **Gaps.** The descriptive check assumed every stop filled at exactly −5%. The backtest
+  fills gaps through the stop at the open, so many losses are bigger than 5%.
+- **Different trades.** Fast stop-outs free slots that are refilled at the next weekly
+  ranking, often by re-buying the same names. That gives 2.5× more trades than FM, and
+  the extra ones are of lower quality.
+- **Larger positions.** About 20% positions raise spread and impact costs.
+- **Paths:** within 40 days, 28.5% of trades hit the −5% stop and then reached +10%
+  anyway. The stop sits inside the normal noise.
