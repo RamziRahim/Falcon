@@ -47,3 +47,27 @@ notes.
 ## Output
 
 `data/fm_high20_result.txt`
+
+---
+
+## Results, 2026-11-08 (`data/fm_high20_result.txt`)
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | Max DD W1 / W2 | Win % W1 / W2 | Checks W1 / W2 |
+|---|---|---|---|---|---|---|
+| H3 (20-day-high entry, 1:3) | 9.5% | 9.7% | −19.6% | −28 / −36% | 42.0 / 44.9 | 3/6 / 4/6 |
+| **H2 (1:2)** | 9.0% | **12.2%** | −22.8% | −31 / **−24%** | 44.7 / 48.2 | 3/6 / **5/6** |
+| H5 (±5%) | −27.1% | −38.5% | −20.3% | −92 / −99% | 44.0 / 42.2 | 0/6 / 0/6 |
+| H3BE | 11.2% | 2.6% | −18.2% | −25 / −39% | 22.2 / 20.7 | 3/6 / 3/6 |
+| H2BE | 7.2% | 2.4% | −17.6% | −21 / −34% | 24.9 / 23.9 | 2/6 / 2/6 |
+| *FM 1:3, Monday open* | *11.2%* | *8.6%* | *−26.7%* | *−26 / −27%* | *39.8 / 43.7* | *2/6 / 4/6* |
+| *FM 1:2, Monday open* | *10.0%* | *8.0%* | *−19.0%* | *−22 / −24%* | *44.4 / 47.2* | *3/6 / 4/6* |
+
+**Verdict:** no version passes both windows.
+
+**Reading:**
+- The 20-day-high entry is about level with the Monday open: 1-2 pp lower on W1,
+  1-4 pp higher on W2.
+- **H2 is the best version on W2:** 12.2%, a −24% drawdown, and 5/6 checks. On W1 it
+  makes 9.0%, below the Nifty's 10.0%.
+- ±5% is ruinous here too.
+- Moving the stop to cost at +5% gives up most of the W2 return.
