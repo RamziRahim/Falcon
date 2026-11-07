@@ -93,10 +93,16 @@ def sector_maps(panel: Panel, indices: pd.DataFrame):
 
 def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, time_stop: int,
            cost: CostModel | None = None, review_at: int | None = None, review_gain: float = 0.02,
-           review_rank: int = 50):
+           review_rank: int = 50, r_mult: float = R_MULT, be_at: float | None = None,
+           levels: list | None = None):
     """review_at (docs/fm_review_preregistration.md): at the close of that many
     sessions held, sell at the next open unless the close is >= fill x (1 +
-    review_gain) AND the latest weekly rank <= review_rank. None = off (FM as frozen)."""
+    review_gain) AND the latest weekly rank <= review_rank. None = off (FM as frozen).
+
+    r_mult / be_at (docs/fm_variants_preregistration.md): target multiple, and
+    once the high reaches fill x (1 + be_at) the stop moves to the fill from the
+    next session (no sale). levels: if a list, (entity, entry_date, fill, stop,
+    target) is appended for every entry."""
     ledger = Ledger(cost or CostModel())
     s = panel.sessions
     c = panel.close
@@ -152,17 +158,26 @@ def run_fm(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, ti
             equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
             value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
             if value > 0:
+                tgt = o + r_mult * (o - stop)
                 ledger.buy(day, e, o, value, _adv(panel, i, e),
-                           {"stop": stop, "target": o + R_MULT * (o - stop), "entry_idx": i, "fill": o})
+                           {"stop": stop, "target": tgt, "entry_idx": i, "fill": o, "be_from": None,
+                            "be_level": o * (1 + be_at) if be_at is not None and o * (1 + be_at) < tgt else None})
+                if levels is not None:
+                    levels.append((e, day, o, stop, tgt))
         queued = []
         for e in list(ledger.shares):
             m = ledger.meta[e]
             o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
             gap_ok = m["entry_idx"] < i and np.isfinite(o)
+            if m.get("be_from") is not None and i >= m["be_from"]:
+                m["stop"] = max(m["stop"], m["fill"])
             if np.isfinite(lo) and lo <= m["stop"]:
-                ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
+                ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e),
+                            "BREAKEVEN" if m.get("be_from") is not None and m["stop"] >= m["fill"] else "STOP")
             elif np.isfinite(hi) and hi >= m["target"]:
                 ledger.sell(day, e, o if gap_ok and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+            elif m.get("be_level") is not None and m["be_from"] is None and np.isfinite(hi) and hi >= m["be_level"]:
+                m["be_from"] = i + 1
         ledger.mark(day, closes)
         if day >= end:
             continue
