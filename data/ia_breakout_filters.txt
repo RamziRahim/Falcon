@@ -1,0 +1,20 @@
+
+IA breakout + filters, 2019-26 (4395 breakouts before filters)
+  filter            n |          reach +8% |            fakeout |    mean 20d return
+                      |      brk     rand |      brk     rand |      brk     rand
+  none           4392 |    44.7%    45.5% |    34.9%    35.5% |   +1.77%   +1.92%
+  tightening     1033 |    45.5%    45.3% |    36.3%    36.4% |   +2.12%   +1.58%
+  volume dry     2582 |    45.6%    46.3% |    34.5%    34.1% |   +1.92%   +2.08%
+  RS > Nifty     3232 |    44.9%    46.0% |    34.4%    33.3% |   +1.83%   +2.06%
+  market ok      3734 |    44.2%    43.4% |    35.2%    36.5% |   +1.70%   +1.57%
+  all four        353 |    48.2%    44.5% |    34.6%    36.3% |   +2.58%   +0.85%
+
+IA breakout + filters, 2008-17 (3956 breakouts before filters)
+  filter            n |          reach +8% |            fakeout |    mean 20d return
+                      |      brk     rand |      brk     rand |      brk     rand
+  none           3950 |    45.0%    50.6% |    39.6%    36.0% |   +0.86%   +1.83%
+  tightening      976 |    44.5%    50.8% |    41.6%    35.0% |   +0.93%   +1.72%
+  volume dry     2258 |    44.4%    50.4% |    41.0%    35.5% |   +0.52%   +1.77%
+  RS > Nifty     2909 |    44.9%    49.8% |    38.1%    36.1% |   +1.06%   +1.54%
+  market ok      3373 |    45.2%    50.5% |    38.7%    37.2% |   +1.02%   +1.34%
+  all four        340 |    48.8%    50.1% |    39.7%    36.1% |   +1.61%   +1.61%

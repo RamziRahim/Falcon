@@ -1,0 +1,48 @@
+
+B 52-week breakout  2019-26: 6848 breakouts vs the same number of random days in the same stocks
+                                  breakout   random
+  +8% with no dip >3% below          21.9%    23.2%
+  dipped first, then +8%             21.7%    19.8%
+  +8% first, then dipped              9.0%     6.3%
+  dipped, never reached +8%          43.2%    44.9%
+  neither                             4.2%     5.8%
+
+S momentum breakout  2019-26: 3681 breakouts vs the same number of random days in the same stocks
+                                  breakout   random
+  +8% with no dip >3% below          20.4%    23.0%
+  dipped first, then +8%             22.1%    20.5%
+  +8% first, then dipped             10.6%     6.8%
+  dipped, never reached +8%          44.0%    44.4%
+  neither                             2.9%     5.3%
+
+F Falcon setup  2019-26: 4989 breakouts vs the same number of random days in the same stocks
+                                  breakout   random
+  +8% with no dip >3% below          22.0%    22.5%
+  dipped first, then +8%             15.4%    16.0%
+  +8% first, then dipped              5.7%     5.4%
+  dipped, never reached +8%          49.4%    48.7%
+  neither                             7.6%     7.3%
+
+B 52-week breakout  2008-17: 7319 breakouts vs the same number of random days in the same stocks
+                                  breakout   random
+  +8% with no dip >3% below          20.1%    22.3%
+  dipped first, then +8%             23.1%    23.5%
+  +8% first, then dipped              9.1%     7.6%
+  dipped, never reached +8%          44.7%    42.5%
+  neither                             3.0%     4.1%
+
+S momentum breakout  2008-17: 3977 breakouts vs the same number of random days in the same stocks
+                                  breakout   random
+  +8% with no dip >3% below          19.8%    21.5%
+  dipped first, then +8%             22.3%    23.2%
+  +8% first, then dipped             10.3%     8.5%
+  dipped, never reached +8%          45.1%    43.5%
+  neither                             2.5%     3.3%
+
+F Falcon setup  2008-17: 5121 breakouts vs the same number of random days in the same stocks
+                                  breakout   random
+  +8% with no dip >3% below          21.3%    21.5%
+  dipped first, then +8%             15.8%    20.5%
+  +8% first, then dipped              7.3%     7.3%
+  dipped, never reached +8%          49.5%    45.1%
+  neither                             6.1%     5.6%
