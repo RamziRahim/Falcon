@@ -46,3 +46,26 @@ stock is watched for the next **10 sessions** (b+1 … b+10).
 
 - `data/s_retest_result.txt`
 - trades in `data/s_retest_trades_*.csv`
+
+---
+
+## Results, 2026-11-07 (`data/s_retest_result.txt`)
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | Win % W1 / W2 | Net per trade W1 / W2 |
+|---|---|---|---|---|---|
+| RL3 (limit at the level, 3R) | 11.0% (DD −48%) | −1.7% (−41%) | −16.6% | 44.6 / 42.4 | +1.15 / +0.01% |
+| RL2 | 7.1% (−48%) | −0.2% (−43%) | −27.4% | 45.2 / 43.7 | +0.66 / +0.25% |
+| RR3 (retest + reclaim, 3R) | 1.9% (−39%) | −6.3% (−59%) | −28.0% | 32.6 / 34.9 | +0.19 / +0.14% |
+| RR2 | 1.0% (−46%) | −10.2% (−69%) | −32.6% | 37.5 / 38.4 | +0.22 / −0.18% |
+| *Baseline: #3 + Nifty filter (breakout entry)* | *17.3% (−24%)* | *5.5% (−34%)* | *−14.3%* | | |
+
+**Verdict:** all four fail, and all are worse than the breakout entry in every window.
+
+**Reading:**
+- About 90% of breakouts retested within 10 sessions, as the descriptive study found.
+- **Limit at the level** buys at about the same price as the breakout entry, but later.
+  It misses the breakouts that never come back, which are the best ones. By the time
+  the retest comes, the last swing low is often further away (about 840-1,170
+  "stop > 15%" skips per window), so the trades it does take are the weaker ones.
+- **Retest + reclaim:** the stop just under the retest low is too tight for these
+  stocks. Most trades are stopped out, giving a 33-38% win rate and deep drawdowns.
