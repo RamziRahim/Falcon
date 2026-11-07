@@ -37,14 +37,21 @@ from backtesting.falcon_momentum import (EXIT_RANK, MAX_GAP, PEER_STRONG, POS_CA
                                          TOP_N, sector_maps, weekly_ranks)
 from backtesting.mtm_portfolio import CostModel
 from backtesting.pit_strategies import Ledger, Panel, _adv, _delisting_exits, _result
-from backtesting.swing_risk import pivot_lows
+from backtesting.swing_risk import pivot_lows, swing_stop
 
 WATCH_DAYS, BUFFER, MAX_STOP, FVG_LOOKBACK, SWEEP_LOOKBACK, PIVOT_W = 10, 0.25, 0.15, 20, 60, 3
 
 
 def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, mode: str,
-                   breakouts: dict | None = None, time_stop: int = 40, cost: CostModel | None = None):
-    assert mode in ("breakout", "sweep", "fvg")
+                   breakouts: dict | None = None, time_stop: int = 40, cost: CostModel | None = None,
+                   r_mult: float = R_MULT, fixed_stop: float | None = None, fixed_tgt: float | None = None,
+                   be_at: float | None = None):
+    """mode "high20" (docs/fm_high20_preregistration.md): while on the watch list, a
+    one-session buy-stop at the 20-day high (fill = max(level, open), skipped if the open
+    is > 3% above the level). Stop = FM's (higher of swing-low stop and fill - 3 ATR),
+    or fill x (1 - fixed_stop); target r_mult x risk or fill x (1 + fixed_tgt); be_at:
+    stop to the fill from the session after the high reaches fill x (1 + be_at)."""
+    assert mode in ("breakout", "sweep", "fvg", "high20")
     ledger = Ledger(cost or CostModel())
     s, c = panel.sessions, panel.close
     cols = {e: j for j, e in enumerate(c.columns)}
@@ -59,10 +66,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     sdates = np.array(sorted(smaps))
     groups = peer_strength(panel, c / c.shift(126) - 1)
     gdates = np.array(sorted(groups))
-    piv = pivot_lows(panel) if mode == "sweep" else None
+    piv = pivot_lows(panel) if mode in ("sweep", "high20") else None
+    high20 = panel.high.rolling(20, min_periods=20).max().to_numpy(float)
     pc = c.shift(1)
     tr = np.maximum(panel.high - panel.low, np.maximum((panel.high - pc).abs(), (panel.low - pc).abs()))
-    atr = tr.rolling(14, min_periods=14).mean().to_numpy(float)
+    atr_df = tr.rolling(14, min_periods=14).mean()
+    atr = atr_df.to_numpy(float)
 
     def latest(dates, store, day):
         k = dates.searchsorted(np.datetime64(day), side="right") - 1
@@ -74,6 +83,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
         a = atr[t, j]
         if not np.isfinite(a):
             return None
+        if mode == "high20":
+            trig = high20[t, j]
+            if not np.isfinite(trig):
+                return None
+            return {"type": "buystop", "trig": trig, "atr": a, "ref": C[t, j],
+                    "swing": swing_stop(panel, piv, atr_df, t, e, min(trig, C[t, j]))}
         if mode == "breakout":
             hit = breakouts.get((j, t))
             if hit is None:
@@ -122,7 +137,17 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             o, lo = opens.get(e, np.nan), lows.get(e, np.nan)
             if not np.isfinite(o):
                 continue
-            if od["type"] == "market":
+            if od["type"] == "buystop":
+                hi = highs.get(e, np.nan)
+                if not (np.isfinite(hi) and hi >= od["trig"]):
+                    continue
+                if o > od["trig"] * 1.03:
+                    stats["gap_skip"] += 1
+                    continue
+                fill = max(od["trig"], o)
+                od["stop"] = (fill * (1 - fixed_stop) if fixed_stop is not None else
+                              max(od["swing"] if od["swing"] is not None else -np.inf, fill - 3.0 * od["atr"]))
+            elif od["type"] == "market":
                 if o > od["ref"] * (1 + MAX_GAP):
                     stats["gap_skip"] += 1
                     continue
@@ -142,7 +167,9 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
             value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
             if value > 0 and ledger.buy(day, e, fill, value, _adv(panel, i, e),
-                                        {"stop": stop, "target": fill + R_MULT * (fill - stop), "entry_idx": i}):
+                                        {"stop": stop, "entry_idx": i, "fill": fill, "be_from": None,
+                                         "target": fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_mult * (fill - stop),
+                                         "be_at": be_at}):
                 stats["filled"] += 1
                 watch.pop(e, None)
         orders = []
@@ -150,10 +177,16 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             m = ledger.meta[e]
             o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
             gap_ok = m["entry_idx"] < i and np.isfinite(o)
+            if m.get("be_from") is not None and i >= m["be_from"]:
+                m["stop"] = max(m["stop"], m["fill"])
             if np.isfinite(lo) and lo <= m["stop"]:
-                ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
+                ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e),
+                            "BREAKEVEN" if m.get("be_from") is not None and m["stop"] >= m["fill"] else "STOP")
             elif np.isfinite(hi) and hi >= m["target"]:
                 ledger.sell(day, e, o if gap_ok and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+            elif (m.get("be_at") is not None and m.get("be_from") is None and np.isfinite(hi)
+                  and hi >= m["fill"] * (1 + m["be_at"]) and m["fill"] * (1 + m["be_at"]) < m["target"]):
+                m["be_from"] = i + 1
         ledger.mark(day, closes)
         if day >= end:
             continue
