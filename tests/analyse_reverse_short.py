@@ -11,6 +11,7 @@ counts. Open at the end of the window -> covered at that close. Costs ~0.4%
 round trip are subtracted (borrowing / futures costs not included).
 
     python tests/analyse_reverse_short.py > data/reverse_short.txt
+    python tests/analyse_reverse_short.py 5 > data/reverse_short_5pct.txt   # stop = entry x 1.05 (1:1)
 """
 import sys
 sys.path.insert(0, ".")
@@ -22,6 +23,7 @@ from backtesting.pit_strategies import make_panel
 from backtesting.swing_risk import pivot_lows, swing_stop
 
 COST = 0.004
+STOP5 = len(sys.argv) > 1 and sys.argv[1] == "5"
 
 
 def main():
@@ -55,7 +57,7 @@ def main():
                 trades.append(("FM", R, tag, cols[r.entity_id], pos[r.entry_date], r.fill, r.target))
     rows = []
     for strat, R, per, j, f, entry, long_tgt in trades:
-        s_stop, s_tgt = long_tgt, entry * 0.95
+        s_stop, s_tgt = (entry * 1.05 if STOP5 else long_tgt), entry * 0.95
         for win in (20, 40):
             if f + win > n:
                 continue
@@ -77,17 +79,17 @@ def main():
             rows.append({"strategy": strat, "R": R, "period": per, "window": win, "cls": cls,
                          "res": res - COST, "stop_pct": (s_stop / entry - 1) * 100, "days": k + 1})
     d = pd.DataFrame(rows)
-    d.to_csv("data/reverse_short.csv", index=False)
+    d.to_csv("data/reverse_short_5pct.csv" if STOP5 else "data/reverse_short.csv", index=False)
     names = {"#3": "#3 (breakout + Nifty filter)", "FM": "Falcon Momentum"}
     for strat in ("#3", "FM"):
         for pname, ps in (("all years", ["W1", "W2", "Y2018"]), ("2019-26", ["W1"]), ("2008-17", ["W2"]), ("2018", ["Y2018"])):
             print(f"\n=== Short on {names[strat]} trades | {pname} ===")
-            for R in (3, 2):
+            for R in ((3,) if STOP5 else (3, 2)):
                 for win in (20, 40):
                     x = d[(d.strategy == strat) & (d.R == R) & (d.period.isin(ps)) & (d.window == win)]
                     sh = x.cls.value_counts(normalize=True) * 100
                     nb = x[x.cls == "neither"]
-                    print(f"  stop = 1:{R} long target (median +{x.stop_pct.median():.0f}%), {win}d, {len(x)} trades | "
+                    print(f"  stop = {'+5%' if STOP5 else f'1:{R} long target (median +{x.stop_pct.median():.0f}%)'}, {win}d, {len(x)} trades | "
                           f"target -5% {sh.get('target', 0):4.1f}% (median day {x[x.cls == 'target'].days.median():.0f}) | "
                           f"stopped {sh.get('stop', 0):4.1f}% | neither {sh.get('neither', 0):4.1f}% (avg {nb.res.mean() * 100 + COST * 100:+.1f}%) | "
                           f"avg per trade after costs {x.res.mean() * 100:+.2f}%")

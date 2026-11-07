@@ -1,0 +1,32 @@
+
+=== Short on #3 (breakout + Nifty filter) trades | all years ===
+  stop = +5%, 20d, 1820 trades | target -5% 45.6% (median day 4) | stopped 50.9% | neither  3.5% (avg +0.4%) | avg per trade after costs -0.65%
+  stop = +5%, 40d, 1820 trades | target -5% 47.3% (median day 4) | stopped 52.2% | neither  0.5% (avg -0.6%) | avg per trade after costs -0.65%
+
+=== Short on #3 (breakout + Nifty filter) trades | 2019-26 ===
+  stop = +5%, 20d, 820 trades | target -5% 45.7% (median day 4) | stopped 51.1% | neither  3.2% (avg -0.1%) | avg per trade after costs -0.67%
+  stop = +5%, 40d, 820 trades | target -5% 47.4% (median day 4) | stopped 52.1% | neither  0.5% (avg -1.0%) | avg per trade after costs -0.64%
+
+=== Short on #3 (breakout + Nifty filter) trades | 2008-17 ===
+  stop = +5%, 20d, 905 trades | target -5% 45.7% (median day 4) | stopped 51.6% | neither  2.7% (avg +0.7%) | avg per trade after costs -0.67%
+  stop = +5%, 40d, 905 trades | target -5% 47.1% (median day 4) | stopped 52.5% | neither  0.4% (avg -0.2%) | avg per trade after costs -0.67%
+
+=== Short on #3 (breakout + Nifty filter) trades | 2018 ===
+  stop = +5%, 20d, 95 trades | target -5% 43.2% (median day 5) | stopped 43.2% | neither 13.7% (avg +0.6%) | avg per trade after costs -0.32%
+  stop = +5%, 40d, 95 trades | target -5% 47.4% (median day 6) | stopped 50.5% | neither  2.1% (avg -0.5%) | avg per trade after costs -0.57%
+
+=== Short on Falcon Momentum trades | all years ===
+  stop = +5%, 20d, 1407 trades | target -5% 45.7% (median day 3) | stopped 51.9% | neither  2.4% (avg +0.2%) | avg per trade after costs -0.71%
+  stop = +5%, 40d, 1407 trades | target -5% 46.6% (median day 3) | stopped 52.7% | neither  0.7% (avg -0.6%) | avg per trade after costs -0.71%
+
+=== Short on Falcon Momentum trades | 2019-26 ===
+  stop = +5%, 20d, 610 trades | target -5% 45.4% (median day 3) | stopped 51.6% | neither  3.0% (avg +0.3%) | avg per trade after costs -0.70%
+  stop = +5%, 40d, 610 trades | target -5% 46.7% (median day 3) | stopped 52.8% | neither  0.5% (avg -0.5%) | avg per trade after costs -0.71%
+
+=== Short on Falcon Momentum trades | 2008-17 ===
+  stop = +5%, 20d, 701 trades | target -5% 45.9% (median day 3) | stopped 52.2% | neither  1.9% (avg +0.1%) | avg per trade after costs -0.71%
+  stop = +5%, 40d, 701 trades | target -5% 46.5% (median day 3) | stopped 52.8% | neither  0.7% (avg -0.7%) | avg per trade after costs -0.72%
+
+=== Short on Falcon Momentum trades | 2018 ===
+  stop = +5%, 20d, 96 trades | target -5% 45.8% (median day 4) | stopped 51.0% | neither  3.1% (avg -0.3%) | avg per trade after costs -0.67%
+  stop = +5%, 40d, 96 trades | target -5% 45.8% (median day 4) | stopped 52.1% | neither  2.1% (avg -0.7%) | avg per trade after costs -0.73%
