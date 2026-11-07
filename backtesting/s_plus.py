@@ -31,7 +31,9 @@ ATR_CAP = 3.0
 
 def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple: float = 3.0,
                market_filter: bool = False, time_stop: int = 20, atr_cap: bool = False,
-               cost: CostModel | None = None):
+               cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None):
+    """fixed_stop / fixed_tgt (docs/fixed_5_15_preregistration.md): stop = fill x (1 - fixed_stop),
+    target = fill x (1 + fixed_tgt), replacing the swing-low stop and R target."""
     ledger = Ledger(cost or CostModel())
     sessions = panel.sessions
     piv = pivot_lows(panel)
@@ -68,7 +70,9 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                     fill = max(od["ref"], o)
             if fill is not None:
                 stop = od["stop"]
-                if atr_cap and np.isfinite(od["atr"]):
+                if fixed_stop is not None:
+                    stop = fill * (1 - fixed_stop)
+                if atr_cap and fixed_stop is None and np.isfinite(od["atr"]):
                     stop = max(stop if stop is not None else -np.inf, fill - ATR_CAP * od["atr"])
                 if stop is None:
                     skipped["no_swing_low"] += 1
@@ -84,7 +88,8 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                 value = min(RISK * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
                 if value > 0:
                     ledger.buy(day, e, fill, value, _adv(panel, i, e),
-                               {"stop": stop, "target": fill + r_multiple * (fill - stop), "entry_idx": i})
+                               {"stop": stop, "entry_idx": i,
+                                "target": fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)})
                 continue
             if od["type"] == "stop" and i < od["expires_idx"] and not (
                     od.get("cancel_below") is not None and np.isfinite(lo) and lo <= od["cancel_below"]):
@@ -117,7 +122,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                 rec = {"type": "stop", "entity": e, "ref": trig, "max_gap": gap, "priority": pr,
                        "expires_idx": i + valid, "cancel_below": cancel}
             stop = swing_stop(panel, piv, atr, i, e, min(rec["ref"], closes.get(e, np.nan)))
-            if stop is None and not atr_cap:
+            if stop is None and not atr_cap and fixed_stop is None:
                 skipped["no_swing_low"] += 1
                 continue
             rec["stop"] = stop
