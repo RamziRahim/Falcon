@@ -65,3 +65,26 @@ IA asked: "what if test A considered top 10 and top 15 instead of top 20". The s
 rules are run with **hold = 10** and **hold = 15** (equal weights of 1/10 and 1/15),
 each without a stop and with the 10% stop. The windows and checks are the same.
 **Output:** `data/a_topn_result.txt`.
+
+### Top-N results, 2026-11-07 (`data/a_topn_result.txt`)
+
+CAGR, with max drawdown in brackets.
+
+| Holdings | Stop | W1 2019-26 | W2 2008-17 | 2018 | Checks W1 / W2 |
+|---|---|---|---|---|---|
+| Top 10 | none | 31.4% (−42%) | 4.4% (−84%) | −3.8% | 5/6 / 2/6 |
+| Top 10 | 10% | 22.9% (−46%) | 5.2% (−65%) | −28.5% | 4/6 / 3/6 |
+| Top 15 | none | **34.1%** (−44%) | 9.5% (−81%) | −16.3% | **6/6** / 3/6 |
+| Top 15 | 10% | 25.8% (−39%) | 11.6% (−59%) | −34.4% | 5/6 / 5/6 |
+| Top 20 | none | 33.0% (−42%) | 8.4% (−80%) | −23.7% | 6/6 / 3/6 |
+| Top 20 | 10% | 26.4% (−39%) | **13.2%** (−59%) | −38.9% | 5/6 / 5/6 |
+
+**Reading:**
+- **Top 10** concentrates the profit: the top 3 positions make 54-65% of it, which fails
+  the concentration check. It is the weakest in 2008-17.
+- **Top 15 and top 20** are close. Top 15 has a slightly better W1; top 20 has a better W2
+  with the stop.
+- The 10% stop's trade-off is the same at every size:
+  - lower W1;
+  - higher W2, and a W2 drawdown of −59% instead of −80%;
+  - a worse 2018.
