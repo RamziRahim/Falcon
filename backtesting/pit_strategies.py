@@ -151,7 +151,11 @@ def _delisting_exits(panel, ledger, day_idx, day):
             ledger.sell(day, e, ledger.meta[e]["last_mark"] * (1 - DELIST_HAIRCUT), _adv(panel, day_idx, e), "DELISTED")
 
 
-def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: CostModel | None = None):
+def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: CostModel | None = None,
+                 stop_pct: float | None = None):
+    """stop_pct (docs/a_stop_preregistration.md): sell a holding whose low reaches
+    fill x (1 - stop_pct) -- at the stop, or at the open if it gaps through after the
+    fill day. It is not re-bought before the next month-end rebalance. None = test A as frozen."""
     ledger = Ledger(cost or CostModel())
     sessions = panel.sessions
     closes_ff = panel.close.ffill(limit=5)
@@ -171,8 +175,17 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             # (split evenly across the new names before any is bought)
             per_name = min(equity_now / MOM_HOLD, ledger.cash / max(len(new), 1) * 0.995)
             for e in new:
-                ledger.buy(day, e, opens[e], per_name, _adv(panel, i, e))
+                ledger.buy(day, e, opens[e], per_name, _adv(panel, i, e),
+                           {"stop": opens[e] * (1 - stop_pct), "entry_idx": i} if stop_pct is not None else None)
             pending_target = None
+        if stop_pct is not None:
+            lows = panel.low.iloc[i]
+            for e in list(ledger.shares):
+                m = ledger.meta.get(e) or {}
+                st, lo, o = m.get("stop"), lows.get(e, np.nan), opens.get(e, np.nan)
+                if st is not None and np.isfinite(lo) and lo <= st:
+                    gap = m["entry_idx"] < i and np.isfinite(o) and o < st
+                    ledger.sell(day, e, o if gap else st, _adv(panel, i, e), "STOP")
         ledger.mark(day, panel.close.iloc[i])
         is_month_end = i + 1 == len(sessions) or sessions[i + 1].month != day.month
         if is_month_end and i >= MOM_LOOKBACK and day < end:
