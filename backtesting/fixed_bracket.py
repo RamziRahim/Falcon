@@ -184,7 +184,9 @@ def entries_f(panel: Panel, setups: pd.DataFrame):
 
 
 def entries_s_quality(panel: Panel, nifty_close: pd.Series, base_min: int = 5, base_width: float = 0.10,
-                      vol_mult: float = 1.5):
+                      vol_mult: float = 1.5, need_close: bool = True):
+    """need_close=False with base_min=1 (docs/range_volume_preregistration.md): the
+    breakout day only needs its intraday high above L, not its close."""
     """#3's stock filters (as entries_s) with a quality breakout on day i
     (docs/s_quality_preregistration.md): close_i above the prior 20-day high L
     (max High of i-20..i-1); that high was set >= base_min sessions before i;
@@ -226,7 +228,8 @@ def entries_s_quality(panel: Panel, nifty_close: pd.Series, base_min: int = 5, b
                 continue
             kk = int(np.argmax(win)) + i - 20                      # day of the prior 20-day high
             lvl = H[kk, j]
-            if not (x > lvl and i - kk >= base_min):
+            crossed = x > lvl if need_close else H[i, j] > lvl
+            if not (crossed and i - kk >= base_min):
                 continue
             lo = np.nanmin(L[kk: i, j])
             if not (np.isfinite(lo) and lvl / lo - 1 <= base_width):

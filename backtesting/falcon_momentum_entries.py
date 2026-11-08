@@ -51,7 +51,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     is > 3% above the level). Stop = FM's (higher of swing-low stop and fill - 3 ATR),
     or fill x (1 - fixed_stop); target r_mult x risk or fill x (1 + fixed_tgt); be_at:
     stop to the fill from the session after the high reaches fill x (1 + be_at)."""
-    assert mode in ("breakout", "sweep", "fvg", "high20")
+    assert mode in ("breakout", "sweep", "fvg", "high20", "rangevol")
     ledger = Ledger(cost or CostModel())
     s, c = panel.sessions, panel.close
     cols = {e: j for j, e in enumerate(c.columns)}
@@ -66,7 +66,9 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     sdates = np.array(sorted(smaps))
     groups = peer_strength(panel, c / c.shift(126) - 1)
     gdates = np.array(sorted(groups))
-    piv = pivot_lows(panel) if mode in ("sweep", "high20") else None
+    piv = pivot_lows(panel) if mode in ("sweep", "high20", "rangevol") else None
+    V = panel.volume.to_numpy(float)
+    vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
     high20 = panel.high.rolling(20, min_periods=20).max().to_numpy(float)
     pc = c.shift(1)
     tr = np.maximum(panel.high - panel.low, np.maximum((panel.high - pc).abs(), (panel.low - pc).abs()))
@@ -83,6 +85,20 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
         a = atr[t, j]
         if not np.isfinite(a):
             return None
+        if mode == "rangevol":                  # docs/range_volume_preregistration.md
+            if t < 21:
+                return None
+            win = H[t - 20: t, j]
+            if not np.isfinite(win).all():
+                return None
+            kk = int(np.argmax(win)) + t - 20
+            lvl = H[kk, j]
+            lo = np.nanmin(L[kk: t, j])
+            if not (H[t, j] > lvl and np.isfinite(lo) and lvl / lo - 1 <= 0.10
+                    and np.isfinite(vavg[t, j]) and V[t, j] >= 1.5 * vavg[t, j]):
+                return None
+            return {"type": "market", "ref": C[t, j], "atr": a, "fm_stop": True,
+                    "swing": swing_stop(panel, piv, atr_df, t, e, C[t, j]), "stop": np.nan}
         if mode == "high20":
             trig = high20[t, j]
             if not np.isfinite(trig):
@@ -152,6 +168,9 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                     stats["gap_skip"] += 1
                     continue
                 fill = o
+                if od.get("fm_stop"):
+                    od["stop"] = (fill * (1 - fixed_stop) if fixed_stop is not None else
+                                  max(od["swing"] if od["swing"] is not None else -np.inf, fill - 3.0 * od["atr"]))
             else:
                 if not (np.isfinite(lo) and lo <= od["top"]):
                     continue
