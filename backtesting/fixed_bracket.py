@@ -181,3 +181,58 @@ def entries_f(panel: Panel, setups: pd.DataFrame):
         return [("stop", s.entity_id, s.pivot, be.F_MAX_GAP, s.priority + s.distance, be.F_ORDER_DAYS, s.stop)
                 for s in g.itertuples() if s.entity_id not in busy]
     return fn
+
+
+def entries_s_quality(panel: Panel, nifty_close: pd.Series, base_min: int = 5, base_width: float = 0.10,
+                      vol_mult: float = 1.5):
+    """#3's stock filters (as entries_s) with a quality breakout on day i
+    (docs/s_quality_preregistration.md): close_i above the prior 20-day high L
+    (max High of i-20..i-1); that high was set >= base_min sessions before i;
+    from that day to i-1 the range (max High / min Low - 1) is <= base_width;
+    volume_i >= vol_mult x the prior 50-day average. Buy at the next open
+    (market order, skipped if > 3% above close_i)."""
+    import backtesting.breakout_entries as be
+    c, h = panel.close, panel.high
+    H, L, V = panel.high.to_numpy(float), panel.low.to_numpy(float), panel.volume.to_numpy(float)
+    C = c.to_numpy(float)
+    cols = {e: j for j, e in enumerate(c.columns)}
+    sma50 = c.rolling(50, min_periods=50).mean()
+    sma200 = c.rolling(200, min_periods=200).mean()
+    mom = c / c.shift(be.S_MOM_LEN) - 1
+    vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
+    groups = be.peer_strength(panel, mom)
+    gdates = np.array(sorted(groups))
+    nifty = nifty_close.reindex(nifty_close.index.union(c.index)).ffill()
+    market_ok = (nifty > nifty.rolling(200, min_periods=200).mean()).reindex(c.index).fillna(False)
+
+    def fn(i, day, busy):
+        if i < 21:
+            return []
+        k = gdates.searchsorted(np.datetime64(day), side="right") - 1
+        grp = groups[pd.Timestamp(gdates[k])] if k >= 0 else pd.Series(dtype=float)
+        members = [e for e in panel.universe_on(day) if e in c.columns]
+        rank = mom.iloc[i][members].dropna().rank(pct=True)
+        need = be.S_GROUP_STRONG if bool(market_ok.iloc[i]) else be.S_GROUP_TOP
+        out = []
+        for e in rank[rank >= be.S_MOM_TOP].index:
+            if e in busy or grp.get(e, 0.0) < need:
+                continue
+            j = cols[e]
+            x, a, b = C[i, j], sma50.iloc[i].get(e, np.nan), sma200.iloc[i].get(e, np.nan)
+            if not (all(np.isfinite(v) for v in (x, a, b)) and x > a and x > b):
+                continue
+            win = H[i - 20: i, j]
+            if not np.isfinite(win).all():
+                continue
+            kk = int(np.argmax(win)) + i - 20                      # day of the prior 20-day high
+            lvl = H[kk, j]
+            if not (x > lvl and i - kk >= base_min):
+                continue
+            lo = np.nanmin(L[kk: i, j])
+            if not (np.isfinite(lo) and lvl / lo - 1 <= base_width):
+                continue
+            if not (np.isfinite(vavg[i, j]) and V[i, j] >= vol_mult * vavg[i, j]):
+                continue
+            out.append(("market", e, x, 0.03, -mom.iloc[i][e]))
+        return out
+    return fn
