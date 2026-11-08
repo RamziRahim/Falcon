@@ -31,8 +31,14 @@ ATR_CAP = 3.0
 
 def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple: float = 3.0,
                market_filter: bool = False, time_stop: int = 20, atr_cap: bool = False,
-               cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None):
-    """fixed_stop / fixed_tgt (docs/fixed_5_15_preregistration.md): stop = fill x (1 - fixed_stop),
+               cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None,
+               range_max: float | None = None, vol_exit: float | None = None):
+    """range_max / vol_exit (docs/volume_exit_preregistration.md): at a buy-stop fill on day i,
+    skip unless the 20 sessions before i stayed within range_max (highest high to lowest low
+    since that high); at the close of the fill day, sell if its volume < vol_exit x the
+    50-session average volume before it.
+
+    fixed_stop / fixed_tgt (docs/fixed_5_15_preregistration.md): stop = fill x (1 - fixed_stop),
     target = fill x (1 + fixed_tgt), replacing the swing-low stop and R target."""
     ledger = Ledger(cost or CostModel())
     sessions = panel.sessions
@@ -42,8 +48,13 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
     atr = tr.rolling(ATR_LEN, min_periods=ATR_LEN).mean()
     nf = nifty.reindex(nifty.index.union(sessions)).ffill().reindex(sessions)
     market_ok = (nf > nf.rolling(50, min_periods=50).mean()).to_numpy()
+    Hn, Ln = panel.high.to_numpy(float), panel.low.to_numpy(float)
+    Vn = panel.volume.to_numpy(float)
+    vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
+    col = {e: j for j, e in enumerate(panel.close.columns)}
     live, queued_exits = [], set()
-    skipped = {"no_swing_low": 0, "gap_below_stop": 0, "stop_too_wide": 0, "market_filter_days": 0}
+    skipped = {"no_swing_low": 0, "gap_below_stop": 0, "stop_too_wide": 0, "market_filter_days": 0,
+               "range_skip": 0, "vol_exit": 0}
     for i, day in enumerate(sessions):
         if day < start or day > end:
             continue
@@ -68,6 +79,15 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                         fill = o
                 elif np.isfinite(hi) and hi >= od["ref"] and o <= od["ref"] * (1 + od["max_gap"]):
                     fill = max(od["ref"], o)
+            if fill is not None and range_max is not None:
+                j = col[e]
+                win = Hn[i - 20: i, j]
+                kk = int(np.argmax(np.nan_to_num(win, nan=-np.inf))) + i - 20 if i >= 20 else None
+                lo_r = np.nanmin(Ln[kk: i, j]) if kk is not None else np.nan
+                if not (np.isfinite(lo_r) and Hn[kk, j] / lo_r - 1 <= range_max):
+                    skipped["range_skip"] += 1
+                    fill = None
+                    continue
             if fill is not None:
                 stop = od["stop"]
                 if fixed_stop is not None:
@@ -103,6 +123,12 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                 ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
             elif np.isfinite(hi) and hi >= m["target"]:
                 ledger.sell(day, e, o if gap_ok and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+            elif vol_exit is not None and m["entry_idx"] == i:
+                j = col[e]
+                if np.isfinite(vavg[i, j]) and np.isfinite(Vn[i, j]) and Vn[i, j] < vol_exit * vavg[i, j] \
+                        and np.isfinite(closes.get(e, np.nan)):
+                    ledger.sell(day, e, closes[e], _adv(panel, i, e), "VOL_EXIT")
+                    skipped["vol_exit"] += 1
         ledger.mark(day, closes)
         if day >= end:
             continue

@@ -45,7 +45,7 @@ WATCH_DAYS, BUFFER, MAX_STOP, FVG_LOOKBACK, SWEEP_LOOKBACK, PIVOT_W = 10, 0.25, 
 def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, mode: str,
                    breakouts: dict | None = None, time_stop: int = 40, cost: CostModel | None = None,
                    r_mult: float = R_MULT, fixed_stop: float | None = None, fixed_tgt: float | None = None,
-                   be_at: float | None = None):
+                   be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None):
     """mode "high20" (docs/fm_high20_preregistration.md): while on the watch list, a
     one-session buy-stop at the 20-day high (fill = max(level, open), skipped if the open
     is > 3% above the level). Stop = FM's (higher of swing-low stop and fill - 3 ATR),
@@ -133,7 +133,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
 
     watch, orders, queued_exits = {}, [], set()
     stats = {"watch_added": 0, "triggers": 0, "filled": 0, "expired_unfilled": 0, "gap_skip": 0,
-             "stop_skip": 0, "too_wide": 0, "blocked_market": 0}
+             "stop_skip": 0, "too_wide": 0, "blocked_market": 0, "range_skip": 0, "vol_exit": 0}
     for i, day in enumerate(s):
         if day < start or day > end:
             continue
@@ -160,6 +160,14 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 if o > od["trig"] * 1.03:
                     stats["gap_skip"] += 1
                     continue
+                if range_max is not None:                # docs/volume_exit_preregistration.md
+                    j = cols[e]
+                    win = H[i - 20: i, j]
+                    kk = int(np.argmax(np.nan_to_num(win, nan=-np.inf))) + i - 20
+                    lo_r = np.nanmin(L[kk: i, j])
+                    if not (np.isfinite(lo_r) and H[kk, j] / lo_r - 1 <= range_max):
+                        stats["range_skip"] += 1
+                        continue
                 fill = max(od["trig"], o)
                 od["stop"] = (fill * (1 - fixed_stop) if fixed_stop is not None else
                               max(od["swing"] if od["swing"] is not None else -np.inf, fill - 3.0 * od["atr"]))
@@ -206,6 +214,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             elif (m.get("be_at") is not None and m.get("be_from") is None and np.isfinite(hi)
                   and hi >= m["fill"] * (1 + m["be_at"]) and m["fill"] * (1 + m["be_at"]) < m["target"]):
                 m["be_from"] = i + 1
+            elif vol_exit is not None and m["entry_idx"] == i:
+                j = cols[e]
+                if np.isfinite(vavg[i, j]) and np.isfinite(V[i, j]) and V[i, j] < vol_exit * vavg[i, j] \
+                        and np.isfinite(closes.get(e, np.nan)):
+                    ledger.sell(day, e, closes[e], _adv(panel, i, e), "VOL_EXIT")
+                    stats["vol_exit"] += 1
         ledger.mark(day, closes)
         if day >= end:
             continue
