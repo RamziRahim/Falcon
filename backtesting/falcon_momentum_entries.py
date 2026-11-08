@@ -45,7 +45,8 @@ WATCH_DAYS, BUFFER, MAX_STOP, FVG_LOOKBACK, SWEEP_LOOKBACK, PIVOT_W = 10, 0.25, 
 def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataFrame, mode: str,
                    breakouts: dict | None = None, time_stop: int = 40, cost: CostModel | None = None,
                    r_mult: float = R_MULT, fixed_stop: float | None = None, fixed_tgt: float | None = None,
-                   be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None):
+                   be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
+                   cooldown: int = 0):
     """mode "high20" (docs/fm_high20_preregistration.md): while on the watch list, a
     one-session buy-stop at the 20-day high (fill = max(level, open), skipped if the open
     is > 3% above the level). Stop = FM's (higher of swing-low stop and fill - 3 ATR),
@@ -131,7 +132,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             return {"type": "limit", "top": top, "stop": bottom - BUFFER * a, "ref": C[t, j]}
         return None
 
-    watch, orders, queued_exits = {}, [], set()
+    watch, orders, queued_exits, blocked = {}, [], set(), {}
     stats = {"watch_added": 0, "triggers": 0, "filled": 0, "expired_unfilled": 0, "gap_skip": 0,
              "stop_skip": 0, "too_wide": 0, "blocked_market": 0, "range_skip": 0, "vol_exit": 0}
     for i, day in enumerate(s):
@@ -220,6 +221,8 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                         and np.isfinite(closes.get(e, np.nan)):
                     ledger.sell(day, e, closes[e], _adv(panel, i, e), "VOL_EXIT")
                     stats["vol_exit"] += 1
+                    if cooldown:                         # docs/volume_cooldown_preregistration.md
+                        blocked[e] = i + cooldown
         ledger.mark(day, closes)
         if day >= end:
             continue
@@ -250,6 +253,8 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 continue
             if e in ledger.shares:
                 del watch[e]
+                continue
+            if blocked.get(e, -1) >= i:
                 continue
             od = trigger(e, i)
             if od is None:

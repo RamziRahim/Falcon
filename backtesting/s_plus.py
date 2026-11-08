@@ -32,8 +32,11 @@ ATR_CAP = 3.0
 def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple: float = 3.0,
                market_filter: bool = False, time_stop: int = 20, atr_cap: bool = False,
                cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None,
-               range_max: float | None = None, vol_exit: float | None = None):
-    """range_max / vol_exit (docs/volume_exit_preregistration.md): at a buy-stop fill on day i,
+               range_max: float | None = None, vol_exit: float | None = None, cooldown: int = 0):
+    """cooldown (docs/volume_cooldown_preregistration.md): after a VOL_EXIT on day i, no new
+    order for that stock until session i + cooldown.
+
+    range_max / vol_exit (docs/volume_exit_preregistration.md): at a buy-stop fill on day i,
     skip unless the 20 sessions before i stayed within range_max (highest high to lowest low
     since that high); at the close of the fill day, sell if its volume < vol_exit x the
     50-session average volume before it.
@@ -52,6 +55,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
     Vn = panel.volume.to_numpy(float)
     vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
     col = {e: j for j, e in enumerate(panel.close.columns)}
+    blocked = {}
     live, queued_exits = [], set()
     skipped = {"no_swing_low": 0, "gap_below_stop": 0, "stop_too_wide": 0, "market_filter_days": 0,
                "range_skip": 0, "vol_exit": 0}
@@ -129,6 +133,8 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                         and np.isfinite(closes.get(e, np.nan)):
                     ledger.sell(day, e, closes[e], _adv(panel, i, e), "VOL_EXIT")
                     skipped["vol_exit"] += 1
+                    if cooldown:
+                        blocked[e] = i + cooldown
         ledger.mark(day, closes)
         if day >= end:
             continue
@@ -140,6 +146,8 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
             continue
         pending = {od["entity"] for od in live}
         for od in order_fn(i, day, set(ledger.shares) | pending):
+            if blocked.get(od[1], -1) >= i:
+                continue
             if od[0] == "market":
                 _, e, ref, gap, pr = od
                 rec = {"type": "market", "entity": e, "ref": ref, "max_gap": gap, "priority": pr}
