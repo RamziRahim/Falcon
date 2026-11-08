@@ -38,3 +38,26 @@ The breakout must also be a **quality breakout** on day i:
 ## Output
 
 `data/s_quality_result.txt`
+
+---
+
+## Results, 2026-11-08 (`data/s_quality_result.txt`)
+
+| | W1 2019-26 | W2 2008-17 | 2018 | Trades W1 / W2 / 2018 | Net per trade W1 / W2 | Capital in use W1 / W2 |
+|---|---|---|---|---|---|---|
+| Q3 (quality breakout, 3R) | 1.5% (DD −20%) | 0.6% (−21%) | −9.7% | 298 / 304 / 54 | +0.79 / +0.16% | 25 / 21% |
+| Q2 (2R) | 1.9% (−17%) | −0.1% (−23%) | −8.0% | 304 / 308 / 58 | +0.90 / −0.06% | 25 / 20% |
+| *#3 + Nifty filter (plain 20-day high)* | *17.3% (−24%)* | *5.5% (−34%)* | *−14.3%* | *820 / 895 / 90* | *+1.99 / +0.85%* | |
+
+**Verdict:** fails (1/6 checks). It is far below plain #3.
+
+**Reading:**
+- The four checks cut trades to about a third.
+- **Per-trade results are also worse,** not better: +0.8% vs +2.0% on W1. The quality
+  breakouts more often stall: about 67% of trades end at the 20-session time stop, and
+  only 2-5% reach the 3R target.
+- Only 20-25% of capital is in use.
+- Losses are smaller in 2018 and the drawdowns are shallower, simply because the
+  strategy is mostly in cash.
+- This agrees with the random-day screens: IA's range-breakout pattern did not beat
+  random days in either decade.
