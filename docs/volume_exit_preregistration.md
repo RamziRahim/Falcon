@@ -60,3 +60,39 @@ look-ahead.
 - **Windows:** W1, W2 and 2018, judged with the six checks.
 - **All windows are in-sample.**
 - **Output:** `data/volume_exit_result.txt`.
+
+---
+
+## Results, 2026-11-08 (`data/volume_exit_result.txt`)
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | Trades W1 / W2 | Volume exits W1 / W2 | ₹10 L grew to (W1 / W2) |
+|---|---|---|---|---|---|---|
+| *#3 + Nifty 1:3 (reference)* | 17.3% | 5.5% | −14.3% | 820 / 895 | — | 34.8 / 17.0 L |
+| *S3_REF2 #3 + Nifty 1:2 (reference)* | 15.4% (DD −29%) | 5.1% (−35%) | −12.6% | 862 / 930 | — | 30.6 / 16.4 L |
+| S3_VX3 | 0.7% (−43%) | −4.2% (−52%) | −26.3% | 1,874 / 1,876 | 1,191 / 1,129 | 10.6 / 6.5 L |
+| S3_VX2 | −1.1% | −7.2% | −26.9% | 1,984 / 1,983 | 1,263 / 1,201 | 9.2 / 4.8 L |
+| S3_RX3 | −3.1% | −7.9% | −28.2% | 1,906 / 1,899 | 1,288 / 1,233 | 7.8 / 4.4 L |
+| S3_RX2 | −4.7% | −8.0% | −23.2% | 1,989 / 1,970 | 1,343 / 1,271 | 6.9 / 4.3 L |
+| *FM H3 (reference)* | 9.4% | 9.7% | −19.6% | 567 / 602 | — | — |
+| FM_VX3 | 4.0% (−24%) | 3.6% (−54%) | −27.9% | 1,157 / 1,159 | 693 / 657 | 13.5 / 14.2 L |
+| FM_VX2 | 0.7% | 1.1% | −27.1% | 1,292 / 1,265 | 771 / 714 | 10.5 / 11.2 L |
+| FM_RX3 | 9.0% (−22%) | 1.3% (−54%) | −20.0% | 1,139 / 1,090 | 734 / 662 | 19.7 / 11.3 L |
+| FM_RX2 | 2.8% | 0.3% | −20.3% | 1,241 / 1,182 | 799 / 716 | 12.4 / 10.3 L |
+
+**Verdict:** every version fails, and all are far below their references. Not adopted.
+
+**Why:** about 64% of entries fail the volume check and are sold at the close. The
+buy-stop then re-arms, so the same stock is often bought again the next day, sold again,
+and so on. Trades more than double, and each round trip pays costs and the day's
+slippage.
+
+**Descriptive check, after the run, on the S3_REF2 trades (no exit rule):**
+
+| Entry-day volume | W1 trades / win / avg net | W2 trades / win / avg net |
+|---|---|---|
+| < 1.5× | 476 / 47.7% / +0.79% | 515 / 44.9% / −0.22% |
+| ≥ 1.5× | 386 / 51.3% / **+2.61%** | 415 / 53.3% / **+1.90%** |
+
+Volume on the breakout day *does* separate better trades from worse ones, in both
+decades. The exit rule wasted it through re-entries. A follow-up would need a cool-down,
+with no re-buy of a stock after a volume exit; that would be a new pre-registration.
