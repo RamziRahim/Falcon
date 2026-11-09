@@ -54,3 +54,50 @@ month-end (`combine()`, no rebalancing cost).
   there is no 2018 scan.
 - **All in-sample.**
 - **Output:** `data/wick_exit_result.txt`.
+
+---
+
+## Results, 2026-11-09 (`data/wick_exit_result.txt`), half A
+
+Every reference reproduces its earlier half-A run exactly.
+
+### Part 1: wick exit
+
+| Strategy | W1 ref → WX → WXC | W2 ref → WX → WXC | 2018 ref → WX → WXC | Win % (W1 ref → WX) |
+|---|---|---|---|---|
+| #3 + Nifty 1:3 | 9.9 → 4.6 → −1.0% | 3.4 → −4.0 → 0.0% | −14.8 → −21.3 → −20.1% | 48 → 25 |
+| FM 20-day-high buy-stop 1:3 | 13.0 → 8.8 → 3.0% | 10.0 → 4.8 → 0.1% | −23.9 → −23.7 → −19.0% | 47 → 26 |
+| Falcon patterns | 8.9 → −0.6% | −1.6 → −10.2% | — | 45 → 23 |
+| Falcon patterns, momentum only | 11.2 → 4.5% | 2.4 → −4.0% | — | 47 → 25 |
+
+**Verdict:** every wick-exit version is worse than its reference in both decades. Not
+adopted.
+- Wick fills lose on average over the full trade, but many of them recover and finish as
+  winners. Selling at the fill-day close turns all of them into small certain losses.
+  The win rate halves.
+- Freed slots are refilled, so the trade count roughly doubles. The cool-down does not
+  help: it blocks the stocks that later recover.
+
+### Part 2: the pair
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | ₹10 L grew to (W1 / W2) | Checks W1 / W2 |
+|---|---|---|---|---|---|
+| FM_C3 alone | 14.5% (DD −18%) | 12.7% (−23%) | −14.7% | 28.8 / 33.0 L | 3 / 5 |
+| A10 alone | 25.9% (−33%) | 11.3% (−59%) | −36.1% | 60.8 / 29.1 L | 6 / 5 |
+| RB3_R20 alone | 9.8% (−22%) | 6.7% (−22%) | −10.8% | 20.8 / 19.0 L | 3 / 4 |
+| **C_F_A (FM_C3 + A10)** | **20.7% (−21%)** | **12.6% (−36%)** | −25.9% | **43.5 / 32.7 L** | **5 / 5** |
+| C_F_A_R (+ RB3_R20) | 17.2% (−16%) | 10.9% (−26%) | −21.0% | 34.7 / 28.1 L | 5 / 5 |
+
+**Against the frozen rule:**
+- **C_F_A:**
+  - W1: met. CAGR 20.7% ≥ 14.5%; drawdown −21% against A10's −33%, 12pp shallower.
+  - W2: drawdown met (−36% against −59%, 23pp shallower). CAGR 12.60% against FM_C3's
+    12.69%: **misses by 0.09pp**.
+  - **Formally not adopted.**
+- **C_F_A_R:** W2 CAGR 10.9% < 12.7%. Not adopted.
+
+**Reading.** FM_C3 + A10 passes 5 of the 6 checks in both decades: the only combination
+or strategy here to do so. It earns 6pp a year more than FM_C3 in W1 and the same in W2.
+The price is deeper drawdowns (−21% / −36% against −18% / −23%) and a worse 2018 (−26%
+against −15%). It misses the frozen rule by 0.09pp, which is noise-level. Whether to
+prefer it over FM_C3 alone is a question of risk appetite, not something the test settles.
