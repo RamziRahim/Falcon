@@ -189,3 +189,63 @@ def run_pullback(panel: Panel, start, end, nifty: pd.Series, sector_of, risk: fl
                     held_sec[name] = held_sec.get(name, 0) + 1
     eq, trades = _result_partial(ledger)
     return eq, trades, st
+
+
+def run_signal_hold(panel: Panel, start, end, signals: pd.DataFrame, sector_of, hold: int = 20,
+                    atr_stop: float = 2.5, risk: float = 0.01, cost: CostModel | None = None):
+    """docs/pullback_diagnostics_preregistration.md Step 1b: buy at the signal close
+    (signals: t, entity_id, rank, atr, close), stop = entry - atr_stop x ATR, sell at
+    the open after `hold` sessions. 6 slots, <= 2 per sector, priority by rank."""
+    from backtesting.pit_strategies import Ledger, _result
+    ledger = Ledger(cost or CostModel())
+    s = panel.sessions
+    O, L = panel.open.to_numpy(float), panel.low.to_numpy(float)
+    cols = {e: j for j, e in enumerate(panel.close.columns)}
+    by_t = {t: g.sort_values("rank", ascending=False) for t, g in signals.groupby("t")}
+    queued = set()
+    for i, day in enumerate(s):
+        if day < start or day > end:
+            continue
+        _delisting_exits(panel, ledger, i, day)
+        closes = panel.close.iloc[i]
+        for e in list(queued):
+            if e not in ledger.shares:
+                queued.discard(e)
+            elif np.isfinite(O[i, cols[e]]):
+                ledger.sell(day, e, O[i, cols[e]], _adv(panel, i, e), "TIME")
+                queued.discard(e)
+        for e in list(ledger.shares):
+            m = ledger.meta[e]
+            j = cols[e]
+            if m["entry_idx"] < i and np.isfinite(L[i, j]) and L[i, j] <= m["stop"]:
+                o = O[i, j]
+                ledger.sell(day, e, o if np.isfinite(o) and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
+        ledger.mark(day, closes)
+        if day >= end:
+            continue
+        for e in ledger.shares:
+            if i - ledger.meta[e]["entry_idx"] >= hold:
+                queued.add(e)
+        g = by_t.get(i)
+        if g is None:
+            continue
+        sec = sector_of(day)
+        held_sec = pd.Series([sec.get(e) for e in ledger.shares if sec.get(e)]).value_counts().to_dict()
+        for r in g.itertuples():
+            e = r.entity_id
+            if e in ledger.shares or len(ledger.shares) >= SLOTS:
+                continue
+            name = sec.get(e)
+            if name and held_sec.get(name, 0) >= PER_SECTOR:
+                continue
+            x, stop = r.close, r.close - atr_stop * r.atr
+            if not (np.isfinite(stop) and 0 < stop < x):
+                continue
+            dist = (x - stop) / x
+            equity_now = ledger.cash + sum(ledger.value(y, closes) for y in ledger.shares)
+            value = min(risk * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+            if value > 0 and ledger.buy(day, e, x, value, _adv(panel, i, e), {"stop": stop, "entry_idx": i}):
+                if name:
+                    held_sec[name] = held_sec.get(name, 0) + 1
+    eq, trades = _result(ledger)
+    return eq, trades, {}
