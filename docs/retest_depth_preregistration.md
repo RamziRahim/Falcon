@@ -59,3 +59,32 @@ The half-A references from `data/close_entry_result.txt`:
   W1 and W2.
 - **All windows are in-sample.**
 - **Output:** `data/retest_depth_result.txt`.
+
+---
+
+## Results, 2026-11-09 (`data/retest_depth_result.txt`), half A
+
+**Half-A references:**
+- S3_REF3: 9.9% / 3.4% / −14.8%
+- S3_REF2: 7.0% / 5.9% / −12.5%
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | Trades W1 / W2 | ₹10 L grew to (W1 / W2) |
+|---|---|---|---|---|---|
+| RCL3 (candle low) | 8.3% (DD −26%) | 3.7% (−30%) | −20.4% | 790 / 786 | 18.7 / 14.4 L |
+| RCL2 | 6.5% (−24%) | 1.9% (−31%) | −16.3% | 826 / 817 | 16.4 / 12.0 L |
+| RE3 (20-EMA) | 9.2% (−30%) | 3.2% (−30%) | −10.2% | 760 / 797 | 20.0 / 13.7 L |
+| RE2 | 9.6% (−25%) | −0.8% (−41%) | −3.3% | 808 / 825 | 20.5 / 9.2 L |
+| RS3 (20-SMA) | 6.2% (−31%) | 2.3% (−32%) | −10.3% | 752 / 769 | 16.1 / 12.6 L |
+| RS2 | 4.4% (−31%) | −1.3% (−42%) | −15.9% | 795 / 797 | 14.0 / 8.8 L |
+| KCL3 (clean + candle low) | 4.9% (−25%) | 6.0% (−17%) | −16.6% | 441 / 395 | 14.6 / 17.9 L |
+| KCL2 | 1.6% (−29%) | 4.4% (−16%) | −18.0% | 446 / 398 | 11.3 / 15.4 L |
+| KE3 (clean + EMA) | 3.0% (−23%) | 1.8% (−21%) | −16.3% | 437 / 404 | 12.6 / 11.9 L |
+| KE2 | 5.5% (−18%) | 0.0% (−25%) | −18.8% | 442 / 410 | 15.2 / 10.0 L |
+| KS3 (clean + SMA) | 4.3% (−20%) | 1.4% (−19%) | −13.5% | 421 / 385 | 13.9 / 11.4 L |
+| KS2 | 5.6% (−16%) | −0.5% (−24%) | −17.0% | 430 / 390 | 15.3 / 9.5 L |
+
+**Verdict:** no version beats its S3_REF in both W1 and W2. Not adopted.
+- **Nearest:** RE2 beats S3_REF2 in W1 (9.6% vs 7.0%) but loses 0.8% in W2.
+- KCL3 beats S3_REF3 in W2 (6.0% vs 3.4%, with a DD of −17%) but loses in W1.
+- The waits for a deeper dip trade the breakout level for a lower price, but they miss
+  the strongest breakouts, which never come back.
