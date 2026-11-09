@@ -33,7 +33,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                market_filter: bool = False, time_stop: int = 20, atr_cap: bool = False,
                cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None,
                range_max: float | None = None, vol_exit: float | None = None, cooldown: int = 0,
-               close_vol: float | None = None, levels: list | None = None):
+               close_vol: float | None = None, levels: list | None = None, clean_close: bool = True):
     """closebuy orders (docs/close_entry_preregistration.md): on the session after the signal,
     buy at the close if High > level, Close >= level, Close >= Open and the upper wick
     < 50% of the day's range (and, with close_vol, Volume >= close_vol x the 50-session
@@ -88,7 +88,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                     c_ = closes.get(e, np.nan)
                     if np.isfinite(hi) and hi > od["ref"] and np.isfinite(c_) and np.isfinite(lo):
                         rng = hi - lo
-                        clean = c_ >= od["ref"] and c_ >= o and rng > 0 and (hi - max(o, c_)) / rng < 0.5
+                        clean = (c_ >= od["ref"] if clean_close else c_ > od["ref"]) and (not clean_close or (c_ >= o and rng > 0 and (hi - max(o, c_)) / rng < 0.5))
                         if clean and close_vol is not None:
                             j = col[e]
                             clean = bool(np.isfinite(vavg[i, j]) and Vn[i, j] >= close_vol * vavg[i, j])
