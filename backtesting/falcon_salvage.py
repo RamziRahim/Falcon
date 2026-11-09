@@ -32,7 +32,7 @@ SLOTS, RISK, POS_CAP, MAX_STOP, TIME_STOP, WINDOW = 10, 0.01, 0.25, 0.15, 40, 5
 
 
 def run_setups(panel: Panel, setups: pd.DataFrame, start, end, entry: str, stop_mode: str, target_mode: str,
-               cost: CostModel | None = None, info: list | None = None):
+               cost: CostModel | None = None, info: list | None = None, wick_exit: bool = False):
     ledger = Ledger(cost or CostModel())
     s = panel.sessions
     O, H, L, C, V = (x.to_numpy(float) for x in (panel.open, panel.high, panel.low, panel.close, panel.volume))
@@ -109,7 +109,7 @@ def run_setups(panel: Panel, setups: pd.DataFrame, start, end, entry: str, stop_
             equity_now = ledger.cash + sum(ledger.value(x, closes) for x in ledger.shares)
             value = min(RISK * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
             if value > 0 and ledger.buy(day, e, fill, value, _adv(panel, i, e),
-                                        {"stop": stop, "target": target, "entry_idx": i,
+                                        {"stop": stop, "target": target, "entry_idx": i, "trig": od["pivot"],
                                          "at_close": entry == "clean_close"}):
                 st["filled"] += 1
                 if info is not None:
@@ -128,6 +128,8 @@ def run_setups(panel: Panel, setups: pd.DataFrame, start, end, entry: str, stop_
                 ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
             elif np.isfinite(h) and h >= m["target"]:
                 ledger.sell(day, e, o if gap_ok and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+            elif wick_exit and m["entry_idx"] == i and np.isfinite(C[i, j]) and C[i, j] < m["trig"]:
+                ledger.sell(day, e, C[i, j], _adv(panel, i, e), "WICK_EXIT")
         ledger.mark(day, closes)
         if day >= end:
             continue

@@ -34,7 +34,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None,
                range_max: float | None = None, vol_exit: float | None = None, cooldown: int = 0,
                close_vol: float | None = None, levels: list | None = None, clean_close: bool = True,
-               risk: float = RISK):
+               risk: float = RISK, wick_exit: bool = False):
     """closebuy orders (docs/close_entry_preregistration.md): on the session after the signal,
     buy at the close if High > level, Close >= level, Close >= Open and the upper wick
     < 50% of the day's range (and, with close_vol, Volume >= close_vol x the 50-session
@@ -134,7 +134,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                                    fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)))
                 if value > 0:
                     ledger.buy(day, e, fill, value, _adv(panel, i, e),
-                               {"stop": stop, "entry_idx": i, "at_close": od["type"] == "closebuy",
+                               {"stop": stop, "entry_idx": i, "at_close": od["type"] == "closebuy", "trig": od["ref"],
                                 "target": fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)})
                 continue
             if od["type"] in ("stop", "closebuy") and i < od["expires_idx"] and not (
@@ -151,6 +151,12 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                 ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
             elif np.isfinite(hi) and hi >= m["target"]:
                 ledger.sell(day, e, o if gap_ok and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+            elif wick_exit and m["entry_idx"] == i and np.isfinite(closes.get(e, np.nan)) \
+                    and closes[e] < m["trig"]:                      # docs/wick_exit_preregistration.md
+                ledger.sell(day, e, closes[e], _adv(panel, i, e), "WICK_EXIT")
+                skipped["wick_exit"] = skipped.get("wick_exit", 0) + 1
+                if cooldown:
+                    blocked[e] = i + cooldown
             elif vol_exit is not None and m["entry_idx"] == i:
                 j = col[e]
                 if np.isfinite(vavg[i, j]) and np.isfinite(Vn[i, j]) and Vn[i, j] < vol_exit * vavg[i, j] \

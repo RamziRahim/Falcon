@@ -46,7 +46,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                    breakouts: dict | None = None, time_stop: int = 40, cost: CostModel | None = None,
                    r_mult: float = R_MULT, fixed_stop: float | None = None, fixed_tgt: float | None = None,
                    be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
-                   cooldown: int = 0, levels: list | None = None):
+                   cooldown: int = 0, levels: list | None = None, wick_exit: bool = False):
     """mode "high20" (docs/fm_high20_preregistration.md): while on the watch list, a
     one-session buy-stop at the 20-day high (fill = max(level, open), skipped if the open
     is > 3% above the level). Stop = FM's (higher of swing-low stop and fill - 3 ATR),
@@ -215,7 +215,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
             if value > 0 and ledger.buy(day, e, fill, value, _adv(panel, i, e),
                                         {"stop": stop, "entry_idx": i, "fill": fill, "be_from": None,
-                                         "at_close": od["type"] == "closebuy",
+                                         "at_close": od["type"] == "closebuy", "trig": od.get("trig"),
                                          "target": fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_mult * (fill - stop),
                                          "be_at": be_at}):
                 stats["filled"] += 1
@@ -239,6 +239,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             elif (m.get("be_at") is not None and m.get("be_from") is None and np.isfinite(hi)
                   and hi >= m["fill"] * (1 + m["be_at"]) and m["fill"] * (1 + m["be_at"]) < m["target"]):
                 m["be_from"] = i + 1
+            elif (wick_exit and m["entry_idx"] == i and m.get("trig") is not None
+                  and np.isfinite(closes.get(e, np.nan)) and closes[e] < m["trig"]):
+                ledger.sell(day, e, closes[e], _adv(panel, i, e), "WICK_EXIT")
+                stats["wick_exit"] = stats.get("wick_exit", 0) + 1
+                if cooldown:
+                    blocked[e] = i + cooldown
             elif vol_exit is not None and m["entry_idx"] == i:
                 j = cols[e]
                 if np.isfinite(vavg[i, j]) and np.isfinite(V[i, j]) and V[i, j] < vol_exit * vavg[i, j] \
