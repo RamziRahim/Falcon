@@ -33,8 +33,15 @@ WATCH, BUFFER, RECLAIM_GAP = 10, 0.25, 0.03
 
 
 def run_retest(panel: Panel, start, end, order_fn, nifty: pd.Series, mode: str, r_multiple: float = 3.0,
-               time_stop: int = 20, cost: CostModel | None = None):
-    assert mode in ("limit", "reclaim")
+               time_stop: int = 20, cost: CostModel | None = None, clean: bool = False):
+    """Modes "candle_low", "ema20", "sma20" (docs/retest_depth_preregistration.md): limit buy
+    on sessions b+1 .. b+WATCH at the breakout candle's low / the 20-EMA / the 20-SMA as of
+    the previous close; fill = min(open, limit). Watch cancelled on a close below the stop.
+    clean: only breakouts whose day-b candle closed >= level, >= open, upper wick < 50%."""
+    assert mode in ("limit", "reclaim", "candle_low", "ema20", "sma20")
+    deep = mode in ("candle_low", "ema20", "sma20")
+    EMA = panel.close.ewm(span=20, adjust=False, min_periods=20).mean().to_numpy(float)
+    SMA = panel.close.rolling(20, min_periods=20).mean().to_numpy(float)
     ledger = Ledger(cost or CostModel())
     s = panel.sessions
     piv = pivot_lows(panel)
@@ -48,7 +55,7 @@ def run_retest(panel: Panel, start, end, order_fn, nifty: pd.Series, mode: str, 
     market_ok = (nf > nf.rolling(50, min_periods=50).mean()).to_numpy()
     pending_bo, watch, orders, queued_exits = [], {}, [], set()
     st = {"breakouts": 0, "retested": 0, "reclaimed": 0, "filled": 0, "expired": 0,
-          "stop_skip": 0, "too_wide": 0, "gap_skip": 0}
+          "stop_skip": 0, "too_wide": 0, "gap_skip": 0, "not_clean": 0, "cancel_below_stop": 0}
     for i, day in enumerate(s):
         if day < start or day > end:
             continue
@@ -94,9 +101,16 @@ def run_retest(panel: Panel, start, end, order_fn, nifty: pd.Series, mode: str, 
         for bo in pending_bo:
             e, j, lvl = bo["entity"], cols[bo["entity"]], bo["level"]
             if np.isfinite(O[i, j]) and H[i, j] >= lvl and O[i, j] <= lvl * (1 + bo["gap"]) and e not in watch:
+                if clean:
+                    rng = H[i, j] - L[i, j]
+                    if not (C[i, j] >= lvl and C[i, j] >= O[i, j] and rng > 0
+                            and (H[i, j] - max(O[i, j], C[i, j])) / rng < 0.5):
+                        st["not_clean"] += 1
+                        continue
                 st["breakouts"] += 1
+                bo["candle_low"] = L[i, j]
                 watch[e] = {"level": lvl, "b": i, "stop": bo["stop"], "priority": bo["priority"],
-                            "touched": False, "low": np.inf}
+                            "touched": False, "low": np.inf, "candle_low": bo["candle_low"]}
         pending_bo = []
         # 3) watched stocks, sessions b+1 .. b+WATCH
         for e in sorted(watch, key=lambda x: watch[x]["priority"]):
@@ -111,7 +125,20 @@ def run_retest(panel: Panel, start, end, order_fn, nifty: pd.Series, mode: str, 
             if not np.isfinite(L[i, j]):
                 continue
             lvl = w["level"]
-            if mode == "limit":
+            if deep:
+                lim = (w["candle_low"] if mode == "candle_low" else
+                       EMA[i - 1, j] if mode == "ema20" else SMA[i - 1, j])
+                if np.isfinite(lim) and L[i, j] <= lim:
+                    if not w["touched"]:
+                        st["retested"] += 1
+                    w["touched"] = True
+                    if try_buy(e, min(O[i, j], lim), w["stop"], w["priority"]):
+                        watch.pop(e)
+                        continue
+                if e in watch and np.isfinite(C[i, j]) and C[i, j] < w["stop"]:
+                    st["cancel_below_stop"] += 1
+                    watch.pop(e)
+            elif mode == "limit":
                 if L[i, j] <= lvl:
                     if not w["touched"]:
                         st["retested"] += 1
@@ -154,7 +181,7 @@ def run_retest(panel: Panel, start, end, order_fn, nifty: pd.Series, mode: str, 
             if od[0] != "stop":
                 continue
             _, e, trig, gap, pr, valid, cancel = od
-            stop = swing_stop(panel, piv, atr, i, e, min(trig, closes.get(e, np.nan))) if mode == "limit" else 0.0
+            stop = swing_stop(panel, piv, atr, i, e, min(trig, closes.get(e, np.nan))) if mode == "limit" or deep else 0.0
             if stop is None:
                 continue
             pending_bo.append({"entity": e, "level": trig, "gap": gap, "priority": pr, "stop": stop})
