@@ -89,3 +89,79 @@ The code shows the triangle pivot is the **average** of the last two swing highs
 the detector allows to differ by up to 3%. PIV_X at 0.5% therefore partly reflects that
 tolerance. An extra descriptive flag, **PIV_X3** (the 20-session max High > pivot × 1.03),
 is added to Part 2. Nothing else changes.
+
+---
+
+## Results, 2026-11-09 (`data/falcon_salvage_result.txt`, `data/falcon_salvage_audit.txt`, `data/falcon_detections_sample.png`), half A
+
+### Part 1: wick fakeouts (F_REF buy-stop fills, W1 + W2)
+
+| Fill day | Share of fills | Win % | Net per trade | Stopped out | Hit target |
+|---|---|---|---|---|---|
+| **Closed back below the pivot (wick)** | **54.7%** | 36.9% | **−1.28%** | 56.2% | 24.3% |
+| Closed above the pivot | 45.3% | 53.8% | **+2.57%** | 38.5% | 37.8% |
+
+The pattern is the same in both decades:
+- W1: wick −1.07% against closed-above +2.80%;
+- W2: wick −1.46% against +2.34%.
+
+Wick fills are 52-61% of the fills for every pattern. **IA's observation is confirmed:**
+more than half of Falcon's buy-stop triggers are wick fakeouts, and they are the losing
+half.
+
+### Part 2: detection sanity flags (14,811 half-A detections)
+
+| Pattern | Detections | No uptrend (N_UP) | Pivot exceeded (PIV_X) | Exceeded > 3% (PIV_X3) | Crash in base | Wide | Far from high | Any flag |
+|---|---|---|---|---|---|---|---|---|
+| Asc. triangle | 7,940 | 33.6% | 85.2% | 10.7% | 5.6% | 12.4% | 16.6% | 90.9% |
+| Flat base | 5,584 | 27.5% | 10.5% | 0.2% | 1.2% | 0.1% | 7.6% | 35.9% |
+| VCP | 1,103 | 41.6% | 74.0% | 37.7% | 11.5% | 21.5% | 24.8% | 86.3% |
+| Bull flag | 184 | 26.6% | 50.5% | 19.6% | 10.3% | 96.2%* | 13.6% | 96.7% |
+
+\*Bull flags are wide by construction, because the flagpole is in the window.
+
+**Flaws seen in the code and the contact sheet:**
+- **Triangle pivot.** It is the *average* of only the last two swing highs, which may be
+  months apart and up to 3% different. The higher high is already above the buy level,
+  so many "triangles" are choppy ranges with a spike.
+- **VCP pivot.** It is the high of the *last* contraction, which is often below the
+  base's real top. 38% of VCPs had traded more than 3% above their pivot in the 20 days
+  before detection. The "first contraction low" can come from a different phase, months
+  earlier.
+- **Trend gate.** The swing-structure "UPTREND" passes 32% of stocks that are below
+  their 200-DMA, or whose 50-DMA is below the 200-DMA.
+- **Flat base.** It is the cleanest: only 36% have any flag.
+
+**Do the flags matter?**
+- **N_UP:** flagged trades net −0.29%, against +0.82% for clean ones.
+- **FAR:** flagged −0.35%, against +0.61%.
+- **PIV_X:** makes no difference to outcomes (+0.45% against +0.49%).
+
+### Part 3: re-entered backtests
+
+| Version | W1 2019-26 | W2 2008-17 | Trades W1 / W2 | Win % W1 / W2 | Net per trade W1 / W2 | ₹10 L grew to (W1 / W2) |
+|---|---|---|---|---|---|---|
+| F_REF (pivot buy-stop, Falcon stop/target) | 8.9% (DD −32%) | −1.6% (−48%) | 827 / 913 | 45 / 44 | +0.78 / +0.17% | 19.5 / 8.5 L |
+| F_CC (clean close) | 1.2% (−25%) | −2.4% (−39%) | 567 / 602 | 53 / 52 | +0.37 / −0.36% | 11.0 / 7.9 L |
+| **F_MOM (top-20% momentum only)** | **11.2% (−22%)** | **2.4% (−27%)** | 505 / 537 | 47 / 45 | +1.68 / +0.31% | 23.0 / 12.6 L |
+| F_MOM_CC | 3.2% (−18%) | −0.5% (−16%) | 192 / 194 | 57 / 51 | +1.54 / +0.07% | 12.8 / 9.5 L |
+| F_CC_W (3 ATR / 3R) | 2.4% (−34%) | 1.1% (−40%) | 493 / 518 | 42 / 42 | +0.67 / +0.20% | 12.0 / 11.1 L |
+| F_MOM_CC_W | 5.1% (−15%) | 1.4% (−24%) | 217 / 224 | 48 / 43 | +2.07 / +1.06% | 14.8 / 11.5 L |
+| *FM_C3 (reference)* | *14.5% (−18%)* | *12.7% (−23%)* | 460 / 486 | | | 28.8 / 33.0 L |
+
+**Verdict:** F_MOM_CC_W is far from FM_C3 (5.1% / 1.4% against 14.5% / 12.7%). **My
+salvage hypothesis is rejected.** Even with the momentum filter, a confirmed entry and a
+wider stop, Falcon's pattern triggers add nothing over FM's simpler trigger. The patterns
+themselves are part of the problem.
+
+**Factor by factor:**
+- **Momentum filter (REF → MOM):** helps in both decades, +2.3pp in W1 and +4.0pp in W2,
+  with smaller drawdowns. It is the single most useful fix.
+- **Clean-close entry (REF → CC, and MOM → MOM_CC):** *hurts*, by 3-8pp. Wick fills lose,
+  but buying at the close gives up the day-one move that made the closed-above fills
+  profitable. It also cuts the trade count by a third or more, because of the volume rule.
+- **Wider stop (CC → CC_W, and MOM_CC → MOM_CC_W):** a small help, +1-3pp.
+
+**Contrast with FM:** the clean-close entry *helped* FM. The likely reason is that FM's
+3-ATR stop does not widen when the fill is higher, and its trigger is the 20-day high.
+This is not tested.
