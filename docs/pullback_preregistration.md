@@ -81,3 +81,28 @@ stated here, before any run. Never edit; add dated notes.
 - **Windows:** W1, W2 and 2018, with the six checks.
 - **All windows are in-sample.**
 - **Output:** `data/pullback_result.txt`.
+
+---
+
+## Results, 2026-11-09 (`data/pullback_result.txt`), half A
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | Trades W1 / W2 | Win % W1 / W2 | Net per trade W1 / W2 | Checks W1 / W2 |
+|---|---|---|---|---|---|---|---|
+| PB10 | 1.0% (DD −13%) | 0.1% (−13%) | −2.7% | 158 / 89 | 43.7 / 40.4 | +0.28 / −0.06% | 1 / 1 |
+| PB075 | 0.8% (−10%) | 0.0% (−10%) | −1.7% | 158 / 89 | 43.7 / 40.4 | +0.28 / −0.06% | 1 / 1 |
+| PBB10 | 1.2% (−13%) | −0.2% (−15%) | +3.0% (2 trades) | 141 / 82 | 44.0 / 40.2 | +0.39 / −0.27% | 1 / 1 |
+| PBB075 | 1.1% (−10%) | −0.2% (−12%) | +2.3% | 141 / 82 | 44.0 / 40.2 | +0.40 / −0.27% | 1 / 1 |
+
+Nifty: 10.0% / 5.5%.
+
+**Verdict:** all four fail; none beats the Nifty in either decade. Not adopted.
+
+**Why:**
+- **Few trades.** The full set of rules qualifies about 20 trades a year in W1 and 9 in
+  W2, out of about 250 half-A stocks. Capital is idle almost all the time.
+- **No edge per trade.** Net per trade is about 0%.
+- **Exit mix, PB10 W1:**
+  - 59 of 158 trades (37%) are cut at day 8 for not reaching +1R;
+  - 51 (32%) are stopped;
+  - only 30 (19%) reach the +2R half-exit.
+  The day-8 rule and the stop below the pullback low catch most trades before they move.
