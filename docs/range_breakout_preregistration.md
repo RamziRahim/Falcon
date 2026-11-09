@@ -63,3 +63,41 @@ Over 20 and 40 sessions after the entry:
 - **Outputs:**
   - `data/range_breakout_result.txt`
   - `data/range_breakout_paths.txt`
+
+---
+
+## Results, 2026-11-09 (`data/range_breakout_result.txt`, `data/range_breakout_paths.txt`), half A
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | Trades W1 / W2 | Win % W1 / W2 | Net per trade W1 / W2 | ₹10 L grew to (W1 / W2) |
+|---|---|---|---|---|---|---|---|
+| *S3_REF3 (20-day high)* | *9.9% (DD −26%)* | *3.4% (−33%)* | *−14.8%* | *708 / 748* | *48.4 / 46.9* | *+1.35 / +0.60%* | *20.9 / 14.0 L* |
+| **RB3** | 6.9% (**−13%**) | 3.6% (**−16%**) | **−7.2%** | 243 / 237 | **56.8 / 52.7** | **+2.16 / +1.81%** | 16.8 / 14.2 L |
+| RB2 | 6.6% (−12%) | 3.8% (−15%) | −8.8% | 244 / 239 | 57.0 / 52.7 | +2.10 / +1.86% | 16.5 / 14.5 L |
+| RBK3 | 6.4% (−12%) | 2.6% (−15%) | −4.6% | 220 / 212 | 55.9 / 51.9 | +2.19 / +1.49% | 16.3 / 12.9 L |
+| RBK2 | 5.5% (−13%) | 3.0% (−15%) | −6.3% | 221 / 213 | 55.7 / 51.6 | +1.91 / +1.67% | 15.2 / 13.4 L |
+
+**Verdict against the adoption rule:** not adopted. RB3 / RB2 beat the reference in W2
+(3.6% / 3.8% against 3.4% and 5.9%) only for RB3, and lose in W1 (6.9% against 9.9%).
+
+**But the trade quality is clearly higher:**
+- win rate 53-57% against 47-48%;
+- net per trade +1.8-2.2% against +0.6-1.4%;
+- drawdowns halved, and the 2018 loss halved.
+
+The lower CAGR comes from about a third as many trades, with cash idle most of the time.
+Return per unit of drawdown, W1: RB3 0.53 against 0.38.
+
+**Paths, RB3:**
+
+| | W1, 40 days | W2, 40 days |
+|---|---|---|
+| Direct to target | 2% | 2% |
+| Back to the range low before the stop | 18% | 15% |
+| — of which then stopped | 84% | 89% |
+| Back to the 20-SMA | 93% | 93% |
+| — of which then stopped | 38% | 37% |
+
+In about 55% of trades the swing-low stop sits above the range low, inside the range.
+
+**Idea for a follow-up (not run):** these trades are better but fewer. A higher risk per
+trade, or combining with another sleeve, would use the idle cash.
