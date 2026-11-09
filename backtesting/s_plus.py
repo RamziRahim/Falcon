@@ -33,7 +33,8 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                market_filter: bool = False, time_stop: int = 20, atr_cap: bool = False,
                cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None,
                range_max: float | None = None, vol_exit: float | None = None, cooldown: int = 0,
-               close_vol: float | None = None, levels: list | None = None, clean_close: bool = True):
+               close_vol: float | None = None, levels: list | None = None, clean_close: bool = True,
+               risk: float = RISK):
     """closebuy orders (docs/close_entry_preregistration.md): on the session after the signal,
     buy at the close if High > level, Close >= level, Close >= Open and the upper wick
     < 50% of the day's range (and, with close_vol, Volume >= close_vol x the 50-session
@@ -127,7 +128,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                     skipped["stop_too_wide"] += 1
                     continue
                 equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
-                value = min(RISK * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                value = min(risk * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
                 if value > 0 and levels is not None:
                     levels.append((e, day, fill, stop,
                                    fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)))
