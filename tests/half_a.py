@@ -6,10 +6,10 @@ import pandas as pd
 from backtesting.pit_strategies import judge, make_panel
 
 
-def load_half_a():
+def load_half_a(which: str = "A"):
     half = pd.read_csv("data/holdout_split.csv", index_col=0)["half"]
     uni = pd.read_parquet("data/pit/universe_monthly.parquet")
-    uni = uni[uni["entity_id"].isin(set(half[half == "A"].index))]
+    uni = uni[uni["entity_id"].isin(set(half[half == which].index))]
     prices = pd.read_parquet("data/pit/prices_adjusted.parquet")
     panel = make_panel(prices, uni)
     del prices
