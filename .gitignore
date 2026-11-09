@@ -44,3 +44,4 @@ _deprecated/*.py
 data/bhavcopy/
 data/pit/
 data/pit_sources/
+data/pullback_cells.parquet

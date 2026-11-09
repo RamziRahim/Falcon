@@ -107,3 +107,73 @@ descriptive; a new combination would need its own pre-registration.
 - **Outputs:**
   - `data/pullback_diag.txt`
   - `data/mom_reversal_result.txt`
+
+---
+
+## Results, 2026-11-09 (`data/pullback_diag.txt`, `data/mom_reversal_result.txt`), half A
+
+### Step 1: signal edge (20-day excess over the Nifty 500, W1 + W2 pooled)
+
+| Set | Signals | Ex 5d | Ex 10d | Ex 15d | **Ex 20d** | t(ex20) | Max gain / max drop in 20d |
+|---|---|---|---|---|---|---|---|
+| STRICT (all rules) | 297 | +0.29% | +0.12% | +0.45% | **+0.57%** | 0.75 | +9.2% / −7.5% |
+| L1 (no volume / RSI) | 1,027 | +0.31% | +0.47% | +0.84% | **+1.08%** | 2.00* | +9.7% / −7.2% |
+| L2 (looser dip) | 5,639 | +0.34% | +0.59% | +1.03% | **+1.21%** | 1.04 | +11.1% / −8.0% |
+| L3 (leader + up close after a red week) | 1,685 | +0.31% | +0.43% | +0.96% | **+1.13%** | 1.68 | +11.3% / −7.8% |
+| *L0 (leaders only, no dip, no trigger)* | *47,165* | +0.29% | +0.67% | +1.04% | ***+1.35%*** | ***3.03*** | +11.3% / −8.2% |
+
+\*L1's t rounds to 2.00 but is below 2, so it is not flagged.
+
+**Verdict:** no pullback set meets the edge rule (≥ +0.5% and t ≥ 2). **The pullback idea
+is dropped, and Step 1b was not run,** as frozen.
+
+The decisive comparison is with **L0**: plain momentum leaders with no dip and no trigger
+have a *higher* 20-day excess (+1.35%, t 3.0) than every dip set. The dip conditions
+select a subset of the leaders that does no better, and STRICT does worse. The edge is in
+the leader filter, i.e. momentum, not in the pullback.
+
+### Step 2: removing one filter at a time from STRICT
+
+No filter clearly helps (≥ 0.5pp with t ≥ 2). Removing these *raises* the 20-day excess:
+
+| Filter removed | Effect on 20-day excess |
+|---|---|
+| trigger (close > prior high) | +0.97pp, 1,391 signals |
+| RSI 35-50 | +0.64pp |
+| depth 5-12% | +0.40pp |
+| market filter | +0.26pp |
+
+nearma is redundant: removing it changes nothing, because a 5-12% dip of 3-8 days always
+reaches the 20-EMA. Only trend (+0.39pp) and mom (+0.26pp) point the right way, both with
+t < 1.
+
+### Step 3: momentum + 5-day dip (REV) against momentum alone (MOM10)
+
+| Version | W1 2019-26 | W2 2008-17 | 2018 | ₹10 L grew to (W1 / W2) | Checks W1 / W2 |
+|---|---|---|---|---|---|
+| REV_N | 16.9% (DD −38%) | −3.8% (−77%) | −29.5% | 33.9 / 6.8 L | 5 / 0 |
+| MOM10_N | 15.3% (−39%) | −3.8% (−77%) | −30.0% | 30.4 / 6.8 L | 4 / 0 |
+| REV_F (Nifty 200-DMA) | 11.3% (−32%) | 2.9% (−56%) | −32.3% | 23.1 / 13.4 L | 3 / 2 |
+| MOM10_F | 8.6% (−30%) | 2.9% (−56%) | −31.3% | 19.0 / 13.3 L | 3 / 2 |
+
+**Signal level** (20-day excess per pick over the Nifty 500):
+
+| | REV | MOM10 |
+|---|---|---|
+| W1 | +1.40% (t 3.5) | +1.19% (t 3.3) |
+| W2 | +0.20% | +0.29% |
+| 2018 | −1.1% | −1.2% |
+
+**Verdict:** not adopted.
+- REV beats MOM10 in W1 (+1.6pp unfiltered, +2.7pp filtered), but ties it in W2.
+- It passes only 0-2 checks in W2.
+- Buying the 5-day dip adds about 0.2pp per pick in 2019-26, and nothing in 2008-17.
+
+**On the Nifty 200-DMA filter:** it cost 5-7pp a year in W1, consistent with IA's VIX
+observation. But in W2 it was the difference between −3.8% and +2.9%, and between −77%
+and −56% drawdowns. Sitting out cost money in the calm decade and saved the portfolio in
+the 2008 crash decade.
+
+**This design is far worse than A10 on half A** (monthly 12-1 momentum, top 20, 10%
+stop: 25.9% / 11.3%). The likely causes are the fixed 20-day turnover, the 6-month
+lookback and the lack of a stop. Not tested.

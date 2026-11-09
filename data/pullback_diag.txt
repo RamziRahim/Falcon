@@ -1,0 +1,40 @@
+Benchmark for excess: NIFTY 500; half A
+
+=== STEP 1: forward returns per signal set ===
+  STRICT ALL W1+W2 n    297  ex5 +0.29%  ex10 +0.12%  ex15 +0.45%  ex20 +0.57%  | t(ex20) +0.75 (104 months) | ret20 +1.24%  win20 50% | max gain +9.2%  max drop -7.5%
+  STRICT W1        n    188  ex5 +0.64%  ex10 +0.11%  ex15 +0.14%  ex20 +0.23%  | t(ex20) +0.22 (56 months) | ret20 +0.81%  win20 50% | max gain +9.1%  max drop -7.6%
+  STRICT W2        n    109  ex5 -0.32%  ex10 +0.15%  ex15 +0.97%  ex20 +1.15%  | t(ex20) +0.74 (48 months) | ret20 +2.00%  win20 50% | max gain +9.5%  max drop -7.2%
+  STRICT 2018      n     24  ex5 +0.67%  ex10 +0.24%  ex15 +2.41%  ex20 +2.71%  | t(ex20) +2.39 (8 months) | ret20 +1.62%  win20 62% | max gain +8.3%  max drop -7.3%
+  L1     ALL W1+W2 n   1027  ex5 +0.31%  ex10 +0.47%  ex15 +0.84%  ex20 +1.08%  | t(ex20) +2.00 (135 months) | ret20 +1.98%  win20 52% | max gain +9.7%  max drop -7.2%
+  L1     W1        n    668  ex5 +0.41%  ex10 +0.44%  ex15 +0.82%  ex20 +1.16%  | t(ex20) +2.01 (66 months) | ret20 +2.13%  win20 53% | max gain +9.9%  max drop -7.2%
+  L1     W2        n    359  ex5 +0.14%  ex10 +0.53%  ex15 +0.88%  ex20 +0.94%  | t(ex20) +1.17 (69 months) | ret20 +1.71%  win20 50% | max gain +9.3%  max drop -7.3%
+  L1     2018      n     94  ex5 +0.43%  ex10 +0.71%  ex15 +0.86%  ex20 +0.33%  | t(ex20) +1.64 (9 months) | ret20 -0.65%  win20 51% | max gain +7.5%  max drop -8.0%
+  L2     ALL W1+W2 n   5639  ex5 +0.34%  ex10 +0.59%  ex15 +1.03%  ex20 +1.21%  | t(ex20) +1.04 (143 months) | ret20 +2.21%  win20 50% | max gain +11.1%  max drop -8.0%
+  L2     W1        n   3732  ex5 +0.38%  ex10 +0.61%  ex15 +1.08%  ex20 +1.27%  | t(ex20) +2.58 (66 months) | ret20 +2.39%  win20 51% | max gain +11.4%  max drop -7.9%
+  L2     W2        n   1907  ex5 +0.25%  ex10 +0.56%  ex15 +0.93%  ex20 +1.09%  | t(ex20) +0.11 (77 months) | ret20 +1.85%  win20 50% | max gain +10.4%  max drop -8.1%
+  L2     2018      n    409  ex5 -0.41%  ex10 -0.86%  ex15 -0.79%  ex20 -1.59%  | t(ex20) -1.92 (11 months) | ret20 -3.26%  win20 42% | max gain +7.0%  max drop -10.0%
+  L3     ALL W1+W2 n   1685  ex5 +0.31%  ex10 +0.43%  ex15 +0.96%  ex20 +1.13%  | t(ex20) +1.68 (140 months) | ret20 +2.46%  win20 49% | max gain +11.3%  max drop -7.8%
+  L3     W1        n   1121  ex5 +0.44%  ex10 +0.49%  ex15 +1.04%  ex20 +1.29%  | t(ex20) +2.65 (65 months) | ret20 +2.58%  win20 50% | max gain +11.4%  max drop -7.7%
+  L3     W2        n    564  ex5 +0.06%  ex10 +0.32%  ex15 +0.79%  ex20 +0.82%  | t(ex20) +0.62 (75 months) | ret20 +2.23%  win20 49% | max gain +11.1%  max drop -8.1%
+  L3     2018      n    130  ex5 -0.19%  ex10 -0.80%  ex15 -0.26%  ex20 -0.94%  | t(ex20) -2.07 (11 months) | ret20 -3.19%  win20 48% | max gain +6.9%  max drop -10.1%
+  L0     ALL W1+W2 n  47165  ex5 +0.29%  ex10 +0.67%  ex15 +1.04%  ex20 +1.35%  | t(ex20) +3.03 (147 months) | ret20 +2.29%  win20 51% | max gain +11.3%  max drop -8.2%
+  L0     W1        n  31282  ex5 +0.34%  ex10 +0.72%  ex15 +1.13%  ex20 +1.47%  | t(ex20) +3.52 (66 months) | ret20 +2.48%  win20 51% | max gain +11.5%  max drop -8.0%
+  L0     W2        n  15883  ex5 +0.19%  ex10 +0.55%  ex15 +0.87%  ex20 +1.12%  | t(ex20) +1.36 (81 months) | ret20 +1.90%  win20 50% | max gain +10.8%  max drop -8.5%
+  L0     2018      n   3082  ex5 -0.29%  ex10 -0.68%  ex15 -1.01%  ex20 -1.38%  | t(ex20) -1.63 (11 months) | ret20 -3.55%  win20 43% | max gain +7.3%  max drop -10.8%
+
+Sets with an edge (mean ex20 >= +0.5%, t >= 2, W1+W2 pooled, L0 is the reference): none
+
+=== STEP 2: remove one filter at a time from STRICT (W1+W2 pooled) ===
+  without mkt    : n    489 ex20 +0.83%  | with: n   297 ex20 +0.57%  | filter adds -0.26pp (t -1.53)  -> does not clearly help
+  without liq    : n    474 ex20 +0.67%  | with: n   297 ex20 +0.57%  | filter adds -0.10pp (t -0.26)  -> does not clearly help
+  without mom    : n    716 ex20 +0.30%  | with: n   297 ex20 +0.57%  | filter adds +0.26pp (t +0.62)  -> does not clearly help
+  without near52 : n    319 ex20 +0.71%  | with: n   297 ex20 +0.57%  | filter adds -0.15pp (t -1.24)  -> does not clearly help
+  without trend  : n    401 ex20 +0.17%  | with: n   297 ex20 +0.57%  | filter adds +0.39pp (t -0.29)  -> does not clearly help
+  without trig   : n   1391 ex20 +1.54%  | with: n   297 ex20 +0.57%  | filter adds -0.97pp (t -1.70)  -> does not clearly help
+  without dip    : n    649 ex20 +0.53%  | with: n   297 ex20 +0.57%  | filter adds +0.04pp (t +1.06)  -> does not clearly help
+  without depth  : n    415 ex20 +0.97%  | with: n   297 ex20 +0.57%  | filter adds -0.40pp (t +0.00)  -> does not clearly help
+  without nearma : n    297 ex20 +0.57%  | with: n   297 ex20 +0.57%  | filter adds +0.00pp (t +nan)  -> does not clearly help
+  without vol    : n    361 ex20 +0.64%  | with: n   297 ex20 +0.57%  | filter adds -0.08pp (t -0.62)  -> does not clearly help
+  without rsi    : n    852 ex20 +1.21%  | with: n   297 ex20 +0.57%  | filter adds -0.64pp (t -1.25)  -> does not clearly help
+  without stop8  : n    464 ex20 +0.60%  | with: n   297 ex20 +0.57%  | filter adds -0.04pp (t +0.86)  -> does not clearly help
+  note: 'without mom' only widens to the top 40% (the cell pre-screen).
