@@ -32,8 +32,14 @@ ATR_CAP = 3.0
 def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple: float = 3.0,
                market_filter: bool = False, time_stop: int = 20, atr_cap: bool = False,
                cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None,
-               range_max: float | None = None, vol_exit: float | None = None, cooldown: int = 0):
-    """cooldown (docs/volume_cooldown_preregistration.md): after a VOL_EXIT on day i, no new
+               range_max: float | None = None, vol_exit: float | None = None, cooldown: int = 0,
+               close_vol: float | None = None, levels: list | None = None):
+    """closebuy orders (docs/close_entry_preregistration.md): on the session after the signal,
+    buy at the close if High > level, Close >= level, Close >= Open and the upper wick
+    < 50% of the day's range (and, with close_vol, Volume >= close_vol x the 50-session
+    average). Not checked against that session's stop or target.
+
+    cooldown (docs/volume_cooldown_preregistration.md): after a VOL_EXIT on day i, no new
     order for that stock until session i + cooldown.
 
     range_max / vol_exit (docs/volume_exit_preregistration.md): at a buy-stop fill on day i,
@@ -58,7 +64,7 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
     blocked = {}
     live, queued_exits = [], set()
     skipped = {"no_swing_low": 0, "gap_below_stop": 0, "stop_too_wide": 0, "market_filter_days": 0,
-               "range_skip": 0, "vol_exit": 0}
+               "range_skip": 0, "vol_exit": 0, "candle_skip": 0}
     for i, day in enumerate(sessions):
         if day < start or day > end:
             continue
@@ -78,7 +84,19 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
             o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
             fill = None
             if np.isfinite(o) and len(ledger.shares) < SLOTS:
-                if od["type"] == "market":
+                if od["type"] == "closebuy":
+                    c_ = closes.get(e, np.nan)
+                    if np.isfinite(hi) and hi > od["ref"] and np.isfinite(c_) and np.isfinite(lo):
+                        rng = hi - lo
+                        clean = c_ >= od["ref"] and c_ >= o and rng > 0 and (hi - max(o, c_)) / rng < 0.5
+                        if clean and close_vol is not None:
+                            j = col[e]
+                            clean = bool(np.isfinite(vavg[i, j]) and Vn[i, j] >= close_vol * vavg[i, j])
+                        if clean:
+                            fill = c_
+                        else:
+                            skipped["candle_skip"] += 1
+                elif od["type"] == "market":
                     if o <= od["ref"] * (1 + od["max_gap"]):
                         fill = o
                 elif np.isfinite(hi) and hi >= od["ref"] and o <= od["ref"] * (1 + od["max_gap"]):
@@ -110,12 +128,15 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
                     continue
                 equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
                 value = min(RISK * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                if value > 0 and levels is not None:
+                    levels.append((e, day, fill, stop,
+                                   fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)))
                 if value > 0:
                     ledger.buy(day, e, fill, value, _adv(panel, i, e),
-                               {"stop": stop, "entry_idx": i,
+                               {"stop": stop, "entry_idx": i, "at_close": od["type"] == "closebuy",
                                 "target": fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)})
                 continue
-            if od["type"] == "stop" and i < od["expires_idx"] and not (
+            if od["type"] in ("stop", "closebuy") and i < od["expires_idx"] and not (
                     od.get("cancel_below") is not None and np.isfinite(lo) and lo <= od["cancel_below"]):
                 still_live.append(od)
         live = still_live
@@ -123,6 +144,8 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
             m = ledger.meta[e]
             o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
             gap_ok = m["entry_idx"] < i and np.isfinite(o)
+            if m.get("at_close") and m["entry_idx"] == i:
+                continue
             if np.isfinite(lo) and lo <= m["stop"]:
                 ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
             elif np.isfinite(hi) and hi >= m["target"]:
@@ -148,7 +171,11 @@ def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple:
         for od in order_fn(i, day, set(ledger.shares) | pending):
             if blocked.get(od[1], -1) >= i:
                 continue
-            if od[0] == "market":
+            if od[0] == "closebuy":
+                _, e, trig, pr = od
+                rec = {"type": "closebuy", "entity": e, "ref": trig, "max_gap": np.inf, "priority": pr,
+                       "expires_idx": i + 1, "cancel_below": None}
+            elif od[0] == "market":
                 _, e, ref, gap, pr = od
                 rec = {"type": "market", "entity": e, "ref": ref, "max_gap": gap, "priority": pr}
             else:

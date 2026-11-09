@@ -46,13 +46,13 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                    breakouts: dict | None = None, time_stop: int = 40, cost: CostModel | None = None,
                    r_mult: float = R_MULT, fixed_stop: float | None = None, fixed_tgt: float | None = None,
                    be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
-                   cooldown: int = 0):
+                   cooldown: int = 0, levels: list | None = None):
     """mode "high20" (docs/fm_high20_preregistration.md): while on the watch list, a
     one-session buy-stop at the 20-day high (fill = max(level, open), skipped if the open
     is > 3% above the level). Stop = FM's (higher of swing-low stop and fill - 3 ATR),
     or fill x (1 - fixed_stop); target r_mult x risk or fill x (1 + fixed_tgt); be_at:
     stop to the fill from the session after the high reaches fill x (1 + be_at)."""
-    assert mode in ("breakout", "sweep", "fvg", "high20", "rangevol")
+    assert mode in ("breakout", "sweep", "fvg", "high20", "rangevol", "closebuy", "closebuy_vol")
     ledger = Ledger(cost or CostModel())
     s, c = panel.sessions, panel.close
     cols = {e: j for j, e in enumerate(c.columns)}
@@ -67,7 +67,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     sdates = np.array(sorted(smaps))
     groups = peer_strength(panel, c / c.shift(126) - 1)
     gdates = np.array(sorted(groups))
-    piv = pivot_lows(panel) if mode in ("sweep", "high20", "rangevol") else None
+    piv = pivot_lows(panel) if mode in ("sweep", "high20", "rangevol", "closebuy", "closebuy_vol") else None
     V = panel.volume.to_numpy(float)
     vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
     high20 = panel.high.rolling(20, min_periods=20).max().to_numpy(float)
@@ -100,6 +100,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 return None
             return {"type": "market", "ref": C[t, j], "atr": a, "fm_stop": True,
                     "swing": swing_stop(panel, piv, atr_df, t, e, C[t, j]), "stop": np.nan}
+        if mode in ("closebuy", "closebuy_vol"):            # docs/close_entry_preregistration.md
+            trig = high20[t, j]
+            if not np.isfinite(trig):
+                return None
+            return {"type": "closebuy", "trig": trig, "atr": a, "ref": C[t, j],
+                    "swing": swing_stop(panel, piv, atr_df, t, e, min(trig, C[t, j]))}
         if mode == "high20":
             trig = high20[t, j]
             if not np.isfinite(trig):
@@ -154,7 +160,20 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             o, lo = opens.get(e, np.nan), lows.get(e, np.nan)
             if not np.isfinite(o):
                 continue
-            if od["type"] == "buystop":
+            if od["type"] == "closebuy":
+                hi, c_, j = highs.get(e, np.nan), closes.get(e, np.nan), cols[e]
+                if not (np.isfinite(hi) and hi > od["trig"] and np.isfinite(c_) and np.isfinite(lo)):
+                    continue
+                rng = hi - lo
+                clean = c_ >= od["trig"] and c_ >= o and rng > 0 and (hi - max(o, c_)) / rng < 0.5
+                if clean and mode == "closebuy_vol":
+                    clean = bool(np.isfinite(vavg[i, j]) and V[i, j] >= 1.5 * vavg[i, j])
+                if not clean:
+                    stats["candle_skip"] = stats.get("candle_skip", 0) + 1
+                    continue
+                fill = c_
+                od["stop"] = max(od["swing"] if od["swing"] is not None else -np.inf, fill - 3.0 * od["atr"])
+            elif od["type"] == "buystop":
                 hi = highs.get(e, np.nan)
                 if not (np.isfinite(hi) and hi >= od["trig"]):
                     continue
@@ -196,15 +215,20 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
             if value > 0 and ledger.buy(day, e, fill, value, _adv(panel, i, e),
                                         {"stop": stop, "entry_idx": i, "fill": fill, "be_from": None,
+                                         "at_close": od["type"] == "closebuy",
                                          "target": fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_mult * (fill - stop),
                                          "be_at": be_at}):
                 stats["filled"] += 1
                 watch.pop(e, None)
+                if levels is not None:
+                    levels.append((e, day, fill, stop, ledger.meta[e]["target"]))
         orders = []
         for e in list(ledger.shares):
             m = ledger.meta[e]
             o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
             gap_ok = m["entry_idx"] < i and np.isfinite(o)
+            if m.get("at_close") and m["entry_idx"] == i:
+                continue
             if m.get("be_from") is not None and i >= m["be_from"]:
                 m["stop"] = max(m["stop"], m["fill"])
             if np.isfinite(lo) and lo <= m["stop"]:
