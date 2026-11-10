@@ -1,8 +1,7 @@
 # Pre-registration: monthly momentum ranked by return per unit of volatility
 
-**Status: DRAFT, written 2026-11-10. NOT FROZEN.** No code written, nothing run. IA to
-confirm or change the variants and the adoption bar, then replace this line with
-"FROZEN on <date, time>" before any run. After that: never edit; add dated notes.
+**Status: FROZEN on 2026-11-10 15:28 IST.** Frozen by IA before any code was written or run. Never edit;
+add dated notes.
 
 **Samples and hold-out.** Half B was used once on 2026-11-09, so it is no longer unseen.
 To keep it meaningful, nothing in this test is tuned: every parameter below is fixed
@@ -33,6 +32,27 @@ A10 exactly as frozen, changing only the month-end ranking score.
 
 Stocks without a valid volatility are not ranked. Everything else (top 20, equal
 amounts, next-open rebalance, 10% stop) is unchanged.
+
+## Implementation notes (confirmed by IA before the freeze)
+
+1. **Volatility window.** It ends at the month-end session itself (the latest 252
+   sessions), although the return skips the last 21. Daily returns are computed as in
+   `falcon_momentum.momentum_score` (closes carried forward up to 5 sessions), annualised
+   by √252.
+2. **A10Z's returns.** Both skip the last month: close[t−21] ÷ close[t−126] − 1 and
+   close[t−21] ÷ close[t−252] − 1. FM's own score does not skip it, so A10Z is not
+   identical to FM's score.
+3. **A10Z's z-scores.** Across the list members that have both scores: subtract the mean,
+   divide by the sample standard deviation, as in `falcon_momentum.weekly_ranks`.
+4. **Extra reports.**
+   - Average volatility of holdings = the mean, over rebalances, of the 252-session
+     volatility of the 20 chosen names.
+   - Overlap with A10 = the mean share of chosen names that A10 chose at the same month end.
+5. **Rule 3, "no deeper".** Max drawdowns are compared as printed in the result file (two
+   decimals), with no allowance.
+6. **Ordering and tolerance** (as decided in `docs/a_exposure_preregistration.md`,
+   2026-11-10): every run uses `PYTHONHASHSEED=0`; the A10 reference counts as reproduced
+   if CAGR and max drawdown are within 0.05pp of the stored file.
 
 ## Adoption bar (A10V against A10, same sample)
 
