@@ -135,6 +135,15 @@ specs = [
  ('hb_fm_ref3','HALF B: Falcon Momentum, Monday open, 1:3','Falcon Momentum','Monday open after weekly rank','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','halfB_confirmation_result.txt','FM_REF3'),
  ('hb_s3_ref3','HALF B: #3 + Nifty filter, 1:3','#3 Momentum breakout','Buy-stop at 20-day high','Swing low','1:3','Nifty > 50-day avg','4 weeks','halfB_confirmation_result.txt','S3_REF3'),
  ('hb_rb3_r20','HALF B: #3 range breakout, 2% risk','#3 Momentum breakout','Range breakout at close','Swing low','1:3','Nifty > 50-day avg','4 weeks','halfB_confirmation_result.txt','RB3_R20'),
+ ('all_a10_e50','Monthly momentum + 10% stop, half exposure when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_E50@ALL'),
+ ('all_a10_e0','Monthly momentum + 10% stop, all cash when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else cash','Until it leaves the top 20','a_exposure_result.txt','A10_E0@ALL'),
+ ('all_a10_n50','Monthly momentum + 10% stop, half exposure when the Nifty is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Nifty > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_N50@ALL'),
+ ('ha_a10_e50','Monthly momentum + 10% stop, half exposure when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_E50@A'),
+ ('ha_a10_e0','Monthly momentum + 10% stop, all cash when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else cash','Until it leaves the top 20','a_exposure_result.txt','A10_E0@A'),
+ ('ha_a10_n50','Monthly momentum + 10% stop, half exposure when the Nifty is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Nifty > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_N50@A'),
+ ('hb_a10_e50','Monthly momentum + 10% stop, half exposure when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_E50@B'),
+ ('hb_a10_e0','Monthly momentum + 10% stop, all cash when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else cash','Until it leaves the top 20','a_exposure_result.txt','A10_E0@B'),
+ ('hb_a10_n50','Monthly momentum + 10% stop, half exposure when the Nifty is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Nifty > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_N50@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -255,11 +264,13 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
     r["sample"] = "Half B" if f.startswith("halfB") else ("Half A" if f.startswith(HALF_A) else "All stocks")
+    if "@" in str(r.get("code", "")):                     # 2026-11-10 series: one file holds all three samples
+        r["sample"] = {"ALL": "All stocks", "A": "Half A", "B": "Half B"}[r["code"].split("@")[1]]
     r["doc"] = next((f"docs/{d}_preregistration.md" if "/" not in d else d for k, d in DOCS if f.startswith(k)), "")
     if r["id"] == "mr_orig" or r["id"] == "mr_orig_ds":
         r["doc"] = "docs/mean_reversion_preregistration.md"
@@ -305,6 +316,10 @@ VERDICT = {
     "p_asf_r": "Smoother than any single strategy; missed its frozen bar.",
     "ml_model": "No edge.", "b_orig": "No edge.", "c_orig": "No edge.",
 }
+for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_a10_e50"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_a10_e0"] = "Reported for information only; not judged."
+    VERDICT[f"{_t}_a10_n50"] = "Reported for information only; not judged."
 for r in rows:
     c = str(r.get("code", ""))
     r["verdict"] = VERDICT.get(r["id"]) or ("Reference run (the existing strategy, re-run for comparison)" if "REF" in c and r["sample"] != "Half B"

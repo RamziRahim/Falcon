@@ -94,3 +94,60 @@ Decision by IA:
   stored result file.
 
 Variants and their reference run in the same process.
+
+---
+
+## Results, 2026-11-10 (`data/a_exposure_result.txt`)
+
+Run with `PYTHONHASHSEED=0`. The A10 reference matched the stored files within 0.01pp on
+all nine sample × window cells. Nifty: W1 10.0%, W2 5.5%, 2018 +4.1%.
+
+Each cell is CAGR (max drawdown); checks are out of 6.
+
+| Sample | Version | W1 2019-26 | W2 2008-17 | 2018 | Checks W1 / W2 | ₹10 L grew to (W1 / W2) |
+|---|---|---|---|---|---|---|
+| Half A | A10 (reference) | 25.9% (−32.5%) | 11.3% (−58.9%) | −36.1% | 6 / 5 | 60.8 / 29.1 L |
+| Half A | **A10_E50** | 22.4% (−29.6%) | 9.7% (−44.2%) | −29.2% | 5 / 4 | 48.5 / 25.2 L |
+| Half A | A10_E0 | 16.6% (−28.9%) | 7.3% (−47.0%) | −20.1% | 5 / 3 | 33.2 / 20.3 L |
+| Half A | A10_N50 | 24.2% (−23.1%) | 11.2% (−46.4%) | −37.8% | 6 / 5 | 54.5 / 29.0 L |
+| Half B | A10 (reference) | 23.2% (−41.4%) | 12.2% (−58.6%) | −36.0% | 5 / 5 | 51.3 / 31.5 L |
+| Half B | **A10_E50** | 18.5% (−37.2%) | 10.5% (−41.8%) | −31.0% | 5 / 4 | 37.9 / 27.0 L |
+| Half B | A10_E0 | 14.7% (−35.1%) | 7.2% (−43.0%) | −23.0% | 4 / 4 | 29.2 / 20.0 L |
+| Half B | A10_N50 | 19.7% (−29.1%) | 11.2% (−42.9%) | −37.8% | 5 / 5 | 40.9 / 28.9 L |
+| All stocks | A10 (reference) | 26.4% (−39.4%) | 13.2% (−59.1%) | −38.9% | 5 / 5 | 62.4 / 34.4 L |
+| All stocks | **A10_E50** | 20.9% (−34.0%) | 12.5% (−43.0%) | −31.6% | 5 / 5 | 44.3 / 32.6 L |
+| All stocks | A10_E0 | 15.8% (−33.9%) | 10.0% (−42.4%) | −19.9% | 5 / 4 | 31.4 / 26.0 L |
+| All stocks | A10_N50 | 22.0% (−30.5%) | 13.6% (−45.4%) | −39.1% | 5 / 5 | 47.3 / 35.8 L |
+
+**Months "down" and level changes:**
+
+| Gauge | Sample | W1 months down / changes | W2 months down / changes | 2018 months down / changes |
+|---|---|---|---|---|
+| EW | Half A | 28 of 93 / 20 | 46 of 120 / 14 | 8 of 11 / 3 |
+| EW | Half B | 31 of 93 / 20 | 46 of 120 / 20 | 8 of 11 / 3 |
+| Nifty | either half | 27 of 93 / 15 | 39 of 120 / 20 | 2 of 11 / 4 |
+
+### Verdict on the primary, A10_E50, against the frozen bar: **FAILS. Not adopted.**
+
+| Rule | Half A | Half B |
+|---|---|---|
+| 1. Drawdown ≥ 10pp shallower in both decades | W1 3.0pp: **fail**; W2 14.7pp: pass | W1 4.2pp: **fail**; W2 16.8pp: pass |
+| 2. CAGR ≤ 3pp below A10 in W1; not below in W2 | W1 −3.6pp: **fail**; W2 −1.6pp: **fail** | W1 −4.7pp: **fail**; W2 −1.7pp: **fail** |
+| 3. 2018 better than A10 | −29.2% against −36.1%: pass | −31.0% against −36.0%: pass |
+| 4. ≥ 5 of 6 checks in both decades | 5 / 4: **fail** | 5 / 4: **fail** |
+
+As expected before the run, the W2 and 2018 drops are shallower. But the W1 cost is more
+than 3pp on both halves, the W1 drawdown barely improves, and W2 return also falls. A10
+stays as it is.
+
+**For information (not judged):**
+- A10_E0 (all cash) cuts 2018 to about −20% to −23%, but loses 9pp a year in W1 and 4-5pp
+  in W2.
+- A10_N50 (Nifty gauge) costs less return: −1.7 to −3.5pp in W1, −0.1 to −1.0pp in W2. It
+  cuts both decades' drawdowns by 9-16pp, but makes 2018 slightly worse, because the
+  Nifty was "down" in only 2 of 11 months. It was not the primary and cannot be adopted
+  from this test.
+
+**Trade accounting.** Trims and top-ups are folded into each position's single trade
+record, so the trade counts equal A10's. The "net per trade" of the scaled versions is
+not comparable with A10's, because a top-up adds to the cost basis of a position.
