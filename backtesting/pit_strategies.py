@@ -166,8 +166,12 @@ def _delisting_exits(panel, ledger, day_idx, day):
 
 def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: CostModel | None = None,
                  stop_pct: float | None = None, hold: int = MOM_HOLD,
-                 gauge_up=None, down_level: float = 1.0, stats: dict | None = None):
-    """gauge_up / down_level (docs/a_exposure_preregistration.md): gauge_up is a boolean
+                 gauge_up=None, down_level: float = 1.0, stats: dict | None = None,
+                 skip_after_stop: bool = False):
+    """skip_after_stop (docs/a_stop_width_preregistration.md, A10C): a stock stopped since
+    the previous rebalance is not bought at the next one; nothing replaces it.
+
+    gauge_up / down_level (docs/a_exposure_preregistration.md): gauge_up is a boolean
     array over panel.sessions. At each month-end close the exposure level is 1.0 if the
     gauge is up, else down_level; slots are equity x level / hold. When the level changes,
     survivors are set to exactly the new slot at the rebalance open (after the leavers are
@@ -181,6 +185,7 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
     closes_ff = panel.close.ffill(limit=5)
     pending_target = None
     level, pending_level = 1.0, 1.0
+    stopped = set()
     for i, day in enumerate(sessions):
         if day < start or day > end:
             continue
@@ -206,6 +211,9 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                 if stats is not None:
                     stats["level_changes"] = stats.get("level_changes", 0) + 1
             new = [e for e in pending_target if e not in ledger.shares and np.isfinite(opens.get(e, np.nan))]
+            if skip_after_stop:
+                new = [e for e in new if e not in stopped]
+                stopped = set()
             equity_now = ledger.cash + sum(ledger.value(e, opens) for e in ledger.shares)
             # equal slots of equity/MOM_HOLD, limited by the cash on hand
             # (split evenly across the new names before any is bought)
@@ -222,6 +230,7 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                 if st is not None and np.isfinite(lo) and lo <= st:
                     gap = m["entry_idx"] < i and np.isfinite(o) and o < st
                     ledger.sell(day, e, o if gap else st, _adv(panel, i, e), "STOP")
+                    stopped.add(e)
         ledger.mark(day, panel.close.iloc[i])
         is_month_end = i + 1 == len(sessions) or sessions[i + 1].month != day.month
         if is_month_end and i >= MOM_LOOKBACK and day < end:
