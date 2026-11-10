@@ -123,9 +123,22 @@ class Ledger:
         proceeds = qty * price
         cost = proceeds * self.cost.per_side(proceeds, adv)
         self.cash += proceeds - cost
+        proceeds += info.get("trim_proceeds", 0.0)       # earlier trims of this position (0 unless trim() was used)
         self.trades.append({"entity_id": entity, "entry_date": info["entry_date"], "exit_date": day,
                             "cost_basis": info["cost_basis"], "proceeds": proceeds,
                             "pnl": proceeds - cost - info["cost_basis"] - info["costs"], "exit_reason": reason})
+
+    def trim(self, entity, price, value, adv):
+        """Sell `value` worth of a holding without closing it; the cash flow and cost are
+        folded into the position's single trade record (docs/a_exposure_preregistration.md)."""
+        qty = min(value / price, self.shares[entity])
+        proceeds = qty * price
+        cost = proceeds * self.cost.per_side(proceeds, adv)
+        self.cash += proceeds - cost
+        self.shares[entity] -= qty
+        info = self.meta[entity]
+        info["costs"] += cost
+        info["trim_proceeds"] = info.get("trim_proceeds", 0.0) + proceeds
 
     def mark(self, day, closes):
         for e in self.shares:
@@ -152,14 +165,22 @@ def _delisting_exits(panel, ledger, day_idx, day):
 
 
 def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: CostModel | None = None,
-                 stop_pct: float | None = None, hold: int = MOM_HOLD):
-    """stop_pct (docs/a_stop_preregistration.md): sell a holding whose low reaches
+                 stop_pct: float | None = None, hold: int = MOM_HOLD,
+                 gauge_up=None, down_level: float = 1.0, stats: dict | None = None):
+    """gauge_up / down_level (docs/a_exposure_preregistration.md): gauge_up is a boolean
+    array over panel.sessions. At each month-end close the exposure level is 1.0 if the
+    gauge is up, else down_level; slots are equity x level / hold. When the level changes,
+    survivors are set to exactly the new slot at the rebalance open (after the leavers are
+    sold, before the new names are bought). gauge_up=None = unchanged behaviour.
+
+    stop_pct (docs/a_stop_preregistration.md): sell a holding whose low reaches
     fill x (1 - stop_pct) -- at the stop, or at the open if it gaps through after the
     fill day. It is not re-bought before the next month-end rebalance. None = test A as frozen."""
     ledger = Ledger(cost or CostModel())
     sessions = panel.sessions
     closes_ff = panel.close.ffill(limit=5)
     pending_target = None
+    level, pending_level = 1.0, 1.0
     for i, day in enumerate(sessions):
         if day < start or day > end:
             continue
@@ -169,11 +190,26 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             for e in [e for e in ledger.shares if e not in pending_target]:
                 if np.isfinite(opens.get(e, np.nan)):
                     ledger.sell(day, e, opens[e], _adv(panel, i, e), "REBALANCE")
+            if gauge_up is not None and pending_level != level:
+                equity_now = ledger.cash + sum(ledger.value(e, opens) for e in ledger.shares)
+                slot = equity_now * pending_level / hold
+                held = [e for e in ledger.shares if np.isfinite(opens.get(e, np.nan))]
+                for e in held:                                   # trims first, so top-ups have cash
+                    if pending_level == 0:
+                        ledger.sell(day, e, opens[e], _adv(panel, i, e), "EXPOSURE")
+                    elif ledger.value(e, opens) > slot:
+                        ledger.trim(e, opens[e], ledger.value(e, opens) - slot, _adv(panel, i, e))
+                for e in held:
+                    if e in ledger.shares and ledger.value(e, opens) < slot:
+                        ledger.buy(day, e, opens[e], slot - ledger.value(e, opens), _adv(panel, i, e))
+                level = pending_level
+                if stats is not None:
+                    stats["level_changes"] = stats.get("level_changes", 0) + 1
             new = [e for e in pending_target if e not in ledger.shares and np.isfinite(opens.get(e, np.nan))]
             equity_now = ledger.cash + sum(ledger.value(e, opens) for e in ledger.shares)
             # equal slots of equity/MOM_HOLD, limited by the cash on hand
             # (split evenly across the new names before any is bought)
-            per_name = min(equity_now / hold, ledger.cash / max(len(new), 1) * 0.995)
+            per_name = min(equity_now * level / hold, ledger.cash / max(len(new), 1) * 0.995)
             for e in new:
                 ledger.buy(day, e, opens[e], per_name, _adv(panel, i, e),
                            {"stop": opens[e] * (1 - stop_pct), "entry_idx": i} if stop_pct is not None else None)
@@ -194,6 +230,11 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             base = closes_ff.iloc[i - MOM_LOOKBACK][members]
             mom = (past / base - 1).dropna()
             pending_target = set(mom.sort_values(ascending=False).head(hold).index)
+            if gauge_up is not None:
+                pending_level = 1.0 if gauge_up[i] else down_level
+                if stats is not None:
+                    stats["months"] = stats.get("months", 0) + 1
+                    stats["months_down"] = stats.get("months_down", 0) + (0 if gauge_up[i] else 1)
     return _result(ledger)
 
 
@@ -467,8 +508,9 @@ def _result(ledger: Ledger):
     eq = pd.DataFrame(ledger.equity, columns=["Date", "equity", "gross_exposure"]).set_index("Date")
     end = eq.index[-1] if len(eq) else None
     open_rows = [{"entity_id": e, "entry_date": m["entry_date"], "exit_date": end, "cost_basis": m["cost_basis"],
-                  "proceeds": ledger.shares[e] * m["last_mark"],
-                  "pnl": ledger.shares[e] * m["last_mark"] - m["cost_basis"] - m["costs"], "exit_reason": "OPEN_AT_END"}
+                  "proceeds": ledger.shares[e] * m["last_mark"] + m.get("trim_proceeds", 0.0),
+                  "pnl": ledger.shares[e] * m["last_mark"] + m.get("trim_proceeds", 0.0) - m["cost_basis"] - m["costs"],
+                  "exit_reason": "OPEN_AT_END"}
                  for e, m in ledger.meta.items() if e in ledger.shares]
     return eq, pd.DataFrame(ledger.trades + open_rows)
 
