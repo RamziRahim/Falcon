@@ -1,8 +1,7 @@
 # Pre-registration: Falcon Momentum clean close, risk per trade and market gauge
 
-**Status: DRAFT, written 2026-11-10. NOT FROZEN.** No code written, nothing run. IA to
-confirm or change the variants and the adoption bar, then replace this line with
-"FROZEN on <date, time>" before any run. After that: never edit; add dated notes.
+**Status: FROZEN on 2026-11-10 15:32 IST.** Frozen by IA before any code was written or run. Never edit;
+add dated notes.
 
 **Samples and hold-out.** Half B was used once on 2026-11-09, so it is no longer unseen.
 To keep it meaningful, nothing in this test is tuned: every parameter below is fixed
@@ -45,6 +44,30 @@ still compares sector indices with the Nifty.
 |---|---|---|---|
 | **FM_C3_EW** | equal-weight list | 1.0% / 0.5% | **primary for part 2** |
 | FM_C3_EW_R15 | equal-weight list | 1.5% / 0.75% | reported |
+
+## Implementation notes (confirmed by IA before the freeze)
+
+1. **Where the gauge is replaced.** `run_fm_entries` reads the Nifty in three places, and
+   all three switch to the equal-weight gauge. The sector check still compares sector
+   indices with the Nifty.
+   - The weekly watch list is built only when the gauge is above its 200-session average.
+   - A daily trigger is blocked when the gauge is not above its 200-session average.
+   - The risk level depends on the 50-session average.
+2. **References.** FM_C3 has stored results only for half A (`data/close_entry_result.txt`)
+   and half B (`data/halfB_confirmation_result.txt`); it is checked against those. The
+   all-stocks FM_C3 run is new and has nothing to be checked against.
+3. **Ordering and tolerance** (as decided in `docs/a_exposure_preregistration.md`,
+   2026-11-10): every run uses `PYTHONHASHSEED=0`; a reference counts as reproduced if
+   CAGR and max drawdown are within 0.05pp of the stored file.
+4. **Extra reports.**
+   - Average gross exposure = the average share of the account invested.
+   - 25% cap binds = the count of buys whose size was set by the cap.
+   - Slots bind = the count of valid entry fills skipped because all 10 slots were full.
+   - Weeks blocked = the count of weekly ranking dates with the gauge not above its
+     200-session average.
+5. **Rule comparisons.** Figures are compared as printed in the result file (two
+   decimals), with no allowance. "No deeper than −30%" means −30.00 passes and −30.01
+   fails.
 
 ## Adoption bars (same sample; all must hold on both half A and half B)
 
