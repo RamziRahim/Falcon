@@ -147,3 +147,95 @@ def run_setups(panel: Panel, setups: pd.DataFrame, start, end, entry: str, stop_
                              "exp": i + WINDOW, "prio": r.sort_key, "pattern": r.pattern})
     eq, trades = _result(ledger)
     return eq, trades, st
+
+
+def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost: CostModel | None = None,
+                  slots: int = SLOTS):
+    """docs/falcon_v2_preregistration.md, rules 6-10. setups: entity_id, scan_date, pivot, stop,
+    mom_rank (already filtered by rules 4-5). nifty_ok: boolean array over panel.sessions.
+    Entry at the close of the first session in the 5 after the scan with High > pivot,
+    Close > pivot, close in the upper half of the range and the Nifty above its 50-DMA.
+    Stop = max(Falcon stop, fill - 3 ATR); target 3R; 40-session time stop."""
+    ledger = Ledger(cost or CostModel())
+    s = panel.sessions
+    O, H, L, C = (x.to_numpy(float) for x in (panel.open, panel.high, panel.low, panel.close))
+    pc = panel.close.shift(1)
+    tr = np.maximum(panel.high - panel.low, np.maximum((panel.high - pc).abs(), (panel.low - pc).abs()))
+    ATR = tr.rolling(14, min_periods=14).mean().to_numpy(float)
+    cols = {e: j for j, e in enumerate(panel.close.columns)}
+    pos = {d: k for k, d in enumerate(s)}
+    by_day = {pos[pd.Timestamp(d)]: g for d, g in setups.groupby("scan_date") if pd.Timestamp(d) in pos}
+    live, queued = [], set()
+    st = {"orders": 0, "pivot_touches": 0, "touch_rejected": 0, "filled": 0, "cancelled_stop": 0,
+          "stop_too_wide": 0, "slots_full": 0}
+    for i, day in enumerate(s):
+        if day < start or day > end:
+            continue
+        _delisting_exits(panel, ledger, i, day)
+        closes = panel.close.iloc[i]
+        for e in sorted(queued):
+            if e not in ledger.shares:
+                queued.discard(e)
+            elif np.isfinite(O[i, cols[e]]):
+                ledger.sell(day, e, O[i, cols[e]], _adv(panel, i, e), "TIME_STOP")
+                queued.discard(e)
+        for e in list(ledger.shares):                                  # exits (positions bought earlier)
+            m = ledger.meta[e]
+            j = cols[e]
+            o, h, l = O[i, j], H[i, j], L[i, j]
+            if np.isfinite(l) and l <= m["stop"]:
+                ledger.sell(day, e, o if np.isfinite(o) and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
+            elif np.isfinite(h) and h >= m["target"]:
+                ledger.sell(day, e, o if np.isfinite(o) and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+        keep = []
+        for od in sorted(live, key=lambda x: (-x["mom"], x["e"])):     # entries at today's close
+            e, j = od["e"], cols[od["e"]]
+            if e in ledger.shares or i > od["exp"]:
+                continue
+            o, h, l, c = O[i, j], H[i, j], L[i, j], C[i, j]
+            if not (np.isfinite(o) and np.isfinite(h) and np.isfinite(l) and np.isfinite(c)):
+                keep.append(od)
+                continue
+            if h > od["pivot"]:
+                st["pivot_touches"] += 1
+                ok = c > od["pivot"] and h > l and (c - l) / (h - l) >= 0.5 and bool(nifty_ok[i])
+                if not ok:
+                    st["touch_rejected"] += 1
+                else:
+                    stop = max(od["stop"], c - 3.0 * ATR[i, j]) if np.isfinite(ATR[i, j]) else od["stop"]
+                    if not stop < c or (c - stop) / c > MAX_STOP:
+                        st["stop_too_wide"] += 1
+                        continue
+                    if len(ledger.shares) >= slots:
+                        st["slots_full"] += 1
+                        keep.append(od)
+                        continue
+                    dist = (c - stop) / c
+                    equity_now = ledger.cash + sum(ledger.value(x, closes) for x in ledger.shares)
+                    value = min(RISK * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                    if value > 0 and ledger.buy(day, e, c, value, _adv(panel, i, e),
+                                                {"stop": stop, "target": c + 3.0 * (c - stop), "entry_idx": i}):
+                        st["filled"] += 1
+                    continue
+            if c <= od["stop"]:
+                st["cancelled_stop"] += 1
+                continue
+            keep.append(od)
+        live = keep
+        ledger.mark(day, closes)
+        if day >= end:
+            continue
+        for e in ledger.shares:
+            if i - ledger.meta[e]["entry_idx"] + 1 >= TIME_STOP:
+                queued.add(e)
+        g = by_day.get(i)
+        if g is not None:
+            busy = set(ledger.shares) | {od["e"] for od in live}
+            for r in g.itertuples():
+                if r.entity_id in busy or r.entity_id not in cols:
+                    continue
+                st["orders"] += 1
+                live.append({"e": r.entity_id, "pivot": r.pivot, "stop": r.stop, "exp": i + WINDOW,
+                             "mom": r.mom_rank if np.isfinite(r.mom_rank) else -1.0})
+    eq, trades = _result(ledger)
+    return eq, trades, st

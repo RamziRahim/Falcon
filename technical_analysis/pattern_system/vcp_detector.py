@@ -7,6 +7,7 @@ Package     : Technical Analysis / Pattern System
 ===============================================================================
 """
 from __future__ import annotations
+import os
 import pandas as pd
 from technical_analysis.pattern_system.breakout_recency import compute_breakout_recency
 from technical_analysis.pattern_system.models import SwingPoint, VCPContraction
@@ -91,7 +92,10 @@ class VCPDetector:
         vcp_score = round(tightness_score + vdu_score + wave_score, 1)
 
         latest_close = df["Close"].iloc[-1]
-        resistance_pivot = contractions[-1].swing_high_price
+        # v2 pivot (docs/falcon_v2_preregistration.md, FALCON_PIVOT_V2=1): the highest swing
+        # high among the contractions. Default: the last contraction's high (unchanged).
+        resistance_pivot = (max(c.swing_high_price for c in contractions) if os.environ.get("FALCON_PIVOT_V2") == "1"
+                            else contractions[-1].swing_high_price)
 
         latest_volume = df["Volume"].iloc[-1]
         volume_baseline = df["Volume_SMA_20"].iloc[-1] if "Volume_SMA_20" in df.columns \
