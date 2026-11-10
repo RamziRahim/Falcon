@@ -155,6 +155,12 @@ specs = [
  ('hb_sw_a20','Monthly momentum + 20% stop','Monthly momentum','Month-end rank, next open','Fixed −20%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A20@B'),
  ('hb_sw_a10c','Monthly momentum + 10% stop, no re-buy of a stopped stock at the next rebalance','Monthly momentum','Month-end rank, next open; a stopped stock is skipped for one rebalance','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A10C@B'),
  ('hb_sw_a','Monthly momentum, top 20, no stop','Monthly momentum','Month-end rank, next open','None','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A@B'),
+ ('all_vr_a10v','Monthly momentum + 10% stop, ranked by 12-1 return ÷ volatility','Monthly momentum','Month-end rank by 12-1 return ÷ 252-day volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10V@ALL'),
+ ('all_vr_a10z','Monthly momentum + 10% stop, ranked by z-scores of 6-1 and 12-1 return ÷ volatility','Monthly momentum','Month-end rank by mean z-score of 6-1 and 12-1 return ÷ volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10Z@ALL'),
+ ('ha_vr_a10v','Monthly momentum + 10% stop, ranked by 12-1 return ÷ volatility','Monthly momentum','Month-end rank by 12-1 return ÷ 252-day volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10V@A'),
+ ('ha_vr_a10z','Monthly momentum + 10% stop, ranked by z-scores of 6-1 and 12-1 return ÷ volatility','Monthly momentum','Month-end rank by mean z-score of 6-1 and 12-1 return ÷ volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10Z@A'),
+ ('hb_vr_a10v','Monthly momentum + 10% stop, ranked by 12-1 return ÷ volatility','Monthly momentum','Month-end rank by 12-1 return ÷ 252-day volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10V@B'),
+ ('hb_vr_a10z','Monthly momentum + 10% stop, ranked by z-scores of 6-1 and 12-1 return ÷ volatility','Monthly momentum','Month-end rank by mean z-score of 6-1 and 12-1 return ÷ volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10Z@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -328,6 +334,8 @@ VERDICT = {
     "ml_model": "No edge.", "b_orig": "No edge.", "c_orig": "No edge.",
 }
 for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_vr_a10v"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_vr_a10z"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_sw_a15"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
     VERDICT[f"{_t}_sw_a20"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_sw_a10c"] = "Reported for information only; not judged."
