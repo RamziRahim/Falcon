@@ -47,8 +47,11 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                    r_mult: float = R_MULT, fixed_stop: float | None = None, fixed_tgt: float | None = None,
                    be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
                    cooldown: int = 0, levels: list | None = None, wick_exit: bool = False,
-                   risk_on: float = RISK_ON, risk_soft: float = RISK_SOFT, gauge: pd.Series | None = None):
-    """risk_on / risk_soft / gauge (docs/fm_risk_gauge_preregistration.md): risk per trade
+                   risk_on: float = RISK_ON, risk_soft: float = RISK_SOFT, gauge: pd.Series | None = None,
+                   slots: int = SLOTS):
+    """slots (docs/fm_slots_preregistration.md): maximum open positions (default SLOTS).
+
+    risk_on / risk_soft / gauge (docs/fm_risk_gauge_preregistration.md): risk per trade
     when the gauge is above / not above its 50-session average; gauge replaces the Nifty in
     the crash protection only (watch list and triggers need gauge > 200-session average).
     The sector check always uses the Nifty. Defaults = unchanged behaviour.
@@ -166,12 +169,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 queued_exits.discard(e)
         for od in sorted(orders, key=lambda o: o["priority"]):               # fills at today's prices
             e = od["entity"]
-            if e not in ledger.shares and len(ledger.shares) >= SLOTS and od["type"] == "closebuy":
+            if e not in ledger.shares and len(ledger.shares) >= slots and od["type"] == "closebuy":
                 o_, lo_, hi_, c__ = (x.get(e, np.nan) for x in (opens, lows, highs, closes))
                 if (np.isfinite(o_) and np.isfinite(hi_) and np.isfinite(c__) and np.isfinite(lo_) and hi_ > od["trig"]
                         and c__ >= od["trig"] and c__ >= o_ and hi_ > lo_ and (hi_ - max(o_, c__)) / (hi_ - lo_) < 0.5):
                     stats["slots_full_skips"] = stats.get("slots_full_skips", 0) + 1
-            if e in ledger.shares or len(ledger.shares) >= SLOTS:
+            if e in ledger.shares or len(ledger.shares) >= slots:
                 continue
             o, lo = opens.get(e, np.nan), lows.get(e, np.nan)
             if not np.isfinite(o):
