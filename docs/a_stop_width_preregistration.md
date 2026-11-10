@@ -1,8 +1,7 @@
 # Pre-registration: monthly momentum, stop width and re-entry
 
-**Status: DRAFT, written 2026-11-10. NOT FROZEN.** No code written, nothing run. IA to
-confirm or change the variants and the adoption bar, then replace this line with
-"FROZEN on <date, time>" before any run. After that: never edit; add dated notes.
+**Status: FROZEN on 2026-11-10 15:25 IST.** Frozen by IA before any code was written or run. Never edit;
+add dated notes.
 
 **Samples and hold-out.** Half B was used once on 2026-11-09, so it is no longer unseen.
 To keep it meaningful, nothing in this test is tuned: every parameter below is fixed
@@ -36,6 +35,21 @@ Monthly 12-1 momentum, top 20, exactly as A10, changing only the stop.
 
 Fill rules are A10's: sold at the stop, or at the open if it gaps through after the fill
 day; the fill day's low counts.
+
+## Implementation notes (confirmed by IA before the freeze)
+
+1. **Code names.** "A15" here means a 15% stop. In `data/a_topn_result.txt` and earlier
+   scorecard rows, "A15" means top 15 stocks. The result file keeps this doc's codes; the
+   scorecard rows are labelled "15% stop" / "20% stop" in words.
+2. **A10C's empty slot.** A stock stopped since the previous rebalance is skipped at the
+   next rebalance if it is still in the top 20. Nothing replaces it (the 21st-ranked
+   stock is not bought); its slot's cash stays idle until the following rebalance.
+3. **References.** A10 is checked against the stored files on all stocks, half A and
+   half B. The no-stop reference "A" has a stored result only for all stocks, so it is
+   checked there only.
+4. **Ordering and tolerance** (as decided in `docs/a_exposure_preregistration.md`,
+   2026-11-10): every run uses `PYTHONHASHSEED=0`; a reference counts as reproduced if
+   CAGR and max drawdown are within 0.05pp of the stored file.
 
 ## Adoption bar (A15 against A10, same sample)
 
