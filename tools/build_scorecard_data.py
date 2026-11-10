@@ -161,6 +161,19 @@ specs = [
  ('ha_vr_a10z','Monthly momentum + 10% stop, ranked by z-scores of 6-1 and 12-1 return ÷ volatility','Monthly momentum','Month-end rank by mean z-score of 6-1 and 12-1 return ÷ volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10Z@A'),
  ('hb_vr_a10v','Monthly momentum + 10% stop, ranked by 12-1 return ÷ volatility','Monthly momentum','Month-end rank by 12-1 return ÷ 252-day volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10V@B'),
  ('hb_vr_a10z','Monthly momentum + 10% stop, ranked by z-scores of 6-1 and 12-1 return ÷ volatility','Monthly momentum','Month-end rank by mean z-score of 6-1 and 12-1 return ÷ volatility, next open','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_volrank_result.txt','A10Z@B'),
+ ('all_fm_c3','Falcon Momentum, buy at close on clean candle, 1:3','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3@ALL'),
+ ('all_rg_fm_c3_r15','Falcon Momentum clean close, 1.5% risk per trade','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_R15@ALL'),
+ ('all_rg_fm_c3_r20','Falcon Momentum clean close, 2% risk per trade','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_R20@ALL'),
+ ('all_rg_fm_c3_ew','Falcon Momentum clean close, crash protection on the equal-weight stock list','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW@ALL'),
+ ('all_rg_fm_c3_ew_r15','Falcon Momentum clean close, equal-weight gauge + 1.5% risk','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW_R15@ALL'),
+ ('ha_rg_fm_c3_r15','Falcon Momentum clean close, 1.5% risk per trade','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_R15@A'),
+ ('ha_rg_fm_c3_r20','Falcon Momentum clean close, 2% risk per trade','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_R20@A'),
+ ('ha_rg_fm_c3_ew','Falcon Momentum clean close, crash protection on the equal-weight stock list','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW@A'),
+ ('ha_rg_fm_c3_ew_r15','Falcon Momentum clean close, equal-weight gauge + 1.5% risk','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW_R15@A'),
+ ('hb_rg_fm_c3_r15','Falcon Momentum clean close, 1.5% risk per trade','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_R15@B'),
+ ('hb_rg_fm_c3_r20','Falcon Momentum clean close, 2% risk per trade','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_R20@B'),
+ ('hb_rg_fm_c3_ew','Falcon Momentum clean close, crash protection on the equal-weight stock list','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW@B'),
+ ('hb_rg_fm_c3_ew_r15','Falcon Momentum clean close, equal-weight gauge + 1.5% risk','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW_R15@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -333,7 +346,12 @@ VERDICT = {
     "p_asf_r": "Smoother than any single strategy; missed its frozen bar.",
     "ml_model": "No edge.", "b_orig": "No edge.", "c_orig": "No edge.",
 }
+VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_rg_fm_c3_r15"] = "Primary variant (part 1): FAILED its frozen bar (10 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_rg_fm_c3_ew"] = "Primary variant (part 2): FAILED its frozen bar (10 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_rg_fm_c3_r20"] = "Reported for information only; not judged."
+    VERDICT[f"{_t}_rg_fm_c3_ew_r15"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_vr_a10v"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
     VERDICT[f"{_t}_vr_a10z"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_sw_a15"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
