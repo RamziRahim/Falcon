@@ -46,8 +46,14 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                    breakouts: dict | None = None, time_stop: int = 40, cost: CostModel | None = None,
                    r_mult: float = R_MULT, fixed_stop: float | None = None, fixed_tgt: float | None = None,
                    be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
-                   cooldown: int = 0, levels: list | None = None, wick_exit: bool = False):
-    """mode "high20" (docs/fm_high20_preregistration.md): while on the watch list, a
+                   cooldown: int = 0, levels: list | None = None, wick_exit: bool = False,
+                   risk_on: float = RISK_ON, risk_soft: float = RISK_SOFT, gauge: pd.Series | None = None):
+    """risk_on / risk_soft / gauge (docs/fm_risk_gauge_preregistration.md): risk per trade
+    when the gauge is above / not above its 50-session average; gauge replaces the Nifty in
+    the crash protection only (watch list and triggers need gauge > 200-session average).
+    The sector check always uses the Nifty. Defaults = unchanged behaviour.
+
+    mode "high20" (docs/fm_high20_preregistration.md): while on the watch list, a
     one-session buy-stop at the 20-day high (fill = max(level, open), skipped if the open
     is > 3% above the level). Stop = FM's (higher of swing-low stop and fill - 3 ATR),
     or fill x (1 - fixed_stop); target r_mult x risk or fill x (1 + fixed_tgt); be_at:
@@ -60,6 +66,11 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     nf = nifty.reindex(nifty.index.union(s)).ffill().reindex(s)
     n200, n50 = nf.rolling(200, min_periods=200).mean(), nf.rolling(50, min_periods=50).mean()
     n126 = nf / nf.shift(126) - 1
+    if gauge is not None:
+        gg = gauge.reindex(gauge.index.union(s)).ffill().reindex(s)
+        g, g200, g50 = gg, gg.rolling(200, min_periods=200).mean(), gg.rolling(50, min_periods=50).mean()
+    else:
+        g, g200, g50 = nf, n200, n50
     idx = indices.reindex(indices.index.union(s)).ffill().reindex(s)
     idx_ok = (idx / idx.shift(126) - 1).gt(n126, axis=0) & (idx > idx.rolling(50, min_periods=50).mean())
     ranks = weekly_ranks(panel, start - pd.Timedelta(days=10), end)
@@ -155,6 +166,11 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 queued_exits.discard(e)
         for od in sorted(orders, key=lambda o: o["priority"]):               # fills at today's prices
             e = od["entity"]
+            if e not in ledger.shares and len(ledger.shares) >= SLOTS and od["type"] == "closebuy":
+                o_, lo_, hi_, c__ = (x.get(e, np.nan) for x in (opens, lows, highs, closes))
+                if (np.isfinite(o_) and np.isfinite(hi_) and np.isfinite(c__) and np.isfinite(lo_) and hi_ > od["trig"]
+                        and c__ >= od["trig"] and c__ >= o_ and hi_ > lo_ and (hi_ - max(o_, c__)) / (hi_ - lo_) < 0.5):
+                    stats["slots_full_skips"] = stats.get("slots_full_skips", 0) + 1
             if e in ledger.shares or len(ledger.shares) >= SLOTS:
                 continue
             o, lo = opens.get(e, np.nan), lows.get(e, np.nan)
@@ -213,6 +229,8 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 continue
             equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
             value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+            if POS_CAP * equity_now < min(od["risk"] * equity_now / dist, ledger.cash * 0.999):
+                stats["cap_binds"] = stats.get("cap_binds", 0) + 1
             if value > 0 and ledger.buy(day, e, fill, value, _adv(panel, i, e),
                                         {"stop": stop, "entry_idx": i, "fill": fill, "be_from": None,
                                          "at_close": od["type"] == "closebuy", "trig": od.get("trig"),
@@ -265,7 +283,10 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 if rk.get(e, np.inf) > EXIT_RANK:
                     ledger.meta[e]["rank_exit"] = True
                     queued_exits.add(e)
-            if nf.iloc[i] > n200.iloc[i]:
+            if not (g.iloc[i] > g200.iloc[i]):
+                stats["weeks_blocked"] = stats.get("weeks_blocked", 0) + 1
+            stats["weeks"] = stats.get("weeks", 0) + 1
+            if g.iloc[i] > g200.iloc[i]:
                 smap, grp = latest(sdates, smaps, day), latest(gdates, groups, day)
                 for e, r in rk[rk <= TOP_N].sort_values().items():
                     if e in ledger.shares:
@@ -289,12 +310,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
             od = trigger(e, i)
             if od is None:
                 continue
-            if not (nf.iloc[i] > n200.iloc[i]):
+            if not (g.iloc[i] > g200.iloc[i]):
                 stats["blocked_market"] += 1
                 continue
             stats["triggers"] += 1
             od.update({"entity": e, "priority": watch[e]["priority"],
-                       "risk": RISK_ON if nf.iloc[i] > n50.iloc[i] else RISK_SOFT})
+                       "risk": risk_on if g.iloc[i] > g50.iloc[i] else risk_soft})
             orders.append(od)
     equity, trades = _result(ledger)
     return equity, trades, stats
