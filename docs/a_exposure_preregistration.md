@@ -77,3 +77,20 @@ more than 3pp, the filter is not worth it and A10 stays as it is.
 ## Output
 
 `data/a_exposure_result.txt`
+
+---
+
+## Dated note, 2026-11-10 15:20 IST, before any variant run
+
+The A10 reference cannot be reproduced to the last digit. `run_momentum` keeps each
+month's buy list in an unordered set, so the order of the buys, and with it the cash
+split, changes from one Python process to the next. The noise is about 0.01pp. With the
+ordering fixed, the code before and after this change gives identical equity (checked on
+all stocks, W2, seeds 0 and 1).
+
+Decision by IA:
+- every run in this series uses `PYTHONHASHSEED=0`;
+- the reference counts as reproduced if CAGR and max drawdown are within 0.05pp of the
+  stored result file.
+
+Variants and their reference run in the same process.
