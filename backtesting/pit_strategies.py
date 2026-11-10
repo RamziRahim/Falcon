@@ -167,8 +167,12 @@ def _delisting_exits(panel, ledger, day_idx, day):
 def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: CostModel | None = None,
                  stop_pct: float | None = None, hold: int = MOM_HOLD,
                  gauge_up=None, down_level: float = 1.0, stats: dict | None = None,
-                 skip_after_stop: bool = False):
-    """skip_after_stop (docs/a_stop_width_preregistration.md, A10C): a stock stopped since
+                 skip_after_stop: bool = False, score: str = "raw"):
+    """score (docs/a_volrank_preregistration.md): "raw" = 12-1 return (unchanged);
+    "vol" = 12-1 return / annualised 252-session volatility; "z" = mean of the z-scores of
+    (6-1 return / vol) and (12-1 return / vol) across the list.
+
+    skip_after_stop (docs/a_stop_width_preregistration.md, A10C): a stock stopped since
     the previous rebalance is not bought at the next one; nothing replaces it.
 
     gauge_up / down_level (docs/a_exposure_preregistration.md): gauge_up is a boolean
@@ -185,6 +189,9 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
     closes_ff = panel.close.ffill(limit=5)
     pending_target = None
     level, pending_level = 1.0, 1.0
+    vol_df = None
+    if score != "raw":
+        vol_df = closes_ff.pct_change(fill_method=None).rolling(252, min_periods=200).std() * np.sqrt(252)
     stopped = set()
     for i, day in enumerate(sessions):
         if day < start or day > end:
@@ -238,7 +245,21 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             past = closes_ff.iloc[i - MOM_SKIP][members]
             base = closes_ff.iloc[i - MOM_LOOKBACK][members]
             mom = (past / base - 1).dropna()
+            if score != "raw":
+                v = vol_df.iloc[i][members]
+                m12 = (past / base - 1) / v
+                if score == "vol":
+                    mom = m12[np.isfinite(m12) & (v > 0)]
+                else:
+                    m6 = (past / closes_ff.iloc[i - 126][members] - 1) / v
+                    ok = np.isfinite(m6) & np.isfinite(m12) & (v > 0)
+                    m6, m12 = m6[ok], m12[ok]
+                    mom = ((m6 - m6.mean()) / m6.std() + (m12 - m12.mean()) / m12.std()) / 2
             pending_target = set(mom.sort_values(ascending=False).head(hold).index)
+            if stats is not None:
+                stats.setdefault("targets", {})[i] = pending_target
+                if vol_df is not None:
+                    stats.setdefault("hold_vol", []).append(float(vol_df.iloc[i][list(pending_target)].mean()))
             if gauge_up is not None:
                 pending_level = 1.0 if gauge_up[i] else down_level
                 if stats is not None:
