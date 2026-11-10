@@ -1,8 +1,7 @@
 # Pre-registration: Falcon Momentum clean close with more position slots
 
-**Status: DRAFT, written 2026-11-10. NOT FROZEN.** No code written, nothing run. IA to
-confirm or change the variants and the adoption bar, then replace this line with
-"FROZEN on <date, time>" before any run. After that: never edit; add dated notes.
+**Status: FROZEN on 2026-11-10 16:00 IST.** Frozen by IA before any code was written or run. Never edit;
+add dated notes.
 
 **Samples.** Each variant runs once on all stocks, half A and half B
 (`data/holdout_split.csv`), on W1 2019-01-01 → 2026-10-30, W2 2008-01-01 → 2017-12-31
