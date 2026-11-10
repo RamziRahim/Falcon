@@ -56,3 +56,45 @@ the return rises (rule 3), 10 slots stay.
 ## Output
 
 `data/fm_slots_result.txt`
+
+---
+
+## Dated note, 2026-11-10 ~16:20 IST
+
+The first run of `tests/run_fm_slots.py` was killed by the operating system during its
+all-stocks stage, because an unrelated smoke test was run at the same time and used up
+the memory. Nothing was changed. The run was restarted from scratch and completed; the
+result file is from that single complete run.
+
+## Results, 2026-11-10 (`data/fm_slots_result.txt`)
+
+Run with `PYTHONHASHSEED=0`. The FM_C3 reference reproduced the stored files exactly on
+half A and half B (six cells).
+
+Each cell is CAGR (max drawdown).
+
+| Sample | Version | W1 2019-26 | W2 2008-17 | 2018 | Trades W1 / W2 | Avg exposure W1 / W2 | Signals skipped, slots full W1 / W2 |
+|---|---|---|---|---|---|---|---|
+| Half A | FM_C3 (10 slots) | 14.49% (−17.95%) | 12.69% (−23.22%) | −14.73% (−16.25%) | 460 / 486 | 55% / 48% | 570 / 420 |
+| Half A | **FM_C3_S15** | 10.27% (−22.98%) | 13.12% (−21.81%) | −15.44% (−17.83%) | 612 / 601 | 58% / 49% | 146 / 92 |
+| Half A | FM_C3_S20 | 11.36% (−22.13%) | 12.12% (−20.52%) | −15.44% (−17.83%) | 649 / 632 | 57% / 49% | 8 / 1 |
+| Half B | FM_C3 (10 slots) | 8.40% (−25.57%) | 11.34% (−24.16%) | −16.34% (−18.97%) | 462 / 502 | 53% / 47% | 511 / 469 |
+| Half B | **FM_C3_S15** | 4.91% (−25.14%) | 14.55% (−21.37%) | −15.42% (−19.34%) | 598 / 611 | 54% / 48% | 98 / 105 |
+| Half B | FM_C3_S20 | 6.01% (−24.92%) | 13.91% (−24.24%) | −15.55% (−19.34%) | 626 / 637 | 54% / 48% | 0 / 4 |
+| All stocks | FM_C3 (10 slots) | 11.71% (−23.76%) | 12.85% (−26.14%) | −13.39% (−16.49%) | 493 / 514 | 53% / 46% | 747 / 637 |
+| All stocks | **FM_C3_S15** | 13.36% (−22.52%) | 12.90% (−31.84%) | −19.09% (−19.56%) | 652 / 656 | 57% / 49% | 225 / 191 |
+| All stocks | FM_C3_S20 | 13.31% (−22.70%) | 12.10% (−27.50%) | −19.07% (−19.53%) | 706 / 696 | 57% / 49% | 42 / 20 |
+
+### Verdict on the primary, FM_C3_S15, against the frozen bar: **FAILS. Not adopted.**
+
+| Rule | Half A | Half B |
+|---|---|---|
+| 1. CAGR ≥ 2pp higher in both decades | W1 −4.22pp: **fail**; W2 +0.43pp: **fail** | W1 −3.49pp: **fail**; W2 +3.21pp: pass |
+| 2. Drawdown ≤ 5pp deeper and not past −30% | W1 5.03pp deeper: **fail** | pass |
+| 3. CAGR ÷ max DD not below FM_C3's | W1 0.45 against 0.81: **fail**; W2 pass | W1 0.20 against 0.33: **fail**; W2 pass |
+
+**What it shows.** The expectation was wrong. Fifteen slots took about 30% more trades
+and almost removed the "slots full" skips. But the average exposure barely moved (55% to
+58%), and the W1 return fell by 3.5-4.2pp on both halves. The signals arrive in clusters,
+so the extra slots take the lower-ranked names of each cluster, and those are worse. Ten
+slots stay.

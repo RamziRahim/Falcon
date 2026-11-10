@@ -174,6 +174,12 @@ specs = [
  ('hb_rg_fm_c3_r20','Falcon Momentum clean close, 2% risk per trade','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_R20@B'),
  ('hb_rg_fm_c3_ew','Falcon Momentum clean close, crash protection on the equal-weight stock list','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW@B'),
  ('hb_rg_fm_c3_ew_r15','Falcon Momentum clean close, equal-weight gauge + 1.5% risk','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + equal-weight list > 200-day avg','8 weeks','fm_risk_gauge_result.txt','FM_C3_EW_R15@B'),
+ ('all_sl_fm_c3_s15','Falcon Momentum clean close, 15 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S15@ALL'),
+ ('all_sl_fm_c3_s20','Falcon Momentum clean close, 20 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S20@ALL'),
+ ('ha_sl_fm_c3_s15','Falcon Momentum clean close, 15 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S15@A'),
+ ('ha_sl_fm_c3_s20','Falcon Momentum clean close, 20 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S20@A'),
+ ('hb_sl_fm_c3_s15','Falcon Momentum clean close, 15 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S15@B'),
+ ('hb_sl_fm_c3_s20','Falcon Momentum clean close, 20 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S20@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -294,7 +300,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -348,6 +354,8 @@ VERDICT = {
 }
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_sl_fm_c3_s15"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_sl_fm_c3_s20"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_rg_fm_c3_r15"] = "Primary variant (part 1): FAILED its frozen bar (10 Nov 2026). Not adopted."
     VERDICT[f"{_t}_rg_fm_c3_ew"] = "Primary variant (part 2): FAILED its frozen bar (10 Nov 2026). Not adopted."
     VERDICT[f"{_t}_rg_fm_c3_r20"] = "Reported for information only; not judged."
