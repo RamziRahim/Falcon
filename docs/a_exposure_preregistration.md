@@ -1,8 +1,7 @@
 # Pre-registration: monthly momentum with exposure scaled by the stock list's own trend
 
-**Status: DRAFT, written 2026-11-10. NOT FROZEN.** No code written, nothing run. IA to
-confirm or change the variants and the adoption bar, then replace this line with
-"FROZEN on <date, time>" before any run. After that: never edit; add dated notes.
+**Status: FROZEN on 2026-11-10 15:10 IST.** Frozen by IA before any code was written or run. Never edit;
+add dated notes.
 
 **Samples and hold-out.** Half B was used once on 2026-11-09, so it is no longer unseen.
 To keep it meaningful, nothing in this test is tuned: every parameter below is fixed
@@ -46,6 +45,19 @@ At each month-end close it is "up" if it is above its own 200-session average, e
 | **A10_E50** | EW | 0.5 | **primary** |
 | A10_E0 | EW | 0.0 (all cash) | reported |
 | A10_N50 | Nifty 50 above its 200-session average | 0.5 | reported, to compare gauges |
+
+## Implementation notes (confirmed by IA before the freeze)
+
+1. **Resizing direction.** When the level changes, every holding is set to exactly the new
+   slot value (equity × level ÷ 20): trimmed if above, topped up if below, in both
+   directions.
+2. **Months with no level change.** Existing holdings are not touched (they drift, as in
+   A10). Only new buys use the current slot size.
+3. **Order at the rebalance open.** Sell the names leaving the top 20, then resize the
+   survivors, then buy the new names. If cash is short, A10's rule applies: cash is split
+   evenly across the buys.
+4. **Trade accounting.** A trim or top-up is not a separate trade. Its cash flows and
+   costs are folded into that position's single trade record.
 
 ## Adoption bar (A10_E50 against A10, same sample)
 
