@@ -69,3 +69,57 @@ more than 3pp deeper, the 10% stop stays.
 ## Output
 
 `data/a_stop_width_result.txt`
+
+---
+
+## Results, 2026-11-10 (`data/a_stop_width_result.txt`)
+
+Run with `PYTHONHASHSEED=0`. All 12 reference checks matched within 0.01pp: A10 on three
+samples × three windows, and A on all stocks × three windows. Nifty: W1 10.0%, W2 5.5%,
+2018 +4.1%.
+
+Each cell is CAGR (max drawdown); checks are out of 6.
+
+| Sample | Version | W1 2019-26 | W2 2008-17 | 2018 | Checks W1 / W2 | Win % W1 / W2 |
+|---|---|---|---|---|---|---|
+| Half A | A10 (reference) | 25.9% (−32.5%) | 11.3% (−58.9%) | −36.1% | 6 / 5 | 40 / 32 |
+| Half A | **A15** | 25.4% (−33.9%) | 10.2% (−67.0%) | −33.3% | 6 / 4 | 47 / 39 |
+| Half A | A20 | 27.5% (−33.2%) | 10.7% (−69.0%) | −32.5% | 6 / 5 | 51 / 43 |
+| Half A | A10C | 23.3% (−28.7%) | 14.5% (−48.7%) | −31.9% | 5 / 5 | 40 / 35 |
+| Half A | A (no stop) | 31.2% (−41.6%) | 6.9% (−80.1%) | −23.2% | 6 / 3 | 54 / 50 |
+| Half B | A10 (reference) | 23.2% (−41.4%) | 12.2% (−58.6%) | −36.0% | 5 / 5 | 36 / 34 |
+| Half B | **A15** | 24.2% (−38.6%) | 11.8% (−64.3%) | −39.7% | 5 / 5 | 43 / 41 |
+| Half B | A20 | 24.7% (−41.1%) | 13.8% (−65.3%) | −33.3% | 5 / 5 | 46 / 46 |
+| Half B | A10C | 20.2% (−37.9%) | 14.5% (−46.6%) | −28.8% | 4 / 5 | 35 / 36 |
+| Half B | A (no stop) | 25.5% (−41.6%) | 13.3% (−73.5%) | −26.4% | 5 / 4 | 49 / 52 |
+| All stocks | A10 (reference) | 26.4% (−39.4%) | 13.2% (−59.1%) | −38.9% | 5 / 5 | 39 / 32 |
+| All stocks | **A15** | 28.2% (−36.9%) | 12.9% (−64.9%) | −38.6% | 6 / 5 | 46 / 40 |
+| All stocks | A20 | 30.3% (−37.4%) | 12.0% (−69.5%) | −34.0% | 6 / 5 | 50 / 43 |
+| All stocks | A10C | 26.8% (−34.1%) | 15.7% (−46.2%) | −30.3% | 5 / 5 | 38 / 34 |
+| All stocks | A (no stop) | 33.0% (−42.1%) | 8.4% (−80.1%) | −23.7% | 6 / 3 | 52 / 49 |
+
+Exit mix, average win and loss, and calendar-year returns for every run are in the result
+file.
+
+### Verdict on the primary, A15, against the frozen bar: **FAILS. Not adopted.**
+
+| Rule | Half A | Half B |
+|---|---|---|
+| 1. CAGR above A10 in both decades | W1 25.4 against 25.9: **fail**; W2 10.2 against 11.3: **fail** | W1 24.2 against 23.2: pass; W2 11.8 against 12.2: **fail** |
+| 2. Drawdown ≤ 3pp deeper in either decade | W1 1.4pp: pass; W2 8.1pp deeper: **fail** | W1 shallower: pass; W2 5.8pp deeper: **fail** |
+| 3. 2018 better than A10 | −33.3% against −36.1%: pass | −39.7% against −36.0%: **fail** |
+| 4. ≥ 5 of 6 checks in both decades | 6 / 4: **fail** | 5 / 5: pass |
+
+As expected before the run, the win rate rises (by 6-8 points) and the W2 drawdown is
+deeper. It is more than 3pp deeper on both halves, so the 10% stop stays.
+
+**For information (not judged):**
+- **A20** shows the same pattern: a higher W1 return on both halves, but W2 drawdowns 7-10pp
+  deeper.
+- **A10C** (no re-buy of a stopped stock at the next rebalance) is the most interesting row:
+  - W2: +2.4 to +3.2pp a year on both halves, with a drawdown 10-12pp shallower;
+  - 2018: 4-7pp better;
+  - W1: 2.6-3.0pp a year lower on both halves (+0.4pp on all stocks).
+
+  It was not the primary and cannot be adopted from this test. It would need its own
+  pre-registration.

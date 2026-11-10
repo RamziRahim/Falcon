@@ -144,6 +144,17 @@ specs = [
  ('hb_a10_e50','Monthly momentum + 10% stop, half exposure when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_E50@B'),
  ('hb_a10_e0','Monthly momentum + 10% stop, all cash when the stock list is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Equal-weight list > 200-day avg, else cash','Until it leaves the top 20','a_exposure_result.txt','A10_E0@B'),
  ('hb_a10_n50','Monthly momentum + 10% stop, half exposure when the Nifty is below its 200-day avg','Monthly momentum','Month-end rank, next open','Fixed −10%','None (monthly rebalance)','Nifty > 200-day avg, else 50% exposure','Until it leaves the top 20','a_exposure_result.txt','A10_N50@B'),
+ ('all_sw_a15','Monthly momentum + 15% stop','Monthly momentum','Month-end rank, next open','Fixed −15%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A15@ALL'),
+ ('all_sw_a20','Monthly momentum + 20% stop','Monthly momentum','Month-end rank, next open','Fixed −20%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A20@ALL'),
+ ('all_sw_a10c','Monthly momentum + 10% stop, no re-buy of a stopped stock at the next rebalance','Monthly momentum','Month-end rank, next open; a stopped stock is skipped for one rebalance','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A10C@ALL'),
+ ('ha_sw_a15','Monthly momentum + 15% stop','Monthly momentum','Month-end rank, next open','Fixed −15%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A15@A'),
+ ('ha_sw_a20','Monthly momentum + 20% stop','Monthly momentum','Month-end rank, next open','Fixed −20%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A20@A'),
+ ('ha_sw_a10c','Monthly momentum + 10% stop, no re-buy of a stopped stock at the next rebalance','Monthly momentum','Month-end rank, next open; a stopped stock is skipped for one rebalance','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A10C@A'),
+ ('ha_sw_a','Monthly momentum, top 20, no stop','Monthly momentum','Month-end rank, next open','None','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A@A'),
+ ('hb_sw_a15','Monthly momentum + 15% stop','Monthly momentum','Month-end rank, next open','Fixed −15%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A15@B'),
+ ('hb_sw_a20','Monthly momentum + 20% stop','Monthly momentum','Month-end rank, next open','Fixed −20%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A20@B'),
+ ('hb_sw_a10c','Monthly momentum + 10% stop, no re-buy of a stopped stock at the next rebalance','Monthly momentum','Month-end rank, next open; a stopped stock is skipped for one rebalance','Fixed −10%','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A10C@B'),
+ ('hb_sw_a','Monthly momentum, top 20, no stop','Monthly momentum','Month-end rank, next open','None','None (monthly rebalance)','None','Until it leaves the top 20','a_stop_width_result.txt','A@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -317,6 +328,10 @@ VERDICT = {
     "ml_model": "No edge.", "b_orig": "No edge.", "c_orig": "No edge.",
 }
 for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_sw_a15"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_sw_a20"] = "Reported for information only; not judged."
+    VERDICT[f"{_t}_sw_a10c"] = "Reported for information only; not judged."
+    VERDICT[f"{_t}_sw_a"] = "Reference run (no stop) on this sample."
     VERDICT[f"{_t}_a10_e50"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
     VERDICT[f"{_t}_a10_e0"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_a10_n50"] = "Reported for information only; not judged."
