@@ -180,6 +180,18 @@ specs = [
  ('ha_sl_fm_c3_s20','Falcon Momentum clean close, 20 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S20@A'),
  ('hb_sl_fm_c3_s15','Falcon Momentum clean close, 15 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S15@B'),
  ('hb_sl_fm_c3_s20','Falcon Momentum clean close, 20 position slots','Falcon Momentum','Watch list; close above 20-day high, green, small wick','Swing low, max 3 ATR','1:3','Sector check + Nifty > 200-day avg','8 weeks','fm_slots_result.txt','FM_C3_S20@B'),
+ ('all_v2_f_ref','Falcon patterns, original (pivot buy-stop, Falcon stop and target)','Other','Falcon pattern pivot (buy-stop)','Falcon structural stop','Falcon measured move','None','8 weeks','falcon_v2_result.txt','F_REF@ALL'),
+ ('all_v2_fv2','Falcon patterns v2: fixed pivots, trend gate, close-confirmed entry','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2@ALL'),
+ ('all_v2_fv2a','Falcon patterns v2 rules on original pivots','Other','Close above original pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2A@ALL'),
+ ('all_v2_fv2m','Falcon patterns v2 + top-20% 6-month momentum','Other','Close above v2 pivot, upper half of range; trend gate; top 20% by 6-month return','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2M@ALL'),
+ ('ha_v2_f_ref','Falcon patterns, original (pivot buy-stop, Falcon stop and target)','Other','Falcon pattern pivot (buy-stop)','Falcon structural stop','Falcon measured move','None','8 weeks','falcon_v2_result.txt','F_REF@A'),
+ ('ha_v2_fv2','Falcon patterns v2: fixed pivots, trend gate, close-confirmed entry','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2@A'),
+ ('ha_v2_fv2a','Falcon patterns v2 rules on original pivots','Other','Close above original pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2A@A'),
+ ('ha_v2_fv2m','Falcon patterns v2 + top-20% 6-month momentum','Other','Close above v2 pivot, upper half of range; trend gate; top 20% by 6-month return','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2M@A'),
+ ('hb_v2_f_ref','Falcon patterns, original (pivot buy-stop, Falcon stop and target)','Other','Falcon pattern pivot (buy-stop)','Falcon structural stop','Falcon measured move','None','8 weeks','falcon_v2_result.txt','F_REF@B'),
+ ('hb_v2_fv2','Falcon patterns v2: fixed pivots, trend gate, close-confirmed entry','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2@B'),
+ ('hb_v2_fv2a','Falcon patterns v2 rules on original pivots','Other','Close above original pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2A@B'),
+ ('hb_v2_fv2m','Falcon patterns v2 + top-20% 6-month momentum','Other','Close above v2 pivot, upper half of range; trend gate; top 20% by 6-month return','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_result.txt','FV2M@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -354,6 +366,10 @@ VERDICT = {
 }
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_v2_fv2"] = "Primary variant: FAILED its frozen bar (11 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_v2_fv2a"] = "Reported for information only; not judged."
+    VERDICT[f"{_t}_v2_fv2m"] = "Reported for information only; not judged."
+    VERDICT[f"{_t}_v2_f_ref"] = "Reference run (original Falcon pattern rules) on this sample."
     VERDICT[f"{_t}_sl_fm_c3_s15"] = "Primary variant: FAILED its frozen bar (10 Nov 2026). Not adopted."
     VERDICT[f"{_t}_sl_fm_c3_s20"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_rg_fm_c3_r15"] = "Primary variant (part 1): FAILED its frozen bar (10 Nov 2026). Not adopted."
