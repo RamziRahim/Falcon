@@ -201,6 +201,12 @@ specs = [
  ('hb_rt_fv2r','Falcon patterns v2, retest entry: limit at the pivot after a confirmed breakout','Other','Confirmed v2 breakout, then limit buy at the pivot within 10 sessions','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg (breakout day)','8 weeks','falcon_v2_retest_result.txt','FV2R@B'),
  ('hb_rt_fv2rc','Falcon patterns v2, retest entry: close back above the pivot after a dip to it','Other','Confirmed v2 breakout, then buy the close of a day that dips to the pivot and closes above it (10 sessions)','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg (breakout day)','8 weeks','falcon_v2_retest_result.txt','FV2RC@B'),
  ('hb_rt_fv2re','Falcon patterns v2, retest entry: limit at the 20-day EMA after a confirmed breakout','Other','Confirmed v2 breakout, then limit buy at the 20-day EMA within 10 sessions','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg (breakout day)','8 weeks','falcon_v2_retest_result.txt','FV2RE@B'),
+ ('all_rk_r2','Falcon patterns v2 at 2% risk per trade','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_risk2_result.txt','FV2_R2@ALL'),
+ ('all_rk_r15','Falcon patterns v2 at 1.5% risk per trade','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_risk2_result.txt','FV2_R15@ALL'),
+ ('ha_rk_r2','Falcon patterns v2 at 2% risk per trade','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_risk2_result.txt','FV2_R2@A'),
+ ('ha_rk_r15','Falcon patterns v2 at 1.5% risk per trade','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_risk2_result.txt','FV2_R15@A'),
+ ('hb_rk_r2','Falcon patterns v2 at 2% risk per trade','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_risk2_result.txt','FV2_R2@B'),
+ ('hb_rk_r15','Falcon patterns v2 at 1.5% risk per trade','Other','Close above v2 pivot, upper half of range; rising 200-day avg, within 15% of 52-week high','Higher of Falcon stop and 3 ATR','1:3','Nifty > 50-day avg','8 weeks','falcon_v2_risk2_result.txt','FV2_R15@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -321,7 +327,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -375,6 +381,8 @@ VERDICT = {
 }
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_rk_r2"] = "Primary variant: FAILED its frozen bar (13 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_rk_r15"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_rt_fv2r"] = "Primary variant: FAILED its frozen bar (13 Nov 2026). Not adopted."
     VERDICT[f"{_t}_rt_fv2rc"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_rt_fv2re"] = "Reported for information only; not judged."

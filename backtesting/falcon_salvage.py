@@ -150,7 +150,8 @@ def run_setups(panel: Panel, setups: pd.DataFrame, start, end, entry: str, stop_
 
 
 def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost: CostModel | None = None,
-                  slots: int = SLOTS, entry: str = "close", retest_window: int = 10):
+                  slots: int = SLOTS, entry: str = "close", retest_window: int = 10,
+                  risk: float = RISK):
     """docs/falcon_v2_preregistration.md, rules 6-10. setups: entity_id, scan_date, pivot, stop,
     mom_rank (already filtered by rules 4-5). nifty_ok: boolean array over panel.sessions.
     Entry at the close of the first session in the 5 after the scan with High > pivot,
@@ -240,7 +241,8 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
                     else:
                         dist = (fill - stop) / fill
                         equity_now = ledger.cash + sum(ledger.value(x, closes) for x in ledger.shares)
-                        value = min(RISK * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                        value = min(risk * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                        st["size_capped"] = st.get("size_capped", 0) + int(value < risk * equity_now / dist)
                         if value > 0 and ledger.buy(day, e, fill, value, _adv(panel, i, e),
                                                     {"stop": stop, "target": fill + 3.0 * (fill - stop), "entry_idx": i}):
                             st["filled"] += 1
@@ -284,7 +286,8 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
                         continue
                     dist = (c - stop) / c
                     equity_now = ledger.cash + sum(ledger.value(x, closes) for x in ledger.shares)
-                    value = min(RISK * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                    value = min(risk * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                    st["size_capped"] = st.get("size_capped", 0) + int(value < risk * equity_now / dist)
                     if value > 0 and ledger.buy(day, e, c, value, _adv(panel, i, e),
                                                 {"stop": stop, "target": c + 3.0 * (c - stop), "entry_idx": i}):
                         st["filled"] += 1
