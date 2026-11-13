@@ -111,3 +111,6 @@ buys; at 2% about 85-95%.
 - Expectation check: return higher than FV2 in most cells (held in W1 only, not W2);
   drawdowns deeper (held, and worse than expected on all stocks); failed rule 3 (held,
   in every cell).
+
+**Correction, 2026-11-13:** in the reading above, "drawdowns deepened by 1-14 points"
+should read "by 1-8 points on the halves and 13-20 points on all stocks".
