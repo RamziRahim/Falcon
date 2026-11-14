@@ -96,3 +96,9 @@ its drawdowns may be smaller.
 `data/momentum_patterns_result.txt`, runner `tests/run_momentum_patterns.py`, blocks named
 `CODE@SAMPLE`. A10T is new code in `backtesting/momentum_timing.py`; nothing existing
 changes.
+
+**Note, 2026-11-14 (implementation, before any result was seen):** rule 5 does not say
+how cash is shared when several list stocks qualify on the same session and cash is short.
+A10T uses A10's own convention (`run_momentum`): each gets min(equity ÷ 20, cash ÷ number
+of buys that session × 0.995). A smoke run on half A for 2018 (A10T only, 2 buys) checked
+the code and was discarded.
