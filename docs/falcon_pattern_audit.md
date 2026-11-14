@@ -90,3 +90,25 @@ about 6-7 a day across 500 stocks.
 **Round 2 audit** (`tools/pattern_audit2_charts.py`, seed 20261114): 40 v3 "real pattern"
 picks (8 per pattern) and 10 Stage-2 stocks with no pattern, none from round-1 stocks.
 Answer key held back until IA finishes.
+
+## Round 2 results (2026-11-14): v3 engine
+
+IA marked all 50 charts blind (`data/pattern_audit2/`).
+
+| v3 label | Real | Unsure | Not | IA named the same pattern |
+|---|---|---|---|---|
+| VCP (8) | 6 | 2 | 0 | 4 of 6 (2 flat base) |
+| Ascending triangle (8) | 6 | 1 | 1 | 1 of 6 (4 VCP, 1 flat base) |
+| Bull flag (8) | 8 | 0 | 0 | 2 of 8 (3 VCP, 3 flat base) |
+| Cup with handle (8) | 4 | 4 | 0 | 0 of 4 (2 triangle, 2 VCP) |
+| Flat base (8) | 8 | 0 | 0 | 3 of 8 (3 VCP, 2 bull flag) |
+| **All v3 picks (40)** | **32 (80%)** | 7 | **1** | **10 of 32 (31%)** |
+| Stage-2 stocks with no v3 pattern (10) | 2 | 2 | 6 | — |
+
+- **Detection passes the 80% bar** (round 1, Falcon v2: 60%). Only 1 of 40 picks was
+  judged not a pattern (round 1: 10 of 40). Picks were judged real 80% of the time
+  against 20% for comparable Stage-2 stocks it did not flag.
+- **Labels still fail**: IA named the same pattern 31% of the time (round 1: 38%). IA
+  most often saw a VCP. Cups were never seen as cups. Labels do not change any trading
+  rule; they matter only for what the dashboard shows.
+- Cups are the weakest pick (4 of 8 real, 4 unsure).
