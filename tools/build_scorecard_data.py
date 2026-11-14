@@ -213,6 +213,15 @@ specs = [
  ('ha_v3_p3u','Falcon patterns v3 engine, real + unsure patterns','Other','v3 real or unsure pattern; close above pivot, upper half of range','Pattern low − 0.5 ATR (2–11.5%)','1:3','Nifty > 50-day avg','8 weeks','falcon_v3_patterns_result.txt','P3U@A'),
  ('hb_v3_p3','Falcon patterns v3 engine (Stage 2 + ATR zigzag), real patterns','Other','v3 real pattern; close above pivot, upper half of range','Pattern low − 0.5 ATR (2–11.5%)','1:3','Nifty > 50-day avg','8 weeks','falcon_v3_patterns_result.txt','P3@B'),
  ('hb_v3_p3u','Falcon patterns v3 engine, real + unsure patterns','Other','v3 real or unsure pattern; close above pivot, upper half of range','Pattern low − 0.5 ATR (2–11.5%)','1:3','Nifty > 50-day avg','8 weeks','falcon_v3_patterns_result.txt','P3U@B'),
+ ('all_mp_c_a_p3','Half monthly momentum (10% stop) + half v3 patterns','Portfolio combination','Monthly top 20 / v3 pattern close breakout','10% / pattern low − 0.5 ATR','— / 1:3','— / Nifty > 50-day avg','Monthly / 8 weeks','momentum_patterns_result.txt','C_A_P3@ALL'),
+ ('all_mp_c_f_a_p3','A third each: monthly momentum, Falcon Momentum clean close, v3 patterns','Portfolio combination','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve','momentum_patterns_result.txt','C_F_A_P3@ALL'),
+ ('all_mp_a10t','Monthly momentum list, bought only on a v3 pattern breakout','Monthly momentum','Monthly top-20 stock, close above v3 pivot (upper half of range)','10% below buy','None','Nifty > 50-day avg (entry)','While on the monthly list','momentum_patterns_result.txt','A10T@ALL'),
+ ('ha_mp_c_a_p3','Half monthly momentum (10% stop) + half v3 patterns','Portfolio combination','Monthly top 20 / v3 pattern close breakout','10% / pattern low − 0.5 ATR','— / 1:3','— / Nifty > 50-day avg','Monthly / 8 weeks','momentum_patterns_result.txt','C_A_P3@A'),
+ ('ha_mp_c_f_a_p3','A third each: monthly momentum, Falcon Momentum clean close, v3 patterns','Portfolio combination','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve','momentum_patterns_result.txt','C_F_A_P3@A'),
+ ('ha_mp_a10t','Monthly momentum list, bought only on a v3 pattern breakout','Monthly momentum','Monthly top-20 stock, close above v3 pivot (upper half of range)','10% below buy','None','Nifty > 50-day avg (entry)','While on the monthly list','momentum_patterns_result.txt','A10T@A'),
+ ('hb_mp_c_a_p3','Half monthly momentum (10% stop) + half v3 patterns','Portfolio combination','Monthly top 20 / v3 pattern close breakout','10% / pattern low − 0.5 ATR','— / 1:3','— / Nifty > 50-day avg','Monthly / 8 weeks','momentum_patterns_result.txt','C_A_P3@B'),
+ ('hb_mp_c_f_a_p3','A third each: monthly momentum, Falcon Momentum clean close, v3 patterns','Portfolio combination','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve as its own rules','Each sleeve','momentum_patterns_result.txt','C_F_A_P3@B'),
+ ('hb_mp_a10t','Monthly momentum list, bought only on a v3 pattern breakout','Monthly momentum','Monthly top-20 stock, close above v3 pivot (upper half of range)','10% below buy','None','Nifty > 50-day avg (entry)','While on the monthly list','momentum_patterns_result.txt','A10T@B'),
  ("f_r3","Falcon setups, swing-low stop 1:3","Other","Falcon pattern pivot (buy-stop)","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","F entries + swing-low stop, 1:3"),
  ("b_r3","52-week breakout, swing-low stop 1:3","Other","Next open after 52-week-high close","Swing low","1:3","None","4 weeks","swing_risk_1to3_result.txt","B entries + swing-low stop, 1:3"),
  ("mr_r3","RSI-2 dip buy, swing-low stop 1:3","Other","Next open after RSI-2 dip","Swing low","1:3","Nifty > 200-day avg","4 weeks","swing_risk_1to3_result.txt","MR entries + swing-low stop, 1:3"),
@@ -333,7 +342,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -387,6 +396,9 @@ VERDICT = {
 }
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
+    VERDICT[f"{_t}_mp_c_a_p3"] = "Primary variant: FAILED its frozen bar (14 Nov 2026). Not adopted."
+    VERDICT[f"{_t}_mp_c_f_a_p3"] = "Reported for information only; not judged. Shallowest 2008–17 drawdown of any mix."
+    VERDICT[f"{_t}_mp_a10t"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_v3_p3"] = "Primary variant: FAILED its frozen bar (14 Nov 2026), passed drawdown and trade quality in every cell. Not adopted."
     VERDICT[f"{_t}_v3_p3u"] = "Reported for information only; not judged."
     VERDICT[f"{_t}_rk_r2"] = "Primary variant: FAILED its frozen bar (13 Nov 2026). Not adopted."

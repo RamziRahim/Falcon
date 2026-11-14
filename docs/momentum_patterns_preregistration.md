@@ -102,3 +102,69 @@ how cash is shared when several list stocks qualify on the same session and cash
 A10T uses A10's own convention (`run_momentum`): each gets min(equity ÷ 20, cash ÷ number
 of buys that session × 0.995). A smoke run on half A for 2018 (A10T only, 2 buys) checked
 the code and was discarded.
+
+---
+
+## Results — 2026-11-14 (added after the run; nothing above was changed)
+
+**Run notes.** `tests/run_momentum_patterns.py`, one run, `PYTHONHASHSEED=0`.
+**Reference checks: all 16 matched** within 0.05pp (A10, C_F_A and P3 on half A and half B;
+A10 and P3 on all stocks; W1 and W2).
+
+**Correction to the reference table above (dated note).** The stored C_F_A drawdowns for
+half A were copied from the wrong columns of the scorecard. The correct stored figures,
+reproduced by this run, are half A W1 20.66% / −20.89% (CAGR ÷ |DD| 0.99) and half A W2
+12.61% / −35.65% (0.35). Half B was correct. The bar compares with C_F_A's figures as
+printed in the result file, so it is judged with these. The verdict below is the same
+with either table.
+
+### Primary C_A_P3 against the frozen bar
+
+| Sample, window | Checks | Max DD (C_F_A) | CAGR ÷ |DD| (C_F_A) | Bar |
+|---|---|---|---|---|
+| Half A, W1 | 4/6 ✗ | −22.60% (−20.89%) ✗ | 16.43 ÷ 22.60 = 0.73 (0.99) ✗ | **FAIL** |
+| Half A, W2 | 4/6 ✗ | −35.23% (−35.65%) ✓ | 10.08 ÷ 35.23 = 0.29 (0.35) ✗ | **FAIL** |
+| Half B, W1 | 5/6 ✓ | −24.45% (−31.42%) ✓ | 18.89 ÷ 24.45 = 0.77 (0.51) ✓ | pass |
+| Half B, W2 | 4/6 ✗ | −35.20% (−36.14%) ✓ | 10.05 ÷ 35.20 = 0.29 (0.34) ✗ | **FAIL** |
+
+**Verdict: C_A_P3 FAILED its bar (3 of 4 cells). Not adopted.** C_F_A remains the
+paper-trading candidate beside A10.
+
+### All versions (CAGR / max DD / checks; average capital invested)
+
+| Code | Half A W1 | Half A W2 | Half B W1 | Half B W2 | All W1 | All W2 |
+|---|---|---|---|---|---|---|
+| A10 | 25.93 / −32.51 / 6; 88% | 11.28 / −58.90 / 5; 85% | 23.22 / −41.36 / 5; 88% | 12.15 / −58.58 / 5; 85% | 26.36 / −39.44 / 5 | 13.17 / −59.05 / 5 |
+| FM_C3 | 14.49 / −17.95 / 3 | 12.69 / −23.22 / 5 | 8.40 / −25.57 / 2 | 11.34 / −24.16 / 5 | 11.71 / −23.76 / 3 | 12.85 / −26.14 / 5 |
+| P3 | 6.34 / −23.34 / 2; 43% | 7.47 / −14.89 / 4; 37% | 13.12 / −15.77 / 3; 38% | 6.45 / −19.15 / 3; 34% | 15.16 / −17.95 / 4 | 7.57 / −21.31 / 4 |
+| C_F_A | 20.66 / −20.89 / 5; 71% | 12.61 / −35.65 / 5; 66% | 16.13 / −31.42 / 5; 71% | 12.43 / −36.14 / 5; 66% | 19.49 / −25.88 / 5 | 13.60 / −35.66 / 5 |
+| **C_A_P3** | 16.43 / −22.60 / 4; 66% | 10.08 / −35.23 / 4; 61% | 18.89 / −24.45 / 5; 63% | 10.05 / −35.20 / 4; 59% | 21.46 / −25.96 / 5 | 11.10 / −35.86 / 5 |
+| C_F_A_P3 | 15.98 / −17.46 / 4 | 11.12 / −25.37 / 5 | 15.47 / −23.04 / 5 | 10.70 / −25.90 / 5 | 18.35 / −20.98 / 5 | 11.84 / −25.83 / 5 |
+| A10T | 1.87 / −6.69 / 1; 7% | 2.07 / −5.25 / 1; 7% | 4.97 / −11.61 / 1; 11% | 1.45 / −7.07 / 2; 6% | 5.15 / −5.10 / 1 | 1.56 / −6.66 / 2 |
+
+2018: C_F_A −25.85% (A) / −26.34% (B); C_A_P3 −26.63% / −22.24%; C_F_A_P3 −22.76% / −20.18%;
+A10 −36.13% / −36.03%.
+
+Monthly return correlation with the A10 sleeve: P3 0.40 / 0.41 (half A W1 / W2), 0.44 / 0.34
+(half B); FM_C3 0.56 / 0.54 (half A), 0.67 / 0.50 (half B).
+
+A10T bought 0.4-0.5 list stocks per month on average and held 5-9% of list slots at month
+end (45-49 buys per window).
+
+### Reading (information only; no decision rests on it)
+
+- Swapping FM_C3 for P3 beside A10 helps only in 2019-26 on half B. In 2008-17 the P3 half
+  earns 6-7% against FM_C3's 11-13%, so the mix loses return without a shallower drawdown
+  (A10's −59% dominates either half-and-half mix).
+- The three-way mix (C_F_A_P3, reported only) is the most balanced combination tested: it
+  cut the 2008-17 drawdown from about −36% to about −26% on both halves and had a better
+  return-to-drawdown ratio than C_F_A in 3 of 4 cells, at a cost of 1.5-4.7 points of
+  yearly return. Being reported, it cannot be adopted from this test; it has now been seen
+  on both halves, so only paper trading could test it.
+- P3 is less correlated with A10 than FM_C3 is (about 0.4 against 0.5-0.67), which is why it
+  helps in a three-way split.
+- A10T almost never trades: momentum leaders rarely sit in a fresh v3 base at the right
+  edge, so 90%+ of the account stays in cash.
+- Expectation check: shallower drawdowns in some cells (held: half B W1, and slightly in
+  W2); lower 2008-17 return (held); fails rule 3 in W2 (held, and also on half A W1);
+  A10T returns much less with smaller drawdowns (held).
