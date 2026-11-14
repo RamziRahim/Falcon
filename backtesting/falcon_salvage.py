@@ -151,7 +151,7 @@ def run_setups(panel: Panel, setups: pd.DataFrame, start, end, entry: str, stop_
 
 def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost: CostModel | None = None,
                   slots: int = SLOTS, entry: str = "close", retest_window: int = 10,
-                  risk: float = RISK):
+                  risk: float = RISK, stop_rule: str = "max_atr3"):
     """docs/falcon_v2_preregistration.md, rules 6-10. setups: entity_id, scan_date, pivot, stop,
     mom_rank (already filtered by rules 4-5). nifty_ok: boolean array over panel.sessions.
     Entry at the close of the first session in the 5 after the scan with High > pivot,
@@ -165,7 +165,9 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
                      Close > pivot; no exit checks on the entry session (FV2RC)
       "retest_ema"   limit at the previous session's 20-EMA of closes while it is above
                      Falcon's stop, fill min(EMA, open), same-day stop check (FV2RE)
-    Retest stops use ATR(14) as of the session before the fill."""
+    Retest stops use ATR(14) as of the session before the fill.
+    stop_rule: "max_atr3" (default, FV2 rule 8) = max(setup stop, fill - 3 ATR);
+               "setup" = the setup's own stop (docs/falcon_v3_patterns_preregistration.md rule 4)."""
     ledger = Ledger(cost or CostModel())
     s = panel.sessions
     O, H, L, C = (x.to_numpy(float) for x in (panel.open, panel.high, panel.low, panel.close))
@@ -276,7 +278,8 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
                 if not ok:
                     st["touch_rejected"] += 1
                 else:
-                    stop = max(od["stop"], c - 3.0 * ATR[i, j]) if np.isfinite(ATR[i, j]) else od["stop"]
+                    stop = (od["stop"] if stop_rule == "setup" else
+                            max(od["stop"], c - 3.0 * ATR[i, j]) if np.isfinite(ATR[i, j]) else od["stop"])
                     if not stop < c or (c - stop) / c > MAX_STOP:
                         st["stop_too_wide"] += 1
                         continue
