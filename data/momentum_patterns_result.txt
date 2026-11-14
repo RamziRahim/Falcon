@@ -1,0 +1,31 @@
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet); v3 patterns with monthly momentum. Blocks are CODE@SAMPLE (ALL / A / B)
+
+======================================================================
+A10@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              850
+  win rate after costs         40.2%
+  avg win / avg loss           +28.60% / -9.54%
+  mean net per trade           +5.808%
+  exit mix                     {'REBALANCE': 429, 'STOP': 421}
+  stats                        None
+  grew 10 lakh to              60.78 lakh
+  cagr_pct                     25.93
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -32.51
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      1.256
+  monthly_excess_t_nw3         2.11
+  years_beating_nifty          5/8
+  n_closed_positions           864
+  top3_profit_share            0.22
+  avg_gross_exposure_pct       87.6
+  total_return_pct             507.8
+  verdict                      EDGE DEMONSTRATED (provisional; next is paper trading)
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [PASS] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
