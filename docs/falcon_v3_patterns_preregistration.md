@@ -160,3 +160,5 @@ By pattern (P3, closed trades; information only, small counts for VCP and triang
 - Expectation check: fewer trades (held: about 30% fewer than FV2); better win rate and
   net per trade (held); return near the Nifty in places (held); rule 1 or 5 likeliest to
   fail (rule 2 failed most).
+
+**Correction, 2026-11-14:** in the expectation check, "about 30% fewer than FV2" should read "about 35% fewer on the halves (28% fewer on all stocks)".
