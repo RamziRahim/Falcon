@@ -1,0 +1,31 @@
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet); swing-structure retest (TCR) and higher-low pullback (HLP). Blocks are CODE@SAMPLE
+
+======================================================================
+P3@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              277
+  win rate after costs         51.3%
+  avg win / avg loss           +12.59% / -7.87%
+  mean net per trade           +2.617%
+  exit mix                     {'TIME_STOP': 148, 'STOP': 105, 'TARGET': 23, 'DELISTED': 1}
+  stats                        {'orders': 1274, 'pivot_touches': 1519, 'touch_rejected': 1022, 'filled': 277, 'cancelled_stop': 147, 'stop_too_wide': 22, 'slots_full': 198, 'size_capped': 33}
+  grew 10 lakh to              16.18 lakh
+  cagr_pct                     6.34
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -23.34
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.379
+  monthly_excess_t_nw3         -0.8
+  years_beating_nifty          3/8
+  n_closed_positions           277
+  top3_profit_share            0.27
+  avg_gross_exposure_pct       43.2
+  total_return_pct             61.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
