@@ -1,0 +1,51 @@
+chart,kind,pattern,verdict,seen,result,ret40,closed_above
+c01,detected,ascending_triangle,yes,flat_base,target,0.20536575950588687,False
+c02,detected,bull_flag,maybe,,target,0.37293686565712236,False
+c03,detected,ascending_triangle,no,,stop,0.1778475336322871,True
+c04,detected,vcp,no,,target,0.09974683544303797,False
+c05,detected,vcp,no,,no trigger,,False
+c06,detected,flat_base,yes,flat_base,stop,-0.07553203739178671,True
+c07,detected,flat_base,maybe,,time,-0.015272727272727216,True
+c08,detected,vcp,no,,stop,-0.09256118245699063,False
+c09,detected,bull_flag,yes,vcp,time,0.07231306556596295,True
+c10,detected,ascending_triangle,maybe,,no trigger,,False
+c11,detected,bull_flag,maybe,,target,0.4650183150183149,False
+c12,detected,flat_base,no,,no trigger,,False
+c13,detected,ascending_triangle,no,,stop,-0.29811320754716975,True
+c14,not_detected,,maybe,,no trigger,,False
+c15,not_detected,,no,,no trigger,,False
+c16,detected,bull_flag,yes,bull_flag,no trigger,,False
+c17,detected,ascending_triangle,maybe,,time,-0.0036208031599737067,True
+c18,detected,bull_flag,yes,bull_flag,no trigger,,False
+c19,detected,bull_flag,yes,vcp,target,0.20044969083754904,False
+c20,detected,vcp,yes,vcp,no trigger,,False
+c21,not_detected,,yes,vcp,no trigger,,False
+c22,not_detected,,no,,no trigger,,False
+c23,detected,bull_flag,yes,bull_flag,target,0.23041736227045062,False
+c24,detected,bull_flag,yes,bull_flag,no trigger,,False
+c25,detected,flat_base,yes,bull_flag,no trigger,,False
+c26,detected,vcp,no,,no trigger,,False
+c27,detected,vcp,yes,ascending_triangle,no trigger,,False
+c28,detected,bull_flag,yes,bull_flag,no trigger,,False
+c29,detected,flat_base,yes,vcp,stop,-0.19457609268035814,False
+c30,detected,flat_base,yes,vcp,time,0.07068019291534999,False
+c31,detected,vcp,yes,vcp,stop,0.08374263261296666,True
+c32,not_detected,,maybe,,no trigger,,False
+c33,detected,flat_base,maybe,,no trigger,,False
+c34,detected,vcp,no,,no trigger,,False
+c35,detected,ascending_triangle,yes,vcp,no trigger,,False
+c36,not_detected,,maybe,,no trigger,,False
+c37,detected,flat_base,yes,bull_flag,no trigger,,False
+c38,detected,ascending_triangle,no,,stop,-0.0658375634517766,False
+c39,not_detected,,maybe,,no trigger,,False
+c40,detected,vcp,no,,no trigger,,False
+c41,detected,ascending_triangle,yes,flat_base,no trigger,,False
+c42,not_detected,,no,,time,-0.12386877828054299,False
+c43,not_detected,,no,,no trigger,,False
+c44,detected,vcp,yes,bull_flag,no trigger,,False
+c45,detected,ascending_triangle,yes,flat_base,no trigger,,False
+c46,not_detected,,yes,vcp,no trigger,,False
+c47,detected,flat_base,yes,ascending_triangle,stop,-0.18301523894067162,False
+c48,detected,bull_flag,yes,bull_flag,time,0.07210723095898852,False
+c49,detected,ascending_triangle,yes,flat_base,no trigger,,False
+c50,detected,flat_base,yes,vcp,stop,-0.04696428571428568,True
