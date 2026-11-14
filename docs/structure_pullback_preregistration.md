@@ -1,6 +1,8 @@
 # Pre-registration: swing-structure retest and higher-low pullback
 
-**Status: DRAFT (2026-11-14). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-15 01:05 IST.** Frozen unchanged on IA's instruction ("Take the setup which
+you think suits best and go ahead"), which left the open choices to Claude, before any test code was
+written or run. Never edit; add dated notes.
 
 **Samples.** Each version runs once on half A, half B and all stocks, on W1 2019-01-01 →
 2026-10-30, W2 2008-01-01 → 2017-12-31 and 2018, with the same six checks, costs and data,
