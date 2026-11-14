@@ -229,3 +229,10 @@ were also added, all genuine on inspection (e.g. IIFL's 2019 demerger, Heritage 
 - **B:** path-dependent slot competition means a different universe gives different
   trades, which shows how fragile B's earlier 23.6% was.
 - The PIT equal-weight benchmark is now 23.37%.
+
+### Dated note, 2026-11-03 ~00:20 IST, before running: strategy A on 2008-2017
+
+Strategy A is unchanged, and so are the six checks above. It will be run once on the
+unseen 2008-01-01 → 2017-12-31, on the rebuilt 2007-2026 PIT data, as an out-of-sample
+check. A pass there would only restore "provisional", given the 2024-26 failure.
+No re-tuning.

@@ -1,0 +1,1911 @@
+version,period,days,back_to_buy,hit_stop,cls
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,False,False,direct
+S3_REF3,Y2018,40,False,False,direct
+S3_REF3,Y2018,20,False,False,direct
+S3_REF3,Y2018,40,True,False,direct
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,retest
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, then up"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,False,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,retest
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,False,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,False,False,neither
+S3_REF3,Y2018,40,False,False,neither
+S3_REF3,Y2018,20,False,False,neither
+S3_REF3,Y2018,40,False,False,direct
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,False,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,True,"stop, down"
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,False,neither
+S3_REF3,Y2018,20,True,False,neither
+S3_REF3,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,False,False,direct
+S3_REF2,Y2018,40,False,False,direct
+S3_REF2,Y2018,20,False,False,direct
+S3_REF2,Y2018,40,True,False,direct
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,retest
+S3_REF2,Y2018,40,True,False,retest
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,direct
+S3_REF2,Y2018,40,True,True,direct
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,retest
+S3_REF2,Y2018,40,True,False,retest
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,retest
+S3_REF2,Y2018,40,True,True,retest
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,False,False,direct
+S3_REF2,Y2018,40,True,False,direct
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,retest
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,retest
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,retest
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,retest
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,False,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,False,False,neither
+S3_REF2,Y2018,40,False,False,neither
+S3_REF2,Y2018,20,False,False,direct
+S3_REF2,Y2018,40,False,False,direct
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,False,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,retest
+S3_REF2,Y2018,40,True,True,retest
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,True,"stop, down"
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,False,neither
+S3_REF2,Y2018,20,True,False,neither
+S3_REF2,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,False,False,direct
+S3_C3,Y2018,40,True,False,direct
+S3_C3,Y2018,20,True,False,retest
+S3_C3,Y2018,40,True,False,retest
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,retest
+S3_C3,Y2018,40,True,False,retest
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,retest
+S3_C3,Y2018,40,True,True,retest
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,True,"stop, down"
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C3,Y2018,20,True,False,neither
+S3_C3,Y2018,40,True,False,neither
+S3_C3,Y2018,20,True,True,neither
+S3_C3,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,False,False,direct
+S3_C2,Y2018,40,True,False,direct
+S3_C2,Y2018,20,True,False,retest
+S3_C2,Y2018,40,True,False,retest
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,retest
+S3_C2,Y2018,20,True,True,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,retest
+S3_C2,Y2018,40,True,False,retest
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,retest
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,retest
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,retest
+S3_C2,Y2018,40,True,False,retest
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,retest
+S3_C2,Y2018,40,True,True,retest
+S3_C2,Y2018,20,True,False,retest
+S3_C2,Y2018,40,True,True,retest
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,retest
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,False,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,True,"stop, down"
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_C2,Y2018,20,True,False,neither
+S3_C2,Y2018,40,True,False,neither
+S3_C2,Y2018,20,True,True,neither
+S3_C2,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,False,False,direct
+S3_CV3,Y2018,40,True,False,direct
+S3_CV3,Y2018,20,True,False,retest
+S3_CV3,Y2018,40,True,False,retest
+S3_CV3,Y2018,20,True,True,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,retest
+S3_CV3,Y2018,40,True,True,retest
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,True,"stop, down"
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,False,neither
+S3_CV3,Y2018,40,True,False,neither
+S3_CV3,Y2018,20,True,True,neither
+S3_CV3,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,False,False,direct
+S3_CV2,Y2018,40,True,False,direct
+S3_CV2,Y2018,20,True,False,retest
+S3_CV2,Y2018,40,True,False,retest
+S3_CV2,Y2018,20,True,True,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,retest
+S3_CV2,Y2018,40,True,False,retest
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,retest
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,retest
+S3_CV2,Y2018,40,True,False,retest
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,retest
+S3_CV2,Y2018,40,True,True,retest
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,True,"stop, down"
+S3_CV2,Y2018,40,True,True,"stop, down"
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,False,neither
+S3_CV2,Y2018,40,True,False,neither
+S3_CV2,Y2018,20,True,True,neither
+S3_CV2,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, then up"
+FM_REF3,Y2018,20,True,False,retest
+FM_REF3,Y2018,40,True,False,retest
+FM_REF3,Y2018,20,True,False,retest
+FM_REF3,Y2018,40,True,False,retest
+FM_REF3,Y2018,20,True,True,"stop, then up"
+FM_REF3,Y2018,40,True,True,"stop, then up"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,retest
+FM_REF3,Y2018,40,True,False,retest
+FM_REF3,Y2018,20,True,True,"stop, then up"
+FM_REF3,Y2018,40,True,True,"stop, then up"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, then up"
+FM_REF3,Y2018,40,True,True,"stop, then up"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,retest
+FM_REF3,Y2018,40,True,False,retest
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,False,False,direct
+FM_REF3,Y2018,40,False,False,direct
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,retest
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, then up"
+FM_REF3,Y2018,20,False,False,neither
+FM_REF3,Y2018,40,False,False,direct
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,retest
+FM_REF3,Y2018,40,True,False,retest
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,False,False,direct
+FM_REF3,Y2018,40,False,False,direct
+FM_REF3,Y2018,20,False,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,retest
+FM_REF3,Y2018,40,True,False,retest
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,True,"stop, then up"
+FM_REF3,Y2018,40,True,True,"stop, then up"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,False,neither
+FM_REF3,Y2018,20,True,True,"stop, down"
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF3,Y2018,20,True,False,neither
+FM_REF3,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,direct
+FM_REF2,Y2018,40,True,True,direct
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,direct
+FM_REF2,Y2018,40,True,True,direct
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, then up"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,False,direct
+FM_REF2,Y2018,40,True,False,direct
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,True,"stop, then up"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,True,"stop, then up"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,True,"stop, then up"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,True,"stop, then up"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,True,retest
+FM_REF2,Y2018,20,False,False,direct
+FM_REF2,Y2018,40,False,False,direct
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,direct
+FM_REF2,Y2018,40,True,True,direct
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,False,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,"stop, then up"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,False,False,direct
+FM_REF2,Y2018,40,False,False,direct
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,"stop, then up"
+FM_REF2,Y2018,40,True,True,"stop, then up"
+FM_REF2,Y2018,20,True,False,retest
+FM_REF2,Y2018,40,True,False,retest
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,True,"stop, down"
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,False,neither
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_REF2,Y2018,20,True,False,neither
+FM_REF2,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,retest
+FM_H3,Y2018,40,True,False,retest
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,retest
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,False,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,False,False,direct
+FM_H3,Y2018,40,True,True,direct
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,retest
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,True,"stop, down"
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,False,neither
+FM_H3,Y2018,20,True,False,neither
+FM_H3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,False,False,neither
+FM_C3,Y2018,40,False,False,direct
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,retest
+FM_C3,Y2018,40,True,False,retest
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,retest
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,False,False,neither
+FM_C3,Y2018,40,False,False,direct
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,retest
+FM_C3,Y2018,40,True,True,retest
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,True,"stop, down"
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,True,"stop, down"
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C3,Y2018,20,True,False,neither
+FM_C3,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,retest
+FM_C2,Y2018,40,True,False,retest
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,False,False,direct
+FM_C2,Y2018,40,False,False,direct
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,retest
+FM_C2,Y2018,40,True,False,retest
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,retest
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,retest
+FM_C2,Y2018,40,True,False,retest
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,retest
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,retest
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, then up"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,retest
+FM_C2,Y2018,40,True,True,retest
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,True,"stop, down"
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,True,"stop, down"
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,neither
+FM_C2,Y2018,20,True,False,neither
+FM_C2,Y2018,40,True,False,retest
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,False,False,neither
+FM_CV3,Y2018,40,False,False,direct
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,retest
+FM_CV3,Y2018,40,True,False,retest
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,retest
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,False,False,neither
+FM_CV3,Y2018,40,False,False,direct
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,retest
+FM_CV3,Y2018,40,True,True,retest
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,True,"stop, down"
+FM_CV3,Y2018,40,True,True,"stop, down"
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV3,Y2018,20,True,False,neither
+FM_CV3,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,False,False,direct
+FM_CV2,Y2018,40,False,False,direct
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,retest
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,retest
+FM_CV2,Y2018,40,True,False,retest
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,retest
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, then up"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,False,False,direct
+FM_CV2,Y2018,40,False,False,direct
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,retest
+FM_CV2,Y2018,40,True,True,retest
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,True,"stop, down"
+FM_CV2,Y2018,40,True,True,"stop, down"
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,neither
+FM_CV2,Y2018,20,True,False,neither
+FM_CV2,Y2018,40,True,False,retest

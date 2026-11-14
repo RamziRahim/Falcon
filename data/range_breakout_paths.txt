@@ -1,0 +1,96 @@
+
+RB3 W1 20 days, 243 trades | direct 1.6% | target before stop 5.3% | stop first 23.5% | range low at/below stop 54%
+   back to range low   12.3% -> target    3% | stop   77% | neither   20%
+   back to 20-SMA      79.4% -> target    1% | stop   30% | neither   69%
+
+RB3 W1 40 days, 243 trades | direct 2.1% | target before stop 13.2% | stop first 35.0% | range low at/below stop 54%
+   back to range low   17.7% -> target    2% | stop   84% | neither   14%
+   back to 20-SMA      92.6% -> target    7% | stop   38% | neither   56%
+
+RB3 W2 20 days, 238 trades | direct 1.3% | target before stop 3.4% | stop first 23.1% | range low at/below stop 55%
+   back to range low   10.5% -> target    0% | stop   76% | neither   24%
+   back to 20-SMA      79.4% -> target    1% | stop   29% | neither   70%
+
+RB3 W2 40 days, 238 trades | direct 1.7% | target before stop 14.7% | stop first 34.0% | range low at/below stop 55%
+   back to range low   15.1% -> target    0% | stop   89% | neither   11%
+   back to 20-SMA      92.9% -> target    8% | stop   37% | neither   55%
+
+RB3 Y2018 20 days, 47 trades | direct 0.0% | target before stop 4.3% | stop first 31.9% | range low at/below stop 64%
+   back to range low   14.9% -> target    0% | stop   71% | neither   29%
+   back to 20-SMA      80.9% -> target    0% | stop   39% | neither   61%
+
+RB3 Y2018 40 days, 47 trades | direct 0.0% | target before stop 4.3% | stop first 42.6% | range low at/below stop 64%
+   back to range low   19.1% -> target    0% | stop   78% | neither   22%
+   back to 20-SMA      95.7% -> target    0% | stop   44% | neither   56%
+
+RB2 W1 20 days, 244 trades | direct 2.0% | target before stop 14.8% | stop first 23.8% | range low at/below stop 55%
+   back to range low   12.3% -> target    3% | stop   77% | neither   20%
+   back to 20-SMA      77.0% -> target    5% | stop   31% | neither   64%
+
+RB2 W1 40 days, 244 trades | direct 2.9% | target before stop 27.5% | stop first 34.4% | range low at/below stop 55%
+   back to range low   17.2% -> target    5% | stop   83% | neither   12%
+   back to 20-SMA      84.8% -> target   14% | stop   41% | neither   45%
+
+RB2 W2 20 days, 240 trades | direct 1.2% | target before stop 12.9% | stop first 22.9% | range low at/below stop 55%
+   back to range low   10.4% -> target    0% | stop   76% | neither   24%
+   back to 20-SMA      77.9% -> target    3% | stop   29% | neither   67%
+
+RB2 W2 40 days, 240 trades | direct 2.9% | target before stop 27.9% | stop first 33.3% | range low at/below stop 55%
+   back to range low   15.0% -> target    0% | stop   89% | neither   11%
+   back to 20-SMA      84.6% -> target   15% | stop   39% | neither   46%
+
+RB2 Y2018 20 days, 47 trades | direct 0.0% | target before stop 6.4% | stop first 31.9% | range low at/below stop 64%
+   back to range low   14.9% -> target    0% | stop   71% | neither   29%
+   back to 20-SMA      80.9% -> target    0% | stop   39% | neither   61%
+
+RB2 Y2018 40 days, 47 trades | direct 0.0% | target before stop 8.5% | stop first 42.6% | range low at/below stop 64%
+   back to range low   19.1% -> target    0% | stop   78% | neither   22%
+   back to 20-SMA      93.6% -> target    2% | stop   45% | neither   52%
+
+RBK3 W1 20 days, 220 trades | direct 1.4% | target before stop 5.5% | stop first 22.7% | range low at/below stop 54%
+   back to range low   11.8% -> target    4% | stop   77% | neither   19%
+   back to 20-SMA      79.5% -> target    1% | stop   29% | neither   70%
+
+RBK3 W1 40 days, 220 trades | direct 1.8% | target before stop 13.2% | stop first 34.1% | range low at/below stop 54%
+   back to range low   17.3% -> target    3% | stop   82% | neither   16%
+   back to 20-SMA      92.7% -> target    7% | stop   37% | neither   56%
+
+RBK3 W2 20 days, 213 trades | direct 0.9% | target before stop 2.8% | stop first 23.0% | range low at/below stop 54%
+   back to range low   10.8% -> target    0% | stop   78% | neither   22%
+   back to 20-SMA      79.8% -> target    0% | stop   29% | neither   71%
+
+RBK3 W2 40 days, 213 trades | direct 0.9% | target before stop 15.0% | stop first 35.7% | range low at/below stop 54%
+   back to range low   15.5% -> target    0% | stop   94% | neither    6%
+   back to 20-SMA      93.0% -> target    9% | stop   38% | neither   53%
+
+RBK3 Y2018 20 days, 39 trades | direct 0.0% | target before stop 5.1% | stop first 33.3% | range low at/below stop 67%
+   back to range low   15.4% -> target    0% | stop   83% | neither   17%
+   back to 20-SMA      79.5% -> target    0% | stop   42% | neither   58%
+
+RBK3 Y2018 40 days, 39 trades | direct 0.0% | target before stop 5.1% | stop first 43.6% | range low at/below stop 67%
+   back to range low   20.5% -> target    0% | stop   88% | neither   12%
+   back to 20-SMA      94.9% -> target    0% | stop   46% | neither   54%
+
+RBK2 W1 20 days, 221 trades | direct 1.8% | target before stop 13.1% | stop first 23.1% | range low at/below stop 54%
+   back to range low   11.8% -> target    4% | stop   77% | neither   19%
+   back to 20-SMA      78.3% -> target    5% | stop   29% | neither   66%
+
+RBK2 W1 40 days, 221 trades | direct 3.2% | target before stop 26.2% | stop first 34.4% | range low at/below stop 54%
+   back to range low   17.2% -> target    5% | stop   82% | neither   13%
+   back to 20-SMA      86.0% -> target   14% | stop   40% | neither   46%
+
+RBK2 W2 20 days, 214 trades | direct 0.9% | target before stop 12.6% | stop first 22.9% | range low at/below stop 54%
+   back to range low   10.7% -> target    0% | stop   78% | neither   22%
+   back to 20-SMA      78.0% -> target    2% | stop   29% | neither   68%
+
+RBK2 W2 40 days, 214 trades | direct 1.4% | target before stop 26.6% | stop first 35.0% | range low at/below stop 54%
+   back to range low   15.4% -> target    0% | stop   94% | neither    6%
+   back to 20-SMA      85.0% -> target   14% | stop   41% | neither   45%
+
+RBK2 Y2018 20 days, 39 trades | direct 0.0% | target before stop 7.7% | stop first 33.3% | range low at/below stop 67%
+   back to range low   15.4% -> target    0% | stop   83% | neither   17%
+   back to 20-SMA      79.5% -> target    0% | stop   42% | neither   58%
+
+RBK2 Y2018 40 days, 39 trades | direct 0.0% | target before stop 10.3% | stop first 43.6% | range low at/below stop 67%
+   back to range low   20.5% -> target    0% | stop   88% | neither   12%
+   back to 20-SMA      92.3% -> target    3% | stop   47% | neither   50%

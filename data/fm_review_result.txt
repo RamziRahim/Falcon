@@ -1,0 +1,62 @@
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet); FM with a 40-session time stop + 4-week review
+
+======================================================================
+FM, time stop 40  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              680
+  win rate after costs         37.9%
+  avg win / avg loss           +17.16% / -8.05%
+  mean net per trade           +1.518%
+  exit mix                     {'STOP': 281, 'TIME_STOP': 141, 'REVIEW_EXIT': 136, 'TARGET': 109, 'MOMENTUM_EXIT': 13}
+  stats                        {'review_exits': 137, 'review_kept': 215, 'weeks': 408, 'weeks_blocked_by_market': 110, 'candidates': 6785, 'sector_rejected': 2828, 'by_index': 1549, 'by_peers': 5236, 'gap_skip': 22, 'stop_skip': 5}
+  cagr_pct                     7.97
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -24.17
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.14
+  monthly_excess_t_nw3         -0.32
+  years_beating_nifty          4/8
+  n_closed_positions           680
+  top3_profit_share            0.23
+  avg_gross_exposure_pct       52.4
+  total_return_pct             82.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+FM, time stop 40  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              811
+  win rate after costs         38.1%
+  avg win / avg loss           +17.93% / -8.40%
+  mean net per trade           +1.631%
+  exit mix                     {'STOP': 318, 'REVIEW_EXIT': 168, 'TIME_STOP': 163, 'TARGET': 138, 'MOMENTUM_EXIT': 23, 'DELISTED': 1}
+  stats                        {'review_exits': 169, 'review_kept': 238, 'weeks': 522, 'weeks_blocked_by_market': 176, 'candidates': 7890, 'sector_rejected': 3555, 'by_index': 1174, 'by_peers': 6716, 'gap_skip': 12, 'stop_skip': 6}
+  cagr_pct                     6.68
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -27.76
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.141
+  monthly_excess_t_nw3         -0.26
+  years_beating_nifty          4/10
+  n_closed_positions           821
+  top3_profit_share            0.18
+  avg_gross_exposure_pct       46.8
+  total_return_pct             90.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+Verdicts: {'W1': 'FAIL', 'W2': 'FAIL'}
+FM t40: NO DEMONSTRATED EDGE

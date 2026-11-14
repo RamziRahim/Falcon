@@ -1,0 +1,32 @@
+
+RB3 Y2018 20 days, 47 trades | direct 0.0% | target before stop 4.3% | stop first 31.9% | range low at/below stop 64%
+   back to range low   14.9% -> target    0% | stop   71% | neither   29%
+   back to 20-SMA      80.9% -> target    0% | stop   39% | neither   61%
+
+RB3 Y2018 40 days, 47 trades | direct 0.0% | target before stop 4.3% | stop first 42.6% | range low at/below stop 64%
+   back to range low   19.1% -> target    0% | stop   78% | neither   22%
+   back to 20-SMA      95.7% -> target    0% | stop   44% | neither   56%
+
+RB2 Y2018 20 days, 47 trades | direct 0.0% | target before stop 6.4% | stop first 31.9% | range low at/below stop 64%
+   back to range low   14.9% -> target    0% | stop   71% | neither   29%
+   back to 20-SMA      80.9% -> target    0% | stop   39% | neither   61%
+
+RB2 Y2018 40 days, 47 trades | direct 0.0% | target before stop 8.5% | stop first 42.6% | range low at/below stop 64%
+   back to range low   19.1% -> target    0% | stop   78% | neither   22%
+   back to 20-SMA      93.6% -> target    2% | stop   45% | neither   52%
+
+RBK3 Y2018 20 days, 39 trades | direct 0.0% | target before stop 5.1% | stop first 33.3% | range low at/below stop 67%
+   back to range low   15.4% -> target    0% | stop   83% | neither   17%
+   back to 20-SMA      79.5% -> target    0% | stop   42% | neither   58%
+
+RBK3 Y2018 40 days, 39 trades | direct 0.0% | target before stop 5.1% | stop first 43.6% | range low at/below stop 67%
+   back to range low   20.5% -> target    0% | stop   88% | neither   12%
+   back to 20-SMA      94.9% -> target    0% | stop   46% | neither   54%
+
+RBK2 Y2018 20 days, 39 trades | direct 0.0% | target before stop 7.7% | stop first 33.3% | range low at/below stop 67%
+   back to range low   15.4% -> target    0% | stop   83% | neither   17%
+   back to 20-SMA      79.5% -> target    0% | stop   42% | neither   58%
+
+RBK2 Y2018 40 days, 39 trades | direct 0.0% | target before stop 10.3% | stop first 43.6% | range low at/below stop 67%
+   back to range low   20.5% -> target    0% | stop   88% | neither   12%
+   back to 20-SMA      92.3% -> target    3% | stop   47% | neither   50%

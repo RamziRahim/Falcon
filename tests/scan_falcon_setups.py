@@ -80,7 +80,8 @@ def main():
             if n % 100 == 0:
                 print(f"  {n}/{len(jobs)} stocks, {len(rows)} setups, {time.time() - t0:.0f}s", flush=True)
     out = pd.DataFrame(rows)
-    path = f"data/pit/falcon_setups_{start.date()}_{end.date()}.parquet"
+    v2 = "v2_" if os.environ.get("FALCON_PIVOT_V2") == "1" else ""
+    path = f"data/pit/falcon_setups_{v2}{start.date()}_{end.date()}.parquet"
     out.to_parquet(path, index=False)
     print(f"Saved {path}: {len(out):,} setups in {time.time() - t0:.0f}s")
 

@@ -1,0 +1,345 @@
+version,period,days,direct,tgt,stop,range_low,sma20,rl_below_stop
+RB3,Y2018,20,False,True,False,,,True
+RB3,Y2018,40,False,True,False,,,True
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,True,then stop,then stop,False
+RB3,Y2018,40,False,False,True,then stop,then stop,False
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,,then neither,False
+RB3,Y2018,40,False,False,True,then stop,then stop,False
+RB3,Y2018,20,False,False,False,,then neither,False
+RB3,Y2018,40,False,False,True,then stop,then stop,False
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,then neither,then neither,False
+RB3,Y2018,40,False,False,False,then neither,then neither,False
+RB3,Y2018,20,False,False,True,then stop,then stop,False
+RB3,Y2018,40,False,False,True,then stop,then stop,False
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,then neither,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,then neither,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,,,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,False,False,,,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,False,,then neither,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,True,False,,,True
+RB3,Y2018,40,False,True,False,,,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,True,then stop,then stop,False
+RB3,Y2018,40,False,False,True,then stop,then stop,False
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,True,then stop,then stop,False
+RB3,Y2018,40,False,False,True,then stop,then stop,False
+RB3,Y2018,20,False,False,True,then stop,then stop,False
+RB3,Y2018,40,False,False,True,then stop,then stop,False
+RB3,Y2018,20,False,False,False,then neither,then neither,False
+RB3,Y2018,40,False,False,False,then neither,then neither,False
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB3,Y2018,20,False,False,True,,then stop,True
+RB3,Y2018,40,False,False,True,,then stop,True
+RB3,Y2018,20,False,False,False,,then neither,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,False,False,,then neither,False
+RB3,Y2018,40,False,False,False,,then neither,False
+RB3,Y2018,20,False,False,False,,then neither,True
+RB3,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,True,False,,,True
+RB2,Y2018,40,False,True,False,,,True
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,True,then stop,then stop,False
+RB2,Y2018,40,False,False,True,then stop,then stop,False
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,,False
+RB2,Y2018,40,False,False,False,,then neither,False
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,,then neither,False
+RB2,Y2018,40,False,False,True,then stop,then stop,False
+RB2,Y2018,20,False,False,False,,then neither,False
+RB2,Y2018,40,False,False,True,then stop,then stop,False
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,then neither,then neither,False
+RB2,Y2018,40,False,False,False,then neither,then neither,False
+RB2,Y2018,20,False,False,True,then stop,then stop,False
+RB2,Y2018,40,False,False,True,then stop,then stop,False
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,,False
+RB2,Y2018,40,False,True,False,,then target,False
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,then neither,False
+RB2,Y2018,40,False,False,False,,then neither,False
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,then neither,False
+RB2,Y2018,40,False,False,False,,then neither,False
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,,,False
+RB2,Y2018,40,False,False,False,,then neither,False
+RB2,Y2018,20,False,False,False,,,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,False,,,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,True,False,,,True
+RB2,Y2018,40,False,True,False,,,True
+RB2,Y2018,20,False,False,False,,then neither,False
+RB2,Y2018,40,False,False,False,,then neither,False
+RB2,Y2018,20,False,True,False,,,True
+RB2,Y2018,40,False,True,False,,,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,True,then stop,then stop,False
+RB2,Y2018,40,False,False,True,then stop,then stop,False
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,True,then stop,then stop,False
+RB2,Y2018,40,False,False,True,then stop,then stop,False
+RB2,Y2018,20,False,False,True,then stop,then stop,False
+RB2,Y2018,40,False,False,True,then stop,then stop,False
+RB2,Y2018,20,False,False,False,then neither,then neither,False
+RB2,Y2018,40,False,False,False,then neither,then neither,False
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RB2,Y2018,20,False,False,True,,then stop,True
+RB2,Y2018,40,False,False,True,,then stop,True
+RB2,Y2018,20,False,False,False,,then neither,False
+RB2,Y2018,40,False,False,False,,then neither,False
+RB2,Y2018,20,False,False,False,,then neither,False
+RB2,Y2018,40,False,False,False,,then neither,False
+RB2,Y2018,20,False,False,False,,then neither,True
+RB2,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,True,False,,,True
+RBK3,Y2018,40,False,True,False,,,True
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,True,then stop,then stop,False
+RBK3,Y2018,40,False,False,True,then stop,then stop,False
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,False,,then neither,False
+RBK3,Y2018,40,False,False,True,then stop,then stop,False
+RBK3,Y2018,20,False,False,False,,then neither,False
+RBK3,Y2018,40,False,False,True,then stop,then stop,False
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,False,then neither,then neither,False
+RBK3,Y2018,40,False,False,False,then neither,then neither,False
+RBK3,Y2018,20,False,False,True,then stop,then stop,False
+RBK3,Y2018,40,False,False,True,then stop,then stop,False
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,,False
+RBK3,Y2018,40,False,False,False,,then neither,False
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,False,,,False
+RBK3,Y2018,40,False,False,False,,then neither,False
+RBK3,Y2018,20,False,False,False,,,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,False,,then neither,False
+RBK3,Y2018,40,False,False,False,,then neither,False
+RBK3,Y2018,20,False,True,False,,,True
+RBK3,Y2018,40,False,True,False,,,True
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,True,then stop,then stop,False
+RBK3,Y2018,40,False,False,True,then stop,then stop,False
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,True,then stop,then stop,False
+RBK3,Y2018,40,False,False,True,then stop,then stop,False
+RBK3,Y2018,20,False,False,True,then stop,then stop,False
+RBK3,Y2018,40,False,False,True,then stop,then stop,False
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK3,Y2018,20,False,False,True,,then stop,True
+RBK3,Y2018,40,False,False,True,,then stop,True
+RBK3,Y2018,20,False,False,False,,then neither,False
+RBK3,Y2018,40,False,False,False,,then neither,False
+RBK3,Y2018,20,False,False,False,,then neither,False
+RBK3,Y2018,40,False,False,False,,then neither,False
+RBK3,Y2018,20,False,False,False,,then neither,True
+RBK3,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,True,False,,,True
+RBK2,Y2018,40,False,True,False,,,True
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,True,then stop,then stop,False
+RBK2,Y2018,40,False,False,True,then stop,then stop,False
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,False,,then neither,False
+RBK2,Y2018,40,False,False,True,then stop,then stop,False
+RBK2,Y2018,20,False,False,False,,then neither,False
+RBK2,Y2018,40,False,False,True,then stop,then stop,False
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,False,then neither,then neither,False
+RBK2,Y2018,40,False,False,False,then neither,then neither,False
+RBK2,Y2018,20,False,False,True,then stop,then stop,False
+RBK2,Y2018,40,False,False,True,then stop,then stop,False
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,False,,,False
+RBK2,Y2018,40,False,True,False,,then target,False
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,False,,,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,False,,,False
+RBK2,Y2018,40,False,False,False,,then neither,False
+RBK2,Y2018,20,False,False,False,,,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,False,,,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,True,False,,,True
+RBK2,Y2018,40,False,True,False,,,True
+RBK2,Y2018,20,False,False,False,,then neither,False
+RBK2,Y2018,40,False,False,False,,then neither,False
+RBK2,Y2018,20,False,True,False,,,True
+RBK2,Y2018,40,False,True,False,,,True
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,True,then stop,then stop,False
+RBK2,Y2018,40,False,False,True,then stop,then stop,False
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,True,then stop,then stop,False
+RBK2,Y2018,40,False,False,True,then stop,then stop,False
+RBK2,Y2018,20,False,False,True,then stop,then stop,False
+RBK2,Y2018,40,False,False,True,then stop,then stop,False
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True
+RBK2,Y2018,20,False,False,True,,then stop,True
+RBK2,Y2018,40,False,False,True,,then stop,True
+RBK2,Y2018,20,False,False,False,,then neither,False
+RBK2,Y2018,40,False,False,False,,then neither,False
+RBK2,Y2018,20,False,False,False,,then neither,False
+RBK2,Y2018,40,False,False,False,,then neither,False
+RBK2,Y2018,20,False,False,False,,then neither,True
+RBK2,Y2018,40,False,False,False,,then neither,True

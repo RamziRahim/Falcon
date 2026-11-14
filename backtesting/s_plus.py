@@ -1,0 +1,199 @@
+"""
+===============================================================================
+Falcon AI Swing Trading Platform — S+ (improved momentum breakout, 1:3)
+===============================================================================
+Script      : s_plus.py
+Package     : Backtesting
+
+docs/s_plus_preregistration.md. backtesting/swing_risk.run_swing_risk (the
+"#3" strategy: S entries + swing-low stop + 1% risk + 1:3, 20 sessions) with
+three switchable changes:
+
+  market_filter : new orders only when the Nifty 50 close > its 50-session SMA
+  time_stop     : 40 sessions instead of 20
+  atr_cap       : stop = the higher of the swing-low stop and fill - 3 x ATR(14)
+                  (the far-away swing lows no longer cause a skip)
+
+With all three off it reproduces run_swing_risk exactly.
+===============================================================================
+"""
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+
+from backtesting.mtm_portfolio import CostModel
+from backtesting.pit_strategies import Ledger, Panel, _adv, _delisting_exits, _result
+from backtesting.swing_risk import ATR_LEN, MAX_STOP_DIST, POS_CAP, RISK, SLOTS, pivot_lows, swing_stop
+
+ATR_CAP = 3.0
+
+
+def run_s_plus(panel: Panel, start, end, order_fn, nifty: pd.Series, r_multiple: float = 3.0,
+               market_filter: bool = False, time_stop: int = 20, atr_cap: bool = False,
+               cost: CostModel | None = None, fixed_stop: float | None = None, fixed_tgt: float | None = None,
+               range_max: float | None = None, vol_exit: float | None = None, cooldown: int = 0,
+               close_vol: float | None = None, levels: list | None = None, clean_close: bool = True,
+               risk: float = RISK, wick_exit: bool = False):
+    """closebuy orders (docs/close_entry_preregistration.md): on the session after the signal,
+    buy at the close if High > level, Close >= level, Close >= Open and the upper wick
+    < 50% of the day's range (and, with close_vol, Volume >= close_vol x the 50-session
+    average). Not checked against that session's stop or target.
+
+    cooldown (docs/volume_cooldown_preregistration.md): after a VOL_EXIT on day i, no new
+    order for that stock until session i + cooldown.
+
+    range_max / vol_exit (docs/volume_exit_preregistration.md): at a buy-stop fill on day i,
+    skip unless the 20 sessions before i stayed within range_max (highest high to lowest low
+    since that high); at the close of the fill day, sell if its volume < vol_exit x the
+    50-session average volume before it.
+
+    fixed_stop / fixed_tgt (docs/fixed_5_15_preregistration.md): stop = fill x (1 - fixed_stop),
+    target = fill x (1 + fixed_tgt), replacing the swing-low stop and R target."""
+    ledger = Ledger(cost or CostModel())
+    sessions = panel.sessions
+    piv = pivot_lows(panel)
+    pc = panel.close.shift(1)
+    tr = np.maximum(panel.high - panel.low, np.maximum((panel.high - pc).abs(), (panel.low - pc).abs()))
+    atr = tr.rolling(ATR_LEN, min_periods=ATR_LEN).mean()
+    nf = nifty.reindex(nifty.index.union(sessions)).ffill().reindex(sessions)
+    market_ok = (nf > nf.rolling(50, min_periods=50).mean()).to_numpy()
+    Hn, Ln = panel.high.to_numpy(float), panel.low.to_numpy(float)
+    Vn = panel.volume.to_numpy(float)
+    vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
+    col = {e: j for j, e in enumerate(panel.close.columns)}
+    blocked = {}
+    live, queued_exits = [], set()
+    skipped = {"no_swing_low": 0, "gap_below_stop": 0, "stop_too_wide": 0, "market_filter_days": 0,
+               "range_skip": 0, "vol_exit": 0, "candle_skip": 0}
+    for i, day in enumerate(sessions):
+        if day < start or day > end:
+            continue
+        _delisting_exits(panel, ledger, i, day)
+        opens, highs, lows, closes = panel.open.iloc[i], panel.high.iloc[i], panel.low.iloc[i], panel.close.iloc[i]
+        for e in list(queued_exits):
+            if e not in ledger.shares:
+                queued_exits.discard(e)
+            elif np.isfinite(opens.get(e, np.nan)):
+                ledger.sell(day, e, opens[e], _adv(panel, i, e), "TIME_STOP")
+                queued_exits.discard(e)
+        still_live = []
+        for od in sorted(live, key=lambda o: o["priority"]):
+            e = od["entity"]
+            if e in ledger.shares:
+                continue
+            o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
+            fill = None
+            if np.isfinite(o) and len(ledger.shares) < SLOTS:
+                if od["type"] == "closebuy":
+                    c_ = closes.get(e, np.nan)
+                    if np.isfinite(hi) and hi > od["ref"] and np.isfinite(c_) and np.isfinite(lo):
+                        rng = hi - lo
+                        clean = (c_ >= od["ref"] if clean_close else c_ > od["ref"]) and (not clean_close or (c_ >= o and rng > 0 and (hi - max(o, c_)) / rng < 0.5))
+                        if clean and close_vol is not None:
+                            j = col[e]
+                            clean = bool(np.isfinite(vavg[i, j]) and Vn[i, j] >= close_vol * vavg[i, j])
+                        if clean:
+                            fill = c_
+                        else:
+                            skipped["candle_skip"] += 1
+                elif od["type"] == "market":
+                    if o <= od["ref"] * (1 + od["max_gap"]):
+                        fill = o
+                elif np.isfinite(hi) and hi >= od["ref"] and o <= od["ref"] * (1 + od["max_gap"]):
+                    fill = max(od["ref"], o)
+            if fill is not None and range_max is not None:
+                j = col[e]
+                win = Hn[i - 20: i, j]
+                kk = int(np.argmax(np.nan_to_num(win, nan=-np.inf))) + i - 20 if i >= 20 else None
+                lo_r = np.nanmin(Ln[kk: i, j]) if kk is not None else np.nan
+                if not (np.isfinite(lo_r) and Hn[kk, j] / lo_r - 1 <= range_max):
+                    skipped["range_skip"] += 1
+                    fill = None
+                    continue
+            if fill is not None:
+                stop = od["stop"]
+                if fixed_stop is not None:
+                    stop = fill * (1 - fixed_stop)
+                if atr_cap and fixed_stop is None and np.isfinite(od["atr"]):
+                    stop = max(stop if stop is not None else -np.inf, fill - ATR_CAP * od["atr"])
+                if stop is None:
+                    skipped["no_swing_low"] += 1
+                    continue
+                if fill <= stop:
+                    skipped["gap_below_stop"] += 1
+                    continue
+                dist = (fill - stop) / fill
+                if dist > MAX_STOP_DIST:
+                    skipped["stop_too_wide"] += 1
+                    continue
+                equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
+                value = min(risk * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                if value > 0 and levels is not None:
+                    levels.append((e, day, fill, stop,
+                                   fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)))
+                if value > 0:
+                    ledger.buy(day, e, fill, value, _adv(panel, i, e),
+                               {"stop": stop, "entry_idx": i, "at_close": od["type"] == "closebuy", "trig": od["ref"],
+                                "target": fill * (1 + fixed_tgt) if fixed_tgt is not None else fill + r_multiple * (fill - stop)})
+                continue
+            if od["type"] in ("stop", "closebuy") and i < od["expires_idx"] and not (
+                    od.get("cancel_below") is not None and np.isfinite(lo) and lo <= od["cancel_below"]):
+                still_live.append(od)
+        live = still_live
+        for e in list(ledger.shares):
+            m = ledger.meta[e]
+            o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)
+            gap_ok = m["entry_idx"] < i and np.isfinite(o)
+            if m.get("at_close") and m["entry_idx"] == i:
+                continue
+            if np.isfinite(lo) and lo <= m["stop"]:
+                ledger.sell(day, e, o if gap_ok and o < m["stop"] else m["stop"], _adv(panel, i, e), "STOP")
+            elif np.isfinite(hi) and hi >= m["target"]:
+                ledger.sell(day, e, o if gap_ok and o > m["target"] else m["target"], _adv(panel, i, e), "TARGET")
+            elif wick_exit and m["entry_idx"] == i and np.isfinite(closes.get(e, np.nan)) \
+                    and closes[e] < m["trig"]:                      # docs/wick_exit_preregistration.md
+                ledger.sell(day, e, closes[e], _adv(panel, i, e), "WICK_EXIT")
+                skipped["wick_exit"] = skipped.get("wick_exit", 0) + 1
+                if cooldown:
+                    blocked[e] = i + cooldown
+            elif vol_exit is not None and m["entry_idx"] == i:
+                j = col[e]
+                if np.isfinite(vavg[i, j]) and np.isfinite(Vn[i, j]) and Vn[i, j] < vol_exit * vavg[i, j] \
+                        and np.isfinite(closes.get(e, np.nan)):
+                    ledger.sell(day, e, closes[e], _adv(panel, i, e), "VOL_EXIT")
+                    skipped["vol_exit"] += 1
+                    if cooldown:
+                        blocked[e] = i + cooldown
+        ledger.mark(day, closes)
+        if day >= end:
+            continue
+        for e in ledger.shares:
+            if i - ledger.meta[e]["entry_idx"] + 1 >= time_stop:
+                queued_exits.add(e)
+        if market_filter and not market_ok[i]:
+            skipped["market_filter_days"] += 1
+            continue
+        pending = {od["entity"] for od in live}
+        for od in order_fn(i, day, set(ledger.shares) | pending):
+            if blocked.get(od[1], -1) >= i:
+                continue
+            if od[0] == "closebuy":
+                _, e, trig, pr = od
+                rec = {"type": "closebuy", "entity": e, "ref": trig, "max_gap": np.inf, "priority": pr,
+                       "expires_idx": i + 1, "cancel_below": None}
+            elif od[0] == "market":
+                _, e, ref, gap, pr = od
+                rec = {"type": "market", "entity": e, "ref": ref, "max_gap": gap, "priority": pr}
+            else:
+                _, e, trig, gap, pr, valid, cancel = od
+                rec = {"type": "stop", "entity": e, "ref": trig, "max_gap": gap, "priority": pr,
+                       "expires_idx": i + valid, "cancel_below": cancel}
+            stop = swing_stop(panel, piv, atr, i, e, min(rec["ref"], closes.get(e, np.nan)))
+            if stop is None and not atr_cap and fixed_stop is None:
+                skipped["no_swing_low"] += 1
+                continue
+            rec["stop"] = stop
+            rec["atr"] = atr.iloc[i].get(e, np.nan)
+            live.append(rec)
+    return (*_result(ledger), skipped)

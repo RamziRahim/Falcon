@@ -1,0 +1,7187 @@
+version,period,days,cls
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,neither
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,neither
+F510,W1,40,retest
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,retest
+F510,W1,40,retest
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,neither
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,neither
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, then up"
+F510,W1,40,"stop, then up"
+F510,W1,20,direct
+F510,W1,40,direct
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, down"
+F510,W1,20,"stop, down"
+F510,W1,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,neither
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,neither
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,"stop, then up"
+F510,W2,40,"stop, then up"
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,neither
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,direct
+F510,W2,40,direct
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,retest
+F510,W2,40,retest
+F510,W2,20,"stop, down"
+F510,W2,40,"stop, down"
+F510,W2,20,retest
+F510,W2,40,retest
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,neither
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,neither
+F510,Y2018,40,neither
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,neither
+F510,Y2018,40,direct
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,neither
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, then up"
+F510,Y2018,40,"stop, then up"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,neither
+F510,Y2018,40,neither
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,retest
+F510,Y2018,40,retest
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,neither
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,neither
+F510,Y2018,40,retest
+F510,Y2018,20,direct
+F510,Y2018,40,direct
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
+F510,Y2018,20,"stop, down"
+F510,Y2018,40,"stop, down"
