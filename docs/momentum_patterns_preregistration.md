@@ -168,3 +168,5 @@ end (45-49 buys per window).
 - Expectation check: shallower drawdowns in some cells (held: half B W1, and slightly in
   W2); lower 2008-17 return (held); fails rule 3 in W2 (held, and also on half A W1);
   A10T returns much less with smaller drawdowns (held).
+
+**Correction, 2026-11-14:** in the reading above, "at a cost of 1.5-4.7 points of yearly return" should read "at a cost of 0.7-4.7 points" (half B 2019-26 lost 0.66 points).
