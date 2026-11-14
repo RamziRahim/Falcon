@@ -49,3 +49,44 @@ for a rebuild: VCP, then ascending triangle, then flat base (labels); bull flag 
 Any rebuilt detector should be re-audited blind (target: at least 80% judged real) before
 a backtest is pre-registered. Both halves of the stocks have already been used for
 pattern tests, so a later backtest would be in-sample.
+
+---
+
+## v3 engine from PATTERN_ENGINE_SPEC.md (2026-11-14)
+
+IA supplied a spec (generated with Gemini) for a rule-based engine: Minervini Stage 2
+gate, ATR-adaptive zigzag pivots, VCP / ascending triangle / bull flag / cup with handle /
+flat base geometry, a 2-11.5% stop window and a right-edge verdict.
+
+**Run as written on the round-1 charts** (`data/pattern_audit/v3_engine_on_round1.csv`):
+it called 5 charts real, and IA had judged all 5 real; it rejected all 14 that IA rejected,
+but it missed 21 of IA's 26 real setups (5 failed its strict 50 > 150 > 200-day stack,
+the rest its shape rules). Its VCP and triangle rules fired on about 1 in 1,500 random
+stock-days.
+
+**Defects found in the spec:**
+1. The reference VCP code crashed (subtracted Pivot objects); it had never been run.
+2. The triangle accepted 2 touches, though its own test describes 3.
+3. With VCP checked first, the spec's own triangle and cup examples come out as VCP: a
+   3-touch triangle with rising lows and a cup with a shallow handle both meet the VCP
+   rules. Its VCP and triangle examples (lows 82/91/96 vs 85/91/95 under 100) are the
+   same shape.
+4. A 20%-deep, 70-session cup fails its own Stage 2 stack (the 50-day average falls
+   below the 150-day), so deep cups can never qualify.
+5. The anti-V filter (35% of closes below the cup midpoint) passes a straight-line V,
+   which has half its closes below the midpoint; it only rejects a spike bottom.
+6. The verdict mixes "is it a pattern" with entry timing (distance to pivot, volume).
+
+**Built as `technical_analysis/pattern_system_v3/`** with changes 1-5 listed in
+`engine.py`: VCP fix, 3 triangle touches, order cup -> triangle -> VCP -> flag -> flat
+base, a straight-support-line rule to label triangles vs VCPs, and `detect_pattern()`
+without the timing verdict. `tests/test_pattern_engine_v3.py`: the spec's five tests
+plus a no-future-data test, 10 passing. Defects 4 and 5 are left as specified and noted.
+
+**Frequency** (60,000 random top-500 stock-days, 2008-2026; `data/pattern_audit2/scan_counts.json`):
+1.3% were "real pattern" (flat base 458, bull flag 155, cup 122, VCP 26, triangle 19),
+about 6-7 a day across 500 stocks.
+
+**Round 2 audit** (`tools/pattern_audit2_charts.py`, seed 20261114): 40 v3 "real pattern"
+picks (8 per pattern) and 10 Stage-2 stocks with no pattern, none from round-1 stocks.
+Answer key held back until IA finishes.

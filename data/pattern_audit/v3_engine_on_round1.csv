@@ -1,0 +1,51 @@
+chart,falcon,ia,ia_type,eng,eng_type,risk,dist,why
+c01,ascending_triangle,yes,flat_base,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c02,bull_flag,maybe,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c03,ascending_triangle,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining | 50-
+c04,vcp,no,,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c05,vcp,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining
+c06,flat_base,yes,flat_base,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c07,flat_base,maybe,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining | Pri
+c08,vcp,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining
+c09,bull_flag,yes,vcp,REAL_PATTERN,BULL_FLAG,5.24,3.35,+18.8% flagpole followed by 5-bar flag (-4.1% depth) | Flag retraced 26% of pole on contra
+c10,ascending_triangle,maybe,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c11,bull_flag,maybe,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c12,flat_base,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining | Pri
+c13,ascending_triangle,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining | 50-
+c14,(none),maybe,,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c15,(none),no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c16,bull_flag,yes,bull_flag,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c17,ascending_triangle,maybe,,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c18,bull_flag,yes,bull_flag,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c19,bull_flag,yes,vcp,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c20,vcp,yes,vcp,REAL_PATTERN,FLAT_BASE,9.13,4.3,18-session Flat Base with -7.6% total box depth | Held above rising 50-day SMA throughout 
+c21,(none),yes,vcp,REAL_PATTERN,FLAT_BASE,7.5,3.96,18-session Flat Base with -6.2% total box depth | Held above rising 50-day SMA throughout 
+c22,(none),no,,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c23,bull_flag,yes,bull_flag,REAL_PATTERN,BULL_FLAG,6.85,4.37,+29.1% flagpole followed by 5-bar flag (-5.0% depth) | Flag retraced 22% of pole on contra
+c24,bull_flag,yes,bull_flag,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c25,flat_base,yes,bull_flag,NOT_A_PATTERN,VCP,5.3,-6.48,2 contractions: -9.7% -> -4.4% | Higher lows & flat overhead supply confirmed | Elevated r
+c26,vcp,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 50-day SMA is sloping downward
+c27,vcp,yes,ascending_triangle,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining
+c28,bull_flag,yes,bull_flag,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c29,flat_base,yes,vcp,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c30,flat_base,yes,vcp,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c31,vcp,yes,vcp,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | Prior 52-week advance < 25%
+c32,(none),maybe,,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c33,flat_base,maybe,,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c34,vcp,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining | 50-
+c35,ascending_triangle,yes,vcp,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c36,(none),maybe,,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c37,flat_base,yes,bull_flag,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c38,ascending_triangle,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining
+c39,(none),maybe,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c40,vcp,no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200) | 200-day SMA is flat or declining | Pri
+c41,ascending_triangle,yes,flat_base,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c42,(none),no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c43,(none),no,,NOT_A_PATTERN,NONE,0.0,0.0,Failed MA stack (Close > SMA50 > SMA150 > SMA200)
+c44,vcp,yes,bull_flag,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c45,ascending_triangle,yes,flat_base,REAL_PATTERN,FLAT_BASE,9.46,3.69,18-session Flat Base with -8.4% total box depth | Held above rising 50-day SMA throughout 
+c46,(none),yes,vcp,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c47,flat_base,yes,ascending_triangle,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c48,bull_flag,yes,bull_flag,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c49,ascending_triangle,yes,flat_base,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
+c50,flat_base,yes,vcp,NOT_A_PATTERN,NONE,0.0,0.0,"Passed Stage 2 uptrend, but no valid contraction/base geometry found"
