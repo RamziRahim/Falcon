@@ -719,3 +719,93 @@ P3@ALL  Y2018 2018-01-01 -> 2018-12-31
     [FAIL] beats Nifty in >= 4 calendar years
     [PASS] max drawdown within Nifty's - 10 pp
     [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+P3U@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              373
+  win rate after costs         51.2%
+  avg win / avg loss           +14.09% / -8.31%
+  mean net per trade           +3.157%
+  exit mix                     {'TIME_STOP': 189, 'STOP': 137, 'TARGET': 46, 'DELISTED': 1}
+  stats                        {'orders': 3901, 'pivot_touches': 3718, 'touch_rejected': 2461, 'filled': 373, 'cancelled_stop': 641, 'stop_too_wide': 87, 'slots_full': 797, 'size_capped': 56, 'setups_per_year': 689.1, 'trades_per_year': 47.7, 'triggered_pct_of_orders': 9.6, 'touch_rejected_pct': 66.2, 'by_pattern': {'ASCENDING_TRIANGLE': {'n': 6, 'win_pct': 83.3, 'mean_net_pct': 6.48}, 'BULL_FLAG': {'n': 115, 'win_pct': 49.6, 'mean_net_pct': 4.05}, 'CUP_WITH_HANDLE': {'n': 79, 'win_pct': 48.1, 'mean_net_pct': 2.61}, 'FLAT_BASE': {'n': 163, 'win_pct': 52.8, 'mean_net_pct': 2.72}, 'VCP': {'n': 10, 'win_pct': 50.0, 'mean_net_pct': 2.41}}}
+  grew 10 lakh to              25.44 lakh
+  cagr_pct                     12.67
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -23.37
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.145
+  monthly_excess_t_nw3         0.29
+  years_beating_nifty          4/8
+  n_closed_positions           373
+  top3_profit_share            0.16
+  avg_gross_exposure_pct       56.3
+  total_return_pct             154.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+P3U@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              397
+  win rate after costs         48.6%
+  avg win / avg loss           +13.10% / -8.15%
+  mean net per trade           +2.183%
+  exit mix                     {'TIME_STOP': 214, 'STOP': 147, 'TARGET': 36}
+  stats                        {'orders': 4007, 'pivot_touches': 3883, 'touch_rejected': 2601, 'filled': 407, 'cancelled_stop': 594, 'stop_too_wide': 87, 'slots_full': 788, 'size_capped': 61, 'setups_per_year': 549.4, 'trades_per_year': 39.7, 'triggered_pct_of_orders': 10.2, 'touch_rejected_pct': 67.0, 'by_pattern': {'ASCENDING_TRIANGLE': {'n': 3, 'win_pct': 66.7, 'mean_net_pct': -0.63}, 'BULL_FLAG': {'n': 111, 'win_pct': 42.3, 'mean_net_pct': 1.17}, 'CUP_WITH_HANDLE': {'n': 105, 'win_pct': 43.8, 'mean_net_pct': 1.46}, 'FLAT_BASE': {'n': 156, 'win_pct': 54.5, 'mean_net_pct': 3.48}, 'VCP': {'n': 22, 'win_pct': 59.1, 'mean_net_pct': 1.91}}}
+  grew 10 lakh to              20.17 lakh
+  cagr_pct                     7.27
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -19.71
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.155
+  monthly_excess_t_nw3         -0.29
+  years_beating_nifty          3/10
+  n_closed_positions           407
+  top3_profit_share            0.17
+  avg_gross_exposure_pct       48.2
+  total_return_pct             101.7
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+P3U@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              47
+  win rate after costs         34.0%
+  avg win / avg loss           +8.31% / -8.77%
+  mean net per trade           -2.958%
+  exit mix                     {'STOP': 26, 'TIME_STOP': 21}
+  stats                        {'orders': 320, 'pivot_touches': 218, 'touch_rejected': 152, 'filled': 49, 'cancelled_stop': 62, 'stop_too_wide': 3, 'slots_full': 14, 'size_capped': 10, 'setups_per_year': 434.5, 'trades_per_year': 47.2, 'triggered_pct_of_orders': 15.3, 'touch_rejected_pct': 69.7, 'by_pattern': {'ASCENDING_TRIANGLE': {'n': 1, 'win_pct': 0.0, 'mean_net_pct': -5.75}, 'BULL_FLAG': {'n': 12, 'win_pct': 16.7, 'mean_net_pct': -5.37}, 'CUP_WITH_HANDLE': {'n': 14, 'win_pct': 21.4, 'mean_net_pct': -6.87}, 'FLAT_BASE': {'n': 17, 'win_pct': 58.8, 'mean_net_pct': 2.06}, 'VCP': {'n': 3, 'win_pct': 33.3, 'mean_net_pct': -2.51}}}
+  grew 10 lakh to              8.62 lakh
+  cagr_pct                     -13.85
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -17.27
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.094
+  monthly_excess_t_nw3         -1.29
+  years_beating_nifty          0/1
+  n_closed_positions           49
+  top3_profit_share            inf
+  avg_gross_exposure_pct       52.1
+  total_return_pct             -13.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
