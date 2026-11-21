@@ -1,6 +1,9 @@
 # Pre-registration: Wyckoff swing strategy (break of structure, demand zone, double MB)
 
-**Status: DRAFT (2026-11-21). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-21 11:33 IST.** Frozen on IA's instruction ("try for 0.5% 1% risk and 2% risk
+separately and lets run this strategy"), with the risk versions IA asked for and the rule 11
+clarification below both added before freezing, and before any test code was written or run.
+Never edit; add dated notes.
 
 Source: IA's doc "Wyckoff Swing Strategy for NSE Equities" (claude.ai artifact
 WcCRv6ywWJ3e9jr261LfTZ, 2026-11-14, rev 52), drawn from the Mentfx course. Where that doc
@@ -71,9 +74,13 @@ A per-stock state machine, run over the stock's full history, with a mode, up or
 
 ### 4. Confirmation (double MB)
 
-11. **MB1.** After the tap, L1 = the lowest low since the tap (tap bar included); H1 = the
-    latest confirmed swing high (rule 1) before L1's bar. H1's bar must be at least one bar
-    before L1's bar (a leg of at least two bars).
+11. **MB1.** After the tap, L1 = the lowest low since the tap (tap bar included). H1 = the
+    starting high of the down-leg that made L1, by the doc's own rule that a rally starts when
+    a bar trades above the previous bar's high: k = the last bar before L1's bar (and not
+    before the break) whose High is above the previous bar's High, and H1 = the highest High
+    from k to the bar before L1 (from the break, if there is no such k). The leg is therefore
+    at least two bars **(fixed here; the draft used the larger rule-1 swing high, which would
+    have demanded a new high before validation)**.
 12. **Validation:** a later bar's High exceeds H1. If a bar trades below L1 first, L1 and H1
     are updated per rule 11.
 13. **MB2.** After validation, a bar trades below the previous bar's low (pullback start);
@@ -113,6 +120,8 @@ A per-stock state machine, run over the stock's full history, with a mode, up or
 | SD (the doc's) | | 0.5% risk per trade; total open risk at most 4% of equity (defined below); at most 2 open positions per sector; ≤ 25% of equity per position |
 | SF (Falcon standard) | | 1% risk per trade; 10 slots; ≤ 25% of equity per position |
 
+- For WY_R1 and WY_R2 the open-risk cap scales with the risk per trade (8 × risk, as the
+  doc's 4% is 8 × 0.5%), so each allows the same number of full-risk positions.
 - Open risk for SD = Σ over open positions of shares × max(0, last close − current stop),
   as a share of equity, checked before each buy; a buy that would take it above 4% is
   skipped.
@@ -132,6 +141,8 @@ A per-stock state machine, run over the stock's full history, with a mode, up or
 | WY_SF | as WY, SF | reported |
 | WY_U500_SF | as WY, U500 and SF | reported |
 | WY_1 | as WY, `single` bias | reported |
+| WY_R1 | as WY, 1% risk per trade (open-risk cap 8%) | reported (IA, 2026-11-21) |
+| WY_R2 | as WY, 2% risk per trade (open-risk cap 16%) | reported (IA, 2026-11-21) |
 | BASE_BOS | as WY, but buy at the close of the bar that completes the bias (no zone, no confirmation); stop at protected low − 0.25 ATR | baseline |
 | BASE_TAP | as WY, but buy on the tap at min(zone top, Open) (no confirmation); stop at min(zone bottom, protected low) − 0.25 ATR | baseline |
 
