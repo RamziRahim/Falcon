@@ -47,7 +47,7 @@ def main():
     lines.append(f"symbol changes: {cp} ({len(changes) if changes else 0} records)")
     universe = monthly_universe(primary_rows(bhav, changes))
     prices, adjustments = build_adjusted_prices(bhav, actions, infer_for=set(universe["entity_id"]), symbol_changes=changes,
-                                                early_tolerance=0.10)   # pre-2006 only, see docs/history_2001_2006_preregistration.md
+                                                early_tolerance=0.10, early_close_tolerance=0.15)   # pre-2006 only, see docs/history_2001_2006_preregistration.md
     prices.to_parquet(f"{out}/prices_adjusted.parquet", index=False)
     adjustments.to_csv(f"{out}/adjustments.csv", index=False)
     universe.to_parquet(f"{out}/universe_monthly.parquet", index=False)

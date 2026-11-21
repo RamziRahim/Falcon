@@ -166,7 +166,8 @@ def parse_factor(subject: str) -> float | None:
     return factor if found and factor != 1.0 else None
 
 
-def infer_actions(rows: pd.DataFrame, recorded: pd.Series, early_tolerance: float | None = None) -> pd.DataFrame:
+def infer_actions(rows: pd.DataFrame, recorded: pd.Series, early_tolerance: float | None = None,
+                  early_close_tolerance: float | None = None) -> pd.DataFrame:
     """Unrecorded split/bonus candidates in one entity's raw rows: the
     opening gap Open_t / Close_(t-1) within INFER_TOLERANCE of a standard
     factor, with no recorded action within INFER_EXCLUSION_DAYS."""
@@ -182,6 +183,12 @@ def infer_actions(rows: pd.DataFrame, recorded: pd.Series, early_tolerance: floa
         tol = early_tolerance if early_tolerance is not None and d < EARLY_TOLERANCE_CUTOFF else INFER_TOLERANCE
         if abs(g / f - 1) > tol:
             continue
+        # pre-2006 only (optional): the close must confirm the ratio too, so a bad
+        # opening print on an ordinary day is not read as a split
+        if early_close_tolerance is not None and d < EARLY_TOLERANCE_CUTOFF:
+            cc = rows.at[i, "Close"] / prev_close.iloc[i]
+            if not (np.isfinite(cc) and abs(cc / f - 1) <= early_close_tolerance):
+                continue
         if len(rec) and (np.abs((rec - np.datetime64(d)) / np.timedelta64(1, "D")) <= INFER_EXCLUSION_DAYS).any():
             continue
         out.append({"exDate": d, "factor": f, "subject": f"INFERRED from opening gap {g:.4f}"})
@@ -241,7 +248,7 @@ def prepare_actions(corporate_actions: pd.DataFrame) -> pd.DataFrame:
 
 def build_adjusted_prices(bhav: pd.DataFrame, corporate_actions: pd.DataFrame | None = None,
                           infer_for: set | None = None, symbol_changes: list[tuple[str, str]] | None = None,
-                          early_tolerance: float | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
+                          early_tolerance: float | None = None, early_close_tolerance: float | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     """(adjusted daily prices for every entity, log of adjustments). An
     action is matched to an entity by the symbol (or ISIN) the entity
     traded under around the ex-date."""
@@ -260,7 +267,7 @@ def build_adjusted_prices(bhav: pd.DataFrame, corporate_actions: pd.DataFrame | 
         # unrecorded splits are inferred only for stocks that matter for
         # backtests (ever in a universe): on thin small/SME stocks a 1/3
         # overnight gap is too often real
-        inferred = (infer_actions(rows, recorded["exDate"], early_tolerance) if infer_for is not None and entity in infer_for
+        inferred = (infer_actions(rows, recorded["exDate"], early_tolerance, early_close_tolerance) if infer_for is not None and entity in infer_for
                     else empty.iloc[0:0])
         combined = pd.concat([recorded, inferred], ignore_index=True) if len(inferred) else recorded
         adjusted, events = adjust_entity(rows, combined)

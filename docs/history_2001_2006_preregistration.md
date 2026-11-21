@@ -88,3 +88,11 @@ Rebuilt data/pit_v2 (2000-01-03 → 2026-11-20): 10.1M bhavcopy rows, 5,179 enti
 - **Gate part 2 (big moves):** **fails as built.** The one-day moves over 40% inside the universe average 23.2 a year in 2001–05 (31, 11, 10, 27, 37), against 3.75 a year in 2008–15, which is 6.2×; the limit is 2×. 74 of the 116 sit at standard split/bonus ratios (e.g. ITC 21 Sep 2005, HDFC 12 Dec 2002). Inference missed them because the ex-day open was 2–10% away from the ratio, while the build accepts only 2%.
 - **Measured, not applied:** an opening-gap tolerance of 10% for ex-dates before 2006-01-01 (2% unchanged afterwards) leaves 5.4 a year in 2001–05 against 3.6 a year in 2008–15, which is 1.5× and would pass. What remains is mostly genuine 2001 small-cap jumps. This is a change of data method, so it awaits IA's decision.
 - Gate part 1 (A10 reproduces W1/W2 within 0.50pp) has not been run yet.
+
+### Rebuild with the 10% pre-2006 tolerance (2026-11-21, IA: "Apply the fix")
+
+- Adjustments went from 1,762 to 2,065. Inferred splits went from 177 to 480 (457 before 2006).
+- **Gate part 1 passes:** A10 on pit_v2 gives W1 26.36% (reference 26.36%) and W2 13.17% (reference 13.16%); tests/check_pit_v2_gate.py. Data from 2006 on is unchanged.
+- **Gate part 2 still fails.** The yearly counts for 2001–05 are 39, 1, 1, 6 and 2, an average of 9.8 a year, against 3.75 for 2008–15: 2.6×. 2002–05 alone is fine. In 2001 the count rose from 31 to 39.
+- **Cause:** 133 of the 457 early inferences are false. The open printed near a split ratio, but the close did not confirm it, so the day was an ordinary one. Each false inference creates an artificial jump in the adjusted series, typically +50% at the 2/3 ratio. 24 of the 49 big moves in 2001–05 are these artefacts. Removing them leaves 25, i.e. 5.0 a year, 1.3×.
+- **Proposed refinement (code ready, not yet built):** before 2006, the close-to-close ratio must also lie within 15% of the ratio (`early_close_tolerance=0.15`). Awaits IA's decision.
