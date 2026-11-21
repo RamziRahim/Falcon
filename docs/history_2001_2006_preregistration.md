@@ -79,3 +79,12 @@ in the early years.
 ## Output
 
 `data/history_2001_2006_result.txt`, runner `tests/run_history_2001_2006.py`.
+
+## Data check on the rebuilt data (2026-11-21, before freeze; no strategy run)
+
+Rebuilt data/pit_v2 (2000-01-03 → 2026-11-20): 10.1M bhavcopy rows, 5,179 entities, 1,762 adjustments (177 inferred), 317 monthly universes (2000-07 → 2026-11).
+
+- **Consistency with data/pit (2007 → 2026-10-30):** 99.92% of price rows are identical. The differences come from 9 entities: six split/bonus ex-dates on 4–16 Nov 2026 and one on 23 Oct 2026, now applied backwards, plus three small old fixes. 99.97% of monthly-universe rows match with the same rank.
+- **Gate part 2 (big moves):** **fails as built.** The one-day moves over 40% inside the universe average 23.2 a year in 2001–05 (31, 11, 10, 27, 37), against 3.75 a year in 2008–15, which is 6.2×; the limit is 2×. 74 of the 116 sit at standard split/bonus ratios (e.g. ITC 21 Sep 2005, HDFC 12 Dec 2002). Inference missed them because the ex-day open was 2–10% away from the ratio, while the build accepts only 2%.
+- **Measured, not applied:** an opening-gap tolerance of 10% for ex-dates before 2006-01-01 (2% unchanged afterwards) leaves 5.4 a year in 2001–05 against 3.6 a year in 2008–15, which is 1.5× and would pass. What remains is mostly genuine 2001 small-cap jumps. This is a change of data method, so it awaits IA's decision.
+- Gate part 1 (A10 reproduces W1/W2 within 0.50pp) has not been run yet.
