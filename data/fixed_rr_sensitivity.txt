@@ -1,0 +1,8 @@
+F -2%/+6% W1: trades 1932, win 28.3%, mean net -0.33%, CAGR -16.0% vs Nifty 10.0%, max DD -74.6%
+S -2%/+6% W1: trades 3261, win 31.6%, mean net +0.05%, CAGR 2.6% vs Nifty 10.0%, max DD -44.6%
+F -2%/+6% W2: trades 2510, win 27.9%, mean net -0.71%, CAGR -30.4% vs Nifty 5.5%, max DD -97.5%
+S -2%/+6% W2: trades 3729, win 30.5%, mean net -0.39%, CAGR -26.0% vs Nifty 5.5%, max DD -96.8%
+F -3%/+6% W1: trades 1524, win 34.9%, mean net -0.46%, CAGR -17.5% vs Nifty 10.0%, max DD -78.0%
+S -3%/+6% W1: trades 2726, win 36.6%, mean net -0.16%, CAGR -12.5% vs Nifty 10.0%, max DD -69.8%
+F -3%/+6% W2: trades 1989, win 35.6%, mean net -0.76%, CAGR -27.0% vs Nifty 5.5%, max DD -96.6%
+S -3%/+6% W2: trades 3111, win 35.9%, mean net -0.58%, CAGR -31.5% vs Nifty 5.5%, max DD -98.5%
