@@ -96,3 +96,12 @@ Rebuilt data/pit_v2 (2000-01-03 → 2026-11-20): 10.1M bhavcopy rows, 5,179 enti
 - **Gate part 2 still fails.** The yearly counts for 2001–05 are 39, 1, 1, 6 and 2, an average of 9.8 a year, against 3.75 for 2008–15: 2.6×. 2002–05 alone is fine. In 2001 the count rose from 31 to 39.
 - **Cause:** 133 of the 457 early inferences are false. The open printed near a split ratio, but the close did not confirm it, so the day was an ordinary one. Each false inference creates an artificial jump in the adjusted series, typically +50% at the 2/3 ratio. 24 of the 49 big moves in 2001–05 are these artefacts. Removing them leaves 25, i.e. 5.0 a year, 1.3×.
 - **Proposed refinement (code ready, not yet built):** before 2006, the close-to-close ratio must also lie within 15% of the ratio (`early_close_tolerance=0.15`). Awaits IA's decision.
+
+### Rebuild with close confirmation (2026-11-21, IA: "go") — data gate PASSES
+
+The build now uses `early_tolerance=0.10` and `early_close_tolerance=0.15` (before 2006 only). It has 1,932 adjustments, 347 of them inferred.
+
+- **Gate part 1, PASS:** A10 W1 26.36% (reference 26.36%), W2 13.17% (reference 13.16%).
+- **Gate part 2, PASS:** the yearly counts for 2001–05 are 17, 2, 1, 7 and 4, an average of 6.2 a year, against 3.75 for 2008–15: 1.65× (limit 2×). 14 of the 17 in 2001 are up-moves, mostly in stocks priced under ₹10.
+
+This is the data the 2001–2006 run will use, once the doc is frozen.
