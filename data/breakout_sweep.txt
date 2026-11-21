@@ -1,0 +1,48 @@
+
+B 52-week breakout  2019-26: 6848 breakouts
+  +8% with no dip >3% below       21.9%
+  dipped first, then +8%          21.7%
+  +8% first, then dipped           9.0%
+  dipped, never reached +8%       43.2%
+  neither                          4.2%
+  dip-then-+8% cases: median low -5.5% vs level (25-75%: -4.0% .. -8.2%), median 7 sessions from the dip to +8%
+
+S momentum breakout  2019-26: 3680 breakouts
+  +8% with no dip >3% below       20.4%
+  dipped first, then +8%          22.1%
+  +8% first, then dipped          10.6%
+  dipped, never reached +8%       44.0%
+  neither                          2.9%
+  dip-then-+8% cases: median low -5.8% vs level (25-75%: -4.2% .. -8.5%), median 8 sessions from the dip to +8%
+
+F Falcon setup  2019-26: 4988 breakouts
+  +8% with no dip >3% below       22.0%
+  dipped first, then +8%          15.4%
+  +8% first, then dipped           5.7%
+  dipped, never reached +8%       49.4%
+  neither                          7.6%
+  dip-then-+8% cases: median low -5.0% vs level (25-75%: -3.9% .. -6.9%), median 8 sessions from the dip to +8%
+
+B 52-week breakout  2008-17: 7316 breakouts
+  +8% with no dip >3% below       20.1%
+  dipped first, then +8%          23.1%
+  +8% first, then dipped           9.1%
+  dipped, never reached +8%       44.7%
+  neither                          3.0%
+  dip-then-+8% cases: median low -5.6% vs level (25-75%: -4.1% .. -8.1%), median 7 sessions from the dip to +8%
+
+S momentum breakout  2008-17: 3976 breakouts
+  +8% with no dip >3% below       19.8%
+  dipped first, then +8%          22.3%
+  +8% first, then dipped          10.3%
+  dipped, never reached +8%       45.1%
+  neither                          2.5%
+  dip-then-+8% cases: median low -5.9% vs level (25-75%: -4.1% .. -8.9%), median 8 sessions from the dip to +8%
+
+F Falcon setup  2008-17: 5120 breakouts
+  +8% with no dip >3% below       21.3%
+  dipped first, then +8%          15.8%
+  +8% first, then dipped           7.3%
+  dipped, never reached +8%       49.5%
+  neither                          6.1%
+  dip-then-+8% cases: median low -5.1% vs level (25-75%: -3.9% .. -7.3%), median 8 sessions from the dip to +8%

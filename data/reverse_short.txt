@@ -1,0 +1,48 @@
+
+=== Short on #3 (breakout + Nifty filter) trades | all years ===
+  stop = 1:3 long target (median +34%), 20d, 1820 trades | target -5% 59.4% (median day 5) | stopped  5.8% | neither 34.8% (avg -7.7%) | avg per trade after costs -1.91%
+  stop = 1:3 long target (median +34%), 40d, 1820 trades | target -5% 69.0% (median day 6) | stopped 11.5% | neither 19.5% (avg -10.2%) | avg per trade after costs -2.54%
+  stop = 1:2 long target (median +22%), 20d, 1820 trades | target -5% 59.1% (median day 5) | stopped 12.9% | neither 28.1% (avg -5.6%) | avg per trade after costs -1.67%
+  stop = 1:2 long target (median +22%), 40d, 1820 trades | target -5% 67.3% (median day 6) | stopped 19.9% | neither 12.8% (avg -7.3%) | avg per trade after costs -2.07%
+
+=== Short on #3 (breakout + Nifty filter) trades | 2019-26 ===
+  stop = 1:3 long target (median +34%), 20d, 820 trades | target -5% 58.3% (median day 5) | stopped  7.0% | neither 34.8% (avg -8.0%) | avg per trade after costs -2.45%
+  stop = 1:3 long target (median +34%), 40d, 820 trades | target -5% 69.3% (median day 6) | stopped 12.1% | neither 18.7% (avg -10.1%) | avg per trade after costs -2.62%
+  stop = 1:2 long target (median +22%), 20d, 820 trades | target -5% 58.2% (median day 5) | stopped 14.4% | neither 27.4% (avg -5.9%) | avg per trade after costs -2.10%
+  stop = 1:2 long target (median +22%), 40d, 820 trades | target -5% 67.3% (median day 6) | stopped 20.5% | neither 12.2% (avg -7.2%) | avg per trade after costs -2.19%
+
+=== Short on #3 (breakout + Nifty filter) trades | 2008-17 ===
+  stop = 1:3 long target (median +34%), 20d, 905 trades | target -5% 60.7% (median day 5) | stopped  5.2% | neither 34.1% (avg -7.8%) | avg per trade after costs -1.64%
+  stop = 1:3 long target (median +34%), 40d, 905 trades | target -5% 68.6% (median day 6) | stopped 11.9% | neither 19.4% (avg -10.7%) | avg per trade after costs -2.71%
+  stop = 1:2 long target (median +23%), 20d, 905 trades | target -5% 60.2% (median day 5) | stopped 11.9% | neither 27.8% (avg -5.7%) | avg per trade after costs -1.43%
+  stop = 1:2 long target (median +23%), 40d, 905 trades | target -5% 67.4% (median day 6) | stopped 19.9% | neither 12.7% (avg -7.6%) | avg per trade after costs -2.10%
+
+=== Short on #3 (breakout + Nifty filter) trades | 2018 ===
+  stop = 1:3 long target (median +29%), 20d, 95 trades | target -5% 56.8% (median day 7) | stopped  2.1% | neither 41.1% (avg -3.6%) | avg per trade after costs +0.19%
+  stop = 1:3 long target (median +29%), 40d, 95 trades | target -5% 70.5% (median day 10) | stopped  3.2% | neither 26.3% (avg -8.0%) | avg per trade after costs -0.13%
+  stop = 1:2 long target (median +19%), 20d, 95 trades | target -5% 55.8% (median day 7) | stopped  8.4% | neither 35.8% (avg -2.8%) | avg per trade after costs -0.32%
+  stop = 1:2 long target (median +19%), 40d, 95 trades | target -5% 66.3% (median day 8) | stopped 14.7% | neither 18.9% (avg -6.3%) | avg per trade after costs -0.76%
+
+=== Short on Falcon Momentum trades | all years ===
+  stop = 1:3 long target (median +33%), 20d, 1407 trades | target -5% 65.3% (median day 4) | stopped 10.4% | neither 24.3% (avg -9.3%) | avg per trade after costs -1.20%
+  stop = 1:3 long target (median +33%), 40d, 1407 trades | target -5% 72.7% (median day 5) | stopped 15.4% | neither 11.9% (avg -11.7%) | avg per trade after costs -1.50%
+  stop = 1:2 long target (median +23%), 20d, 1536 trades | target -5% 64.9% (median day 4) | stopped 17.6% | neither 17.5% (avg -6.7%) | avg per trade after costs -0.97%
+  stop = 1:2 long target (median +23%), 40d, 1536 trades | target -5% 70.7% (median day 5) | stopped 22.3% | neither  7.0% (avg -7.6%) | avg per trade after costs -1.13%
+
+=== Short on Falcon Momentum trades | 2019-26 ===
+  stop = 1:3 long target (median +32%), 20d, 610 trades | target -5% 63.4% (median day 4) | stopped 10.8% | neither 25.7% (avg -9.1%) | avg per trade after costs -1.40%
+  stop = 1:3 long target (median +32%), 40d, 610 trades | target -5% 72.0% (median day 5) | stopped 17.2% | neither 10.8% (avg -10.8%) | avg per trade after costs -1.74%
+  stop = 1:2 long target (median +22%), 20d, 671 trades | target -5% 63.9% (median day 4) | stopped 18.6% | neither 17.4% (avg -6.6%) | avg per trade after costs -1.21%
+  stop = 1:2 long target (median +22%), 40d, 671 trades | target -5% 70.3% (median day 4) | stopped 23.2% | neither  6.4% (avg -8.1%) | avg per trade after costs -1.30%
+
+=== Short on Falcon Momentum trades | 2008-17 ===
+  stop = 1:3 long target (median +34%), 20d, 701 trades | target -5% 66.0% (median day 4) | stopped 10.6% | neither 23.4% (avg -10.0%) | avg per trade after costs -1.32%
+  stop = 1:3 long target (median +34%), 40d, 701 trades | target -5% 72.3% (median day 5) | stopped 15.0% | neither 12.7% (avg -13.3%) | avg per trade after costs -1.74%
+  stop = 1:2 long target (median +23%), 20d, 769 trades | target -5% 65.3% (median day 4) | stopped 17.7% | neither 17.0% (avg -7.2%) | avg per trade after costs -1.00%
+  stop = 1:2 long target (median +23%), 40d, 769 trades | target -5% 70.4% (median day 5) | stopped 22.6% | neither  7.0% (avg -7.9%) | avg per trade after costs -1.31%
+
+=== Short on Falcon Momentum trades | 2018 ===
+  stop = 1:3 long target (median +27%), 20d, 96 trades | target -5% 71.9% (median day 5) | stopped  6.2% | neither 21.9% (avg -5.9%) | avg per trade after costs +0.91%
+  stop = 1:3 long target (median +27%), 40d, 96 trades | target -5% 80.2% (median day 6) | stopped  7.3% | neither 12.5% (avg -5.5%) | avg per trade after costs +1.82%
+  stop = 1:2 long target (median +19%), 20d, 96 trades | target -5% 68.8% (median day 5) | stopped  9.4% | neither 21.9% (avg -4.6%) | avg per trade after costs +0.96%
+  stop = 1:2 long target (median +19%), 40d, 96 trades | target -5% 76.0% (median day 5) | stopped 12.5% | neither 11.5% (avg -4.5%) | avg per trade after costs +1.50%

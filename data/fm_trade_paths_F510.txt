@@ -1,0 +1,20 @@
+
+=== FM | all 2008-2026 ===
+  version                      days trades         direct         retest     stop, down  stop, then up        neither
+  -5% stop / +10% target         20   3593          15.0%          18.4%          43.6%          16.9%           6.1%
+  -5% stop / +10% target         40   3593          15.2%          20.7%          34.5%          28.5%           1.1%
+
+=== FM | 2019-26 ===
+  version                      days trades         direct         retest     stop, down  stop, then up        neither
+  -5% stop / +10% target         20   1530          15.0%          18.0%          44.2%          16.4%           6.3%
+  -5% stop / +10% target         40   1530          15.2%          20.2%          36.3%          26.9%           1.4%
+
+=== FM | 2008-17 ===
+  version                      days trades         direct         retest     stop, down  stop, then up        neither
+  -5% stop / +10% target         20   1849          15.3%          19.5%          41.5%          18.2%           5.5%
+  -5% stop / +10% target         40   1849          15.4%          21.8%          31.4%          30.4%           0.9%
+
+=== FM | 2018 ===
+  version                      days trades         direct         retest     stop, down  stop, then up        neither
+  -5% stop / +10% target         20    214          12.6%          10.7%          57.5%           9.8%           9.3%
+  -5% stop / +10% target         40    214          13.1%          15.4%          47.7%          22.4%           1.4%

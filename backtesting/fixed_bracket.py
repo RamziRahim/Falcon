@@ -181,3 +181,131 @@ def entries_f(panel: Panel, setups: pd.DataFrame):
         return [("stop", s.entity_id, s.pivot, be.F_MAX_GAP, s.priority + s.distance, be.F_ORDER_DAYS, s.stop)
                 for s in g.itertuples() if s.entity_id not in busy]
     return fn
+
+
+def entries_s_quality(panel: Panel, nifty_close: pd.Series, base_min: int = 5, base_width: float = 0.10,
+                      vol_mult: float = 1.5, need_close: bool = True):
+    """need_close=False with base_min=1 (docs/range_volume_preregistration.md): the
+    breakout day only needs its intraday high above L, not its close."""
+    """#3's stock filters (as entries_s) with a quality breakout on day i
+    (docs/s_quality_preregistration.md): close_i above the prior 20-day high L
+    (max High of i-20..i-1); that high was set >= base_min sessions before i;
+    from that day to i-1 the range (max High / min Low - 1) is <= base_width;
+    volume_i >= vol_mult x the prior 50-day average. Buy at the next open
+    (market order, skipped if > 3% above close_i)."""
+    import backtesting.breakout_entries as be
+    c, h = panel.close, panel.high
+    H, L, V = panel.high.to_numpy(float), panel.low.to_numpy(float), panel.volume.to_numpy(float)
+    C = c.to_numpy(float)
+    cols = {e: j for j, e in enumerate(c.columns)}
+    sma50 = c.rolling(50, min_periods=50).mean()
+    sma200 = c.rolling(200, min_periods=200).mean()
+    mom = c / c.shift(be.S_MOM_LEN) - 1
+    vavg = panel.volume.rolling(50, min_periods=50).mean().shift(1).to_numpy(float)
+    groups = be.peer_strength(panel, mom)
+    gdates = np.array(sorted(groups))
+    nifty = nifty_close.reindex(nifty_close.index.union(c.index)).ffill()
+    market_ok = (nifty > nifty.rolling(200, min_periods=200).mean()).reindex(c.index).fillna(False)
+
+    def fn(i, day, busy):
+        if i < 21:
+            return []
+        k = gdates.searchsorted(np.datetime64(day), side="right") - 1
+        grp = groups[pd.Timestamp(gdates[k])] if k >= 0 else pd.Series(dtype=float)
+        members = [e for e in panel.universe_on(day) if e in c.columns]
+        rank = mom.iloc[i][members].dropna().rank(pct=True)
+        need = be.S_GROUP_STRONG if bool(market_ok.iloc[i]) else be.S_GROUP_TOP
+        out = []
+        for e in rank[rank >= be.S_MOM_TOP].index:
+            if e in busy or grp.get(e, 0.0) < need:
+                continue
+            j = cols[e]
+            x, a, b = C[i, j], sma50.iloc[i].get(e, np.nan), sma200.iloc[i].get(e, np.nan)
+            if not (all(np.isfinite(v) for v in (x, a, b)) and x > a and x > b):
+                continue
+            win = H[i - 20: i, j]
+            if not np.isfinite(win).all():
+                continue
+            kk = int(np.argmax(win)) + i - 20                      # day of the prior 20-day high
+            lvl = H[kk, j]
+            crossed = x > lvl if need_close else H[i, j] > lvl
+            if not (crossed and i - kk >= base_min):
+                continue
+            lo = np.nanmin(L[kk: i, j])
+            if not (np.isfinite(lo) and lvl / lo - 1 <= base_width):
+                continue
+            if not (np.isfinite(vavg[i, j]) and V[i, j] >= vol_mult * vavg[i, j]):
+                continue
+            out.append(("market", e, x, 0.03, -mom.iloc[i][e]))
+        return out
+    return fn
+
+
+def pivot_highs(panel: Panel, w: int = 3) -> dict:
+    """entity -> sorted session indices of fractal swing highs (no bar within w on
+    either side has a strictly higher High); confirmed w sessions later."""
+    high = panel.high.to_numpy(dtype=float)
+    n = len(high)
+    beaten = np.zeros_like(high, dtype=bool)
+    for r in range(1, w + 1):
+        left = np.full_like(high, np.nan)
+        right = np.full_like(high, np.nan)
+        left[r:] = high[:-r]
+        right[:-r] = high[r:]
+        with np.errstate(invalid="ignore"):
+            beaten |= (left > high) | (right > high)
+    valid = np.isfinite(high)
+    valid[:w] = False
+    valid[n - w:] = False
+    ok = valid & ~beaten
+    return {e: np.flatnonzero(ok[:, j]) for j, e in enumerate(panel.close.columns)}
+
+
+def find_range(H, L, i, j, min_len=10, width=0.12, max_len=60):
+    """The sideways range ending at session i (docs/range_breakout_preregistration.md):
+    grow back from i while highest high / lowest low - 1 <= width, up to max_len.
+    Returns (range_high, range_low, start) or None if shorter than min_len."""
+    lo_i = max(0, i - max_len + 1)
+    hh = np.maximum.accumulate(H[i: lo_i - 1 if lo_i > 0 else None: -1, j])
+    ll = np.minimum.accumulate(L[i: lo_i - 1 if lo_i > 0 else None: -1, j])
+    with np.errstate(invalid="ignore", divide="ignore"):
+        ok = np.isfinite(hh) & np.isfinite(ll) & (hh / ll - 1 <= width)
+    length = len(ok) if ok.all() else int(np.argmin(ok))
+    if length < min_len:
+        return None
+    return hh[length - 1], ll[length - 1], i - length + 1
+
+
+def entries_s_range(panel: Panel, nifty_close: pd.Series, min_len: int = 10, width: float = 0.12,
+                    max_len: int = 60, w: int = 3):
+    """#3 candidates (entries_s) whose last min_len+ sessions form a range of <= width,
+    after an earlier swing high was broken: the most recent pivot high confirmed before
+    the range start has a later close above it (up to the signal day). Emits a
+    "closebuy" order at the range high for the next session."""
+    base = entries_s(panel, nifty_close)
+    H, L, C = (x.to_numpy(float) for x in (panel.high, panel.low, panel.close))
+    cols = {e: j for j, e in enumerate(panel.close.columns)}
+    ph = pivot_highs(panel, w)
+    ranges = {}
+
+    def fn(i, day, busy):
+        out = []
+        for od in base(i, day, busy):
+            e = od[1]
+            j = cols[e]
+            r = find_range(H, L, i, j, min_len, width, max_len)
+            if r is None:
+                continue
+            rh, rl, s = r
+            pv = ph.get(e)
+            k = np.searchsorted(pv, s - w, side="left") - 1          # confirmed before the range start
+            if k < 0:
+                continue
+            p = pv[k]
+            if not (np.nanmax(C[p + 1: i + 1, j]) > H[p, j]):
+                continue
+            ranges[(e, i)] = (rh, rl, s, p)
+            out.append(("closebuy", e, rh, od[4]))
+        return out
+    fn.ranges = ranges
+    return fn

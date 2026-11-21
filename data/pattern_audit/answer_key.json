@@ -1,0 +1,502 @@
+[
+ {
+  "chart": "c01",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE759A01021",
+  "t": 3560,
+  "pivot": 2072.4,
+  "stop": 1832.2700408935548,
+  "date": "2021-06-09"
+ },
+ {
+  "chart": "c02",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE0BV301023",
+  "t": 4095,
+  "pivot": 1541.95,
+  "stop": 1424.193603515625,
+  "date": "2023-08-03"
+ },
+ {
+  "chart": "c03",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE513A01014",
+  "t": 4490,
+  "pivot": 3345.0,
+  "stop": 2944.1402893066406,
+  "date": "2025-03-12"
+ },
+ {
+  "chart": "c04",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE376G01013",
+  "t": 1719,
+  "pivot": 65.83333333333333,
+  "stop": 63.61651848355929,
+  "date": "2013-12-16"
+ },
+ {
+  "chart": "c05",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE002A01018",
+  "t": 1199,
+  "pivot": 205.1762056406918,
+  "stop": 192.5895743264977,
+  "date": "2011-11-09"
+ },
+ {
+  "chart": "c06",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE100A01010",
+  "t": 3620,
+  "pivot": 9552.9,
+  "stop": 8962.849127197265,
+  "date": "2021-09-03"
+ },
+ {
+  "chart": "c07",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE114A01011",
+  "t": 1709,
+  "pivot": 68.75,
+  "stop": 63.31084494590759,
+  "date": "2013-12-02"
+ },
+ {
+  "chart": "c08",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE596I01012",
+  "t": 4550,
+  "pivot": 825.4000000000001,
+  "stop": 778.2275316238404,
+  "date": "2025-06-12"
+ },
+ {
+  "chart": "c09",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:IN9155A01012",
+  "t": 4230,
+  "pivot": 629.9,
+  "stop": 586.6888314723968,
+  "date": "2024-02-21"
+ },
+ {
+  "chart": "c10",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE237A01028",
+  "t": 2995,
+  "pivot": 263.0,
+  "stop": 248.72700023651123,
+  "date": "2019-02-19"
+ },
+ {
+  "chart": "c11",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE548C01032",
+  "t": 4290,
+  "pivot": 546.0,
+  "stop": 503.7065653324127,
+  "date": "2024-05-24"
+ },
+ {
+  "chart": "c12",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE429C01035",
+  "t": 1494,
+  "pivot": 12.621133525456294,
+  "stop": 11.387065151985109,
+  "date": "2013-01-17"
+ },
+ {
+  "chart": "c13",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE007B01023",
+  "t": 494,
+  "pivot": 26.5,
+  "stop": 23.284568905830383,
+  "date": "2008-12-31"
+ },
+ {
+  "chart": "c14",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE716A01013",
+  "t": 1418,
+  "pivot": 273.45,
+  "stop": 244.4,
+  "date": "2012-09-26"
+ },
+ {
+  "chart": "c15",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE410P01011",
+  "t": 3792,
+  "pivot": 743.45,
+  "stop": 650.3,
+  "date": "2022-05-17"
+ },
+ {
+  "chart": "c16",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE001B01026",
+  "t": 919,
+  "pivot": 38.65,
+  "stop": 32.425986194610594,
+  "date": "2010-09-24"
+ },
+ {
+  "chart": "c17",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE775B01025",
+  "t": 2504,
+  "pivot": 151.9,
+  "stop": 139.61608934402466,
+  "date": "2017-02-27"
+ },
+ {
+  "chart": "c18",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE361B01024",
+  "t": 1709,
+  "pivot": 591.725,
+  "stop": 557.0322926044464,
+  "date": "2013-12-02"
+ },
+ {
+  "chart": "c19",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE373A01013",
+  "t": 2674,
+  "pivot": 1779.0,
+  "stop": 1628.619037246704,
+  "date": "2017-11-03"
+ },
+ {
+  "chart": "c20",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE077A01010",
+  "t": 859,
+  "pivot": 96.4,
+  "stop": 90.52360820770264,
+  "date": "2010-07-01"
+ },
+ {
+  "chart": "c21",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE200M01013",
+  "t": 3650,
+  "pivot": 125.6,
+  "stop": 118.80666666666666,
+  "date": "2021-10-19"
+ },
+ {
+  "chart": "c22",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE849A01012",
+  "t": 3724,
+  "pivot": 808.0,
+  "stop": 667.5666666666666,
+  "date": "2022-02-03"
+ },
+ {
+  "chart": "c23",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE953O01021",
+  "t": 4795,
+  "pivot": 2995.0,
+  "stop": 2767.7895957946776,
+  "date": "2026-06-11"
+ },
+ {
+  "chart": "c24",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE870H01013",
+  "t": 2724,
+  "pivot": 62.85,
+  "stop": 57.78796023130417,
+  "date": "2018-01-15"
+ },
+ {
+  "chart": "c25",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE239A01016",
+  "t": 4040,
+  "pivot": 1115.0,
+  "stop": 1074.5533241462708,
+  "date": "2023-05-17"
+ },
+ {
+  "chart": "c26",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE591G01017",
+  "t": 2289,
+  "pivot": 104.0,
+  "stop": 96.20881818294527,
+  "date": "2016-04-13"
+ },
+ {
+  "chart": "c27",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE510A01028",
+  "t": 1134,
+  "pivot": 147.7,
+  "stop": 141.2216846227646,
+  "date": "2011-08-02"
+ },
+ {
+  "chart": "c28",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE058A01010",
+  "t": 2129,
+  "pivot": 2680.0166788283123,
+  "stop": 2473.1039877672533,
+  "date": "2015-08-18"
+ },
+ {
+  "chart": "c29",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE059A01026",
+  "t": 984,
+  "pivot": 379.8,
+  "stop": 345.3473155975342,
+  "date": "2010-12-28"
+ },
+ {
+  "chart": "c30",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE196A01026",
+  "t": 2529,
+  "pivot": 300.65,
+  "stop": 282.0266231536865,
+  "date": "2017-04-05"
+ },
+ {
+  "chart": "c31",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE437A01024",
+  "t": 4780,
+  "pivot": 8144.0,
+  "stop": 7941.432373046875,
+  "date": "2026-05-20"
+ },
+ {
+  "chart": "c32",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE401H01017",
+  "t": 3919,
+  "pivot": 520.75,
+  "stop": 460.0,
+  "date": "2022-11-18"
+ },
+ {
+  "chart": "c33",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE012A01025",
+  "t": 2359,
+  "pivot": 1718.0,
+  "stop": 1619.5292663574219,
+  "date": "2016-07-26"
+ },
+ {
+  "chart": "c34",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE010V01017",
+  "t": 3200,
+  "pivot": 1529.9,
+  "stop": 1477.5701900482177,
+  "date": "2019-12-26"
+ },
+ {
+  "chart": "c35",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE663F01024",
+  "t": 2614,
+  "pivot": 213.94000000000003,
+  "stop": 199.41436727523805,
+  "date": "2017-08-07"
+ },
+ {
+  "chart": "c36",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE067A01029",
+  "t": 809,
+  "pivot": 95.55698647778492,
+  "stop": 87.70766258853831,
+  "date": "2010-04-22"
+ },
+ {
+  "chart": "c37",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE176B01026",
+  "t": 1494,
+  "pivot": 139.94000000000003,
+  "stop": 130.0450891876221,
+  "date": "2013-01-17"
+ },
+ {
+  "chart": "c38",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE129A01019",
+  "t": 4535,
+  "pivot": 197.0,
+  "stop": 180.30999517440796,
+  "date": "2025-05-22"
+ },
+ {
+  "chart": "c39",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE206F01022",
+  "t": 4701,
+  "pivot": 683.0,
+  "stop": 601.7,
+  "date": "2026-01-20"
+ },
+ {
+  "chart": "c40",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE242A01010",
+  "t": 1334,
+  "pivot": 45.0,
+  "stop": 42.9398145655791,
+  "date": "2012-05-28"
+ },
+ {
+  "chart": "c41",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE573A01034",
+  "t": 4670,
+  "pivot": 476.0,
+  "stop": 436.6041452884674,
+  "date": "2025-12-04"
+ },
+ {
+  "chart": "c42",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE192A01025",
+  "t": 1835,
+  "pivot": 176.8,
+  "stop": 145.35,
+  "date": "2014-06-06"
+ },
+ {
+  "chart": "c43",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE205B01023",
+  "t": 4446,
+  "pivot": 672.55,
+  "stop": 594.55,
+  "date": "2025-01-08"
+ },
+ {
+  "chart": "c44",
+  "kind": "detected",
+  "pattern": "vcp",
+  "e": "I:INE438A01022",
+  "t": 4070,
+  "pivot": 414.55,
+  "stop": 402.6615557193756,
+  "date": "2023-06-28"
+ },
+ {
+  "chart": "c45",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE001A01036",
+  "t": 884,
+  "pivot": 629.0,
+  "stop": 590.1551189422607,
+  "date": "2010-08-05"
+ },
+ {
+  "chart": "c46",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE683A01023",
+  "t": 4598,
+  "pivot": 30.4,
+  "stop": 28.35,
+  "date": "2025-08-20"
+ },
+ {
+  "chart": "c47",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE289B01019",
+  "t": 2404,
+  "pivot": 337.95,
+  "stop": 303.54059143066405,
+  "date": "2016-09-30"
+ },
+ {
+  "chart": "c48",
+  "kind": "detected",
+  "pattern": "bull_flag",
+  "e": "I:INE540H01012",
+  "t": 4265,
+  "pivot": 10377.6,
+  "stop": 9506.71588897705,
+  "date": "2024-04-16"
+ },
+ {
+  "chart": "c49",
+  "kind": "detected",
+  "pattern": "ascending_triangle",
+  "e": "I:INE195A01028",
+  "t": 1519,
+  "pivot": 324.8,
+  "stop": 301.921367931366,
+  "date": "2013-02-21"
+ },
+ {
+  "chart": "c50",
+  "kind": "detected",
+  "pattern": "flat_base",
+  "e": "I:INE134E01011",
+  "t": 744,
+  "pivot": 112.0,
+  "stop": 101.81844329833984,
+  "date": "2010-01-13"
+ }
+]

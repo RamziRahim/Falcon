@@ -17,6 +17,7 @@ breakout bar and its own pivot level.
 ===============================================================================
 """
 from __future__ import annotations
+import os
 import pandas as pd
 from technical_analysis.pattern_system.breakout_recency import compute_breakout_recency
 
@@ -68,18 +69,21 @@ class AscendingTriangleDetector:
         volume_baseline = df["Volume_SMA_20"].iloc[-1] if "Volume_SMA_20" in df.columns \
             else df["Volume"].rolling(window=20).mean().iloc[-1]
 
-        price_crossed_pivot = latest_close > resistance_level
+        # v2 pivot (docs/falcon_v2_preregistration.md, FALCON_PIVOT_V2=1): the higher of the
+        # two swing highs. Default: their average (unchanged).
+        pivot_level = max(p.price for p in recent_highs) if os.environ.get("FALCON_PIVOT_V2") == "1" else resistance_level
+        price_crossed_pivot = latest_close > pivot_level
         breakout_volume_confirmed = (
             not pd.isna(volume_baseline) and volume_baseline > 0
             and latest_volume >= volume_baseline * 1.5
         )
 
-        recency = compute_breakout_recency(df, resistance_level, volume_baseline)
+        recency = compute_breakout_recency(df, pivot_level, volume_baseline)
 
         return {
             "is_ascending_triangle_setup": is_ascending_triangle_setup,
             "resistance_level": round(resistance_level, 2),
-            "pivot_level": resistance_level,
+            "pivot_level": pivot_level,
             # Two-low model (2.2 fix, I-6): recent_lows is sorted ascending
             # by index/time, and lows_are_rising already confirmed each is
             # higher than its predecessor. [-1] (most recent, highest) is

@@ -1,0 +1,502 @@
+[
+ {
+  "chart": "c01",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE326A01037",
+  "t": 4828,
+  "pivot": 2529.5,
+  "stop": 2312.69,
+  "date": "2026-07-29"
+ },
+ {
+  "chart": "c02",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE491A01021",
+  "t": 2006,
+  "pivot": 62.57,
+  "stop": 56.91,
+  "date": "2015-02-19"
+ },
+ {
+  "chart": "c03",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE501A01019",
+  "t": 1764,
+  "pivot": 113.0,
+  "stop": 102.86,
+  "date": "2014-02-18"
+ },
+ {
+  "chart": "c04",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE686F01025",
+  "t": 2963,
+  "pivot": 1411.9,
+  "stop": 1327.02,
+  "date": "2019-01-04"
+ },
+ {
+  "chart": "c05",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE115Q01022",
+  "t": 4804,
+  "pivot": 1764.9,
+  "stop": 1592.62,
+  "date": "2026-06-24"
+ },
+ {
+  "chart": "c06",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE483A01010",
+  "t": 4210,
+  "pivot": 57.5,
+  "stop": 49.25,
+  "date": "2024-01-23"
+ },
+ {
+  "chart": "c07",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE878A01011",
+  "t": 746,
+  "pivot": 598.7,
+  "stop": 559.82,
+  "date": "2010-01-15"
+ },
+ {
+  "chart": "c08",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE256A01028",
+  "t": 1411,
+  "pivot": 174.9,
+  "stop": 156.77,
+  "date": "2012-09-14"
+ },
+ {
+  "chart": "c09",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE667A01018",
+  "t": 737,
+  "pivot": 98.9,
+  "stop": 88.95,
+  "date": "2010-01-04"
+ },
+ {
+  "chart": "c10",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE467B01029",
+  "t": 3581,
+  "pivot": 3399.65,
+  "stop": 3203.88,
+  "date": "2021-07-08"
+ },
+ {
+  "chart": "c11",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE654A01024",
+  "t": 2420,
+  "pivot": 564.0,
+  "stop": 516.84,
+  "date": "2016-10-26"
+ },
+ {
+  "chart": "c12",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE462A01022",
+  "t": 2593,
+  "pivot": 4699.95,
+  "stop": 4535.92,
+  "date": "2017-07-07"
+ },
+ {
+  "chart": "c13",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE323A01026",
+  "t": 2020,
+  "pivot": 27398.9,
+  "stop": 25089.85,
+  "date": "2015-03-12"
+ },
+ {
+  "chart": "c14",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE775A01035",
+  "t": 2110,
+  "pivot": 58.46,
+  "stop": 53.87,
+  "date": "2015-07-22"
+ },
+ {
+  "chart": "c15",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE745G01035",
+  "t": 1941,
+  "pivot": 176.96,
+  "stop": 163.49,
+  "date": "2014-11-17"
+ },
+ {
+  "chart": "c16",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE388Y01029",
+  "t": 4828,
+  "pivot": 335.0,
+  "stop": 307.3,
+  "date": "2026-07-29"
+ },
+ {
+  "chart": "c17",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE883F01010",
+  "t": 4612,
+  "pivot": 530.0,
+  "stop": 488.68,
+  "date": "2025-09-10"
+ },
+ {
+  "chart": "c18",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE302A01020",
+  "t": 824,
+  "pivot": 125.95,
+  "stop": 114.25,
+  "date": "2010-05-13"
+ },
+ {
+  "chart": "c19",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE805D01026",
+  "t": 2735,
+  "pivot": 435.0,
+  "stop": 392.94,
+  "date": "2018-01-31"
+ },
+ {
+  "chart": "c20",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE018I01017",
+  "t": 2893,
+  "pivot": 1183.8,
+  "stop": 1040.5,
+  "date": "2018-09-21"
+ },
+ {
+  "chart": "c21",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE918I01018",
+  "t": 2842,
+  "pivot": 629.36,
+  "stop": 567.85,
+  "date": "2018-07-06"
+ },
+ {
+  "chart": "c22",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE508G01029",
+  "t": 3872,
+  "pivot": 60.77,
+  "stop": 56.29,
+  "date": "2022-09-09"
+ },
+ {
+  "chart": "c23",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE042A01014",
+  "t": 3684,
+  "pivot": 1889.75,
+  "stop": 1809.38,
+  "date": "2021-12-08"
+ },
+ {
+  "chart": "c24",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE572A01028",
+  "t": 1056,
+  "pivot": 78.5,
+  "stop": 65.0,
+  "date": "2011-04-11"
+ },
+ {
+  "chart": "c25",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE353G01020",
+  "t": 2265,
+  "pivot": 190.9,
+  "stop": 145.05,
+  "date": "2016-03-08"
+ },
+ {
+  "chart": "c26",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE378D01032",
+  "t": 674,
+  "pivot": 136.25,
+  "stop": 106.65,
+  "date": "2009-09-25"
+ },
+ {
+  "chart": "c27",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE860A01027",
+  "t": 3395,
+  "pivot": 849.9,
+  "stop": 784.0,
+  "date": "2020-10-07"
+ },
+ {
+  "chart": "c28",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE883N01014",
+  "t": 2716,
+  "pivot": 312.95,
+  "stop": 281.67,
+  "date": "2018-01-03"
+ },
+ {
+  "chart": "c29",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE102D01028",
+  "t": 3982,
+  "pivot": 946.2,
+  "stop": 883.15,
+  "date": "2023-02-16"
+ },
+ {
+  "chart": "c30",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE066A01013",
+  "t": 1736,
+  "pivot": 519.9,
+  "stop": 463.12,
+  "date": "2014-01-09"
+ },
+ {
+  "chart": "c31",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE769A01020",
+  "t": 3005,
+  "pivot": 370.38856222311716,
+  "stop": 283.6387434554974,
+  "date": "2019-03-06"
+ },
+ {
+  "chart": "c32",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE296A01016",
+  "t": 1264,
+  "pivot": 8.439000000000002,
+  "stop": 7.1800000000000015,
+  "date": "2012-02-13"
+ },
+ {
+  "chart": "c33",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE047A01013",
+  "t": 4614,
+  "pivot": 2898.4,
+  "stop": 2739.07,
+  "date": "2025-09-12"
+ },
+ {
+  "chart": "c34",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE275B01026",
+  "t": 3462,
+  "pivot": 319.0,
+  "stop": 299.73,
+  "date": "2021-01-13"
+ },
+ {
+  "chart": "c35",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE176A01010",
+  "t": 3120,
+  "pivot": 1479.95,
+  "stop": 1389.6,
+  "date": "2019-08-26"
+ },
+ {
+  "chart": "c36",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE021A01018",
+  "t": 717,
+  "pivot": 173.98,
+  "stop": 159.22,
+  "date": "2009-12-02"
+ },
+ {
+  "chart": "c37",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE455F01025",
+  "t": 4183,
+  "pivot": 23.2,
+  "stop": 17.05,
+  "date": "2023-12-13"
+ },
+ {
+  "chart": "c38",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE366I01010",
+  "t": 3843,
+  "pivot": 333.18,
+  "stop": 313.38,
+  "date": "2022-07-27"
+ },
+ {
+  "chart": "c39",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE364U01010",
+  "t": 4202,
+  "pivot": 1747.4,
+  "stop": 1622.69,
+  "date": "2024-01-10"
+ },
+ {
+  "chart": "c40",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE040A01018",
+  "t": 1400,
+  "pivot": 152.38,
+  "stop": 145.26,
+  "date": "2012-08-30"
+ },
+ {
+  "chart": "c41",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE263A01016",
+  "t": 2417,
+  "pivot": 39.36,
+  "stop": 36.82,
+  "date": "2016-10-21"
+ },
+ {
+  "chart": "c42",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE378A01012",
+  "t": 1856,
+  "pivot": 995.0,
+  "stop": 930.19,
+  "date": "2014-07-07"
+ },
+ {
+  "chart": "c43",
+  "kind": "detected",
+  "pattern": "BULL_FLAG",
+  "e": "I:INE169A01031",
+  "t": 3231,
+  "pivot": 641.45,
+  "stop": 595.62,
+  "date": "2020-02-07"
+ },
+ {
+  "chart": "c44",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE917I01010",
+  "t": 4682,
+  "pivot": 9254.5,
+  "stop": 8660.46,
+  "date": "2025-12-22"
+ },
+ {
+  "chart": "c45",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE238A01026",
+  "t": 2092,
+  "pivot": 588.9,
+  "stop": 531.75,
+  "date": "2015-06-26"
+ },
+ {
+  "chart": "c46",
+  "kind": "detected",
+  "pattern": "ASCENDING_TRIANGLE",
+  "e": "I:INE179A01014",
+  "t": 2424,
+  "pivot": 7252.0,
+  "stop": 6753.99,
+  "date": "2016-11-02"
+ },
+ {
+  "chart": "c47",
+  "kind": "detected",
+  "pattern": "CUP_WITH_HANDLE",
+  "e": "I:INE051B01013",
+  "t": 1134,
+  "pivot": 8.93,
+  "stop": 8.28,
+  "date": "2011-08-02"
+ },
+ {
+  "chart": "c48",
+  "kind": "detected",
+  "pattern": "VCP",
+  "e": "I:INE481G01011",
+  "t": 4018,
+  "pivot": 7492.0,
+  "stop": 6929.95,
+  "date": "2023-04-13"
+ },
+ {
+  "chart": "c49",
+  "kind": "not_detected",
+  "pattern": "",
+  "e": "I:INE738I01010",
+  "t": 3533,
+  "pivot": 423.66666666666663,
+  "stop": 370.0,
+  "date": "2021-04-30"
+ },
+ {
+  "chart": "c50",
+  "kind": "detected",
+  "pattern": "FLAT_BASE",
+  "e": "I:INE030A01027",
+  "t": 2611,
+  "pivot": 1195.05,
+  "stop": 1078.35,
+  "date": "2017-08-02"
+ }
+]

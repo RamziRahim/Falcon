@@ -1,0 +1,125 @@
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices.parquet); half A; Step 3
+
+======================================================================
+REV_F  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              190
+  win rate after costs         36.3%
+  avg win / avg loss           +8.15% / -10.59%
+  mean net per trade           -3.787%
+  exit mix                     {'HOLD_20': 129, 'CAT_STOP': 61}
+  stats                        {}
+  grew 10 lakh to              6.78 lakh
+  cagr_pct                     -32.27
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -34.62
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.412
+  monthly_excess_t_nw3         -5.39
+  years_beating_nifty          0/1
+  n_closed_positions           190
+  top3_profit_share            inf
+  avg_gross_exposure_pct       65.5
+  total_return_pct             -32.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+REV_N  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              231
+  win rate after costs         40.3%
+  avg win / avg loss           +8.29% / -10.52%
+  mean net per trade           -2.948%
+  exit mix                     {'HOLD_20': 164, 'CAT_STOP': 67}
+  stats                        {}
+  grew 10 lakh to              7.06 lakh
+  cagr_pct                     -29.51
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -34.62
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.059
+  monthly_excess_t_nw3         -3.06
+  years_beating_nifty          0/1
+  n_closed_positions           250
+  top3_profit_share            inf
+  avg_gross_exposure_pct       85.2
+  total_return_pct             -29.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MOM10_F  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              254
+  win rate after costs         35.0%
+  avg win / avg loss           +8.16% / -10.62%
+  mean net per trade           -4.039%
+  exit mix                     {'HOLD_20': 172, 'CAT_STOP': 82}
+  stats                        {}
+  grew 10 lakh to              6.88 lakh
+  cagr_pct                     -31.27
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -33.16
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.475
+  monthly_excess_t_nw3         -5.78
+  years_beating_nifty          0/1
+  n_closed_positions           254
+  top3_profit_share            inf
+  avg_gross_exposure_pct       66.4
+  total_return_pct             -31.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MOM10_N  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              300
+  win rate after costs         38.0%
+  avg win / avg loss           +8.24% / -10.58%
+  mean net per trade           -3.427%
+  exit mix                     {'HOLD_20': 210, 'CAT_STOP': 90}
+  stats                        {}
+  grew 10 lakh to              7.01 lakh
+  cagr_pct                     -29.99
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -33.89
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.317
+  monthly_excess_t_nw3         -3.95
+  years_beating_nifty          0/1
+  n_closed_positions           321
+  top3_profit_share            inf
+  avg_gross_exposure_pct       86.1
+  total_return_pct             -29.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+=== signal-level: 20-day forward excess of the picks (next open to open+20) ===
+  REV   Y2018 picks   250  mean 20-day excess vs Nifty 500 -1.09%  (t -3.03, 12 months)  win 48%
+  MOM10 Y2018 picks   321  mean 20-day excess vs Nifty 500 -1.19%  (t -3.41, 12 months)  win 46%
