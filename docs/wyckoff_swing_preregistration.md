@@ -177,3 +177,64 @@ is likely to beat BASE_TAP, as breakouts beat retests in every earlier test.
 
 `data/wyckoff_swing_result.txt`; code `backtesting/wyckoff_swing.py` with unit tests
 `tests/test_wyckoff_swing.py`; runner `tests/run_wyckoff_swing.py`. Nothing existing changes.
+
+---
+
+## Results — 2026-11-21 (added after the run; nothing above was changed)
+
+**Run notes.** `tests/run_wyckoff_swing.py`, one run, `PYTHONHASHSEED=0`; unit tests
+`tests/test_wyckoff_swing.py` (3 pass: a simple break of structure, no later data used in
+any candidate, candidate levels obey rules 15-18). **Reference check:** P3 reproduced
+`data/falcon_v3_patterns_result.txt` exactly on half A, half B and all stocks, W1 and W2.
+**Implementation notes, settled before the run:** a fill that the portfolio cannot take
+(no room, sector cap, filters) is lost, not kept for a later session; filters use the Nifty
+and weekly state known before the fill (the previous close for buy-stops and taps).
+**Candidates 2007-2026, before filters:** half A 4,727 double-bias WY entries (6,709 with
+single bias), half B 4,503; about 250 a year per half, of which the top-200 universe keeps
+roughly a tenth.
+
+### Primary WY against the frozen bar
+
+| Sample, window | CAGR (Nifty) | Checks | Max DD | Net/trade | CAGR vs BASE_BOS / BASE_TAP | Bar |
+|---|---|---|---|---|---|---|
+| Half A, W1 | 0.03% (10.03%) ✗ | 1/6 ✗ | −13.59% ✓ | −0.12% ✗ | 0.03 < 4.08 ✗ / > −1.38 | **FAIL** |
+| Half A, W2 | 0.61% (5.54%) ✗ | 1/6 ✗ | −13.87% ✓ | +1.27% ✓ | 0.61 < 3.54 ✗ / < 3.91 ✗ | **FAIL** |
+| Half B, W1 | −0.94% (10.03%) ✗ | 1/6 ✗ | −12.42% ✓ | −0.60% ✗ | −0.94 < −0.48 ✗ / < 2.21 ✗ | **FAIL** |
+| Half B, W2 | 1.12% (5.54%) ✗ | 1/6 ✗ | −12.95% ✓ | +0.93% ✗ | > 0.84 / 1.12 < 1.52 ✗ | **FAIL** |
+
+**Verdict: WY FAILED its bar in all four cells. Not adopted.** It made almost nothing (−0.9%
+to +1.1% a year) and did not beat both baselines in any cell, so on this data the Wyckoff
+confirmation adds nothing. Only rule 3 (drawdown) held.
+
+### All versions (CAGR / max DD / win / net per trade / closed trades / checks)
+
+| Code | Half A W1 | Half A W2 | Half B W1 | Half B W2 | 2018 A / B |
+|---|---|---|---|---|---|
+| **WY** (top 200, 0.5%) | 0.03 / −13.59 / 27.4 / −0.12 / 186 / 1 | 0.61 / −13.87 / 32.1 / +1.27 / 209 / 1 | −0.94 / −12.42 / 23.8 / −0.60 / 181 / 1 | 1.12 / −12.95 / 31.8 / +0.93 / 214 / 1 | 0.23 / −4.85 |
+| WY_R1 (1%) | 0.28 / −20.61 / 27.4 / +0.05 / 201 / 1 | 1.49 / −25.18 / 31.2 / +1.04 / 215 / 1 | −2.53 / −25.40 / 24.1 / −0.41 / 187 / 1 | 1.46 / −22.65 / 31.8 / +0.95 / 220 / 1 | −3.03 / −9.82 |
+| WY_R2 (2%) | 0.28 / −23.21 / 28.4 / +0.26 / 208 / 1 | 4.84 / −24.60 / 30.9 / +0.94 / 246 / 4 | −2.67 / −38.12 / 25.4 / −0.28 / 197 / 1 | 2.70 / −32.93 / 31.0 / +0.81 / 242 / 2 | −3.50 / −13.79 |
+| WY_U500 | 1.29 / −17.68 / 29.7 / +0.78 / 283 / 1 | 1.48 / −18.56 / 34.3 / +1.52 / 309 / 1 | 1.74 / −13.71 / 30.2 / +0.96 / 285 / 1 | 2.09 / −15.93 / 33.6 / +1.42 / 307 / 2 | −4.61 / −8.41 |
+| WY_SF (1%, 10 slots) | 0.04 / −23.47 / 28.3 / +0.12 / 205 / 1 | 0.71 / −28.25 / 30.5 / +1.04 / 246 / 1 | −2.97 / −26.42 / 23.9 / −0.52 / 197 / 1 | 0.76 / −25.78 / 31.1 / +0.82 / 241 / 1 | −3.03 / −9.82 |
+| WY_U500_SF | 3.37 / −22.94 / 28.2 / +0.49 / 354 / 1 | 4.55 / −32.88 / 33.8 / +1.50 / 361 / 3 | 1.93 / −27.05 / 27.2 / +0.47 / 335 / 1 | 1.98 / −31.84 / 31.0 / +0.62 / 374 / 1 | −13.24 / −15.32 |
+| WY_1 (single bias) | 1.06 / −13.72 / 29.1 / +0.35 / 206 / 1 | 0.14 / −20.03 / 30.3 / +0.79 / 238 / 1 | 0.88 / −14.50 / 28.5 / +0.02 / 221 / 1 | 1.03 / −16.83 / 30.6 / +0.66 / 248 / 1 | −2.11 / −1.84 |
+| BASE_BOS | 4.08 / −10.34 / 32.9 / +2.15 / 283 / 2 | 3.54 / −16.79 / 32.9 / +2.21 / 298 / 4 | −0.48 / −15.07 / 24.8 / +0.39 / 298 / 1 | 0.84 / −20.92 / 28.6 / +0.38 / 332 / 1 | −2.96 / 0.70 |
+| BASE_TAP | −1.38 / −16.17 / 26.1 / −0.22 / 379 / 1 | 3.91 / −16.94 / 34.3 / +0.89 / 397 / 3 | 2.21 / −21.63 / 31.0 / +0.75 / 364 / 1 | 1.52 / −25.52 / 31.5 / +0.63 / 461 / 1 | −12.42 / −7.87 |
+| P3 (reference) | 6.34 / −23.34 / 51.3 / +2.62 / 277 / 2 | 7.47 / −14.89 / 51.9 / +2.48 / 297 / 4 | 13.12 / −15.77 / 56.2 / +4.52 / 240 / 3 | 6.45 / −19.15 / 52.1 / +3.03 / 265 / 3 | −17.00 / −6.95 |
+
+WY also reported: 21-24 trades a year per half; profit factor 0.89-1.14; 24-32% of trades
+reached the first target; average holding 25-29 sessions; capital invested 14-19%.
+
+### Reading (information only; no decision rests on it)
+
+- The win rate (24-32%) was in the range the course itself expects, but the winners were not
+  large enough: on daily bars, with 80% sold at about 2.5R, the strategy roughly broke even
+  before costs, as the source doc warned ("roughly one win in three, after costs, just to
+  break even").
+- Higher risk did not rescue it. At 1% and 2% per trade the return stayed near zero on half B
+  in 2019-26 while the drawdown deepened to −25% and −38%.
+- The confirmation step did not add value: in three of four cells simply buying the break
+  (BASE_BOS) or the zone tap (BASE_TAP) did better.
+- This is the fifth pullback or retest family to trail breakout entries on this data.
+- Expectation check: few trades (held, about 22 a year per half); win rate 25-40% (held,
+  24-32%); low capital use and CAGR below the Nifty (held); rule 5 failing (held); BASE_BOS
+  beating BASE_TAP (held on half A in 2019-26 only; mixed elsewhere).

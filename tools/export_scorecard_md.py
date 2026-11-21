@@ -1,5 +1,5 @@
 import json, csv, sys
-D = "/tmp/claude-0/-home-claude/bc00d2b6-bc92-528f-ae68-d7180e4ca2f1/scratchpad/dash/"
+D = "data/dash_tmp/"
 rows = json.load(open(D + "strategies.json")); bench = json.load(open(D + "benchmarks.json"))
 OUT = sys.argv[1]
 def p(v, plus=True): return "—" if v is None else (f"{'+' if plus and v > 0 else ''}{v:.1f}%".replace("-", "−"))
@@ -20,7 +20,7 @@ md.append("- No strategy passed all six checks in both decades.\n"
           "- Chart-pattern entries, breakout-timing tricks, dip-buying, volume rules, fixed brackets and early profit-taking added nothing reliable; several looked good on half A and failed on half B.\n"
           f"- Benchmark Nifty 50: {b['2019-26']['nifty_cagr']}% a year in 2019–26 (worst drop {b['2019-26']['nifty_dd']}%), {b['2008-17']['nifty_cagr']}% in 2008–17 (worst drop {b['2008-17']['nifty_dd']}%), {b['2018']['nifty_cagr']}% in 2018. "
           f"Owning every stock in the list equally: {b['2019-26']['ew_cagr']}%, {b['2008-17']['ew_cagr']}%, {b['2018']['ew_cagr']}%.\n")
-md.append(open("/tmp/claude-0/-home-claude/bc00d2b6-bc92-528f-ae68-d7180e4ca2f1/scratchpad/md_guide.md").read())
+md.append(open("tools/scorecard_guide.md").read())
 cols = ["Strategy", "Code", "Family", "Sample", "Entry", "Stop", "Target", "Market filter", "Max hold",
         "2019–26", "2008–17", "2018", "₹10 L → 19–26", "₹10 L → 08–17", "₹10 L → 2018", "Drop 19–26", "Drop 08–17",
         "Win 19–26", "Win 08–17", "Avg/trade 19–26", "Avg/trade 08–17", "Trades 19–26", "Trades 08–17", "Trades 2018",
