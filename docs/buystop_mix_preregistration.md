@@ -1,6 +1,6 @@
 # The current mix with Falcon Momentum entering on a resting buy-stop — pre-registration
 
-**Status: DRAFT (2026-11-22). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 18:06 IST**
 
 ## Question
 
