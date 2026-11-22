@@ -1,0 +1,3282 @@
+Benchmark: NSE NIFTY 50 (data/pit_sources/indices_2000_2026.parquet). Data data/pit_v2, no ethical filter.
+Blocks are CODE@SAMPLE. Judged: MWS_S4_BA on ALL vs A10.
+
+======================================================================
+A10@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              739
+  win rate after costs         35.5%
+  avg win / avg loss           +37.62% / -11.41%
+  mean net per trade           +5.974%
+  exit mix                     {'STOP': 436, 'REBALANCE': 300, 'DELISTED': 3}
+  stats                        None
+  grew 10 lakh to              67.42 lakh
+  cagr_pct                     37.52
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -38.04
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      1.485
+  monthly_excess_t_nw3         1.7
+  years_beating_nifty          5/6
+  n_closed_positions           752
+  top3_profit_share            0.56
+  avg_gross_exposure_pct       82.8
+  total_return_pct             574.2
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+  reference check A10@ALL H0: file (37.52, -38.04) run (37.52, -38.04) -> MATCH
+
+======================================================================
+MWS_S4_BA@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              427
+  win rate after costs         34.2%
+  avg win / avg loss           +44.48% / -11.60%
+  mean net per trade           +7.572%
+  exit mix                     {'STOP': 256, 'REBALANCE': 170, 'DELISTED': 1}
+  stats                        {'orders': 676, 'filled_at_support': 88, 'fallback_buys': 344, 'cancelled_never_bought': 235, 'pct_filled_at_support': 13.0, 'avg_days_to_fill': 8.7, 'support_fill_vs_A10_open_pct': -4.66, 'fallback_vs_A10_open_pct': 4.39, 'avg_cash_pct': np.float64(43.5)}
+  grew 10 lakh to              48.55 lakh
+  cagr_pct                     30.18
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -28.54
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.807
+  monthly_excess_t_nw3         1.23
+  years_beating_nifty          5/6
+  n_closed_positions           432
+  top3_profit_share            0.59
+  avg_gross_exposure_pct       56.5
+  total_return_pct             385.5
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              518
+  win rate after costs         36.3%
+  avg win / avg loss           +37.27% / -11.36%
+  mean net per trade           +6.289%
+  exit mix                     {'STOP': 291, 'REBALANCE': 224, 'DELISTED': 3}
+  stats                        {'orders': 689, 'filled_at_support': 279, 'fallback_buys': 249, 'cancelled_never_bought': 156, 'pct_filled_at_support': 40.5, 'avg_days_to_fill': 7.1, 'support_fill_vs_A10_open_pct': -2.54, 'fallback_vs_A10_open_pct': 4.85, 'avg_cash_pct': np.float64(35.9)}
+  grew 10 lakh to              52.19 lakh
+  cagr_pct                     31.76
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -32.66
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.953
+  monthly_excess_t_nw3         1.4
+  years_beating_nifty          5/6
+  n_closed_positions           528
+  top3_profit_share            0.54
+  avg_gross_exposure_pct       64.1
+  total_return_pct             421.9
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              691
+  win rate after costs         34.3%
+  avg win / avg loss           +36.78% / -11.49%
+  mean net per trade           +5.065%
+  exit mix                     {'STOP': 408, 'REBALANCE': 279, 'DELISTED': 4}
+  stats                        {'orders': 745, 'filled_at_support': 582, 'fallback_buys': 119, 'cancelled_never_bought': 41, 'pct_filled_at_support': 78.1, 'avg_days_to_fill': 3.3, 'support_fill_vs_A10_open_pct': -2.58, 'fallback_vs_A10_open_pct': 16.6, 'avg_cash_pct': np.float64(24.4)}
+  grew 10 lakh to              50.74 lakh
+  cagr_pct                     31.14
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -36.35
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      1.009
+  monthly_excess_t_nw3         1.33
+  years_beating_nifty          4/6
+  n_closed_positions           701
+  top3_profit_share            0.58
+  avg_gross_exposure_pct       75.6
+  total_return_pct             407.4
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              480
+  win rate after costs         35.4%
+  avg win / avg loss           +40.35% / -11.29%
+  mean net per trade           +7.000%
+  exit mix                     {'STOP': 280, 'REBALANCE': 197, 'DELISTED': 3}
+  stats                        {'orders': 685, 'filled_at_support': 192, 'fallback_buys': 297, 'cancelled_never_bought': 191, 'pct_filled_at_support': 28.0, 'avg_days_to_fill': 6.4, 'support_fill_vs_A10_open_pct': -7.91, 'fallback_vs_A10_open_pct': 6.3, 'avg_cash_pct': np.float64(39.4)}
+  grew 10 lakh to              55.42 lakh
+  cagr_pct                     33.09
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -29.13
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      1.011
+  monthly_excess_t_nw3         1.44
+  years_beating_nifty          5/6
+  n_closed_positions           489
+  top3_profit_share            0.51
+  avg_gross_exposure_pct       60.6
+  total_return_pct             454.2
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              149
+  win rate after costs         36.2%
+  avg win / avg loss           +34.33% / -11.79%
+  mean net per trade           +4.925%
+  exit mix                     {'STOP': 83, 'REBALANCE': 65, 'DELISTED': 1}
+  stats                        {'orders': 1281, 'filled_at_support': 153, 'fallback_buys': 0, 'cancelled_never_bought': 389, 'pct_filled_at_support': 11.9, 'avg_days_to_fill': 9.3, 'support_fill_vs_A10_open_pct': -5.4, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(83.8)}
+  grew 10 lakh to              13.94 lakh
+  cagr_pct                     5.71
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -18.07
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -1.243
+  monthly_excess_t_nw3         -1.78
+  years_beating_nifty          1/6
+  n_closed_positions           153
+  top3_profit_share            1.09
+  avg_gross_exposure_pct       16.2
+  total_return_pct             39.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              390
+  win rate after costs         38.2%
+  avg win / avg loss           +31.02% / -11.31%
+  mean net per trade           +4.864%
+  exit mix                     {'STOP': 207, 'REBALANCE': 180, 'DELISTED': 3}
+  stats                        {'orders': 1059, 'filled_at_support': 399, 'fallback_buys': 0, 'cancelled_never_bought': 228, 'pct_filled_at_support': 37.7, 'avg_days_to_fill': 8.0, 'support_fill_vs_A10_open_pct': -2.66, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(57.1)}
+  grew 10 lakh to              23.74 lakh
+  cagr_pct                     15.52
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -25.52
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.35
+  monthly_excess_t_nw3         -0.57
+  years_beating_nifty          2/6
+  n_closed_positions           399
+  top3_profit_share            0.37
+  avg_gross_exposure_pct       42.9
+  total_return_pct             137.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              664
+  win rate after costs         34.3%
+  avg win / avg loss           +34.77% / -11.49%
+  mean net per trade           +4.395%
+  exit mix                     {'STOP': 391, 'REBALANCE': 270, 'DELISTED': 3}
+  stats                        {'orders': 913, 'filled_at_support': 676, 'fallback_buys': 0, 'cancelled_never_bought': 54, 'pct_filled_at_support': 74.0, 'avg_days_to_fill': 4.1, 'support_fill_vs_A10_open_pct': -3.35, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(33.0)}
+  grew 10 lakh to              29.18 lakh
+  cagr_pct                     19.57
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -36.97
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.136
+  monthly_excess_t_nw3         0.2
+  years_beating_nifty          2/6
+  n_closed_positions           676
+  top3_profit_share            0.36
+  avg_gross_exposure_pct       67.0
+  total_return_pct             191.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@ALL  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              296
+  win rate after costs         36.1%
+  avg win / avg loss           +29.15% / -11.75%
+  mean net per trade           +3.036%
+  exit mix                     {'STOP': 168, 'REBALANCE': 125, 'DELISTED': 3}
+  stats                        {'orders': 1191, 'filled_at_support': 302, 'fallback_buys': 0, 'cancelled_never_bought': 298, 'pct_filled_at_support': 25.4, 'avg_days_to_fill': 7.9, 'support_fill_vs_A10_open_pct': -9.16, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(72.0)}
+  grew 10 lakh to              16.44 lakh
+  cagr_pct                     8.65
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.8
+  max_drawdown_pct             -26.43
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.965
+  monthly_excess_t_nw3         -1.42
+  years_beating_nifty          1/6
+  n_closed_positions           302
+  top3_profit_share            0.61
+  avg_gross_exposure_pct       28.0
+  total_return_pct             64.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1176
+  win rate after costs         32.4%
+  avg win / avg loss           +29.52% / -10.45%
+  mean net per trade           +2.502%
+  exit mix                     {'STOP': 696, 'REBALANCE': 473, 'DELISTED': 7}
+  stats                        None
+  grew 10 lakh to              34.42 lakh
+  cagr_pct                     13.17
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -59.05
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.517
+  monthly_excess_t_nw3         0.85
+  years_beating_nifty          5/10
+  n_closed_positions           1192
+  top3_profit_share            0.31
+  avg_gross_exposure_pct       83.8
+  total_return_pct             244.2
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+  reference check A10@ALL W2: file (13.16, -59.05) run (13.17, -59.05) -> MATCH
+
+======================================================================
+MWS_S4_BA@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              678
+  win rate after costs         34.7%
+  avg win / avg loss           +31.46% / -10.50%
+  mean net per trade           +4.045%
+  exit mix                     {'STOP': 391, 'REBALANCE': 282, 'DELISTED': 5}
+  stats                        {'orders': 1008, 'filled_at_support': 153, 'fallback_buys': 537, 'cancelled_never_bought': 312, 'pct_filled_at_support': 15.2, 'avg_days_to_fill': 8.2, 'support_fill_vs_A10_open_pct': -3.18, 'fallback_vs_A10_open_pct': 1.52, 'avg_cash_pct': np.float64(38.7)}
+  grew 10 lakh to              38.39 lakh
+  cagr_pct                     14.41
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -33.21
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.487
+  monthly_excess_t_nw3         0.91
+  years_beating_nifty          8/10
+  n_closed_positions           690
+  top3_profit_share            0.25
+  avg_gross_exposure_pct       61.3
+  total_return_pct             283.9
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              850
+  win rate after costs         32.8%
+  avg win / avg loss           +28.75% / -10.35%
+  mean net per trade           +2.481%
+  exit mix                     {'STOP': 493, 'REBALANCE': 352, 'DELISTED': 5}
+  stats                        {'orders': 1065, 'filled_at_support': 492, 'fallback_buys': 369, 'cancelled_never_bought': 199, 'pct_filled_at_support': 46.2, 'avg_days_to_fill': 7.5, 'support_fill_vs_A10_open_pct': -2.66, 'fallback_vs_A10_open_pct': 4.09, 'avg_cash_pct': np.float64(33.0)}
+  grew 10 lakh to              26.37 lakh
+  cagr_pct                     10.19
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -45.03
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.199
+  monthly_excess_t_nw3         0.36
+  years_beating_nifty          8/10
+  n_closed_positions           861
+  top3_profit_share            0.35
+  avg_gross_exposure_pct       67.0
+  total_return_pct             163.7
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1088
+  win rate after costs         33.2%
+  avg win / avg loss           +28.40% / -10.47%
+  mean net per trade           +2.428%
+  exit mix                     {'STOP': 635, 'REBALANCE': 447, 'DELISTED': 6}
+  stats                        {'orders': 1147, 'filled_at_support': 964, 'fallback_buys': 140, 'cancelled_never_bought': 42, 'pct_filled_at_support': 84.0, 'avg_days_to_fill': 2.9, 'support_fill_vs_A10_open_pct': -2.1, 'fallback_vs_A10_open_pct': 14.14, 'avg_cash_pct': np.float64(21.7)}
+  grew 10 lakh to              29.37 lakh
+  cagr_pct                     11.38
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -57.12
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.359
+  monthly_excess_t_nw3         0.62
+  years_beating_nifty          5/10
+  n_closed_positions           1104
+  top3_profit_share            0.31
+  avg_gross_exposure_pct       78.3
+  total_return_pct             193.7
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              769
+  win rate after costs         32.0%
+  avg win / avg loss           +31.20% / -10.59%
+  mean net per trade           +2.782%
+  exit mix                     {'STOP': 462, 'REBALANCE': 301, 'DELISTED': 6}
+  stats                        {'orders': 1053, 'filled_at_support': 329, 'fallback_buys': 454, 'cancelled_never_bought': 266, 'pct_filled_at_support': 31.2, 'avg_days_to_fill': 4.7, 'support_fill_vs_A10_open_pct': -4.72, 'fallback_vs_A10_open_pct': 3.53, 'avg_cash_pct': np.float64(34.7)}
+  grew 10 lakh to              29.09 lakh
+  cagr_pct                     11.28
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -49.0
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.287
+  monthly_excess_t_nw3         0.49
+  years_beating_nifty          7/10
+  n_closed_positions           783
+  top3_profit_share            0.33
+  avg_gross_exposure_pct       65.3
+  total_return_pct             190.9
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              280
+  win rate after costs         38.9%
+  avg win / avg loss           +21.86% / -9.69%
+  mean net per trade           +2.593%
+  exit mix                     {'REBALANCE': 146, 'STOP': 132, 'DELISTED': 2}
+  stats                        {'orders': 2025, 'filled_at_support': 284, 'fallback_buys': 0, 'cancelled_never_bought': 534, 'pct_filled_at_support': 14.0, 'avg_days_to_fill': 9.0, 'support_fill_vs_A10_open_pct': -4.0, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(77.5)}
+  grew 10 lakh to              15.22 lakh
+  cagr_pct                     4.3
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -20.8
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.428
+  monthly_excess_t_nw3         -0.83
+  years_beating_nifty          3/10
+  n_closed_positions           284
+  top3_profit_share            0.64
+  avg_gross_exposure_pct       22.5
+  total_return_pct             52.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              657
+  win rate after costs         34.4%
+  avg win / avg loss           +25.01% / -10.08%
+  mean net per trade           +1.992%
+  exit mix                     {'STOP': 359, 'REBALANCE': 295, 'DELISTED': 3}
+  stats                        {'orders': 1647, 'filled_at_support': 666, 'fallback_buys': 0, 'cancelled_never_bought': 299, 'pct_filled_at_support': 40.4, 'avg_days_to_fill': 8.2, 'support_fill_vs_A10_open_pct': -2.8, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(52.0)}
+  grew 10 lakh to              20.23 lakh
+  cagr_pct                     7.3
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -36.19
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.107
+  monthly_excess_t_nw3         -0.2
+  years_beating_nifty          5/10
+  n_closed_positions           666
+  top3_profit_share            0.47
+  avg_gross_exposure_pct       48.0
+  total_return_pct             102.3
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1051
+  win rate after costs         33.7%
+  avg win / avg loss           +27.01% / -10.41%
+  mean net per trade           +2.193%
+  exit mix                     {'STOP': 601, 'REBALANCE': 444, 'DELISTED': 6}
+  stats                        {'orders': 1340, 'filled_at_support': 1067, 'fallback_buys': 0, 'cancelled_never_bought': 51, 'pct_filled_at_support': 79.6, 'avg_days_to_fill': 3.7, 'support_fill_vs_A10_open_pct': -2.6, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(26.8)}
+  grew 10 lakh to              23.79 lakh
+  cagr_pct                     9.06
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -57.11
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.152
+  monthly_excess_t_nw3         0.28
+  years_beating_nifty          5/10
+  n_closed_positions           1067
+  top3_profit_share            0.34
+  avg_gross_exposure_pct       73.2
+  total_return_pct             137.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@ALL  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              513
+  win rate after costs         32.4%
+  avg win / avg loss           +22.66% / -10.22%
+  mean net per trade           +0.418%
+  exit mix                     {'STOP': 294, 'REBALANCE': 216, 'DELISTED': 3}
+  stats                        {'orders': 1920, 'filled_at_support': 523, 'fallback_buys': 0, 'cancelled_never_bought': 403, 'pct_filled_at_support': 27.2, 'avg_days_to_fill': 6.9, 'support_fill_vs_A10_open_pct': -6.92, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(67.3)}
+  grew 10 lakh to              12.78 lakh
+  cagr_pct                     2.49
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         4.17
+  max_drawdown_pct             -39.62
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.539
+  monthly_excess_t_nw3         -1.08
+  years_beating_nifty          4/10
+  n_closed_positions           523
+  top3_profit_share            1.11
+  avg_gross_exposure_pct       32.7
+  total_return_pct             27.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              145
+  win rate after costs         7.6%
+  avg win / avg loss           +30.35% / -10.80%
+  mean net per trade           -7.678%
+  exit mix                     {'STOP': 128, 'REBALANCE': 17}
+  stats                        None
+  grew 10 lakh to              6.12 lakh
+  cagr_pct                     -38.88
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -39.48
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -4.054
+  monthly_excess_t_nw3         -4.08
+  years_beating_nifty          0/1
+  n_closed_positions           154
+  top3_profit_share            inf
+  avg_gross_exposure_pct       58.8
+  total_return_pct             -38.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+  reference check A10@ALL Y2018: file (-38.88, -39.48) run (-38.88, -39.48) -> MATCH
+
+======================================================================
+MWS_S4_BA@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              78
+  win rate after costs         9.0%
+  avg win / avg loss           +22.50% / -10.68%
+  mean net per trade           -7.705%
+  exit mix                     {'STOP': 67, 'REBALANCE': 11}
+  stats                        {'orders': 121, 'filled_at_support': 14, 'fallback_buys': 67, 'cancelled_never_bought': 31, 'pct_filled_at_support': 11.6, 'avg_days_to_fill': 2.4, 'support_fill_vs_A10_open_pct': -4.46, 'fallback_vs_A10_open_pct': -0.95, 'avg_cash_pct': np.float64(66.3)}
+  grew 10 lakh to              7.47 lakh
+  cagr_pct                     -25.37
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -25.87
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.461
+  monthly_excess_t_nw3         -2.4
+  years_beating_nifty          0/1
+  n_closed_positions           81
+  top3_profit_share            inf
+  avg_gross_exposure_pct       33.7
+  total_return_pct             -25.3
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              99
+  win rate after costs         15.2%
+  avg win / avg loss           +21.45% / -10.95%
+  mean net per trade           -6.045%
+  exit mix                     {'STOP': 82, 'REBALANCE': 17}
+  stats                        {'orders': 133, 'filled_at_support': 74, 'fallback_buys': 35, 'cancelled_never_bought': 19, 'pct_filled_at_support': 55.6, 'avg_days_to_fill': 5.4, 'support_fill_vs_A10_open_pct': -2.93, 'fallback_vs_A10_open_pct': 3.64, 'avg_cash_pct': np.float64(58.2)}
+  grew 10 lakh to              7.64 lakh
+  cagr_pct                     -23.68
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -26.33
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.232
+  monthly_excess_t_nw3         -1.98
+  years_beating_nifty          0/1
+  n_closed_positions           109
+  top3_profit_share            inf
+  avg_gross_exposure_pct       41.8
+  total_return_pct             -23.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              132
+  win rate after costs         8.3%
+  avg win / avg loss           +31.20% / -10.68%
+  mean net per trade           -7.191%
+  exit mix                     {'STOP': 114, 'REBALANCE': 18}
+  stats                        {'orders': 143, 'filled_at_support': 136, 'fallback_buys': 5, 'cancelled_never_bought': 1, 'pct_filled_at_support': 95.1, 'avg_days_to_fill': 1.3, 'support_fill_vs_A10_open_pct': -1.66, 'fallback_vs_A10_open_pct': 4.46, 'avg_cash_pct': np.float64(38.5)}
+  grew 10 lakh to              6.59 lakh
+  cagr_pct                     -34.16
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -35.55
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -3.403
+  monthly_excess_t_nw3         -3.29
+  years_beating_nifty          0/1
+  n_closed_positions           141
+  top3_profit_share            inf
+  avg_gross_exposure_pct       61.5
+  total_return_pct             -34.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              88
+  win rate after costs         12.5%
+  avg win / avg loss           +18.18% / -10.21%
+  mean net per trade           -6.658%
+  exit mix                     {'STOP': 70, 'REBALANCE': 18}
+  stats                        {'orders': 123, 'filled_at_support': 39, 'fallback_buys': 55, 'cancelled_never_bought': 23, 'pct_filled_at_support': 31.7, 'avg_days_to_fill': 4.3, 'support_fill_vs_A10_open_pct': -7.01, 'fallback_vs_A10_open_pct': 1.39, 'avg_cash_pct': np.float64(61.7)}
+  grew 10 lakh to              7.66 lakh
+  cagr_pct                     -23.44
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -26.05
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.207
+  monthly_excess_t_nw3         -1.98
+  years_beating_nifty          0/1
+  n_closed_positions           94
+  top3_profit_share            inf
+  avg_gross_exposure_pct       38.3
+  total_return_pct             -23.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              20
+  win rate after costs         10.0%
+  avg win / avg loss           +7.04% / -10.61%
+  mean net per trade           -8.844%
+  exit mix                     {'STOP': 17, 'REBALANCE': 3}
+  stats                        {'orders': 200, 'filled_at_support': 25, 'fallback_buys': 0, 'cancelled_never_bought': 49, 'pct_filled_at_support': 12.5, 'avg_days_to_fill': 4.4, 'support_fill_vs_A10_open_pct': -4.51, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(87.0)}
+  grew 10 lakh to              9.47 lakh
+  cagr_pct                     -5.33
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -7.47
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -0.435
+  monthly_excess_t_nw3         -0.48
+  years_beating_nifty          0/1
+  n_closed_positions           25
+  top3_profit_share            inf
+  avg_gross_exposure_pct       13.0
+  total_return_pct             -5.3
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              74
+  win rate after costs         23.0%
+  avg win / avg loss           +19.85% / -11.00%
+  mean net per trade           -3.913%
+  exit mix                     {'STOP': 56, 'REBALANCE': 18}
+  stats                        {'orders': 169, 'filled_at_support': 84, 'fallback_buys': 0, 'cancelled_never_bought': 23, 'pct_filled_at_support': 49.7, 'avg_days_to_fill': 6.3, 'support_fill_vs_A10_open_pct': -4.51, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(65.3)}
+  grew 10 lakh to              9.09 lakh
+  cagr_pct                     -9.1
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -15.46
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -0.727
+  monthly_excess_t_nw3         -0.75
+  years_beating_nifty          0/1
+  n_closed_positions           84
+  top3_profit_share            inf
+  avg_gross_exposure_pct       34.7
+  total_return_pct             -9.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              131
+  win rate after costs         8.4%
+  avg win / avg loss           +31.20% / -10.68%
+  mean net per trade           -7.159%
+  exit mix                     {'STOP': 113, 'REBALANCE': 18}
+  stats                        {'orders': 148, 'filled_at_support': 140, 'fallback_buys': 0, 'cancelled_never_bought': 1, 'pct_filled_at_support': 94.6, 'avg_days_to_fill': 1.5, 'support_fill_vs_A10_open_pct': -1.8, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(39.0)}
+  grew 10 lakh to              6.61 lakh
+  cagr_pct                     -34.03
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -35.42
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -3.395
+  monthly_excess_t_nw3         -3.28
+  years_beating_nifty          0/1
+  n_closed_positions           140
+  top3_profit_share            inf
+  avg_gross_exposure_pct       61.0
+  total_return_pct             -33.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@ALL  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              52
+  win rate after costs         19.2%
+  avg win / avg loss           +9.31% / -9.99%
+  mean net per trade           -6.281%
+  exit mix                     {'STOP': 38, 'REBALANCE': 14}
+  stats                        {'orders': 187, 'filled_at_support': 59, 'fallback_buys': 0, 'cancelled_never_bought': 29, 'pct_filled_at_support': 31.6, 'avg_days_to_fill': 6.8, 'support_fill_vs_A10_open_pct': -9.68, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(77.7)}
+  grew 10 lakh to              8.89 lakh
+  cagr_pct                     -11.1
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.39
+  max_drawdown_pct             -15.31
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -0.997
+  monthly_excess_t_nw3         -0.87
+  years_beating_nifty          0/1
+  n_closed_positions           59
+  top3_profit_share            inf
+  avg_gross_exposure_pct       22.3
+  total_return_pct             -11.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              975
+  win rate after costs         39.1%
+  avg win / avg loss           +27.60% / -9.73%
+  mean net per trade           +4.858%
+  exit mix                     {'STOP': 506, 'REBALANCE': 469}
+  stats                        None
+  grew 10 lakh to              62.42 lakh
+  cagr_pct                     26.36
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -39.44
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      1.344
+  monthly_excess_t_nw3         1.74
+  years_beating_nifty          4/8
+  n_closed_positions           987
+  top3_profit_share            0.41
+  avg_gross_exposure_pct       85.4
+  total_return_pct             524.2
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+  reference check A10@ALL W1: file (26.36, -39.44) run (26.36, -39.44) -> MATCH
+
+======================================================================
+MWS_S4_BA@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              540
+  win rate after costs         38.7%
+  avg win / avg loss           +29.93% / -9.82%
+  mean net per trade           +5.565%
+  exit mix                     {'STOP': 279, 'REBALANCE': 261}
+  stats                        {'orders': 865, 'filled_at_support': 135, 'fallback_buys': 412, 'cancelled_never_bought': 310, 'pct_filled_at_support': 15.6, 'avg_days_to_fill': 8.5, 'support_fill_vs_A10_open_pct': -2.3, 'fallback_vs_A10_open_pct': 3.41, 'avg_cash_pct': np.float64(42.1)}
+  grew 10 lakh to              42.47 lakh
+  cagr_pct                     20.29
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -27.55
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.773
+  monthly_excess_t_nw3         1.42
+  years_beating_nifty          4/8
+  n_closed_positions           547
+  top3_profit_share            0.51
+  avg_gross_exposure_pct       57.9
+  total_return_pct             324.7
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              696
+  win rate after costs         38.8%
+  avg win / avg loss           +26.28% / -9.74%
+  mean net per trade           +4.232%
+  exit mix                     {'STOP': 354, 'REBALANCE': 342}
+  stats                        {'orders': 910, 'filled_at_support': 442, 'fallback_buys': 263, 'cancelled_never_bought': 198, 'pct_filled_at_support': 48.6, 'avg_days_to_fill': 7.1, 'support_fill_vs_A10_open_pct': -1.29, 'fallback_vs_A10_open_pct': 5.94, 'avg_cash_pct': np.float64(34.6)}
+  grew 10 lakh to              40.18 lakh
+  cagr_pct                     19.44
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -32.65
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.743
+  monthly_excess_t_nw3         1.28
+  years_beating_nifty          4/8
+  n_closed_positions           705
+  top3_profit_share            0.5
+  avg_gross_exposure_pct       65.4
+  total_return_pct             301.8
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              896
+  win rate after costs         38.6%
+  avg win / avg loss           +24.76% / -9.58%
+  mean net per trade           +3.679%
+  exit mix                     {'STOP': 456, 'REBALANCE': 440}
+  stats                        {'orders': 956, 'filled_at_support': 760, 'fallback_buys': 146, 'cancelled_never_bought': 48, 'pct_filled_at_support': 79.5, 'avg_days_to_fill': 3.0, 'support_fill_vs_A10_open_pct': -2.0, 'fallback_vs_A10_open_pct': 13.34, 'avg_cash_pct': np.float64(22.6)}
+  grew 10 lakh to              40.56 lakh
+  cagr_pct                     19.59
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -32.62
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.822
+  monthly_excess_t_nw3         1.32
+  years_beating_nifty          5/8
+  n_closed_positions           906
+  top3_profit_share            0.48
+  avg_gross_exposure_pct       77.4
+  total_return_pct             305.6
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              630
+  win rate after costs         39.7%
+  avg win / avg loss           +27.12% / -9.58%
+  mean net per trade           +4.982%
+  exit mix                     {'STOP': 317, 'REBALANCE': 313}
+  stats                        {'orders': 885, 'filled_at_support': 276, 'fallback_buys': 364, 'cancelled_never_bought': 239, 'pct_filled_at_support': 31.2, 'avg_days_to_fill': 6.6, 'support_fill_vs_A10_open_pct': -6.12, 'fallback_vs_A10_open_pct': 6.44, 'avg_cash_pct': np.float64(39.0)}
+  grew 10 lakh to              43.35 lakh
+  cagr_pct                     20.61
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -29.8
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.811
+  monthly_excess_t_nw3         1.42
+  years_beating_nifty          5/8
+  n_closed_positions           640
+  top3_profit_share            0.44
+  avg_gross_exposure_pct       61.0
+  total_return_pct             333.5
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              236
+  win rate after costs         44.1%
+  avg win / avg loss           +20.50% / -9.33%
+  mean net per trade           +3.812%
+  exit mix                     {'REBALANCE': 134, 'STOP': 102}
+  stats                        {'orders': 1621, 'filled_at_support': 237, 'fallback_buys': 0, 'cancelled_never_bought': 500, 'pct_filled_at_support': 14.6, 'avg_days_to_fill': 9.2, 'support_fill_vs_A10_open_pct': -3.68, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(79.2)}
+  grew 10 lakh to              14.92 lakh
+  cagr_pct                     5.24
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -10.38
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.488
+  monthly_excess_t_nw3         -1.33
+  years_beating_nifty          2/8
+  n_closed_positions           237
+  top3_profit_share            0.86
+  avg_gross_exposure_pct       20.8
+  total_return_pct             49.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              574
+  win rate after costs         40.4%
+  avg win / avg loss           +22.81% / -9.78%
+  mean net per trade           +3.393%
+  exit mix                     {'REBALANCE': 293, 'STOP': 281}
+  stats                        {'orders': 1339, 'filled_at_support': 579, 'fallback_buys': 0, 'cancelled_never_bought': 266, 'pct_filled_at_support': 43.2, 'avg_days_to_fill': 7.7, 'support_fill_vs_A10_open_pct': -0.84, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(53.3)}
+  grew 10 lakh to              21.86 lakh
+  cagr_pct                     10.51
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -24.69
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.005
+  monthly_excess_t_nw3         -0.01
+  years_beating_nifty          4/8
+  n_closed_positions           579
+  top3_profit_share            0.56
+  avg_gross_exposure_pct       46.7
+  total_return_pct             118.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              865
+  win rate after costs         39.4%
+  avg win / avg loss           +22.28% / -9.57%
+  mean net per trade           +2.983%
+  exit mix                     {'REBALANCE': 435, 'STOP': 430}
+  stats                        {'orders': 1175, 'filled_at_support': 875, 'fallback_buys': 0, 'cancelled_never_bought': 62, 'pct_filled_at_support': 74.5, 'avg_days_to_fill': 3.8, 'support_fill_vs_A10_open_pct': -2.64, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(30.0)}
+  grew 10 lakh to              29.84 lakh
+  cagr_pct                     14.99
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -31.9
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.457
+  monthly_excess_t_nw3         0.81
+  years_beating_nifty          4/8
+  n_closed_positions           875
+  top3_profit_share            0.5
+  avg_gross_exposure_pct       70.0
+  total_return_pct             198.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@ALL  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              408
+  win rate after costs         39.2%
+  avg win / avg loss           +19.91% / -9.20%
+  mean net per trade           +2.216%
+  exit mix                     {'REBALANCE': 212, 'STOP': 196}
+  stats                        {'orders': 1552, 'filled_at_support': 415, 'fallback_buys': 0, 'cancelled_never_bought': 376, 'pct_filled_at_support': 26.7, 'avg_days_to_fill': 7.9, 'support_fill_vs_A10_open_pct': -7.45, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(71.8)}
+  grew 10 lakh to              15.03 lakh
+  cagr_pct                     5.34
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         15.16
+  max_drawdown_pct             -18.93
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.454
+  monthly_excess_t_nw3         -1.26
+  years_beating_nifty          3/8
+  n_closed_positions           415
+  top3_profit_share            0.52
+  avg_gross_exposure_pct       28.2
+  total_return_pct             50.3
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              718
+  win rate after costs         35.7%
+  avg win / avg loss           +34.30% / -11.46%
+  mean net per trade           +4.854%
+  exit mix                     {'STOP': 419, 'REBALANCE': 296, 'DELISTED': 3}
+  stats                        None
+  grew 10 lakh to              36.06 lakh
+  cagr_pct                     23.87
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -42.72
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.494
+  monthly_excess_t_nw3         0.64
+  years_beating_nifty          4/6
+  n_closed_positions           733
+  top3_profit_share            0.23
+  avg_gross_exposure_pct       83.4
+  total_return_pct             260.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              406
+  win rate after costs         33.7%
+  avg win / avg loss           +37.23% / -11.31%
+  mean net per trade           +5.070%
+  exit mix                     {'STOP': 234, 'REBALANCE': 171, 'DELISTED': 1}
+  stats                        {'orders': 641, 'filled_at_support': 78, 'fallback_buys': 338, 'cancelled_never_bought': 217, 'pct_filled_at_support': 12.2, 'avg_days_to_fill': 8.1, 'support_fill_vs_A10_open_pct': -2.85, 'fallback_vs_A10_open_pct': 3.42, 'avg_cash_pct': np.float64(43.9)}
+  grew 10 lakh to              24.87 lakh
+  cagr_pct                     16.42
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -35.72
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.217
+  monthly_excess_t_nw3         -0.38
+  years_beating_nifty          2/6
+  n_closed_positions           416
+  top3_profit_share            0.29
+  avg_gross_exposure_pct       56.1
+  total_return_pct             148.7
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              530
+  win rate after costs         35.1%
+  avg win / avg loss           +32.38% / -11.20%
+  mean net per trade           +4.091%
+  exit mix                     {'STOP': 298, 'REBALANCE': 229, 'DELISTED': 3}
+  stats                        {'orders': 673, 'filled_at_support': 305, 'fallback_buys': 238, 'cancelled_never_bought': 125, 'pct_filled_at_support': 45.3, 'avg_days_to_fill': 7.1, 'support_fill_vs_A10_open_pct': -3.0, 'fallback_vs_A10_open_pct': 5.07, 'avg_cash_pct': np.float64(36.7)}
+  grew 10 lakh to              26.53 lakh
+  cagr_pct                     17.69
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -37.0
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.078
+  monthly_excess_t_nw3         -0.12
+  years_beating_nifty          3/6
+  n_closed_positions           543
+  top3_profit_share            0.29
+  avg_gross_exposure_pct       63.3
+  total_return_pct             165.3
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              657
+  win rate after costs         34.4%
+  avg win / avg loss           +32.39% / -11.52%
+  mean net per trade           +3.583%
+  exit mix                     {'STOP': 386, 'REBALANCE': 268, 'DELISTED': 3}
+  stats                        {'orders': 716, 'filled_at_support': 557, 'fallback_buys': 115, 'cancelled_never_bought': 42, 'pct_filled_at_support': 77.8, 'avg_days_to_fill': 3.0, 'support_fill_vs_A10_open_pct': -2.24, 'fallback_vs_A10_open_pct': 14.99, 'avg_cash_pct': np.float64(26.9)}
+  grew 10 lakh to              21.46 lakh
+  cagr_pct                     13.59
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -42.66
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.316
+  monthly_excess_t_nw3         -0.46
+  years_beating_nifty          2/6
+  n_closed_positions           672
+  top3_profit_share            0.36
+  avg_gross_exposure_pct       73.1
+  total_return_pct             114.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              460
+  win rate after costs         34.1%
+  avg win / avg loss           +36.74% / -11.18%
+  mean net per trade           +5.178%
+  exit mix                     {'STOP': 269, 'REBALANCE': 189, 'DELISTED': 2}
+  stats                        {'orders': 644, 'filled_at_support': 186, 'fallback_buys': 285, 'cancelled_never_bought': 168, 'pct_filled_at_support': 28.9, 'avg_days_to_fill': 5.4, 'support_fill_vs_A10_open_pct': -7.48, 'fallback_vs_A10_open_pct': 5.18, 'avg_cash_pct': np.float64(38.6)}
+  grew 10 lakh to              29.20 lakh
+  cagr_pct                     19.59
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -36.33
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.049
+  monthly_excess_t_nw3         0.08
+  years_beating_nifty          2/6
+  n_closed_positions           471
+  top3_profit_share            0.24
+  avg_gross_exposure_pct       61.4
+  total_return_pct             192.0
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              145
+  win rate after costs         31.0%
+  avg win / avg loss           +32.19% / -11.23%
+  mean net per trade           +2.244%
+  exit mix                     {'STOP': 82, 'REBALANCE': 62, 'DELISTED': 1}
+  stats                        {'orders': 1277, 'filled_at_support': 150, 'fallback_buys': 0, 'cancelled_never_bought': 371, 'pct_filled_at_support': 11.7, 'avg_days_to_fill': 8.7, 'support_fill_vs_A10_open_pct': -4.71, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(83.9)}
+  grew 10 lakh to              11.55 lakh
+  cagr_pct                     2.44
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -18.61
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -1.502
+  monthly_excess_t_nw3         -2.2
+  years_beating_nifty          1/6
+  n_closed_positions           150
+  top3_profit_share            1.06
+  avg_gross_exposure_pct       16.1
+  total_return_pct             15.5
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              409
+  win rate after costs         37.4%
+  avg win / avg loss           +26.00% / -11.11%
+  mean net per trade           +2.775%
+  exit mix                     {'STOP': 215, 'REBALANCE': 190, 'DELISTED': 4}
+  stats                        {'orders': 1037, 'filled_at_support': 420, 'fallback_buys': 0, 'cancelled_never_bought': 186, 'pct_filled_at_support': 40.5, 'avg_days_to_fill': 7.8, 'support_fill_vs_A10_open_pct': -3.08, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(56.6)}
+  grew 10 lakh to              18.19 lakh
+  cagr_pct                     10.5
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -29.26
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.748
+  monthly_excess_t_nw3         -1.22
+  years_beating_nifty          2/6
+  n_closed_positions           420
+  top3_profit_share            0.43
+  avg_gross_exposure_pct       43.4
+  total_return_pct             81.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              635
+  win rate after costs         34.2%
+  avg win / avg loss           +30.33% / -11.56%
+  mean net per trade           +2.751%
+  exit mix                     {'STOP': 375, 'REBALANCE': 258, 'DELISTED': 2}
+  stats                        {'orders': 888, 'filled_at_support': 650, 'fallback_buys': 0, 'cancelled_never_bought': 55, 'pct_filled_at_support': 73.2, 'avg_days_to_fill': 3.9, 'support_fill_vs_A10_open_pct': -2.88, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(32.1)}
+  grew 10 lakh to              19.32 lakh
+  cagr_pct                     11.62
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -41.41
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.483
+  monthly_excess_t_nw3         -0.85
+  years_beating_nifty          2/6
+  n_closed_positions           650
+  top3_profit_share            0.41
+  avg_gross_exposure_pct       67.9
+  total_return_pct             93.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@A  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              291
+  win rate after costs         32.6%
+  avg win / avg loss           +29.13% / -11.74%
+  mean net per trade           +1.604%
+  exit mix                     {'STOP': 178, 'REBALANCE': 111, 'DELISTED': 2}
+  stats                        {'orders': 1168, 'filled_at_support': 297, 'fallback_buys': 0, 'cancelled_never_bought': 269, 'pct_filled_at_support': 25.4, 'avg_days_to_fill': 7.7, 'support_fill_vs_A10_open_pct': -9.15, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(70.5)}
+  grew 10 lakh to              12.39 lakh
+  cagr_pct                     3.64
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         35.06
+  max_drawdown_pct             -27.74
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -1.346
+  monthly_excess_t_nw3         -2.22
+  years_beating_nifty          1/6
+  n_closed_positions           297
+  top3_profit_share            0.93
+  avg_gross_exposure_pct       29.5
+  total_return_pct             23.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1103
+  win rate after costs         32.4%
+  avg win / avg loss           +30.92% / -10.57%
+  mean net per trade           +2.857%
+  exit mix                     {'STOP': 667, 'REBALANCE': 433, 'DELISTED': 3}
+  stats                        None
+  grew 10 lakh to              29.09 lakh
+  cagr_pct                     11.28
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -58.9
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.356
+  monthly_excess_t_nw3         0.72
+  years_beating_nifty          5/10
+  n_closed_positions           1119
+  top3_profit_share            0.37
+  avg_gross_exposure_pct       84.5
+  total_return_pct             190.9
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              635
+  win rate after costs         35.4%
+  avg win / avg loss           +33.06% / -10.45%
+  mean net per trade           +4.965%
+  exit mix                     {'STOP': 357, 'REBALANCE': 276, 'DELISTED': 2}
+  stats                        {'orders': 931, 'filled_at_support': 143, 'fallback_buys': 502, 'cancelled_never_bought': 279, 'pct_filled_at_support': 15.4, 'avg_days_to_fill': 8.5, 'support_fill_vs_A10_open_pct': -3.22, 'fallback_vs_A10_open_pct': -0.02, 'avg_cash_pct': np.float64(34.3)}
+  grew 10 lakh to              41.53 lakh
+  cagr_pct                     15.31
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -33.83
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.558
+  monthly_excess_t_nw3         1.22
+  years_beating_nifty          6/10
+  n_closed_positions           645
+  top3_profit_share            0.29
+  avg_gross_exposure_pct       65.7
+  total_return_pct             315.3
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              794
+  win rate after costs         33.6%
+  avg win / avg loss           +30.76% / -10.51%
+  mean net per trade           +3.368%
+  exit mix                     {'STOP': 456, 'REBALANCE': 336, 'DELISTED': 2}
+  stats                        {'orders': 990, 'filled_at_support': 473, 'fallback_buys': 332, 'cancelled_never_bought': 181, 'pct_filled_at_support': 47.8, 'avg_days_to_fill': 6.8, 'support_fill_vs_A10_open_pct': -3.42, 'fallback_vs_A10_open_pct': 3.71, 'avg_cash_pct': np.float64(28.5)}
+  grew 10 lakh to              31.24 lakh
+  cagr_pct                     12.07
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -47.58
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.343
+  monthly_excess_t_nw3         0.75
+  years_beating_nifty          6/10
+  n_closed_positions           805
+  top3_profit_share            0.33
+  avg_gross_exposure_pct       71.5
+  total_return_pct             212.4
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              996
+  win rate after costs         31.5%
+  avg win / avg loss           +29.71% / -10.36%
+  mean net per trade           +2.274%
+  exit mix                     {'STOP': 588, 'REBALANCE': 406, 'DELISTED': 2}
+  stats                        {'orders': 1064, 'filled_at_support': 887, 'fallback_buys': 126, 'cancelled_never_bought': 50, 'pct_filled_at_support': 83.4, 'avg_days_to_fill': 2.5, 'support_fill_vs_A10_open_pct': -1.93, 'fallback_vs_A10_open_pct': 13.04, 'avg_cash_pct': np.float64(19.7)}
+  grew 10 lakh to              24.85 lakh
+  cagr_pct                     9.54
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -57.86
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.21
+  monthly_excess_t_nw3         0.46
+  years_beating_nifty          6/10
+  n_closed_positions           1013
+  top3_profit_share            0.36
+  avg_gross_exposure_pct       80.3
+  total_return_pct             148.5
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              736
+  win rate after costs         30.7%
+  avg win / avg loss           +32.79% / -10.52%
+  mean net per trade           +2.776%
+  exit mix                     {'STOP': 454, 'REBALANCE': 280, 'DELISTED': 2}
+  stats                        {'orders': 988, 'filled_at_support': 301, 'fallback_buys': 448, 'cancelled_never_bought': 235, 'pct_filled_at_support': 30.5, 'avg_days_to_fill': 5.0, 'support_fill_vs_A10_open_pct': -5.44, 'fallback_vs_A10_open_pct': 2.61, 'avg_cash_pct': np.float64(32.7)}
+  grew 10 lakh to              24.71 lakh
+  cagr_pct                     9.47
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -45.19
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.138
+  monthly_excess_t_nw3         0.29
+  years_beating_nifty          5/10
+  n_closed_positions           749
+  top3_profit_share            0.41
+  avg_gross_exposure_pct       67.3
+  total_return_pct             147.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              279
+  win rate after costs         41.9%
+  avg win / avg loss           +22.71% / -9.49%
+  mean net per trade           +4.015%
+  exit mix                     {'REBALANCE': 153, 'STOP': 125, 'DELISTED': 1}
+  stats                        {'orders': 1958, 'filled_at_support': 285, 'fallback_buys': 0, 'cancelled_never_bought': 461, 'pct_filled_at_support': 14.6, 'avg_days_to_fill': 9.3, 'support_fill_vs_A10_open_pct': -3.59, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(74.1)}
+  grew 10 lakh to              17.59 lakh
+  cagr_pct                     5.81
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -14.5
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.309
+  monthly_excess_t_nw3         -0.62
+  years_beating_nifty          3/10
+  n_closed_positions           285
+  top3_profit_share            0.52
+  avg_gross_exposure_pct       25.9
+  total_return_pct             75.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              637
+  win rate after costs         34.2%
+  avg win / avg loss           +26.34% / -10.37%
+  mean net per trade           +2.191%
+  exit mix                     {'STOP': 351, 'REBALANCE': 285, 'DELISTED': 1}
+  stats                        {'orders': 1578, 'filled_at_support': 650, 'fallback_buys': 0, 'cancelled_never_bought': 249, 'pct_filled_at_support': 41.2, 'avg_days_to_fill': 7.6, 'support_fill_vs_A10_open_pct': -3.34, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(47.9)}
+  grew 10 lakh to              20.10 lakh
+  cagr_pct                     7.24
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -39.6
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.121
+  monthly_excess_t_nw3         -0.28
+  years_beating_nifty          6/10
+  n_closed_positions           650
+  top3_profit_share            0.38
+  avg_gross_exposure_pct       52.1
+  total_return_pct             101.0
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              974
+  win rate after costs         32.3%
+  avg win / avg loss           +27.14% / -10.44%
+  mean net per trade           +1.714%
+  exit mix                     {'STOP': 571, 'REBALANCE': 401, 'DELISTED': 2}
+  stats                        {'orders': 1266, 'filled_at_support': 991, 'fallback_buys': 0, 'cancelled_never_bought': 58, 'pct_filled_at_support': 78.3, 'avg_days_to_fill': 3.2, 'support_fill_vs_A10_open_pct': -2.31, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(24.3)}
+  grew 10 lakh to              19.09 lakh
+  cagr_pct                     6.68
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -58.49
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.036
+  monthly_excess_t_nw3         -0.08
+  years_beating_nifty          6/10
+  n_closed_positions           991
+  top3_profit_share            0.41
+  avg_gross_exposure_pct       75.7
+  total_return_pct             90.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@A  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              483
+  win rate after costs         31.3%
+  avg win / avg loss           +23.58% / -10.36%
+  mean net per trade           +0.251%
+  exit mix                     {'STOP': 291, 'REBALANCE': 192}
+  stats                        {'orders': 1887, 'filled_at_support': 494, 'fallback_buys': 0, 'cancelled_never_bought': 366, 'pct_filled_at_support': 26.2, 'avg_days_to_fill': 7.0, 'support_fill_vs_A10_open_pct': -7.05, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(67.1)}
+  grew 10 lakh to              11.06 lakh
+  cagr_pct                     1.02
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         3.22
+  max_drawdown_pct             -35.09
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.672
+  monthly_excess_t_nw3         -1.66
+  years_beating_nifty          4/10
+  n_closed_positions           494
+  top3_profit_share            2.23
+  avg_gross_exposure_pct       32.9
+  total_return_pct             10.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              118
+  win rate after costs         11.0%
+  avg win / avg loss           +13.25% / -10.57%
+  mean net per trade           -7.949%
+  exit mix                     {'STOP': 98, 'REBALANCE': 20}
+  stats                        None
+  grew 10 lakh to              6.40 lakh
+  cagr_pct                     -36.13
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -37.35
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -3.627
+  monthly_excess_t_nw3         -3.98
+  years_beating_nifty          0/1
+  n_closed_positions           134
+  top3_profit_share            inf
+  avg_gross_exposure_pct       65.6
+  total_return_pct             -36.0
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              71
+  win rate after costs         9.9%
+  avg win / avg loss           +16.30% / -10.65%
+  mean net per trade           -7.989%
+  exit mix                     {'STOP': 61, 'REBALANCE': 10}
+  stats                        {'orders': 107, 'filled_at_support': 22, 'fallback_buys': 60, 'cancelled_never_bought': 18, 'pct_filled_at_support': 20.6, 'avg_days_to_fill': 5.9, 'support_fill_vs_A10_open_pct': -5.82, 'fallback_vs_A10_open_pct': 1.9, 'avg_cash_pct': np.float64(56.5)}
+  grew 10 lakh to              7.51 lakh
+  cagr_pct                     -25.0
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -26.6
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.406
+  monthly_excess_t_nw3         -2.32
+  years_beating_nifty          0/1
+  n_closed_positions           82
+  top3_profit_share            inf
+  avg_gross_exposure_pct       43.5
+  total_return_pct             -24.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              90
+  win rate after costs         14.4%
+  avg win / avg loss           +14.29% / -10.68%
+  mean net per trade           -7.071%
+  exit mix                     {'STOP': 73, 'REBALANCE': 17}
+  stats                        {'orders': 118, 'filled_at_support': 79, 'fallback_buys': 26, 'cancelled_never_bought': 10, 'pct_filled_at_support': 66.9, 'avg_days_to_fill': 5.4, 'support_fill_vs_A10_open_pct': -4.2, 'fallback_vs_A10_open_pct': 5.55, 'avg_cash_pct': np.float64(45.2)}
+  grew 10 lakh to              7.36 lakh
+  cagr_pct                     -26.43
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -31.73
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.543
+  monthly_excess_t_nw3         -1.79
+  years_beating_nifty          0/1
+  n_closed_positions           105
+  top3_profit_share            inf
+  avg_gross_exposure_pct       54.8
+  total_return_pct             -26.4
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              107
+  win rate after costs         12.1%
+  avg win / avg loss           +13.65% / -10.43%
+  mean net per trade           -7.505%
+  exit mix                     {'STOP': 87, 'REBALANCE': 20}
+  stats                        {'orders': 124, 'filled_at_support': 119, 'fallback_buys': 4, 'cancelled_never_bought': 0, 'pct_filled_at_support': 96.0, 'avg_days_to_fill': 1.1, 'support_fill_vs_A10_open_pct': -1.62, 'fallback_vs_A10_open_pct': 4.74, 'avg_cash_pct': np.float64(31.7)}
+  grew 10 lakh to              6.89 lakh
+  cagr_pct                     -31.22
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -35.53
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.961
+  monthly_excess_t_nw3         -2.49
+  years_beating_nifty          0/1
+  n_closed_positions           123
+  top3_profit_share            inf
+  avg_gross_exposure_pct       68.3
+  total_return_pct             -31.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              80
+  win rate after costs         8.8%
+  avg win / avg loss           +19.03% / -10.44%
+  mean net per trade           -7.864%
+  exit mix                     {'STOP': 68, 'REBALANCE': 12}
+  stats                        {'orders': 115, 'filled_at_support': 38, 'fallback_buys': 55, 'cancelled_never_bought': 18, 'pct_filled_at_support': 33.0, 'avg_days_to_fill': 2.9, 'support_fill_vs_A10_open_pct': -5.35, 'fallback_vs_A10_open_pct': 3.53, 'avg_cash_pct': np.float64(55.7)}
+  grew 10 lakh to              7.32 lakh
+  cagr_pct                     -26.83
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -28.2
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.613
+  monthly_excess_t_nw3         -2.81
+  years_beating_nifty          0/1
+  n_closed_positions           93
+  top3_profit_share            inf
+  avg_gross_exposure_pct       44.3
+  total_return_pct             -26.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              34
+  win rate after costs         14.7%
+  avg win / avg loss           +12.44% / -10.27%
+  mean net per trade           -6.927%
+  exit mix                     {'STOP': 25, 'REBALANCE': 9}
+  stats                        {'orders': 179, 'filled_at_support': 42, 'fallback_buys': 0, 'cancelled_never_bought': 31, 'pct_filled_at_support': 23.5, 'avg_days_to_fill': 7.9, 'support_fill_vs_A10_open_pct': -5.17, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(77.1)}
+  grew 10 lakh to              9.14 lakh
+  cagr_pct                     -8.63
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -14.79
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -0.731
+  monthly_excess_t_nw3         -0.68
+  years_beating_nifty          0/1
+  n_closed_positions           42
+  top3_profit_share            inf
+  avg_gross_exposure_pct       22.9
+  total_return_pct             -8.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              75
+  win rate after costs         16.0%
+  avg win / avg loss           +15.39% / -10.59%
+  mean net per trade           -6.430%
+  exit mix                     {'STOP': 58, 'REBALANCE': 17}
+  stats                        {'orders': 147, 'filled_at_support': 91, 'fallback_buys': 0, 'cancelled_never_bought': 16, 'pct_filled_at_support': 61.9, 'avg_days_to_fill': 5.5, 'support_fill_vs_A10_open_pct': -4.2, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(51.1)}
+  grew 10 lakh to              8.12 lakh
+  cagr_pct                     -18.84
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -26.48
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.711
+  monthly_excess_t_nw3         -1.21
+  years_beating_nifty          0/1
+  n_closed_positions           91
+  top3_profit_share            inf
+  avg_gross_exposure_pct       48.9
+  total_return_pct             -18.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              105
+  win rate after costs         12.4%
+  avg win / avg loss           +13.65% / -10.42%
+  mean net per trade           -7.441%
+  exit mix                     {'STOP': 85, 'REBALANCE': 20}
+  stats                        {'orders': 126, 'filled_at_support': 121, 'fallback_buys': 0, 'cancelled_never_bought': 0, 'pct_filled_at_support': 96.0, 'avg_days_to_fill': 1.3, 'support_fill_vs_A10_open_pct': -1.71, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(31.7)}
+  grew 10 lakh to              6.91 lakh
+  cagr_pct                     -30.96
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -35.28
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -2.934
+  monthly_excess_t_nw3         -2.49
+  years_beating_nifty          0/1
+  n_closed_positions           121
+  top3_profit_share            inf
+  avg_gross_exposure_pct       68.3
+  total_return_pct             -30.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@A  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              46
+  win rate after costs         13.0%
+  avg win / avg loss           +20.03% / -9.89%
+  mean net per trade           -5.988%
+  exit mix                     {'STOP': 35, 'REBALANCE': 11}
+  stats                        {'orders': 172, 'filled_at_support': 55, 'fallback_buys': 0, 'cancelled_never_bought': 22, 'pct_filled_at_support': 32.0, 'avg_days_to_fill': 6.7, 'support_fill_vs_A10_open_pct': -9.38, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(69.6)}
+  grew 10 lakh to              9.09 lakh
+  cagr_pct                     -9.14
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.68
+  max_drawdown_pct             -13.4
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -0.779
+  monthly_excess_t_nw3         -0.84
+  years_beating_nifty          0/1
+  n_closed_positions           55
+  top3_profit_share            inf
+  avg_gross_exposure_pct       30.4
+  total_return_pct             -9.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              850
+  win rate after costs         40.2%
+  avg win / avg loss           +28.60% / -9.54%
+  mean net per trade           +5.808%
+  exit mix                     {'REBALANCE': 429, 'STOP': 421}
+  stats                        None
+  grew 10 lakh to              60.78 lakh
+  cagr_pct                     25.93
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -32.51
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      1.256
+  monthly_excess_t_nw3         2.11
+  years_beating_nifty          5/8
+  n_closed_positions           864
+  top3_profit_share            0.22
+  avg_gross_exposure_pct       87.6
+  total_return_pct             507.8
+  verdict                      EDGE DEMONSTRATED (provisional; next is paper trading)
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [PASS] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              510
+  win rate after costs         41.8%
+  avg win / avg loss           +28.47% / -9.37%
+  mean net per trade           +6.435%
+  exit mix                     {'REBALANCE': 269, 'STOP': 241}
+  stats                        {'orders': 768, 'filled_at_support': 120, 'fallback_buys': 398, 'cancelled_never_bought': 242, 'pct_filled_at_support': 15.6, 'avg_days_to_fill': 8.4, 'support_fill_vs_A10_open_pct': -2.99, 'fallback_vs_A10_open_pct': 3.16, 'avg_cash_pct': np.float64(37.5)}
+  grew 10 lakh to              44.12 lakh
+  cagr_pct                     20.88
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -23.58
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.796
+  monthly_excess_t_nw3         1.59
+  years_beating_nifty          5/8
+  n_closed_positions           518
+  top3_profit_share            0.2
+  avg_gross_exposure_pct       62.5
+  total_return_pct             341.2
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              639
+  win rate after costs         38.8%
+  avg win / avg loss           +27.79% / -9.20%
+  mean net per trade           +5.157%
+  exit mix                     {'REBALANCE': 333, 'STOP': 306}
+  stats                        {'orders': 797, 'filled_at_support': 397, 'fallback_buys': 253, 'cancelled_never_bought': 142, 'pct_filled_at_support': 49.8, 'avg_days_to_fill': 7.2, 'support_fill_vs_A10_open_pct': -1.49, 'fallback_vs_A10_open_pct': 4.77, 'avg_cash_pct': np.float64(29.4)}
+  grew 10 lakh to              42.33 lakh
+  cagr_pct                     20.24
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -28.04
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.78
+  monthly_excess_t_nw3         1.5
+  years_beating_nifty          5/8
+  n_closed_positions           650
+  top3_profit_share            0.28
+  avg_gross_exposure_pct       70.6
+  total_return_pct             323.3
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              805
+  win rate after costs         39.5%
+  avg win / avg loss           +24.89% / -9.25%
+  mean net per trade           +4.234%
+  exit mix                     {'REBALANCE': 417, 'STOP': 388}
+  stats                        {'orders': 847, 'filled_at_support': 684, 'fallback_buys': 132, 'cancelled_never_bought': 28, 'pct_filled_at_support': 80.8, 'avg_days_to_fill': 3.0, 'support_fill_vs_A10_open_pct': -2.12, 'fallback_vs_A10_open_pct': 14.07, 'avg_cash_pct': np.float64(19.8)}
+  grew 10 lakh to              39.59 lakh
+  cagr_pct                     19.22
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -29.96
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.76
+  monthly_excess_t_nw3         1.41
+  years_beating_nifty          4/8
+  n_closed_positions           816
+  top3_profit_share            0.24
+  avg_gross_exposure_pct       80.2
+  total_return_pct             295.9
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              582
+  win rate after costs         42.3%
+  avg win / avg loss           +26.93% / -9.40%
+  mean net per trade           +5.959%
+  exit mix                     {'REBALANCE': 308, 'STOP': 274}
+  stats                        {'orders': 790, 'filled_at_support': 249, 'fallback_buys': 346, 'cancelled_never_bought': 191, 'pct_filled_at_support': 31.5, 'avg_days_to_fill': 5.7, 'support_fill_vs_A10_open_pct': -5.5, 'fallback_vs_A10_open_pct': 5.19, 'avg_cash_pct': np.float64(33.7)}
+  grew 10 lakh to              47.88 lakh
+  cagr_pct                     22.15
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -24.11
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.913
+  monthly_excess_t_nw3         1.74
+  years_beating_nifty          5/8
+  n_closed_positions           595
+  top3_profit_share            0.21
+  avg_gross_exposure_pct       66.3
+  total_return_pct             378.8
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              245
+  win rate after costs         39.2%
+  avg win / avg loss           +19.10% / -8.61%
+  mean net per trade           +2.245%
+  exit mix                     {'REBALANCE': 138, 'STOP': 107}
+  stats                        {'orders': 1568, 'filled_at_support': 247, 'fallback_buys': 0, 'cancelled_never_bought': 407, 'pct_filled_at_support': 15.8, 'avg_days_to_fill': 9.3, 'support_fill_vs_A10_open_pct': -3.41, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(76.3)}
+  grew 10 lakh to              13.09 lakh
+  cagr_pct                     3.5
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -15.7
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.625
+  monthly_excess_t_nw3         -1.69
+  years_beating_nifty          1/8
+  n_closed_positions           247
+  top3_profit_share            0.67
+  avg_gross_exposure_pct       23.7
+  total_return_pct             30.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              546
+  win rate after costs         38.1%
+  avg win / avg loss           +23.83% / -9.04%
+  mean net per trade           +3.483%
+  exit mix                     {'REBALANCE': 292, 'STOP': 254}
+  stats                        {'orders': 1229, 'filled_at_support': 554, 'fallback_buys': 0, 'cancelled_never_bought': 201, 'pct_filled_at_support': 45.1, 'avg_days_to_fill': 7.8, 'support_fill_vs_A10_open_pct': -1.03, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(47.6)}
+  grew 10 lakh to              24.11 lakh
+  cagr_pct                     11.9
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -26.48
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.104
+  monthly_excess_t_nw3         0.26
+  years_beating_nifty          4/8
+  n_closed_positions           554
+  top3_profit_share            0.41
+  avg_gross_exposure_pct       52.4
+  total_return_pct             141.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              758
+  win rate after costs         40.5%
+  avg win / avg loss           +24.03% / -9.13%
+  mean net per trade           +4.299%
+  exit mix                     {'REBALANCE': 408, 'STOP': 350}
+  stats                        {'orders': 1015, 'filled_at_support': 769, 'fallback_buys': 0, 'cancelled_never_bought': 42, 'pct_filled_at_support': 75.8, 'avg_days_to_fill': 3.9, 'support_fill_vs_A10_open_pct': -2.73, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(24.7)}
+  grew 10 lakh to              39.06 lakh
+  cagr_pct                     19.02
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -28.65
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.734
+  monthly_excess_t_nw3         1.4
+  years_beating_nifty          5/8
+  n_closed_positions           769
+  top3_profit_share            0.24
+  avg_gross_exposure_pct       75.3
+  total_return_pct             290.6
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@A  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              387
+  win rate after costs         42.4%
+  avg win / avg loss           +21.22% / -8.97%
+  mean net per trade           +3.825%
+  exit mix                     {'REBALANCE': 215, 'STOP': 172}
+  stats                        {'orders': 1485, 'filled_at_support': 396, 'fallback_buys': 0, 'cancelled_never_bought': 312, 'pct_filled_at_support': 26.7, 'avg_days_to_fill': 7.5, 'support_fill_vs_A10_open_pct': -6.6, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(66.4)}
+  grew 10 lakh to              21.56 lakh
+  cagr_pct                     10.31
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         16.45
+  max_drawdown_pct             -21.88
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.048
+  monthly_excess_t_nw3         -0.12
+  years_beating_nifty          4/8
+  n_closed_positions           396
+  top3_profit_share            0.3
+  avg_gross_exposure_pct       33.6
+  total_return_pct             115.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+A10@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              668
+  win rate after costs         33.4%
+  avg win / avg loss           +38.37% / -11.44%
+  mean net per trade           +5.190%
+  exit mix                     {'STOP': 389, 'REBALANCE': 274, 'DELISTED': 5}
+  stats                        None
+  grew 10 lakh to              53.05 lakh
+  cagr_pct                     32.12
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -39.29
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      1.092
+  monthly_excess_t_nw3         1.21
+  years_beating_nifty          4/6
+  n_closed_positions           683
+  top3_profit_share            0.58
+  avg_gross_exposure_pct       85.6
+  total_return_pct             430.5
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              408
+  win rate after costs         34.6%
+  avg win / avg loss           +37.69% / -11.20%
+  mean net per trade           +5.697%
+  exit mix                     {'STOP': 240, 'REBALANCE': 168}
+  stats                        {'orders': 608, 'filled_at_support': 89, 'fallback_buys': 328, 'cancelled_never_bought': 185, 'pct_filled_at_support': 14.6, 'avg_days_to_fill': 7.9, 'support_fill_vs_A10_open_pct': -4.41, 'fallback_vs_A10_open_pct': 4.82, 'avg_cash_pct': np.float64(36.7)}
+  grew 10 lakh to              46.44 lakh
+  cagr_pct                     29.22
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -35.67
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.762
+  monthly_excess_t_nw3         1.01
+  years_beating_nifty          3/6
+  n_closed_positions           417
+  top3_profit_share            0.7
+  avg_gross_exposure_pct       63.3
+  total_return_pct             364.4
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              488
+  win rate after costs         34.8%
+  avg win / avg loss           +35.41% / -10.69%
+  mean net per trade           +5.367%
+  exit mix                     {'STOP': 267, 'REBALANCE': 219, 'DELISTED': 2}
+  stats                        {'orders': 621, 'filled_at_support': 266, 'fallback_buys': 231, 'cancelled_never_bought': 120, 'pct_filled_at_support': 42.8, 'avg_days_to_fill': 7.2, 'support_fill_vs_A10_open_pct': -2.75, 'fallback_vs_A10_open_pct': 4.98, 'avg_cash_pct': np.float64(29.8)}
+  grew 10 lakh to              51.38 lakh
+  cagr_pct                     31.42
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -39.15
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.954
+  monthly_excess_t_nw3         1.26
+  years_beating_nifty          3/6
+  n_closed_positions           497
+  top3_profit_share            0.68
+  avg_gross_exposure_pct       70.2
+  total_return_pct             413.8
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              607
+  win rate after costs         36.1%
+  avg win / avg loss           +33.71% / -11.37%
+  mean net per trade           +4.895%
+  exit mix                     {'STOP': 343, 'REBALANCE': 262, 'DELISTED': 2}
+  stats                        {'orders': 656, 'filled_at_support': 529, 'fallback_buys': 92, 'cancelled_never_bought': 34, 'pct_filled_at_support': 80.6, 'avg_days_to_fill': 3.0, 'support_fill_vs_A10_open_pct': -2.63, 'fallback_vs_A10_open_pct': 17.52, 'avg_cash_pct': np.float64(17.8)}
+  grew 10 lakh to              59.81 lakh
+  cagr_pct                     34.79
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -37.78
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      1.248
+  monthly_excess_t_nw3         1.41
+  years_beating_nifty          4/6
+  n_closed_positions           621
+  top3_profit_share            0.65
+  avg_gross_exposure_pct       82.2
+  total_return_pct             498.1
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              453
+  win rate after costs         35.8%
+  avg win / avg loss           +36.09% / -11.22%
+  mean net per trade           +5.699%
+  exit mix                     {'STOP': 266, 'REBALANCE': 186, 'DELISTED': 1}
+  stats                        {'orders': 623, 'filled_at_support': 175, 'fallback_buys': 289, 'cancelled_never_bought': 156, 'pct_filled_at_support': 28.1, 'avg_days_to_fill': 5.7, 'support_fill_vs_A10_open_pct': -7.21, 'fallback_vs_A10_open_pct': 6.87, 'avg_cash_pct': np.float64(33.6)}
+  grew 10 lakh to              50.68 lakh
+  cagr_pct                     31.12
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -34.95
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.904
+  monthly_excess_t_nw3         1.15
+  years_beating_nifty          3/6
+  n_closed_positions           464
+  top3_profit_share            0.67
+  avg_gross_exposure_pct       66.4
+  total_return_pct             406.8
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              170
+  win rate after costs         38.2%
+  avg win / avg loss           +31.26% / -10.21%
+  mean net per trade           +5.649%
+  exit mix                     {'STOP': 85, 'REBALANCE': 85}
+  stats                        {'orders': 1237, 'filled_at_support': 174, 'fallback_buys': 0, 'cancelled_never_bought': 317, 'pct_filled_at_support': 14.1, 'avg_days_to_fill': 9.2, 'support_fill_vs_A10_open_pct': -5.2, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(78.5)}
+  grew 10 lakh to              15.80 lakh
+  cagr_pct                     7.94
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -14.63
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -1.052
+  monthly_excess_t_nw3         -1.64
+  years_beating_nifty          1/6
+  n_closed_positions           174
+  top3_profit_share            0.65
+  avg_gross_exposure_pct       21.5
+  total_return_pct             58.0
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              378
+  win rate after costs         36.0%
+  avg win / avg loss           +35.73% / -10.48%
+  mean net per trade           +6.147%
+  exit mix                     {'STOP': 196, 'REBALANCE': 180, 'DELISTED': 2}
+  stats                        {'orders': 980, 'filled_at_support': 387, 'fallback_buys': 0, 'cancelled_never_bought': 179, 'pct_filled_at_support': 39.5, 'avg_days_to_fill': 8.0, 'support_fill_vs_A10_open_pct': -2.9, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(50.5)}
+  grew 10 lakh to              26.91 lakh
+  cagr_pct                     17.97
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -27.38
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.14
+  monthly_excess_t_nw3         -0.2
+  years_beating_nifty          3/6
+  n_closed_positions           387
+  top3_profit_share            0.31
+  avg_gross_exposure_pct       49.5
+  total_return_pct             169.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              593
+  win rate after costs         35.8%
+  avg win / avg loss           +31.62% / -11.39%
+  mean net per trade           +3.987%
+  exit mix                     {'STOP': 336, 'REBALANCE': 255, 'DELISTED': 2}
+  stats                        {'orders': 802, 'filled_at_support': 606, 'fallback_buys': 0, 'cancelled_never_bought': 42, 'pct_filled_at_support': 75.6, 'avg_days_to_fill': 3.8, 'support_fill_vs_A10_open_pct': -3.47, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(25.0)}
+  grew 10 lakh to              27.69 lakh
+  cagr_pct                     18.53
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -41.32
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      0.083
+  monthly_excess_t_nw3         0.1
+  years_beating_nifty          3/6
+  n_closed_positions           606
+  top3_profit_share            0.35
+  avg_gross_exposure_pct       75.0
+  total_return_pct             176.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@B  H0 2001-01-01 -> 2006-12-31
+======================================================================
+  trades (closed)              290
+  win rate after costs         36.9%
+  avg win / avg loss           +34.54% / -11.08%
+  mean net per trade           +5.754%
+  exit mix                     {'STOP': 163, 'REBALANCE': 126, 'DELISTED': 1}
+  stats                        {'orders': 1130, 'filled_at_support': 299, 'fallback_buys': 0, 'cancelled_never_bought': 241, 'pct_filled_at_support': 26.5, 'avg_days_to_fill': 7.5, 'support_fill_vs_A10_open_pct': -8.88, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(65.0)}
+  grew 10 lakh to              22.36 lakh
+  cagr_pct                     14.38
+  nifty_cagr_pct               21.19
+  ew_universe_cagr_pct         34.38
+  max_drawdown_pct             -26.89
+  nifty_max_drawdown_pct       -39.7
+  monthly_excess_mean_pct      -0.48
+  monthly_excess_t_nw3         -0.73
+  years_beating_nifty          2/6
+  n_closed_positions           299
+  top3_profit_share            0.37
+  avg_gross_exposure_pct       35.0
+  total_return_pct             123.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+A10@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1110
+  win rate after costs         34.2%
+  avg win / avg loss           +27.50% / -10.35%
+  mean net per trade           +2.606%
+  exit mix                     {'STOP': 637, 'REBALANCE': 468, 'DELISTED': 5}
+  stats                        None
+  grew 10 lakh to              31.45 lakh
+  cagr_pct                     12.15
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -58.58
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.433
+  monthly_excess_t_nw3         0.8
+  years_beating_nifty          6/10
+  n_closed_positions           1127
+  top3_profit_share            0.37
+  avg_gross_exposure_pct       85.1
+  total_return_pct             214.5
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              670
+  win rate after costs         34.9%
+  avg win / avg loss           +27.63% / -10.39%
+  mean net per trade           +2.885%
+  exit mix                     {'STOP': 385, 'REBALANCE': 281, 'DELISTED': 4}
+  stats                        {'orders': 986, 'filled_at_support': 154, 'fallback_buys': 527, 'cancelled_never_bought': 297, 'pct_filled_at_support': 15.6, 'avg_days_to_fill': 8.3, 'support_fill_vs_A10_open_pct': -2.67, 'fallback_vs_A10_open_pct': 2.58, 'avg_cash_pct': np.float64(37.9)}
+  grew 10 lakh to              25.48 lakh
+  cagr_pct                     9.81
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -33.74
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      0.123
+  monthly_excess_t_nw3         0.26
+  years_beating_nifty          5/10
+  n_closed_positions           681
+  top3_profit_share            0.43
+  avg_gross_exposure_pct       62.1
+  total_return_pct             154.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              855
+  win rate after costs         33.9%
+  avg win / avg loss           +24.79% / -10.10%
+  mean net per trade           +1.733%
+  exit mix                     {'STOP': 476, 'REBALANCE': 375, 'DELISTED': 4}
+  stats                        {'orders': 1054, 'filled_at_support': 514, 'fallback_buys': 352, 'cancelled_never_bought': 181, 'pct_filled_at_support': 48.8, 'avg_days_to_fill': 6.8, 'support_fill_vs_A10_open_pct': -2.05, 'fallback_vs_A10_open_pct': 5.46, 'avg_cash_pct': np.float64(31.0)}
+  grew 10 lakh to              20.08 lakh
+  cagr_pct                     7.23
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -42.05
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.046
+  monthly_excess_t_nw3         -0.09
+  years_beating_nifty          6/10
+  n_closed_positions           866
+  top3_profit_share            0.59
+  avg_gross_exposure_pct       69.0
+  total_return_pct             100.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1044
+  win rate after costs         34.0%
+  avg win / avg loss           +25.46% / -10.39%
+  mean net per trade           +1.800%
+  exit mix                     {'STOP': 604, 'REBALANCE': 435, 'DELISTED': 5}
+  stats                        {'orders': 1104, 'filled_at_support': 912, 'fallback_buys': 150, 'cancelled_never_bought': 42, 'pct_filled_at_support': 82.6, 'avg_days_to_fill': 2.7, 'support_fill_vs_A10_open_pct': -1.64, 'fallback_vs_A10_open_pct': 13.41, 'avg_cash_pct': np.float64(21.1)}
+  grew 10 lakh to              18.07 lakh
+  cagr_pct                     6.1
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -57.9
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.06
+  monthly_excess_t_nw3         -0.12
+  years_beating_nifty          4/10
+  n_closed_positions           1062
+  top3_profit_share            0.49
+  avg_gross_exposure_pct       78.9
+  total_return_pct             80.7
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              761
+  win rate after costs         31.9%
+  avg win / avg loss           +27.99% / -10.35%
+  mean net per trade           +1.891%
+  exit mix                     {'STOP': 452, 'REBALANCE': 304, 'DELISTED': 5}
+  stats                        {'orders': 1018, 'filled_at_support': 311, 'fallback_buys': 466, 'cancelled_never_bought': 238, 'pct_filled_at_support': 30.6, 'avg_days_to_fill': 4.8, 'support_fill_vs_A10_open_pct': -4.78, 'fallback_vs_A10_open_pct': 4.87, 'avg_cash_pct': np.float64(33.9)}
+  grew 10 lakh to              20.22 lakh
+  cagr_pct                     7.3
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -45.71
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.033
+  monthly_excess_t_nw3         -0.06
+  years_beating_nifty          5/10
+  n_closed_positions           777
+  top3_profit_share            0.66
+  avg_gross_exposure_pct       66.1
+  total_return_pct             102.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              307
+  win rate after costs         38.4%
+  avg win / avg loss           +17.65% / -9.52%
+  mean net per trade           +0.921%
+  exit mix                     {'REBALANCE': 162, 'STOP': 144, 'DELISTED': 1}
+  stats                        {'orders': 2014, 'filled_at_support': 311, 'fallback_buys': 0, 'cancelled_never_bought': 490, 'pct_filled_at_support': 15.4, 'avg_days_to_fill': 9.1, 'support_fill_vs_A10_open_pct': -3.68, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(78.1)}
+  grew 10 lakh to              12.25 lakh
+  cagr_pct                     2.05
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -15.59
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.617
+  monthly_excess_t_nw3         -1.26
+  years_beating_nifty          2/10
+  n_closed_positions           311
+  top3_profit_share            0.69
+  avg_gross_exposure_pct       21.9
+  total_return_pct             22.5
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              686
+  win rate after costs         36.6%
+  avg win / avg loss           +19.93% / -9.82%
+  mean net per trade           +1.065%
+  exit mix                     {'STOP': 351, 'REBALANCE': 332, 'DELISTED': 3}
+  stats                        {'orders': 1607, 'filled_at_support': 694, 'fallback_buys': 0, 'cancelled_never_bought': 254, 'pct_filled_at_support': 43.2, 'avg_days_to_fill': 7.7, 'support_fill_vs_A10_open_pct': -2.09, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(50.1)}
+  grew 10 lakh to              16.03 lakh
+  cagr_pct                     4.84
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -34.57
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.302
+  monthly_excess_t_nw3         -0.67
+  years_beating_nifty          4/10
+  n_closed_positions           694
+  top3_profit_share            0.54
+  avg_gross_exposure_pct       49.9
+  total_return_pct             60.3
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              1009
+  win rate after costs         34.4%
+  avg win / avg loss           +24.57% / -10.38%
+  mean net per trade           +1.639%
+  exit mix                     {'STOP': 577, 'REBALANCE': 428, 'DELISTED': 4}
+  stats                        {'orders': 1316, 'filled_at_support': 1025, 'fallback_buys': 0, 'cancelled_never_bought': 55, 'pct_filled_at_support': 77.9, 'avg_days_to_fill': 3.5, 'support_fill_vs_A10_open_pct': -2.18, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(26.5)}
+  grew 10 lakh to              15.59 lakh
+  cagr_pct                     4.54
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -57.89
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.211
+  monthly_excess_t_nw3         -0.43
+  years_beating_nifty          4/10
+  n_closed_positions           1025
+  top3_profit_share            0.64
+  avg_gross_exposure_pct       73.5
+  total_return_pct             55.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@B  W2 2008-01-01 -> 2017-12-31
+======================================================================
+  trades (closed)              495
+  win rate after costs         34.5%
+  avg win / avg loss           +24.42% / -10.23%
+  mean net per trade           +1.739%
+  exit mix                     {'STOP': 277, 'REBALANCE': 215, 'DELISTED': 3}
+  stats                        {'orders': 1832, 'filled_at_support': 506, 'fallback_buys': 0, 'cancelled_never_bought': 375, 'pct_filled_at_support': 27.6, 'avg_days_to_fill': 7.2, 'support_fill_vs_A10_open_pct': -6.97, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(61.9)}
+  grew 10 lakh to              16.38 lakh
+  cagr_pct                     5.06
+  nifty_cagr_pct               5.54
+  ew_universe_cagr_pct         5.14
+  max_drawdown_pct             -35.35
+  nifty_max_drawdown_pct       -59.86
+  monthly_excess_mean_pct      -0.321
+  monthly_excess_t_nw3         -0.64
+  years_beating_nifty          5/10
+  n_closed_positions           506
+  top3_profit_share            1.02
+  avg_gross_exposure_pct       38.1
+  total_return_pct             63.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              154
+  win rate after costs         13.6%
+  avg win / avg loss           +19.45% / -10.59%
+  mean net per trade           -6.492%
+  exit mix                     {'STOP': 124, 'REBALANCE': 30}
+  stats                        None
+  grew 10 lakh to              6.41 lakh
+  cagr_pct                     -36.03
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -37.51
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -3.62
+  monthly_excess_t_nw3         -4.31
+  years_beating_nifty          0/1
+  n_closed_positions           165
+  top3_profit_share            inf
+  avg_gross_exposure_pct       61.0
+  total_return_pct             -35.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              76
+  win rate after costs         10.5%
+  avg win / avg loss           +19.49% / -10.00%
+  mean net per trade           -6.894%
+  exit mix                     {'STOP': 60, 'REBALANCE': 16}
+  stats                        {'orders': 128, 'filled_at_support': 26, 'fallback_buys': 58, 'cancelled_never_bought': 37, 'pct_filled_at_support': 20.3, 'avg_days_to_fill': 7.2, 'support_fill_vs_A10_open_pct': -3.67, 'fallback_vs_A10_open_pct': -3.76, 'avg_cash_pct': np.float64(64.2)}
+  grew 10 lakh to              8.01 lakh
+  cagr_pct                     -19.93
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -22.05
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.837
+  monthly_excess_t_nw3         -1.78
+  years_beating_nifty          0/1
+  n_closed_positions           84
+  top3_profit_share            inf
+  avg_gross_exposure_pct       35.8
+  total_return_pct             -19.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              97
+  win rate after costs         18.6%
+  avg win / avg loss           +20.15% / -10.55%
+  mean net per trade           -4.856%
+  exit mix                     {'STOP': 73, 'REBALANCE': 24}
+  stats                        {'orders': 139, 'filled_at_support': 73, 'fallback_buys': 36, 'cancelled_never_bought': 26, 'pct_filled_at_support': 52.5, 'avg_days_to_fill': 5.6, 'support_fill_vs_A10_open_pct': -3.59, 'fallback_vs_A10_open_pct': -2.68, 'avg_cash_pct': np.float64(56.7)}
+  grew 10 lakh to              8.28 lakh
+  cagr_pct                     -17.28
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -24.55
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.434
+  monthly_excess_t_nw3         -1.08
+  years_beating_nifty          0/1
+  n_closed_positions           109
+  top3_profit_share            inf
+  avg_gross_exposure_pct       43.3
+  total_return_pct             -17.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              140
+  win rate after costs         12.9%
+  avg win / avg loss           +20.32% / -10.59%
+  mean net per trade           -6.619%
+  exit mix                     {'STOP': 113, 'REBALANCE': 27}
+  stats                        {'orders': 155, 'filled_at_support': 145, 'fallback_buys': 6, 'cancelled_never_bought': 4, 'pct_filled_at_support': 93.5, 'avg_days_to_fill': 1.4, 'support_fill_vs_A10_open_pct': -1.54, 'fallback_vs_A10_open_pct': 5.72, 'avg_cash_pct': np.float64(40.4)}
+  grew 10 lakh to              6.62 lakh
+  cagr_pct                     -33.86
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -35.59
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -3.349
+  monthly_excess_t_nw3         -3.38
+  years_beating_nifty          0/1
+  n_closed_positions           151
+  top3_profit_share            inf
+  avg_gross_exposure_pct       59.6
+  total_return_pct             -33.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              78
+  win rate after costs         12.8%
+  avg win / avg loss           +27.35% / -10.11%
+  mean net per trade           -5.308%
+  exit mix                     {'STOP': 59, 'REBALANCE': 19}
+  stats                        {'orders': 129, 'filled_at_support': 39, 'fallback_buys': 46, 'cancelled_never_bought': 36, 'pct_filled_at_support': 30.2, 'avg_days_to_fill': 4.9, 'support_fill_vs_A10_open_pct': -6.58, 'fallback_vs_A10_open_pct': -3.33, 'avg_cash_pct': np.float64(60.0)}
+  grew 10 lakh to              8.54 lakh
+  cagr_pct                     -14.69
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -24.3
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.172
+  monthly_excess_t_nw3         -0.81
+  years_beating_nifty          0/1
+  n_closed_positions           85
+  top3_profit_share            inf
+  avg_gross_exposure_pct       40.0
+  total_return_pct             -14.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              27
+  win rate after costs         18.5%
+  avg win / avg loss           +7.74% / -9.22%
+  mean net per trade           -6.081%
+  exit mix                     {'STOP': 17, 'REBALANCE': 10}
+  stats                        {'orders': 200, 'filled_at_support': 32, 'fallback_buys': 0, 'cancelled_never_bought': 55, 'pct_filled_at_support': 16.0, 'avg_days_to_fill': 8.3, 'support_fill_vs_A10_open_pct': -4.76, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(85.7)}
+  grew 10 lakh to              9.48 lakh
+  cagr_pct                     -5.26
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -7.76
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -0.423
+  monthly_excess_t_nw3         -0.5
+  years_beating_nifty          0/1
+  n_closed_positions           32
+  top3_profit_share            inf
+  avg_gross_exposure_pct       14.3
+  total_return_pct             -5.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              70
+  win rate after costs         24.3%
+  avg win / avg loss           +21.02% / -10.45%
+  mean net per trade           -2.807%
+  exit mix                     {'STOP': 48, 'REBALANCE': 22}
+  stats                        {'orders': 175, 'filled_at_support': 80, 'fallback_buys': 0, 'cancelled_never_bought': 33, 'pct_filled_at_support': 45.7, 'avg_days_to_fill': 6.6, 'support_fill_vs_A10_open_pct': -5.01, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(65.2)}
+  grew 10 lakh to              9.38 lakh
+  cagr_pct                     -6.18
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -15.79
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -0.397
+  monthly_excess_t_nw3         -0.34
+  years_beating_nifty          0/1
+  n_closed_positions           80
+  top3_profit_share            inf
+  avg_gross_exposure_pct       34.8
+  total_return_pct             -6.2
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              139
+  win rate after costs         14.4%
+  avg win / avg loss           +19.10% / -10.68%
+  mean net per trade           -6.396%
+  exit mix                     {'STOP': 111, 'REBALANCE': 28}
+  stats                        {'orders': 161, 'filled_at_support': 150, 'fallback_buys': 0, 'cancelled_never_bought': 4, 'pct_filled_at_support': 93.2, 'avg_days_to_fill': 1.5, 'support_fill_vs_A10_open_pct': -1.75, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(40.7)}
+  grew 10 lakh to              6.74 lakh
+  cagr_pct                     -32.66
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -34.44
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -3.198
+  monthly_excess_t_nw3         -3.26
+  years_beating_nifty          0/1
+  n_closed_positions           150
+  top3_profit_share            inf
+  avg_gross_exposure_pct       59.3
+  total_return_pct             -32.6
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [FAIL] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@B  Y2018 2018-01-01 -> 2018-12-31
+======================================================================
+  trades (closed)              51
+  win rate after costs         19.6%
+  avg win / avg loss           +9.19% / -9.67%
+  mean net per trade           -5.975%
+  exit mix                     {'STOP': 33, 'REBALANCE': 18}
+  stats                        {'orders': 193, 'filled_at_support': 55, 'fallback_buys': 0, 'cancelled_never_bought': 43, 'pct_filled_at_support': 28.5, 'avg_days_to_fill': 5.5, 'support_fill_vs_A10_open_pct': -7.46, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(78.7)}
+  grew 10 lakh to              8.69 lakh
+  cagr_pct                     -13.1
+  nifty_cagr_pct               4.11
+  ew_universe_cagr_pct         -24.13
+  max_drawdown_pct             -16.61
+  nifty_max_drawdown_pct       -14.55
+  monthly_excess_mean_pct      -1.191
+  monthly_excess_t_nw3         -1.02
+  years_beating_nifty          0/1
+  n_closed_positions           55
+  top3_profit_share            inf
+  avg_gross_exposure_pct       21.3
+  total_return_pct             -13.1
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+A10@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              817
+  win rate after costs         35.6%
+  avg win / avg loss           +32.75% / -9.75%
+  mean net per trade           +5.387%
+  exit mix                     {'STOP': 436, 'REBALANCE': 381}
+  stats                        None
+  grew 10 lakh to              51.25 lakh
+  cagr_pct                     23.22
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -41.36
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      1.122
+  monthly_excess_t_nw3         1.46
+  years_beating_nifty          6/8
+  n_closed_positions           826
+  top3_profit_share            0.47
+  avg_gross_exposure_pct       88.2
+  total_return_pct             412.5
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_BA@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              508
+  win rate after costs         34.4%
+  avg win / avg loss           +37.30% / -9.87%
+  mean net per trade           +6.381%
+  exit mix                     {'STOP': 286, 'REBALANCE': 222}
+  stats                        {'orders': 753, 'filled_at_support': 126, 'fallback_buys': 388, 'cancelled_never_bought': 231, 'pct_filled_at_support': 16.7, 'avg_days_to_fill': 8.1, 'support_fill_vs_A10_open_pct': -2.4, 'fallback_vs_A10_open_pct': 3.53, 'avg_cash_pct': np.float64(33.7)}
+  grew 10 lakh to              43.81 lakh
+  cagr_pct                     20.77
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -38.89
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.834
+  monthly_excess_t_nw3         1.35
+  years_beating_nifty          5/8
+  n_closed_positions           514
+  top3_profit_share            0.51
+  avg_gross_exposure_pct       66.3
+  total_return_pct             338.1
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_BA@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              627
+  win rate after costs         35.6%
+  avg win / avg loss           +32.14% / -9.67%
+  mean net per trade           +5.200%
+  exit mix                     {'STOP': 336, 'REBALANCE': 291}
+  stats                        {'orders': 781, 'filled_at_support': 389, 'fallback_buys': 246, 'cancelled_never_bought': 140, 'pct_filled_at_support': 49.8, 'avg_days_to_fill': 6.9, 'support_fill_vs_A10_open_pct': -2.23, 'fallback_vs_A10_open_pct': 5.92, 'avg_cash_pct': np.float64(26.6)}
+  grew 10 lakh to              40.53 lakh
+  cagr_pct                     19.58
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -40.32
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.78
+  monthly_excess_t_nw3         1.18
+  years_beating_nifty          5/8
+  n_closed_positions           635
+  top3_profit_share            0.51
+  avg_gross_exposure_pct       73.4
+  total_return_pct             305.3
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_BA@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              769
+  win rate after costs         36.4%
+  avg win / avg loss           +31.25% / -9.59%
+  mean net per trade           +5.280%
+  exit mix                     {'STOP': 404, 'REBALANCE': 365}
+  stats                        {'orders': 809, 'filled_at_support': 676, 'fallback_buys': 102, 'cancelled_never_bought': 30, 'pct_filled_at_support': 83.6, 'avg_days_to_fill': 3.0, 'support_fill_vs_A10_open_pct': -2.0, 'fallback_vs_A10_open_pct': 13.92, 'avg_cash_pct': np.float64(16.2)}
+  grew 10 lakh to              48.88 lakh
+  cagr_pct                     22.47
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -40.02
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      1.062
+  monthly_excess_t_nw3         1.44
+  years_beating_nifty          5/8
+  n_closed_positions           778
+  top3_profit_share            0.47
+  avg_gross_exposure_pct       83.8
+  total_return_pct             388.8
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_BA@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              589
+  win rate after costs         36.3%
+  avg win / avg loss           +32.53% / -9.41%
+  mean net per trade           +5.827%
+  exit mix                     {'STOP': 300, 'REBALANCE': 289}
+  stats                        {'orders': 756, 'filled_at_support': 252, 'fallback_buys': 346, 'cancelled_never_bought': 153, 'pct_filled_at_support': 33.3, 'avg_days_to_fill': 6.0, 'support_fill_vs_A10_open_pct': -5.45, 'fallback_vs_A10_open_pct': 5.66, 'avg_cash_pct': np.float64(29.4)}
+  grew 10 lakh to              41.43 lakh
+  cagr_pct                     19.91
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -40.66
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.783
+  monthly_excess_t_nw3         1.25
+  years_beating_nifty          5/8
+  n_closed_positions           598
+  top3_profit_share            0.47
+  avg_gross_exposure_pct       70.6
+  total_return_pct             314.3
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S4_CASH@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              241
+  win rate after costs         39.0%
+  avg win / avg loss           +26.79% / -9.64%
+  mean net per trade           +4.569%
+  exit mix                     {'STOP': 122, 'REBALANCE': 119}
+  stats                        {'orders': 1529, 'filled_at_support': 243, 'fallback_buys': 0, 'cancelled_never_bought': 377, 'pct_filled_at_support': 15.9, 'avg_days_to_fill': 9.0, 'support_fill_vs_A10_open_pct': -3.83, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(72.4)}
+  grew 10 lakh to              15.85 lakh
+  cagr_pct                     6.06
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -21.51
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.399
+  monthly_excess_t_nw3         -0.96
+  years_beating_nifty          3/8
+  n_closed_positions           243
+  top3_profit_share            0.83
+  avg_gross_exposure_pct       27.6
+  total_return_pct             58.5
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [FAIL] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S1_CASH@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              532
+  win rate after costs         35.2%
+  avg win / avg loss           +26.67% / -9.56%
+  mean net per trade           +3.172%
+  exit mix                     {'STOP': 283, 'REBALANCE': 249}
+  stats                        {'orders': 1218, 'filled_at_support': 537, 'fallback_buys': 0, 'cancelled_never_bought': 197, 'pct_filled_at_support': 44.1, 'avg_days_to_fill': 7.4, 'support_fill_vs_A10_open_pct': -1.64, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(45.9)}
+  grew 10 lakh to              18.79 lakh
+  cagr_pct                     8.39
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -29.86
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      -0.147
+  monthly_excess_t_nw3         -0.33
+  years_beating_nifty          5/8
+  n_closed_positions           537
+  top3_profit_share            0.76
+  avg_gross_exposure_pct       54.1
+  total_return_pct             87.9
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [FAIL] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S2_CASH@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              740
+  win rate after costs         37.8%
+  avg win / avg loss           +29.33% / -9.63%
+  mean net per trade           +5.115%
+  exit mix                     {'STOP': 379, 'REBALANCE': 361}
+  stats                        {'orders': 953, 'filled_at_support': 750, 'fallback_buys': 0, 'cancelled_never_bought': 37, 'pct_filled_at_support': 78.7, 'avg_days_to_fill': 3.7, 'support_fill_vs_A10_open_pct': -2.56, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(20.2)}
+  grew 10 lakh to              40.92 lakh
+  cagr_pct                     19.72
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -43.16
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.848
+  monthly_excess_t_nw3         1.18
+  years_beating_nifty          5/8
+  n_closed_positions           750
+  top3_profit_share            0.42
+  avg_gross_exposure_pct       79.8
+  total_return_pct             309.2
+  verdict                      NO DEMONSTRATED EDGE
+    [PASS] CAGR beats Nifty by >= 5 pp/yr
+    [PASS] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+MWS_S3_CASH@B  W1 2019-01-01 -> 2026-10-30
+======================================================================
+  trades (closed)              392
+  win rate after costs         40.6%
+  avg win / avg loss           +25.20% / -8.92%
+  mean net per trade           +4.919%
+  exit mix                     {'REBALANCE': 220, 'STOP': 172}
+  stats                        {'orders': 1395, 'filled_at_support': 400, 'fallback_buys': 0, 'cancelled_never_bought': 254, 'pct_filled_at_support': 28.7, 'avg_days_to_fill': 8.0, 'support_fill_vs_A10_open_pct': -7.46, 'fallback_vs_A10_open_pct': None, 'avg_cash_pct': np.float64(60.4)}
+  grew 10 lakh to              23.08 lakh
+  cagr_pct                     11.28
+  nifty_cagr_pct               10.03
+  ew_universe_cagr_pct         13.8
+  max_drawdown_pct             -21.14
+  nifty_max_drawdown_pct       -38.44
+  monthly_excess_mean_pct      0.026
+  monthly_excess_t_nw3         0.07
+  years_beating_nifty          4/8
+  n_closed_positions           400
+  top3_profit_share            0.37
+  avg_gross_exposure_pct       39.6
+  total_return_pct             130.8
+  verdict                      NO DEMONSTRATED EDGE
+    [FAIL] CAGR beats Nifty by >= 5 pp/yr
+    [FAIL] CAGR beats PIT equal-weight universe
+    [FAIL] monthly excess t (NW3) >= 2
+    [PASS] beats Nifty in >= 4 calendar years
+    [PASS] max drawdown within Nifty's - 10 pp
+    [PASS] top-3 positions < 50% of profit
+
+======================================================================
+SUMMARY: CAGR % (max DD %, checks /6)
+======================================================================
+  A10@ALL            H0 37.52 (-38.0, 4/6) | W2 13.17 (-59.0, 5/6) | Y2018 -38.88 (-39.5, 0/6) | W1 26.36 (-39.4, 5/6)
+  MWS_S4_BA@ALL      H0 30.18 (-28.5, 3/6) | W2 14.41 (-33.2, 5/6) | Y2018 -25.37 (-25.9, 0/6) | W1 20.29 (-27.6, 4/6)
+  MWS_S1_BA@ALL      H0 31.76 (-32.7, 3/6) | W2 10.19 (-45.0, 4/6) | Y2018 -23.68 (-26.3, 1/6) | W1 19.44 (-32.6, 5/6)
+  MWS_S2_BA@ALL      H0 31.14 (-36.4, 3/6) | W2 11.38 (-57.1, 5/6) | Y2018 -34.16 (-35.5, 0/6) | W1 19.59 (-32.6, 5/6)
+  MWS_S3_BA@ALL      H0 33.09 (-29.1, 3/6) | W2 11.28 (-49.0, 5/6) | Y2018 -23.44 (-26.1, 1/6) | W1 20.61 (-29.8, 5/6)
+  MWS_S4_CASH@ALL    H0 5.71 (-18.1, 1/6) | W2 4.30 (-20.8, 2/6) | Y2018 -5.33 (-7.5, 2/6) | W1 5.24 (-10.4, 1/6)
+  MWS_S1_CASH@ALL    H0 15.52 (-25.5, 2/6) | W2 7.30 (-36.2, 4/6) | Y2018 -9.10 (-15.5, 2/6) | W1 10.51 (-24.7, 2/6)
+  MWS_S2_CASH@ALL    H0 19.57 (-37.0, 2/6) | W2 9.06 (-57.1, 4/6) | Y2018 -34.03 (-35.4, 0/6) | W1 14.99 (-31.9, 2/6)
+  MWS_S3_CASH@ALL    H0 8.65 (-26.4, 1/6) | W2 2.49 (-39.6, 2/6) | Y2018 -11.10 (-15.3, 2/6) | W1 5.34 (-18.9, 1/6)
+  A10@A              H0 23.87 (-42.7, 3/6) | W2 11.28 (-58.9, 5/6) | Y2018 -36.13 (-37.4, 0/6) | W1 25.93 (-32.5, 6/6)
+  MWS_S4_BA@A        H0 16.42 (-35.7, 2/6) | W2 15.31 (-33.8, 5/6) | Y2018 -25.00 (-26.6, 0/6) | W1 20.88 (-23.6, 5/6)
+  MWS_S1_BA@A        H0 17.69 (-37.0, 2/6) | W2 12.07 (-47.6, 5/6) | Y2018 -26.43 (-31.7, 0/6) | W1 20.24 (-28.0, 5/6)
+  MWS_S2_BA@A        H0 13.59 (-42.7, 2/6) | W2 9.54 (-57.9, 4/6) | Y2018 -31.22 (-35.5, 0/6) | W1 19.22 (-30.0, 5/6)
+  MWS_S3_BA@A        H0 19.59 (-36.3, 2/6) | W2 9.47 (-45.2, 4/6) | Y2018 -26.83 (-28.2, 0/6) | W1 22.15 (-24.1, 5/6)
+  MWS_S4_CASH@A      H0 2.44 (-18.6, 1/6) | W2 5.81 (-14.5, 2/6) | Y2018 -8.63 (-14.8, 2/6) | W1 3.50 (-15.7, 1/6)
+  MWS_S1_CASH@A      H0 10.50 (-29.3, 2/6) | W2 7.24 (-39.6, 4/6) | Y2018 -18.84 (-26.5, 1/6) | W1 11.90 (-26.5, 3/6)
+  MWS_S2_CASH@A      H0 11.62 (-41.4, 2/6) | W2 6.68 (-58.5, 4/6) | Y2018 -30.96 (-35.3, 0/6) | W1 19.02 (-28.6, 5/6)
+  MWS_S3_CASH@A      H0 3.64 (-27.7, 1/6) | W2 1.02 (-35.1, 2/6) | Y2018 -9.14 (-13.4, 2/6) | W1 10.31 (-21.9, 3/6)
+  A10@B              H0 32.12 (-39.3, 3/6) | W2 12.15 (-58.6, 5/6) | Y2018 -36.03 (-37.5, 0/6) | W1 23.22 (-41.4, 5/6)
+  MWS_S4_BA@B        H0 29.22 (-35.7, 2/6) | W2 9.81 (-33.7, 4/6) | Y2018 -19.93 (-22.1, 2/6) | W1 20.77 (-38.9, 4/6)
+  MWS_S1_BA@B        H0 31.42 (-39.1, 2/6) | W2 7.23 (-42.0, 3/6) | Y2018 -17.28 (-24.6, 2/6) | W1 19.58 (-40.3, 4/6)
+  MWS_S2_BA@B        H0 34.79 (-37.8, 4/6) | W2 6.10 (-57.9, 4/6) | Y2018 -33.86 (-35.6, 0/6) | W1 22.47 (-40.0, 5/6)
+  MWS_S3_BA@B        H0 31.12 (-35.0, 2/6) | W2 7.30 (-45.7, 3/6) | Y2018 -14.69 (-24.3, 2/6) | W1 19.91 (-40.7, 5/6)
+  MWS_S4_CASH@B      H0 7.94 (-14.6, 1/6) | W2 2.05 (-15.6, 1/6) | Y2018 -5.26 (-7.8, 2/6) | W1 6.06 (-21.5, 1/6)
+  MWS_S1_CASH@B      H0 17.97 (-27.4, 2/6) | W2 4.84 (-34.6, 2/6) | Y2018 -6.18 (-15.8, 2/6) | W1 8.39 (-29.9, 2/6)
+  MWS_S2_CASH@B      H0 18.53 (-41.3, 2/6) | W2 4.54 (-57.9, 2/6) | Y2018 -32.66 (-34.4, 0/6) | W1 19.72 (-43.2, 5/6)
+  MWS_S3_CASH@B      H0 14.38 (-26.9, 2/6) | W2 5.06 (-35.4, 2/6) | Y2018 -13.10 (-16.6, 2/6) | W1 11.28 (-21.1, 3/6)
+
+VERDICT (MWS_S4_BA, all stocks, W1 and W2: DD >= 5pp shallower than A10, CAGR >= A10 - 2pp, >= 4/6 checks):
+  W1: DD -27.55 vs -39.44 (shallower by +11.89pp); CAGR 20.29 vs 26.36 (-6.07pp); checks 4/6 -> FAIL
+  W2: DD -33.21 vs -59.05 (shallower by +25.84pp); CAGR 14.41 vs 13.17 (+1.24pp); checks 5/6 -> PASS
+  MWS_S4_BA: FAILED ITS FROZEN BAR

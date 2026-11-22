@@ -77,3 +77,48 @@ FM_C3O, P3O, Y2018 and the halves are reported, not judged.
 - `data/entry_realism_result.txt`
 - Runner: `tests/run_entry_realism.py`
 - Dated Results section here; scorecard rows.
+
+## Implementation notes (2026-11-22, before running)
+
+- **FM_C3O:** `run_fm_entries(..., next_open=True)`. A confirmed clean close becomes a market order for the next open, using FM's existing market-order path: gap rule `MAX_GAP` 5% from the signal close, stop = max(swing, fill − 3 ATR), with ATR(14) **as of the signal day** as this doc says. The old close-fill code uses the ATR of the session before the signal day, a one-session difference.
+  - The watch-list entry is kept until a fill, as for every other FM order type. A signal skipped for a gap can therefore signal again on a later day.
+  - The fill day gets the normal same-day stop and target checks, since it was not bought at the close.
+- **P3O:** `run_setups_v2(..., entry="next_open")`. Pending orders fill at the next open, before that session's exit checks, so the same-day stop and target apply.
+  - Skipped when: the open is > 5% above the signal close; the open is at or below the setup stop; the stop window (MAX_STOP) fails at the fill; or slots are full at the open.
+  - Slots are also checked at the signal, as in P3.
+
+## Results (2026-11-22, run once after freeze)
+
+**Reference check.** It passed: the close-fill FM_C3, P3, C_F_A and C_F_A_P3 reproduced `data/ethical_filter_history_result.txt` exactly in H0, W2, Y2018 and W1. Output: `data/entry_realism_result.txt`.
+
+**Verdict (mechanical, all stocks):**
+
+| Mix | Beats Nifty H0 / W2 / W1 | CAGR shortfall vs close-fill, W1 / W2 | Verdict |
+|---|---|---|---|
+| **C_F_A_O** | yes / yes / yes | 2.37 / 2.67pp | **DOES NOT HOLD UP** (limit 2.0pp) |
+| **C_F_A_P3O** | yes / yes / yes | 3.44 / 2.26pp | **DOES NOT HOLD UP** |
+
+**All stocks, CAGR % (max DD %), close fill → next open:**
+
+| Strategy | H0 2001–06 | W2 2008–17 | Y2018 | W1 2019–26 |
+|---|---|---|---|---|
+| FM_C3 → FM_C3O | 31.03 → 20.39 (−18.2) | 12.56 → 7.22 (−29.4) | −13.39 → −16.02 | 11.71 → 7.23 (−26.5) |
+| P3 → P3O | 11.66 → 9.43 (−14.7) | 7.57 → 6.11 (−22.3) | −16.57 → −15.62 | 15.16 → 9.71 (−18.1) |
+| C_F_A → C_F_A_O | 35.56 → 30.05 (−26.1) | 13.46 → 10.79 (−34.8) | −26.85 → −27.95 | 19.49 → 17.12 (−26.6) |
+| C_F_A_P3 → C_F_A_P3O | 27.59 → 23.25 (−21.7) | 11.75 → 9.49 (−25.2) | −23.41 → −23.91 | 18.35 → 14.91 (−22.4) |
+
+The halves show the same picture. The weakest is FM_C3O on half B in W1, at 0.95%.
+
+**How big the gap is:**
+- The average next-open gap was small: +0.6% to +1.1% for FM and +0.3% for P3, and few signals were skipped for gaps over 5%.
+- The loss is larger than the gap. FM's mean net per trade in W1 fell from +1.90% to +1.46%, and its win rate from 44.0% to 41.4%.
+- Buying the next open also gives up the "no stop check on the entry day" advantage of a close fill.
+
+**What it means:**
+- Much of FM's and P3's measured edge sits in buying the confirming close.
+- A realistic next-open entry keeps both mixes ahead of the Nifty in every period, but costs 2–3½ points a year.
+- By the frozen rule, IA now decides among three options:
+  - (a) FM's resting buy-stop at the 20-day high;
+  - (b) a 3:15 pm decision job with live prices;
+  - (c) running the mixes with next-open entries anyway, accepting the lower expected return.
+- Nothing is removed automatically.

@@ -317,6 +317,24 @@ specs = [
  ('ha_f_ref_wx','Falcon patterns + wick exit','Other','Buy-stop at pattern pivot; sell at close if it closes back below','Falcon two-low stop','Measured move','None','8 weeks','wick_exit_result.txt','F_REF_WX'),
  ('ha_f_mom_wx','Falcon patterns in momentum stocks + wick exit','Other','Buy-stop at pattern pivot; sell at close if it closes back below','Falcon two-low stop','Measured move','Top 20% 6-month momentum','8 weeks','wick_exit_result.txt','F_MOM_WX'),
 ]
+# realistic next-open entries (docs/entry_realism_preregistration.md, frozen 22 Nov 2026)
+_ER = {"FM_C3O": ("Falcon Momentum, clean close confirmed, bought at the next open", "Falcon Momentum"),
+       "P3O": ("v3 patterns, breakout confirmed, bought at the next open", "Other"),
+       "C_F_A_O": ("FM next-open + monthly momentum (half each)", "Portfolio combination"),
+       "C_F_A_P3O": ("FM next-open + monthly momentum + v3 patterns next-open (a third each)", "Portfolio combination")}
+for _c, (_n, _f) in _ER.items():
+    for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+        specs.append((f"{_p}_er_{_c.lower()}", _n, _f, "Signal confirmed at the close; market buy at the next open (skip > 5% gap)",
+                      "As already specified", "As already specified", "As already specified", "As already specified",
+                      "entry_realism_result.txt", f"{_c}@{_s}"))
+# monthly momentum bought at weekly support (docs/momentum_weekly_support_preregistration.md, frozen 22 Nov 2026)
+_LV = {"S4": "confluence of weekly supports", "S1": "broken prior weekly high", "S2": "10-week average", "S3": "last weekly higher low"}
+for _k, _kn in _LV.items():
+    for _fb, _fbn in (("BA", "buy at next rebalance if not filled"), ("CASH", "support only, else cash")):
+        for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+            specs.append((f"{_p}_mws_{_k.lower()}_{_fb.lower()}", f"Monthly momentum bought at weekly support: {_kn}, {_fbn}",
+                          "Monthly momentum", f"Limit at the {_kn}; {_fbn}", "Fixed −10% from buy price", "None (monthly rebalance)",
+                          "None", "Until it leaves the top 20", "momentum_weekly_support_result.txt", f"MWS_{_k}_{_fb}@{_s}"))
 # ethical sector filter (docs/ethical_filter_history_preregistration.md, frozen 22 Nov 2026)
 _ETH = {"A10": ("Monthly momentum, 10% stop", "Monthly momentum"),
         "A10C": ("Monthly momentum, 10% stop, no re-buy after a stop", "Monthly momentum"),
@@ -393,7 +411,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -475,6 +493,16 @@ for _p in ("all", "ha", "hb"):
         VERDICT[f"{_p}_eth_{_c}"] = ("HOLDS UP WITH THE ETHICAL FILTER (beat the Nifty in 2001–06, 2008–17 and 2019–26; "
                                      "costs ≤ 3 pt a year over 2001–26; 22 Nov 2026)." if _p == "all" else
                                      "With the ethical filter, on this half: reported for information.")
+for _p in ("all", "ha", "hb"):
+    for _c in ("fm_c3o", "p3o"):
+        VERDICT[f"{_p}_er_{_c}"] = "Realistic next-open entry: reported for information only."
+    for _c in ("c_f_a_o", "c_f_a_p3o"):
+        VERDICT[f"{_p}_er_{_c}"] = ("Realistic next-open entry: DID NOT HOLD UP (more than 2 pt a year below the buy-at-close mix; "
+                                    "IA decides; 22 Nov 2026)." if _p == "all" else "Realistic next-open entry, this half: reported for information.")
+    for _k in ("s4", "s1", "s2", "s3"):
+        for _fb in ("ba", "cash"):
+            VERDICT[f"{_p}_mws_{_k}_{_fb}"] = ("Primary variant: FAILED its frozen bar (22 Nov 2026). Not adopted."
+                                              if (_p, _k, _fb) == ("all", "s4", "ba") else "Reported for information only; not judged.")
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

@@ -167,8 +167,18 @@ def _delisting_exits(panel, ledger, day_idx, day):
 def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: CostModel | None = None,
                  stop_pct: float | None = None, hold: int = MOM_HOLD,
                  gauge_up=None, down_level: float = 1.0, stats: dict | None = None,
-                 skip_after_stop: bool = False, score: str = "raw"):
-    """score (docs/a_volrank_preregistration.md): "raw" = 12-1 return (unchanged);
+                 skip_after_stop: bool = False, score: str = "raw",
+                 support: pd.DataFrame | None = None, support_fallback: str = "BA"):
+    """support / support_fallback (docs/momentum_weekly_support_preregistration.md): support is
+    a DataFrame (sessions x entities) of weekly support levels (backtesting.weekly_support).
+    A new top-list name is not bought at the rebalance open: it gets a limit order at its
+    level, active from that open until the next rebalance; it fills in a session whose low
+    is at or below the level, at min(open, level); no level that session = no order that
+    session. Stop = fill x (1 - stop_pct). At the next rebalance an unfilled name still in the
+    list is bought at the open ("BA") or gets a fresh order ("CASH"); otherwise cancelled.
+    None (default) = unchanged behaviour.
+
+    score (docs/a_volrank_preregistration.md): "raw" = 12-1 return (unchanged);
     "vol" = 12-1 return / annualised 252-session volatility; "z" = mean of the z-scores of
     (6-1 return / vol) and (12-1 return / vol) across the list.
 
@@ -193,11 +203,66 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
     if score != "raw":
         vol_df = closes_ff.pct_change(fill_method=None).rolling(252, min_periods=200).std() * np.sqrt(252)
     stopped = set()
+    sup_orders = {}                                   # entity -> {"from": i, "open0": first-session open}
+    if support is not None:
+        assert support_fallback in ("BA", "CASH")
+        sup = support.reindex(columns=panel.close.columns).to_numpy(float)
+        scol = {e: j for j, e in enumerate(panel.close.columns)}
+        sst = stats if stats is not None else {}
+        for k in ("orders", "filled_support", "fallback_buys", "cancelled", "cash_share_sum", "cash_share_n"):
+            sst.setdefault(k, 0)
+        sst.setdefault("days_to_fill", [])
+        sst.setdefault("entry_vs_open0", [])
+        sst.setdefault("fallback_vs_open0", [])
     for i, day in enumerate(sessions):
         if day < start or day > end:
             continue
         _delisting_exits(panel, ledger, i, day)
         opens = panel.open.iloc[i]
+        if pending_target is not None and support is not None:
+            for e in [e for e in ledger.shares if e not in pending_target]:
+                if np.isfinite(opens.get(e, np.nan)):
+                    ledger.sell(day, e, opens[e], _adv(panel, i, e), "REBALANCE")
+            carried = {e: od for e, od in sup_orders.items() if e in pending_target and e not in ledger.shares}
+            sst["cancelled"] += len(sup_orders) - len(carried)
+            sup_orders = {}
+            fb = []
+            if support_fallback == "BA":
+                fb = [e for e in carried if np.isfinite(opens.get(e, np.nan))]
+            else:
+                sup_orders.update({e: {"from": i, "open0": opens.get(e, np.nan)} for e in carried})
+                sst["orders"] += len(carried)
+            equity_now = ledger.cash + sum(ledger.value(e, opens) for e in ledger.shares)
+            per_name = min(equity_now * level / hold, ledger.cash / max(len(fb), 1) * 0.995)
+            for e in fb:
+                if ledger.buy(day, e, opens[e], per_name, _adv(panel, i, e), {"stop": opens[e] * (1 - stop_pct), "entry_idx": i}):
+                    sst["fallback_buys"] += 1
+                    o0 = carried[e]["open0"]
+                    if np.isfinite(o0) and o0 > 0:
+                        sst.setdefault("fallback_vs_open0", []).append(opens[e] / o0 - 1)
+            for e in pending_target:
+                if e not in ledger.shares and e not in sup_orders and e not in carried:
+                    sup_orders[e] = {"from": i, "open0": opens.get(e, np.nan)}
+                    sst["orders"] += 1
+            pending_target = None
+        if support is not None and sup_orders:
+            lows_ = panel.low.iloc[i]
+            fills = []
+            for e, od in list(sup_orders.items()):
+                lv, o, lo = sup[i, scol[e]], opens.get(e, np.nan), lows_.get(e, np.nan)
+                if not (np.isfinite(lv) and np.isfinite(o) and np.isfinite(lo)) or lo > lv:
+                    continue
+                fills.append((e, min(o, lv)))
+            if fills:
+                equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
+                per_name = min(equity_now * level / hold, ledger.cash / len(fills) * 0.995)
+                for e, px in fills:
+                    od = sup_orders.pop(e)
+                    if ledger.buy(day, e, px, per_name, _adv(panel, i, e), {"stop": px * (1 - stop_pct), "entry_idx": i}):
+                        sst["filled_support"] += 1
+                        sst["days_to_fill"].append(i - od["from"])
+                        if np.isfinite(od["open0"]) and od["open0"] > 0:
+                            sst["entry_vs_open0"].append(px / od["open0"] - 1)
         if pending_target is not None:
             for e in [e for e in ledger.shares if e not in pending_target]:
                 if np.isfinite(opens.get(e, np.nan)):
@@ -239,6 +304,11 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                     ledger.sell(day, e, o if gap else st, _adv(panel, i, e), "STOP")
                     stopped.add(e)
         ledger.mark(day, panel.close.iloc[i])
+        if support is not None:
+            eq_now = ledger.cash + sum(ledger.value(x, panel.close.iloc[i]) for x in ledger.shares)
+            if eq_now > 0:
+                sst["cash_share_sum"] += ledger.cash / eq_now
+                sst["cash_share_n"] += 1
         is_month_end = i + 1 == len(sessions) or sessions[i + 1].month != day.month
         if is_month_end and i >= MOM_LOOKBACK and day < end:
             members = [e for e in panel.universe_on(day) if e in closes_ff.columns]

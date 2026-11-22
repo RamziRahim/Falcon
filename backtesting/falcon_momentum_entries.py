@@ -48,8 +48,14 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                    be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
                    cooldown: int = 0, levels: list | None = None, wick_exit: bool = False,
                    risk_on: float = RISK_ON, risk_soft: float = RISK_SOFT, gauge: pd.Series | None = None,
-                   slots: int = SLOTS):
-    """slots (docs/fm_slots_preregistration.md): maximum open positions (default SLOTS).
+                   slots: int = SLOTS, next_open: bool = False):
+    """next_open (docs/entry_realism_preregistration.md, FM_C3O; closebuy modes only): a clean
+    close on day t buys nothing at the close; it becomes a market order for the open of t+1,
+    skipped if that open is > MAX_GAP above day t's close. Stop = max(swing stop, fill - 3 ATR)
+    with ATR as of day t; target r_mult x risk from the fill; exits checked from the fill day.
+    False (default) = unchanged behaviour.
+
+    slots (docs/fm_slots_preregistration.md): maximum open positions (default SLOTS).
 
     risk_on / risk_soft / gauge (docs/fm_risk_gauge_preregistration.md): risk per trade
     when the gauge is above / not above its 50-session average; gauge replaces the Nifty in
@@ -62,6 +68,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     or fill x (1 - fixed_stop); target r_mult x risk or fill x (1 + fixed_tgt); be_at:
     stop to the fill from the session after the high reaches fill x (1 + be_at)."""
     assert mode in ("breakout", "sweep", "fvg", "high20", "rangevol", "closebuy", "closebuy_vol")
+    assert not next_open or mode in ("closebuy", "closebuy_vol")
     ledger = Ledger(cost or CostModel())
     s, c = panel.sessions, panel.close
     cols = {e: j for j, e in enumerate(c.columns)}
@@ -153,6 +160,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
         return None
 
     watch, orders, queued_exits, blocked = {}, [], set(), {}
+    carry = []                                       # next_open: market orders for the next session
     stats = {"watch_added": 0, "triggers": 0, "filled": 0, "expired_unfilled": 0, "gap_skip": 0,
              "stop_skip": 0, "too_wide": 0, "blocked_market": 0, "range_skip": 0, "vol_exit": 0}
     for i, day in enumerate(s):
@@ -190,6 +198,12 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 if not clean:
                     stats["candle_skip"] = stats.get("candle_skip", 0) + 1
                     continue
+                if next_open:
+                    stats["signals_next_open"] = stats.get("signals_next_open", 0) + 1
+                    carry.append({"type": "market", "ref": c_, "atr": atr[i, j], "fm_stop": True, "swing": od["swing"],
+                                  "stop": np.nan, "entity": e, "priority": od["priority"], "risk": od["risk"],
+                                  "trig": od["trig"], "from_signal": True})
+                    continue
                 fill = c_
                 od["stop"] = max(od["swing"] if od["swing"] is not None else -np.inf, fill - 3.0 * od["atr"])
             elif od["type"] == "buystop":
@@ -215,6 +229,9 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                     stats["gap_skip"] += 1
                     continue
                 fill = o
+                if od.get("from_signal"):
+                    stats["gap_sum"] = stats.get("gap_sum", 0.0) + (o / od["ref"] - 1)
+                    stats["gap_n"] = stats.get("gap_n", 0) + 1
                 if od.get("fm_stop"):
                     od["stop"] = (fill * (1 - fixed_stop) if fixed_stop is not None else
                                   max(od["swing"] if od["swing"] is not None else -np.inf, fill - 3.0 * od["atr"]))
@@ -243,7 +260,7 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 watch.pop(e, None)
                 if levels is not None:
                     levels.append((e, day, fill, stop, ledger.meta[e]["target"]))
-        orders = []
+        orders, carry = carry, []
         for e in list(ledger.shares):
             m = ledger.meta[e]
             o, hi, lo = opens.get(e, np.nan), highs.get(e, np.nan), lows.get(e, np.nan)

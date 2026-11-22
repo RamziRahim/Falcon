@@ -138,7 +138,7 @@ def run_setups(panel: Panel, setups: pd.DataFrame, start, end, entry: str, stop_
                 queued.add(e)
         g = by_day.get(i)
         if g is not None:
-            busy = set(ledger.shares) | {od["e"] for od in live}
+            busy = set(ledger.shares) | {od["e"] for od in live} | {od["e"] for od in pending}
             for r in g.itertuples():
                 if r.entity_id in busy or r.entity_id not in cols:
                     continue
@@ -159,6 +159,11 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
     Stop = max(Falcon stop, fill - 3 ATR); target 3R; 40-session time stop.
     entry (docs/falcon_v2_retest_preregistration.md; default "close" = FV2 unchanged):
       "close"        buy the close of the breakout day (FV2)
+      "next_open"    the same breakout-day signal buys at the open of the next session
+                     (docs/entry_realism_preregistration.md, P3O): skipped if that open is
+                     > 5% above the signal close or at/below the stop, or if slots are full
+                     at the open; stop computed as for "close" but from the fill; exits
+                     checked from the fill session
       "retest_pivot" breakout day buys nothing; limit at the pivot for the next
                      `retest_window` sessions, fill min(pivot, open), same-day stop check (FV2R)
       "retest_close" same window, buy the close of the first session with Low <= pivot and
@@ -181,7 +186,11 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
     live, queued = [], set()
     st = {"orders": 0, "pivot_touches": 0, "touch_rejected": 0, "filled": 0, "cancelled_stop": 0,
           "stop_too_wide": 0, "slots_full": 0}
-    if entry != "close":
+    pending = []
+    if entry == "next_open":
+        st.update({"signals_next_open": 0, "gap_skip": 0, "open_below_stop": 0, "slots_full_at_open": 0,
+                   "gap_sum": 0.0, "gap_n": 0})
+    if entry not in ("close", "next_open"):
         st.update({"breakouts": 0, "retest_filled": 0, "retest_expired": 0, "retest_cancelled_stop": 0,
                    "fill_day_stopped": 0, "never_retested": 0})
         no_retest_ret = []
@@ -196,6 +205,37 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
             elif np.isfinite(O[i, cols[e]]):
                 ledger.sell(day, e, O[i, cols[e]], _adv(panel, i, e), "TIME_STOP")
                 queued.discard(e)
+        if pending:                                                    # next_open fills at today's open
+            opens_row = panel.open.iloc[i]
+            for od in sorted(pending, key=lambda x: (-x["mom"], x["e"])):
+                e, j = od["e"], cols[od["e"]]
+                o = O[i, j]
+                if e in ledger.shares or not np.isfinite(o):
+                    continue
+                if o > od["sig_close"] * 1.05:
+                    st["gap_skip"] += 1
+                    continue
+                if o <= od["stop0"]:
+                    st["open_below_stop"] += 1
+                    continue
+                stop = (od["stop0"] if stop_rule == "setup" else
+                        max(od["stop0"], o - 3.0 * ATR[i - 1, j]) if np.isfinite(ATR[i - 1, j]) else od["stop0"])
+                if not stop < o or (o - stop) / o > MAX_STOP:
+                    st["stop_too_wide"] += 1
+                    continue
+                if len(ledger.shares) >= slots:
+                    st["slots_full_at_open"] += 1
+                    continue
+                dist = (o - stop) / o
+                equity_now = ledger.cash + sum(ledger.value(x, opens_row) for x in ledger.shares)
+                value = min(risk * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+                st["size_capped"] = st.get("size_capped", 0) + int(value < risk * equity_now / dist)
+                if value > 0 and ledger.buy(day, e, o, value, _adv(panel, i, e),
+                                            {"stop": stop, "target": o + 3.0 * (o - stop), "entry_idx": i}):
+                    st["filled"] += 1
+                    st["gap_sum"] += o / od["sig_close"] - 1
+                    st["gap_n"] += 1
+            pending = []
         for e in list(ledger.shares):                                  # exits (positions bought earlier)
             m = ledger.meta[e]
             j = cols[e]
@@ -207,7 +247,7 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
         keep = []
         for od in sorted(live, key=lambda x: (-x["mom"], x["e"])):     # entries at today's close
             e, j = od["e"], cols[od["e"]]
-            if entry != "close" and od.get("bo") is not None:
+            if entry not in ("close", "next_open") and od.get("bo") is not None:
                 if e in ledger.shares:
                     continue
                 if i > od["bo"] + retest_window:
@@ -264,7 +304,7 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
             if not (np.isfinite(o) and np.isfinite(h) and np.isfinite(l) and np.isfinite(c)):
                 keep.append(od)
                 continue
-            if h > od["pivot"] and entry != "close":
+            if h > od["pivot"] and entry not in ("close", "next_open"):
                 st["pivot_touches"] += 1
                 if c > od["pivot"] and h > l and (c - l) / (h - l) >= 0.5 and bool(nifty_ok[i]):
                     st["breakouts"] += 1
@@ -287,6 +327,10 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
                         st["slots_full"] += 1
                         keep.append(od)
                         continue
+                    if entry == "next_open":
+                        st["signals_next_open"] += 1
+                        pending.append({"e": e, "mom": od["mom"], "sig_close": c, "stop0": od["stop"]})
+                        continue
                     dist = (c - stop) / c
                     equity_now = ledger.cash + sum(ledger.value(x, closes) for x in ledger.shares)
                     value = min(risk * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
@@ -308,7 +352,7 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
                 queued.add(e)
         g = by_day.get(i)
         if g is not None:
-            busy = set(ledger.shares) | {od["e"] for od in live}
+            busy = set(ledger.shares) | {od["e"] for od in live} | {od["e"] for od in pending}
             for r in g.itertuples():
                 if r.entity_id in busy or r.entity_id not in cols:
                     continue
@@ -316,7 +360,7 @@ def run_setups_v2(panel: Panel, setups: pd.DataFrame, start, end, nifty_ok, cost
                 live.append({"e": r.entity_id, "pivot": r.pivot, "stop": r.stop, "exp": i + WINDOW,
                              "mom": r.mom_rank if np.isfinite(r.mom_rank) else -1.0})
     eq, trades = _result(ledger)
-    if entry != "close":
+    if entry not in ("close", "next_open"):
         st["no_retest_40d_ret_pct"] = round(100 * float(np.mean(no_retest_ret)), 2) if no_retest_ret else None
         st["no_retest_40d_n"] = len(no_retest_ret)
     return eq, trades, st

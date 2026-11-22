@@ -92,3 +92,55 @@ H0, Y2018 and the halves are reported, not judged. The other 7 variants are repo
 - `data/momentum_weekly_support_result.txt`
 - Runner: `tests/run_momentum_weekly_support.py`
 - Dated Results section here; scorecard rows.
+
+## Implementation notes (2026-11-22, before running)
+
+- **Code:** `backtesting/weekly_support.py` computes the levels. `run_momentum(..., support=<levels>, support_fallback="BA"|"CASH")` places the orders; `support=None` (default) leaves behaviour unchanged.
+- The four levels were checked by hand on a synthetic weekly series.
+- **Several orders filling in the same session** share the cash evenly: per name = min(equity ÷ 20, cash ÷ number filling).
+- **Same-day stop:** a limit filled during a session is checked against that session's low for the 10% stop, the same treatment A10 gives its rebalance-day buys.
+
+## Results (2026-11-22, run once after freeze)
+
+**Reference check.** It passed: A10 on all stocks reproduced `data/a_stop_result.txt` (W1, W2, Y2018) and `data/history_2001_2006_result.txt` (H0) within 0.05pp. Output: `data/momentum_weekly_support_result.txt`.
+
+**Verdict (MWS_S4_BA, all stocks): FAILED ITS FROZEN BAR.**
+
+| Window | Max DD vs A10 | CAGR vs A10 | Checks | Result |
+|---|---|---|---|---|
+| W1 2019–26 | −27.55% vs −39.44% (11.9pp shallower) | 20.29% vs 26.36% (**−6.07pp**) | 4/6 | **FAIL** |
+| W2 2008–17 | −33.21% vs −59.05% (25.8pp shallower) | 14.41% vs 13.17% (+1.24pp) | 5/6 | PASS |
+
+**All stocks, CAGR % (max DD %):**
+
+| Variant | H0 2001–06 | W2 2008–17 | Y2018 | W1 2019–26 |
+|---|---|---|---|---|
+| A10 (reference) | 37.52 (−38.0) | 13.17 (−59.0) | −38.88 | 26.36 (−39.4) |
+| **S4 confluence, buy anyway (primary)** | 30.18 (−28.5) | 14.41 (−33.2) | −25.37 | 20.29 (−27.6) |
+| S1 broken high, buy anyway | 31.76 (−32.7) | 10.19 (−45.0) | −23.68 | 19.44 (−32.6) |
+| S2 10-week avg, buy anyway | 31.14 (−36.4) | 11.38 (−57.1) | −34.16 | 19.59 (−32.6) |
+| S3 higher low, buy anyway | 33.09 (−29.1) | 11.28 (−49.0) | −23.44 | 20.61 (−29.8) |
+| S4, cash only | 5.71 (−18.1) | 4.30 (−20.8) | −5.33 | 5.24 (−10.4) |
+| S1, cash only | 15.52 (−25.5) | 7.30 (−36.2) | −9.10 | 10.51 (−24.7) |
+| S2, cash only | 19.57 (−37.0) | 9.06 (−57.1) | −34.03 | 14.99 (−31.9) |
+| S3, cash only | 8.65 (−26.4) | 2.49 (−39.6) | −11.10 | 5.34 (−18.9) |
+
+**How the entries behaved (all stocks, W1 / W2):**
+
+| Variant | Orders filled at support | Never bought | Cheaper than A10's open (support fills) | Fallback paid vs A10's open | Average cash |
+|---|---|---|---|---|---|
+| S4, buy anyway | 15.6% / 15.2% | 310 / 312 | −2.3% / −3.2% | +3.4% / +1.5% | 42% / 39% |
+| S1, buy anyway | 48.6% / 46.2% | 198 / 199 | −1.3% / −2.7% | +5.9% / +4.1% | 35% / 33% |
+| S3, buy anyway | 31.2% / 31.2% | 239 / 266 | −6.1% / −4.7% | +6.4% / +3.5% | 39% / 35% |
+| S4, cash only | 14.6% / 14.0% | 500 / 534 | −3.7% / −4.0% | — | 79% / 78% |
+
+Win rates: A10 39.1% / 32.4%; S4 buy anyway 38.7% / 34.7%; S4 cash only 44.1% / 38.9%.
+
+**What it means:**
+
+1. **The pullback entry did not give better trades on balance.**
+   - When a pullback to support happened, the buy was 1–6% cheaper than A10's open.
+   - But it happened for only 15–49% of names. The strongest momentum stocks usually kept rising, and those were then bought a month later at 2–6% *higher* prices, or never bought at all.
+2. **The smaller drawdowns come mainly from holding less stock.** The buy-anyway versions held 33–42% cash on average, and the cash-only versions about 78%. A strategy that is only 60% invested falls less in a crash, and also earns less in a strong market. That is exactly the W1 vs W2 split: W2 (2008–17) contains the 2008 crash, where cash helped; W1 (2019–26) is a strong run where cash cost 6 points a year.
+3. **The cash-only versions confirm the A10T lesson.** Waiting only for support leaves most of the money idle, and returns fall to 2–15% a year.
+4. **No rule changes.** A10 keeps buying at the next open. If lower drawdowns matter more than return, the cleaner lever is how much is invested, not the entry. That would be a separate pre-registration. A10_E50, the exposure test, already examined part of this.
