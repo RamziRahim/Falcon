@@ -88,3 +88,39 @@ Otherwise the verdict is **NOT BETTER THAN A10**.
 - `data/momentum_risk_sizing_result.txt`
 - Runner: `tests/run_momentum_risk_sizing.py`
 - Dated Results section here; scorecard rows.
+
+## Results (2026-11-23, run once after freeze)
+
+**Reference.** Passed: A10 on all stocks reproduced `data/buystop_mix_result.txt` exactly in H0, W2 and W1. Output: `data/momentum_risk_sizing_result.txt`.
+
+**Verdict (RS_CONF_T3 vs A10, all stocks): NOT BETTER THAN A10.**
+- W2: **8.44 points a year lower** (4.73% vs 13.17%). Its drawdown was shallower (−47.6% vs −59.0%).
+- W1: **6.12 points a year lower** (20.24% vs 26.36%). Drawdown −33.5% vs −39.4%.
+
+**CAGR % (max DD %)**
+
+| Version | Sample | H0 2001–06 | W2 2008–17 | W1 2019–26 |
+|---|---|---|---|---|
+| **A10: 10% stop, equal size** | All | **37.52 (−38.0)** | **13.17 (−59.0)** | **26.36 (−39.4)** |
+| RS_CONF_T3: IA's spec (judged) | All | 12.52 (−42.0) | 4.73 (−47.6) | 20.24 (−33.5) |
+| EQ_CONF_T3: confluence stop + 1:3, equal size | All | 12.85 (−45.7) | 3.84 (−51.5) | 19.83 (−34.8) |
+| RS_CONF: confluence stop, risk sizing, no target | All | 32.95 (−37.2) | 13.07 (−56.0) | 29.98 (−36.8) |
+| EQ_CONF: confluence stop only | All | 35.38 (−41.0) | 12.01 (−58.8) | 27.77 (−37.5) |
+| A10 | Half A | 23.87 | 11.28 | 25.93 |
+| RS_CONF | Half A | 22.81 | 11.66 | 27.93 |
+| A10 | Half B | 32.12 | 12.15 | 23.22 |
+| RS_CONF | Half B | 29.59 | 9.72 | 23.96 |
+
+**How the stop was set:**
+- About 42–51% of new positions used a support cluster, 35–37% the volatility (2 × ATR) stop, and 12–22% fell back to 10%.
+- The average stop was 10.2–10.5% below the buy price, about the same as A10's flat 10%. The difference is in *which* stocks got tight or wide stops.
+
+**What it means, in plain English:**
+- **The 1:3 target is what sinks it, again.** With the target the strategy loses 6–8 points a year whichever way the stop is set or the money is sized. Its winners are capped at about +30%, and momentum's returns come from the few stocks that keep running. This confirms the sector-exits test of 22 Nov.
+- **Risk-based sizing with no target (RS_CONF) is the interesting part, but it is not reliable.**
+  - All stocks: +3.62 points in 2019–26, −0.10 in 2008–17, −4.57 in 2001–06.
+  - Half A: +2.00 and +0.38. Half B: +0.74 and −2.43.
+  - It helped in the recent period and not in the older ones. It only slightly reduced drawdowns.
+  - It was reported, not judged, and would need its own frozen test. On this evidence that test would probably not clear a "+1 point in every period" bar.
+- **The confluence stop on its own (EQ_CONF) is no better than a flat 10%.** It gained 1.4 points in 2019–26 and lost 1.2 and 2.1 in the earlier periods.
+- A10 stays as it is. Nothing in the paper-trading plan changes. IA decides.
