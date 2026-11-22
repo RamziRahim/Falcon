@@ -385,6 +385,12 @@ for _c, (_sp, _tg) in _TS.items():
     for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
         specs.append((f"{_p}_ts_{_c.lower()}", f"Monthly momentum: stop {_sp}, exit {_tg}", "Monthly momentum", "Open after month end",
                       _sp, _tg, "None", "Until it leaves the top 20", "momentum_tight_stops_result.txt", f"{_c}@{_s}"))
+# half at 1:1 vs holding less (docs/half_at_1to1_preregistration.md, 22 Nov 2026)
+for _c, _n, _tg in (("S10_H1", "Monthly momentum: half sold at 1:1, rest keeps 10% stop (vs holding less)", "Half at +10%, rest keeps stop"),
+                    ("A10_70", "Monthly momentum at 70% position size (about 30% cash)", "None (monthly rebalance)")):
+    for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+        specs.append((f"{_p}_h11_{_c.lower()}", _n, "Monthly momentum", "Open after month end", "Fixed −10%", _tg, "None",
+                      "Until it leaves the top 20", "half_at_1to1_result.txt", f"{_c}@{_s}"))
 # ethical sector filter (docs/ethical_filter_history_preregistration.md, frozen 22 Nov 2026)
 _ETH = {"A10": ("Monthly momentum, 10% stop", "Monthly momentum"),
         "A10C": ("Monthly momentum, 10% stop, no re-buy after a stop", "Monthly momentum"),
@@ -461,7 +467,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("momentum_tight_stops", "momentum_tight_stops"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("momentum_tight_stops", "momentum_tight_stops"), ("half_at_1to1", "half_at_1to1"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -571,6 +577,10 @@ for _p in ("all", "ha", "hb"):
     for _c in ("s6", "s5", "s7", "s6_t3", "s6_t5", "s5_t5", "s10_t5", "s10_t8", "s10_h1be", "s10_h1", "s6_h1be", "s5_h1tr", "s6_h1tr", "s10_h1tr"):
         VERDICT[f"{_p}_ts_{_c}"] = ("Judged: FAILED its frozen bar (22 Nov 2026). Not adopted."
                                    if _p == "all" and _c in ("s6", "s5_h1tr") else "Reported for information only; not judged.")
+for _p in ("all", "ha", "hb"):
+    VERDICT[f"{_p}_h11_s10_h1"] = ("Judged vs 70% A10: NOT better than holding less; FAILED its frozen bar (22 Nov 2026)."
+                                   if _p == "all" else "Reported for information only.")
+    VERDICT[f"{_p}_h11_a10_70"] = "Comparison version (A10 at 70% size); reported."
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

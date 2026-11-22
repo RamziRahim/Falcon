@@ -62,3 +62,37 @@ S10_H1 is "better than simply holding less" only if, **in both W1 and W2**:
 - `data/half_at_1to1_result.txt`
 - Runner: `tests/run_half_at_1to1.py`
 - Dated Results section here; scorecard rows.
+
+## Implementation note (2026-11-22, before running)
+
+`run_momentum(..., track_invested=True)` records the daily invested share (1 − cash ÷ equity) in `stats`, for reporting only. A10_70 uses the existing exposure mechanism with a constant 0.7 level.
+
+## Results (2026-11-22, run once after freeze)
+
+**References.** Passed: A10 and S10_H1 reproduced their stored results exactly in all four windows. Output: `data/half_at_1to1_result.txt`.
+
+**Verdict: S10_H1 is NOT better than holding less. It fails its frozen bar.**
+- **W1:** 18.46% vs 22.03% (−3.57pp); DD −27.4% vs −31.4% (4.0pp shallower).
+- **W2:** 6.99% vs 11.17% (−4.18pp); DD −49.9% vs −46.9% (3.0pp *deeper*).
+
+**All stocks:**
+
+| Version | Period | Return a year | Max DD | Average invested | Return ÷ worst fall |
+|---|---|---|---|---|---|
+| A10 | 2001–06 | 37.52% | −38.0% | 83% | 0.99 |
+| A10 | 2008–17 | 13.17% | −59.0% | 84% | 0.22 |
+| A10 | 2019–26 | 26.36% | −39.4% | 85% | 0.67 |
+| S10_H1 | 2001–06 | 22.07% | −35.5% | 59% | 0.62 |
+| S10_H1 | 2008–17 | 6.99% | −49.9% | 60% | 0.14 |
+| S10_H1 | 2019–26 | 18.46% | −27.4% | 62% | 0.67 |
+| A10_70 | 2001–06 | 31.72% | −31.6% | 67% | **1.00** |
+| A10_70 | 2008–17 | 11.17% | −46.9% | 68% | **0.24** |
+| A10_70 | 2019–26 | 22.03% | −31.4% | 68% | **0.70** |
+
+Both halves agree. On half A in W1, S10_H1 makes 18.8% (−23.6%) against A10_70's 21.5% (−26.1%). On half B in W2, it makes 8.5% (−48.2%) against 10.9% (−46.8%).
+
+**What it means:**
+1. **Selling half at 1:1 is a less efficient way of holding less.** It averages only about 60% invested, less than A10_70's 68%. Yet its return per unit of worst fall is no better in 2019–26 and worse in 2001–06 and 2008–17. It sells exactly the stocks that are working.
+2. **Plain A10 is itself only about 84% invested on average.** A stopped stock's money waits in cash until the next month end.
+3. **If smaller falls are wanted, holding less of plain A10 is the simpler and better lever.** At 70% slots it cut the worst fall by 7–12 points for about 2–6 points a year less return, with the same return per unit of fall.
+4. **No rule changes.** A10 stays at full size. IA decides whether a reduced-size A10 becomes a paper track.

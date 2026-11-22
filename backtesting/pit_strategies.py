@@ -173,7 +173,7 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                  review: str = "month", lookback: int | None = None, skip: int | None = None, buffer: int | None = None,
                  allowed: pd.DataFrame | None = None, stop_mode: str = "pct", pwl: pd.DataFrame | None = None,
                  target_r: float | None = None, half_at_r: float | None = None, half_be: bool = False,
-                 trail_step: float | None = None):
+                 trail_step: float | None = None, track_invested: bool = False):
     """half_at_r / half_be / trail_step (docs/momentum_tight_stops_preregistration.md): when the
     high reaches buy + half_at_r x (buy - stop), sell half there (or at the open if it gaps above,
     after the buy day); stops are checked first. half_be: from the next session the rest's stop
@@ -423,6 +423,11 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                     if new_stop is not None and new_stop > max(m["stop"], m.get("pending_stop") or 0.0):
                         m["pending_stop"], m["pending_from"] = new_stop, i + 1
         ledger.mark(day, panel.close.iloc[i])
+        if track_invested and stats is not None:       # docs/half_at_1to1_preregistration.md: reporting only
+            eq_now = ledger.cash + sum(ledger.value(x, panel.close.iloc[i]) for x in ledger.shares)
+            if eq_now > 0:
+                stats["inv_sum"] = stats.get("inv_sum", 0.0) + 1 - ledger.cash / eq_now
+                stats["inv_n"] = stats.get("inv_n", 0) + 1
         if add_frac is not None:
             for e in [e for e in adds if e not in ledger.shares]:
                 adds.pop(e)
