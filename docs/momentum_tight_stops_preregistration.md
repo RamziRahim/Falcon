@@ -1,4 +1,4 @@
-# Monthly momentum with tighter stops (5–7.5%) and larger targets (1:3, 1:5) — pre-registration
+# Monthly momentum with tighter stops (5–7.5%), larger targets (1:3, 1:5), and half-at-1:1 with a trailing stop — pre-registration
 
 **Status: DRAFT (2026-11-22). Not frozen. No test code written.**
 
@@ -28,13 +28,17 @@ Stops are measured from the buy price. Stops fill at the stop, or at the open if
 - The half is sold when the high reaches the 1:1 level, at that level, or at the open if it gaps above it after the buy day.
 - If the stop and the 1:1 level trade on the same day, the stop wins.
 - The break-even stop is live from the session after the half is sold.
+- **Trailing (TR variants):**
+  - Steps are measured from the buy price, using the day's high.
+  - Once the high has reached the 1:1 level + k × 5%, the stop is the buy price + k × 5% (k = 1, 2, …), live from the next session.
+  - The stop never moves down.
 - Both halves count as one trade.
 
 A stopped or target-hit stock can be re-bought at a later review if it is still on the list.
 
 | Code | Stop | Target |
 |---|---|---|
-| **S6 (primary)** | 6% | none |
+| **S6 (first judged)** | 6% | none |
 | S5 | 5% | none |
 | S7 | 7.5% | none |
 | S6_T3 | 6% | 1:3 = +18% |
@@ -45,6 +49,9 @@ A stopped or target-hit stock can be re-bought at a later review if it is still 
 | S10_H1BE | 10% | **at 1:1 (+10%) sell half**; the rest's stop moves to the buy price (break-even) from the next session; the rest has no target and leaves with the list (added at IA's request, 2026-11-22) |
 | S10_H1 | 10% | at 1:1 (+10%) sell half; the rest **keeps the original 10% stop**, no target, leaves with the list |
 | S6_H1BE | 6% | at 1:1 (+6%) sell half; the rest moves to break-even, no target, leaves with the list |
+| **S5_H1TR (second judged; IA's trailing plan, 2026-11-22)** | 5% | at 1:1 (+5%) sell half and move the rest's stop to the buy price; then **every further 5% rise raises the stop by 5%** (high reaches +10% → stop +5%, +15% → +10%, and so on); no target; the rest also leaves with the list |
+| S6_H1TR | 6% | at 1:1 (+6%) sell half, rest to the buy price; then every further 5% rise (+11%, +16%, …) raises the stop by 5% of the buy price |
+| S10_H1TR | 10% | at 1:1 (+10%) sell half, rest to the buy price; then every further 5% rise (+15%, +20%, …) raises the stop by 5% of the buy price |
 | A10 (reference) | 10% | none |
 
 The A10 reference must reproduce `data/a_stop_result.txt` (W1, W2, Y2018) and `data/history_2001_2006_result.txt` (H0) within 0.05pp before any variant runs.
@@ -60,19 +67,19 @@ The A10 reference must reproduce `data/a_stop_result.txt` (W1, W2, Y2018) and `d
 - **No ethical filter.**
 - **Reported:** CAGR, max drawdown, checks, win rate, average win and average loss, trades and stops per year, and targets hit per year.
 
-## Adoption bar (S6, all stocks, both W1 and W2)
+## Adoption bar (two judged versions, S6 and S5_H1TR; all stocks, both W1 and W2)
 
-S6 replaces the 10% stop only if, **in both W1 and W2**:
+Each judged version replaces A10's 10% stop only if, **in both W1 and W2**:
 - its CAGR is **no more than 1.0 point a year below** A10's; **and**
 - its max drawdown is **no more than 1.0 point deeper**; **and**
 - it is **clearly better on one:** CAGR at least 1.0 point **above**, or max drawdown at least 3.0 points **shallower**; **and**
 - it passes **at least 4 of the 6 checks**.
 
-The others are reported only. With 10 extra versions, the best-looking one is a lead for its own single-variant test, not a result.
+The others are reported only. With 12 extra versions, the best-looking one is a lead for its own single-variant test, not a result.
 
 ## What it means
 
-- **S6 passes:** the paper-trading momentum tracks would use a 6% stop. IA decides whether that replaces the 10% stop.
+- **A judged version passes:** it becomes a paper-trading track. IA decides whether it replaces the 10% stop.
 - **It fails:** no change.
 
 ## Output
