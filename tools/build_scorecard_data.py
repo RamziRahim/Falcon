@@ -522,6 +522,31 @@ for _c, (_n, _cg, _dd, _k, _d6, _ha, _hb, _j) in _H0.items():
                  "note": (f"2001–2006 only (Nifty 21.19% a year, max drop −39.7%; all stocks equally 34.8%): {_cg:.2f}% a year, "
                           f"max drop {_dd:.2f}%, {_k}/6 checks, May–June 2006 drop {_d6:.2f}%. "
                           f"Half A {_ha:.2f}%, half B {_hb:.2f}% a year.")})
+# dynamic allocation across the ten automatic tracks (docs/dynamic_allocation_preregistration.md, frozen 22 Nov 2026)
+import re as _re
+_DA = {"EW": "One pot split equally across the ten tracks (monthly reset)",
+       "DA_RR": "One pot: half equal, half by each track's past-year reward per risk",
+       "DA_IV": "One pot: less to the more volatile tracks",
+       "DA_TOP3": "One pot: all in the three best recent tracks"}
+_dtxt = open(D + "dynamic_allocation_result.txt", encoding="utf-8").read()
+for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+    for _c, _n in _DA.items():
+        _r = {"id": f"{_p}_da_{_c.lower()}", "name": _n, "family": "Portfolio combination", "entry": "As already specified",
+              "stop": "As already specified", "target": "As already specified", "filter": "As already specified",
+              "hold": "Re-split at each month end (0.25% on money moved)", "code": f"{_c}@{_s}",
+              "doc": "docs/dynamic_allocation_preregistration.md",
+              "sample": {"ALL": "All stocks", "A": "Half A", "B": "Half B"}[_s]}
+        _h0 = None
+        for _w, _t in (("W1", "w1"), ("W2", "w2"), ("H0", "h0")):
+            _m = _re.search(rf"--- ALLOCATION {_s} {_w} .*?\n(.*?)(?=\n\n|\n---|\Z)", _dtxt, _re.S)
+            _l = _re.search(rf"^  {_c} +CAGR +(-?[\d.]+) +maxDD +(-?[\d.]+) +10L-> +([\d.]+)L", _m.group(1), _re.M)
+            if _t == "h0":
+                _h0 = (float(_l.group(1)), float(_l.group(2)))
+            else:
+                _r[f"cagr_{_t}"], _r[f"dd_{_t}"], _r[f"grew_{_t}"] = float(_l.group(1)), float(_l.group(2)), float(_l.group(3))
+                _r[f"total_{_t}"] = round((float(_l.group(3)) / 10 - 1) * 100, 1)
+        _r["note"] = f"2001–06: {_h0[0]:.2f}% a year, max drop {_h0[1]:.2f}%."
+        INFO.append(_r)
 for r in INFO:
     for k in ("cagr", "dd", "win", "net", "trades", "passes", "total", "grew"):
         for tag in ("w1", "w2", "y18"):
@@ -592,6 +617,12 @@ for _p in ("all", "ha", "hb"):
     for _c in ("fm_h3", "c_f_a_h", "c_f_a_p3_ho"):
         VERDICT[f"{_p}_bs_{_c}"] = ("HOLDS UP WITH A BUY-STOP (beat the Nifty in all periods; within 2 pt of the buy-at-close mix; 22 Nov 2026). Paper track 7."
                                    if (_p, _c) == ("all", "c_f_a_h") else "Reported for information only; not judged.")
+for _p in ("all", "ha", "hb"):
+    VERDICT[f"{_p}_da_ew"] = "Baseline (equal split); reported."
+    VERDICT[f"{_p}_da_da_rr"] = ("Judged: DOES NOT HELP (about 1 pt a year below the equal split in 2008–17 and 2019–26; 23 Nov 2026). Not adopted."
+                                if _p == "all" else "Reported for information only; not judged.")
+    for _c in ("da_iv", "da_top3"):
+        VERDICT[f"{_p}_da_{_c}"] = "Reported for information only; not judged."
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."
