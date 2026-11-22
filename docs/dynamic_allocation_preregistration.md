@@ -82,3 +82,34 @@ Otherwise the verdict is **DOES NOT HELP**.
 - `data/dynamic_allocation_result.txt`
 - Runner: `tests/run_dynamic_allocation.py`
 - Dated Results section here; scorecard rows.
+
+## Results (2026-11-23, run once after freeze)
+
+**References.** Passed: A10, C_F_A, C_F_A_O and C_F_A_H on all stocks reproduced `data/buystop_mix_result.txt` exactly in H0, W2 and W1. Output: `data/dynamic_allocation_result.txt`.
+
+**Verdict (DA_RR vs EW, all stocks): DOES NOT HELP.**
+- W2: DA_RR returned **0.97 points a year less** than EW (11.26% vs 12.23%), with the same max drawdown (−42.4%).
+- W1: DA_RR returned **1.21 points a year less** (20.49% vs 21.70%), and its drawdown was 2.14 points deeper (−31.0% vs −28.8%).
+- It needed +1.0 point in both windows.
+
+**One pot of ₹10 lakh across the ten tracks: CAGR % (max DD %)**
+
+| Split | H0 2001–06 | W2 2008–17 | W1 2019–26 | Money moved per year |
+|---|---|---|---|---|
+| **EW: equal, reset monthly** | **31.91 (−29.8)** | **12.23 (−42.4)** | **21.70 (−28.8)** | 0.15–0.21× |
+| DA_RR: half equal, half by reward-per-risk (judged) | 31.41 (−29.9) | 11.26 (−42.4) | 20.49 (−31.0) | 1.0–1.7× |
+| DA_IV: less to the more volatile tracks | 31.08 (−28.8) | 11.89 (−40.6) | 20.85 (−28.2) | 0.23–0.27× |
+| DA_TOP3: all in the 3 best recent tracks | 29.13 (−33.0) | 9.54 (−42.4) | 20.41 (−35.0) | 3.1–5.9× |
+| A10 alone (for comparison) | 37.52 (−38.0) | 13.17 (−59.0) | 26.36 (−39.4) | — |
+
+The halves agree: every dynamic split is below EW in W2 and W1 on half A and on half B.
+
+W2's worst fall (2008) came inside the first 126 sessions, when every split is equal by rule. That is why EW, DA_RR and DA_TOP3 share the same W2 max drawdown.
+
+**What it means, in plain English:**
+- Moving more money each month into the tracks that had the best reward for their risk over the past year did **not** raise returns. It lowered them by about 1 point a year in both decades, and the more aggressively it chased (top 3), the worse it did.
+- The tracks are close cousins: most hold A10's stocks. So the one that led last year is usually not the one that leads next year by enough to pay for the switching.
+- Shifting money away from the jumpier tracks (DA_IV) gave slightly smaller drawdowns, but also slightly lower returns. That is not enough to be worth it.
+- An **equal split** across the tracks is the better simple rule.
+- A10 on its own still has the highest return, with much deeper drops (−59% in 2008–17 against −42% for the equal split).
+- Nothing changes in paper trading: each track keeps its own capital, as frozen. IA decides.
