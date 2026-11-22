@@ -36,6 +36,8 @@ What is already known and relevant:
 | WM12_B40 | same | Buffer: keep a holding while it ranks in the top 40; new buys fill free slots from the top of the list (fewer trades) |
 | WM6 | 6-month return skipping the last week: close[t−5] ÷ close[t−126] − 1 | Top 20 |
 | WM3 | 3-month return skipping the last week: close[t−5] ÷ close[t−68] − 1 | Top 20 |
+| WM12P (pullback add-on; added at IA's request, 2026-11-22) | as WM12 | A new name gets **half** its slot at the Monday open. The other half is a limit add at the weekly **broken prior high** (S1, `backtesting/weekly_support.py`), filled at min(open, level), while held. If it has not filled by the next weekly review and the name is still held, it is bought at that open. Stop 10% below the first buy. This is A10P's rule with a weekly review. |
+| WM12S (pullback entry; added at IA's request, 2026-11-22) | as WM12 | A new name is **not** bought at the open. It gets a limit buy at its weekly **confluence support** (S4), filled at min(open, level). If it has not filled by the next weekly review and the name is still in the top 20, it is bought at that open; otherwise the order is cancelled. This is MWS_S4_BA's rule with a weekly review. |
 | A10 (reference) | unchanged, monthly | — must reproduce `data/a_stop_result.txt` (W1, W2, Y2018) and `data/history_2001_2006_result.txt` (H0) within 0.05pp before any variant runs |
 
 ## Runs
@@ -64,7 +66,7 @@ WM12 replaces A10's monthly review only if, **in both W1 and W2**:
 3. it is **clearly better on at least one:** CAGR at least 1.0 point a year **above** A10's, or max drawdown at least 3.0 points **shallower**; **and**
 4. it passes **at least 4 of the 6 checks**.
 
-The other variants are reported for information only. There is no re-tuning and there are no extra variants.
+The other variants, including the two pullback versions, are reported for information only. Each pullback version is also compared with WM12 itself in the results. There is no re-tuning and there are no extra variants.
 
 ## What it means
 
