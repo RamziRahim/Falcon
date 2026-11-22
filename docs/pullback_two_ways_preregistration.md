@@ -1,6 +1,6 @@
 # Two more pullback approaches: large-cap mean reversion, and adding to momentum winners on a pullback — pre-registration
 
-**Status: DRAFT (2026-11-22). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 16:39 IST**
 
 ## Why
 
