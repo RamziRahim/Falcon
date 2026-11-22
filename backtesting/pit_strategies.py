@@ -170,8 +170,17 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                  skip_after_stop: bool = False, score: str = "raw",
                  support: pd.DataFrame | None = None, support_fallback: str = "BA",
                  add_frac: float | None = None, add_level: pd.DataFrame | None = None, add_fallback: bool = True,
-                 review: str = "month", lookback: int | None = None, skip: int | None = None, buffer: int | None = None):
-    """review / lookback / skip / buffer (docs/weekly_momentum_preregistration.md): review="week"
+                 review: str = "month", lookback: int | None = None, skip: int | None = None, buffer: int | None = None,
+                 allowed: pd.DataFrame | None = None, stop_mode: str = "pct", pwl: pd.DataFrame | None = None,
+                 target_r: float | None = None):
+    """allowed / stop_mode / pwl / target_r (docs/momentum_sector_exits_preregistration.md):
+    allowed = boolean frame (sessions x entities); at a review only allowed stocks are ranked.
+    stop_mode="pwl": the stop is the previous calendar week's low (pwl frame, sessions x
+    entities), unless it is >= the fill or more than 15% below it (then fill x (1 - stop_pct)).
+    target_r: sell when the high reaches fill + target_r x (fill - stop), at the target (or the
+    open if it gaps above, after the fill day); stops are checked first. Defaults = unchanged.
+
+    review / lookback / skip / buffer (docs/weekly_momentum_preregistration.md): review="week"
     ranks at the close of the last session of each calendar week (else month); the score is
     close[t-skip] / close[t-lookback] - 1 (defaults MOM_SKIP, MOM_LOOKBACK = A10's 12-1);
     buffer=N keeps a holding while it ranks in the top N and fills free places from the top of
@@ -328,8 +337,19 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             per_name = min(equity_now * level / hold, ledger.cash / max(len(new), 1) * 0.995)
             for e in new:
                 first = per_name if add_frac is None else per_name * add_frac
-                ok = ledger.buy(day, e, opens[e], first, _adv(panel, i, e),
-                                {"stop": opens[e] * (1 - stop_pct), "entry_idx": i} if stop_pct is not None else None)
+                meta_e = None
+                if stop_pct is not None:
+                    stp = opens[e] * (1 - stop_pct)
+                    if stop_mode == "pwl":
+                        lw = pwl.iloc[i].get(e, np.nan)
+                        if np.isfinite(lw) and lw < opens[e] and (opens[e] - lw) / opens[e] <= 0.15:
+                            stp = lw
+                        elif stats is not None:
+                            stats["pwl_fallback"] = stats.get("pwl_fallback", 0) + 1
+                    meta_e = {"stop": stp, "entry_idx": i}
+                    if target_r is not None:
+                        meta_e["target"] = opens[e] + target_r * (opens[e] - stp)
+                ok = ledger.buy(day, e, opens[e], first, _adv(panel, i, e), meta_e)
                 if ok and add_frac is not None and add_frac < 1:
                     adds[e] = {"value": per_name * (1 - add_frac), "from": i + 1, "first": opens[e]}
                     ast["adds_total"] += 1
@@ -356,6 +376,14 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                     gap = m["entry_idx"] < i and np.isfinite(o) and o < st
                     ledger.sell(day, e, o if gap else st, _adv(panel, i, e), "STOP")
                     stopped.add(e)
+            if target_r is not None:
+                highs = panel.high.iloc[i]
+                for e in list(ledger.shares):
+                    m = ledger.meta.get(e) or {}
+                    tg, hi, o = m.get("target"), highs.get(e, np.nan), opens.get(e, np.nan)
+                    if tg is not None and np.isfinite(hi) and hi >= tg:
+                        gap = m["entry_idx"] < i and np.isfinite(o) and o > tg
+                        ledger.sell(day, e, o if gap else tg, _adv(panel, i, e), "TARGET")
         ledger.mark(day, panel.close.iloc[i])
         if add_frac is not None:
             for e in [e for e in adds if e not in ledger.shares]:
@@ -378,6 +406,14 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
         sk = MOM_SKIP if skip is None else skip
         if is_month_end and i >= lb and day < end:
             members = [e for e in panel.universe_on(day) if e in closes_ff.columns]
+            if allowed is not None:
+                arow = allowed.iloc[i]
+                if stats is not None:
+                    pb = closes_ff.iloc[i - sk][members] / closes_ff.iloc[i - lb][members] - 1
+                    top_all = list(pb.dropna().sort_values(ascending=False).head(hold).index)
+                    stats["top_candidates"] = stats.get("top_candidates", 0) + len(top_all)
+                    stats["top_rejected_by_sector"] = stats.get("top_rejected_by_sector", 0) + sum(not bool(arow.get(e, False)) for e in top_all)
+                members = [e for e in members if bool(arow.get(e, False))]
             past = closes_ff.iloc[i - sk][members]
             base = closes_ff.iloc[i - lb][members]
             mom = (past / base - 1).dropna()

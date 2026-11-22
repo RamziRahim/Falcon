@@ -356,6 +356,23 @@ _PB2 = {"LMR": ("Large-cap mean reversion: RSI(2) < 10 dip in an uptrend, sell t
 for _c, (_n, _f, _en, _sp, _tg, _hd) in _PB2.items():
     for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
         specs.append((f"{_p}_pb2_{_c.lower()}", _n, _f, _en, _sp, _tg, "None", _hd, "pullback_two_ways_result.txt", f"{_c}@{_s}"))
+# weekly momentum (docs/weekly_momentum_preregistration.md) and sector/exits (docs/momentum_sector_exits_preregistration.md), 22 Nov 2026
+_WM = {"WM12": "Weekly momentum (12-1 rank, reviewed weekly)", "WM12_B40": "Weekly momentum, keep while top 40",
+       "WM6": "Weekly momentum, 6-month rank", "WM3": "Weekly momentum, 3-month rank",
+       "WM12P": "Weekly momentum, half at open + half on weekly pullback", "WM12S": "Weekly momentum, bought at weekly support"}
+for _c, _n in _WM.items():
+    for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+        specs.append((f"{_p}_wm_{_c.lower()}", _n, "Monthly momentum", "Monday open after the Friday ranking", "Fixed −10% from buy price",
+                      "None (weekly review)", "None", "Until it leaves the list", "weekly_momentum_result.txt", f"{_c}@{_s}"))
+_BN = {"M": "Monthly momentum", "M_SEC": "Monthly momentum + sector strength", "W": "Weekly momentum", "W_SEC": "Weekly momentum + sector strength"}
+_XN = {"X10": ("Fixed −10%", "None"), "X10_T2": ("Fixed −10%", "+20% (1:2)"), "X10_T3": ("Fixed −10%", "+30% (1:3)"),
+       "XPWL": ("Previous week's low", "None"), "XPWL_T2": ("Previous week's low", "2× risk (1:2)"), "XPWL_T3": ("Previous week's low", "3× risk (1:3)")}
+for _b, _bn in _BN.items():
+    for _x, (_sp, _tg) in _XN.items():
+        for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+            specs.append((f"{_p}_mse_{_b.lower()}_{_x.lower()}", f"{_bn}: stop {_sp}, target {_tg}", "Monthly momentum",
+                          "Open after the review", _sp, _tg, "Sector strength" if "SEC" in _b else "None", "Until it leaves the list",
+                          "momentum_sector_exits_result.txt", f"{_b}_{_x}@{_s}"))
 # ethical sector filter (docs/ethical_filter_history_preregistration.md, frozen 22 Nov 2026)
 _ETH = {"A10": ("Monthly momentum, 10% stop", "Monthly momentum"),
         "A10C": ("Monthly momentum, 10% stop, no re-buy after a stop", "Monthly momentum"),
@@ -432,7 +449,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -528,6 +545,16 @@ for _p in ("all", "ha", "hb"):
     for _c in ("lmr", "lmr_o", "lmr_s8", "lmr_n", "a10p", "a10p_67", "a10p_nf"):
         VERDICT[f"{_p}_pb2_{_c}"] = ("Primary variant: FAILED its frozen bar (22 Nov 2026). Not adopted."
                                     if _p == "all" and _c in ("lmr", "a10p") else "Reported for information only; not judged.")
+for _p in ("all", "ha", "hb"):
+    for _c in ("wm12", "wm12_b40", "wm6", "wm3", "wm12p", "wm12s"):
+        VERDICT[f"{_p}_wm_{_c}"] = ("Primary variant: FAILED its frozen bar (22 Nov 2026). Not adopted."
+                                   if (_p, _c) == ("all", "wm12") else "Reported for information only; not judged.")
+    for _b in ("m", "m_sec", "w", "w_sec"):
+        for _x in ("x10", "x10_t2", "x10_t3", "xpwl", "xpwl_t2", "xpwl_t3"):
+            VERDICT[f"{_p}_mse_{_b}_{_x}"] = ("Judged: FAILED its frozen bar (22 Nov 2026). Not adopted."
+                                             if _p == "all" and _x == "x10" and _b in ("m_sec", "w_sec") else
+                                             "Reference (reproduces A10/WM12)." if _x == "x10" and _b in ("m", "w") and _p == "all"
+                                             else "Reported for information only; not judged.")
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

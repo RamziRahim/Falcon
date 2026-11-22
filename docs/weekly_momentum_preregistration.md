@@ -78,3 +78,47 @@ The other variants, including the two pullback versions, are reported for inform
 - `data/weekly_momentum_result.txt`
 - Runner: `tests/run_weekly_momentum.py`
 - Dated Results section here; scorecard rows.
+
+## Implementation notes (2026-11-22, before running)
+
+`run_momentum(..., review="week", lookback, skip, buffer)`. The week is a calendar ISO week; the review is at the close of its last session.
+
+The pullback versions reuse the A10P (`add_frac`, `add_level`) and MWS (`support`, `support_fallback`) code, so "next rebalance" becomes the next weekly review.
+
+The first run was interrupted by IA after part of the H0 and W2 output. It was rerun unchanged, from scratch, at IA's go-ahead (2026-11-22 17:09).
+
+## Results (2026-11-22)
+
+**Reference check.** It passed: A10 reproduced the stored results within 0.05pp in all four windows. Output: `data/weekly_momentum_result.txt`.
+
+**Verdict (WM12, all stocks): FAILED ITS FROZEN BAR.**
+- **W1:** CAGR 21.44% vs 26.36% (−4.92pp); max DD −47.3% vs −39.4% (7.9pp deeper); 4/6 checks.
+- **W2:** CAGR −2.14% vs 13.17% (−15.31pp); max DD −82.8% vs −59.1%; 1/6 checks.
+
+**All stocks, CAGR % (max DD %):**
+
+| Version | H0 2001–06 | W2 2008–17 | Y2018 | W1 2019–26 |
+|---|---|---|---|---|
+| A10 (monthly) | 37.52 (−38.0) | 13.17 (−59.0) | −38.88 | 26.36 (−39.4) |
+| WM12 weekly | 17.75 (−60.4) | −2.14 (−82.8) | −34.27 | 21.44 (−47.3) |
+| WM12_B40 (keep while top 40) | 24.72 (−53.8) | 3.25 (−82.8) | −31.96 | 24.10 (−44.3) |
+| WM6 (6-month rank) | 10.17 (−61.7) | −5.09 (−81.6) | −36.69 | 19.40 (−41.0) |
+| WM3 (3-month rank) | −11.90 (−75.8) | −6.13 (−82.0) | −29.87 | 4.24 (−48.4) |
+| WM12P (pullback add-on) | 22.82 (−51.5) | 2.01 (−74.2) | −34.21 | 23.26 (−42.9) |
+| WM12S (pullback entry) | 26.13 (−51.8) | 3.62 (−66.9) | −40.03 | 25.04 (−39.6) |
+
+Both halves show the same picture: every weekly version is below A10 in H0 and W2.
+
+**Why (W2, all stocks):**
+
+| | A10 | WM12 |
+|---|---|---|
+| Trades a year | 119 | 242 |
+| Stops a year | 70 | 111 |
+| Average hold | 50 days | 28 days |
+| Average win | +29.5% | +17.7% |
+| Average loss | −10.5% | −9.1% |
+
+A weekly review sells strong stocks when they slip briefly out of the top 20, often just before they recover, and buys new names more often just before they fall back. This short-term give-back is the reversal effect that A10's skipped month exists to avoid. It is worse with shorter look-backs: the 3-month rank lost money in 2001–06 and 2008–17.
+
+**What it means:** the monthly review stays. The weekly versions, including the pullback ones, are not paper-trading candidates.
