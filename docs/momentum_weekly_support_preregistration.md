@@ -1,6 +1,6 @@
 # Monthly momentum, bought on a pullback to weekly support — pre-registration
 
-**Status: DRAFT (2026-11-22). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 14:08 IST**
 
 ## Question
 
