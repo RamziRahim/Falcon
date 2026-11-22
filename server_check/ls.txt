@@ -1,0 +1,9 @@
+total 290080
+drwxrwxr-x 2 ubuntu ubuntu      4096 Nov 22 23:50 .
+drwxrwxr-x 8 ubuntu ubuntu     36864 Nov 22 23:48 ..
+-rw-rw-r-- 1 ubuntu ubuntu    181630 Nov 22 23:50 adjustments.csv
+-rw-rw-r-- 1 ubuntu ubuntu      7345 Nov 22 23:50 big_moves_in_universe.csv
+-rw-rw-r-- 1 ubuntu ubuntu    192819 Nov 22 23:48 ethical_exclusions.csv
+-rw-rw-r-- 1 ubuntu ubuntu 294731025 Nov 22 23:50 prices_adjusted.parquet
+-rw-rw-r-- 1 ubuntu ubuntu       755 Nov 22 23:50 summary.txt
+-rw-rw-r-- 1 ubuntu ubuntu   1875162 Nov 22 23:50 universe_monthly.parquet
