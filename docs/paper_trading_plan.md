@@ -127,3 +127,9 @@ At each checkpoint, for each track:
   - When it does, it replays every session from 2026-12-01 in order.
   - Because every fill uses only daily prices, the replayed record must match the manual first-run orders exactly. Any difference is investigated and explained in a dated note.
 - **Checkpoints:** 2027-03-01 (3 months), 2027-06-01 (6 months), 2027-12-01 (12 months).
+
+## Dated notes
+
+- **2026-11-22 (engine frozen):** `paper-v1` = commit `5f5eebf` on `claude/swing-low-risk`. The tag itself could not be pushed from the build environment.
+  - Checks on past data, with a pretend day one of 2026-09-01: the engine matches the full-history backtest functions on all 10 automatic tracks; no look-ahead; the evening month-end orders equal the next-open fills.
+  - Track 8 is logged in `paper/manual/track8_orders.csv` rather than by Telegram, since IA chose email for alerts.

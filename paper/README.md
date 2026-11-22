@@ -1,6 +1,6 @@
 # Falcon paper trading
 
-Plan: `docs/paper_trading_plan.md` (frozen 2026-11-22 18:22 IST). Engine: tag `paper-v1`.
+Plan: `docs/paper_trading_plan.md` (frozen 2026-11-22 18:22 IST). Engine: `paper-v1` = commit `5f5eebf` on branch `claude/swing-low-risk` (a git tag of the same name exists locally; tags could not be pushed from the build environment).
 
 | File | What |
 |---|---|
