@@ -169,8 +169,16 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                  gauge_up=None, down_level: float = 1.0, stats: dict | None = None,
                  skip_after_stop: bool = False, score: str = "raw",
                  support: pd.DataFrame | None = None, support_fallback: str = "BA",
-                 add_frac: float | None = None, add_level: pd.DataFrame | None = None, add_fallback: bool = True):
-    """add_frac / add_level / add_fallback (docs/pullback_two_ways_preregistration.md, A10P): a new
+                 add_frac: float | None = None, add_level: pd.DataFrame | None = None, add_fallback: bool = True,
+                 review: str = "month", lookback: int | None = None, skip: int | None = None, buffer: int | None = None):
+    """review / lookback / skip / buffer (docs/weekly_momentum_preregistration.md): review="week"
+    ranks at the close of the last session of each calendar week (else month); the score is
+    close[t-skip] / close[t-lookback] - 1 (defaults MOM_SKIP, MOM_LOOKBACK = A10's 12-1);
+    buffer=N keeps a holding while it ranks in the top N and fills free places from the top of
+    the list. Defaults = unchanged behaviour. All order/stop/support/add logic is the same at a
+    weekly review as at a monthly one ("next rebalance" = the next weekly review).
+
+    add_frac / add_level / add_fallback (docs/pullback_two_ways_preregistration.md, A10P): a new
     name gets add_frac of its slot at the rebalance open (stop = 10% below that fill, for the
     whole position); the rest is a limit add at add_level (sessions x entities), active from the
     next session while the position is held, filled at min(open, level) when the low reaches it.
@@ -362,11 +370,16 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             if eq_now > 0:
                 sst["cash_share_sum"] += ledger.cash / eq_now
                 sst["cash_share_n"] += 1
-        is_month_end = i + 1 == len(sessions) or sessions[i + 1].month != day.month
-        if is_month_end and i >= MOM_LOOKBACK and day < end:
+        if review == "week":
+            is_month_end = i + 1 == len(sessions) or (sessions[i + 1].isocalendar()[:2] != day.isocalendar()[:2])
+        else:
+            is_month_end = i + 1 == len(sessions) or sessions[i + 1].month != day.month
+        lb = MOM_LOOKBACK if lookback is None else lookback
+        sk = MOM_SKIP if skip is None else skip
+        if is_month_end and i >= lb and day < end:
             members = [e for e in panel.universe_on(day) if e in closes_ff.columns]
-            past = closes_ff.iloc[i - MOM_SKIP][members]
-            base = closes_ff.iloc[i - MOM_LOOKBACK][members]
+            past = closes_ff.iloc[i - sk][members]
+            base = closes_ff.iloc[i - lb][members]
             mom = (past / base - 1).dropna()
             if score != "raw":
                 v = vol_df.iloc[i][members]
@@ -378,7 +391,13 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                     ok = np.isfinite(m6) & np.isfinite(m12) & (v > 0)
                     m6, m12 = m6[ok], m12[ok]
                     mom = ((m6 - m6.mean()) / m6.std() + (m12 - m12.mean()) / m12.std()) / 2
-            pending_target = set(mom.sort_values(ascending=False).head(hold).index)
+            if buffer is None:
+                pending_target = set(mom.sort_values(ascending=False).head(hold).index)
+            else:
+                ranked = list(mom.sort_values(ascending=False).index)
+                keep = [e for e in ranked[:buffer] if e in ledger.shares]
+                fill = [e for e in ranked if e not in keep][:max(hold - len(keep), 0)]
+                pending_target = set(keep) | set(fill)
             if stats is not None:
                 stats.setdefault("targets", {})[i] = pending_target
                 if vol_df is not None:
