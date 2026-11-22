@@ -1,6 +1,6 @@
 # Falcon's ethical sector filter applied to 25 years of history — pre-registration
 
-**Status: DRAFT (2026-11-22). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 12:07 IST**
 (The exclusion list in `data/pit_v2/ethical_exclusions.csv`, copied to `docs/paper_trading/ethical_exclusions_history.csv` for review, is classification data, built and reviewed before freeze; no returns were computed with it.)
 
 ## Question
@@ -80,7 +80,7 @@ Both conditions must hold:
 
 **What it means:**
 - A candidate that holds up stays on the paper-trading list. Paper trading always applies the filter.
-- A candidate that does not hold up comes off the list, unless IA explicitly decides to keep it.
+- A candidate that does not hold up is flagged. **IA decides whether it comes off the paper-trading list** (IA, 2026-11-22); the verdict itself does not remove it.
 - No strategy rule changes either way. If the filter is costly, that is a finding about Falcon's constraints, not a reason to retune.
 
 ## Output
