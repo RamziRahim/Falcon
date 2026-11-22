@@ -1,6 +1,6 @@
 # Monthly momentum with tighter stops (5–7.5%), larger targets (1:3, 1:5), and half-at-1:1 with a trailing stop — pre-registration
 
-**Status: DRAFT (2026-11-22). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 17:28 IST**
 
 ## Question
 
