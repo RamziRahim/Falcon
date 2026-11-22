@@ -410,6 +410,25 @@ INFO = [
      "doc": "docs/redesign_preregistration.md", "sample": "All stocks",
      "note": "Tested on 2019-01 to 2024-07 only: 8.8% a year against Nifty 16.1%."},
 ]
+
+# 2001-2006 out-of-sample check (docs/history_2001_2006_preregistration.md, frozen 22 Nov 2026):
+# a different window, so the figures go in the note, not the W1/W2/2018 columns
+_H0 = {  # code: (name, CAGR, max DD, checks, May-Jun 2006 DD, half A CAGR, half B CAGR, judged)
+    "A10": ("Monthly momentum, 10% stop", 37.52, -38.04, 4, -26.83, 23.87, 32.12, True),
+    "C_F_A": ("FM clean close + monthly momentum (half each)", 35.56, -24.58, 5, -18.31, 20.51, 28.89, True),
+    "C_F_A_P3": ("FM clean close + monthly momentum + v3 patterns (a third each)", 27.59, -20.87, 4, -13.89, 16.77, 21.96, True),
+    "A10C": ("Monthly momentum, 10% stop, no re-buy after a stop", 37.41, -38.08, 4, -23.54, 20.88, 30.23, False),
+    "FM_C3": ("Falcon Momentum, clean close", 31.03, -14.19, 4, -13.3, 15.2, 23.74, False),
+    "P3": ("v3 patterns", 11.66, -15.04, 2, -7.17, 8.49, 7.76, False),
+}
+for _c, (_n, _cg, _dd, _k, _d6, _ha, _hb, _j) in _H0.items():
+    INFO.append({"id": f"h0_{_c.lower()}", "name": f"2001–06 check: {_n}", "family": "Out-of-sample check 2001–06",
+                 "entry": "As already specified", "stop": "As already specified", "target": "As already specified",
+                 "filter": "As already specified", "hold": "As already specified", "code": f"{_c}@ALL H0",
+                 "doc": "docs/history_2001_2006_preregistration.md", "sample": "All stocks",
+                 "note": (f"2001–2006 only (Nifty 21.19% a year, max drop −39.7%; all stocks equally 34.8%): {_cg:.2f}% a year, "
+                          f"max drop {_dd:.2f}%, {_k}/6 checks, May–June 2006 drop {_d6:.2f}%. "
+                          f"Half A {_ha:.2f}%, half B {_hb:.2f}% a year.")})
 for r in INFO:
     for k in ("cagr", "dd", "win", "net", "trades", "passes", "total", "grew"):
         for tag in ("w1", "w2", "y18"):
@@ -433,6 +452,10 @@ VERDICT = {
     "p_asf_r": "Smoother than any single strategy; missed its frozen bar.",
     "ml_model": "No edge.", "b_orig": "No edge.", "c_orig": "No edge.",
 }
+for _c in ("a10", "c_f_a", "c_f_a_p3"):
+    VERDICT[f"h0_{_c}"] = "HOLDS UP on 2001–06 (beat the Nifty, at least 4 of 6 checks; 22 Nov 2026)."
+for _c in ("a10c", "fm_c3", "p3"):
+    VERDICT[f"h0_{_c}"] = "2001–06: reported for information only; not judged."
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

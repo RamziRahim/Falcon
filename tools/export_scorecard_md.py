@@ -35,7 +35,7 @@ md.append("| # | " + " | ".join(cols) + " |\n|" + "---|" * (len(cols) + 1) + "\n
 for r in sorted([r for r in rows if r.get("top5")], key=lambda r: r["top5"]):
     md.append(f"| {r['top5']} | " + " | ".join(vals(r)) + " |\n")
 order = ["All stocks", "Half A", "Half B", "Screener list"]
-fam_order = ["Monthly momentum", "#3 Momentum breakout", "Falcon Momentum", "Portfolio combination", "Other"]
+fam_order = ["Monthly momentum", "#3 Momentum breakout", "Falcon Momentum", "Portfolio combination", "Other", "Out-of-sample check 2001–06"]
 for smp in order:
     sub = [r for r in rows if r["sample"] == smp]
     if not sub: continue

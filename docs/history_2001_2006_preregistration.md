@@ -105,3 +105,39 @@ The build now uses `early_tolerance=0.10` and `early_close_tolerance=0.15` (befo
 - **Gate part 2, PASS:** the yearly counts for 2001–05 are 17, 2, 1, 7 and 4, an average of 6.2 a year, against 3.75 for 2008–15: 1.65× (limit 2×). 14 of the 17 in 2001 are up-moves, mostly in stocks priced under ₹10.
 
 This is the data the 2001–2006 run will use, once the doc is frozen.
+
+## Results (2026-11-22, run once after freeze)
+
+**Data gate.** Part 1 passes: A10 on pit_v2 gives W1 26.36% / −39.44% and W2 13.17% / −59.05%, matching the stored 26.36% / −39.44% and 13.16% / −59.05%. Part 2 passes at 1.65×, as recorded above.
+
+**Inputs.**
+- v3 scan of 2001–06 on pit_v2: 1,913 setups (`data/pit_v2/falcon_setups_v3_2001-01-01_2006-12-31.parquet`).
+- Sector indices that existed at the start of H0: Bank, Energy, FMCG, IT and Pharma.
+- Output in `data/history_2001_2006_result.txt` (runner `tests/run_history_2001_2006.py`).
+- Stocks not in `data/holdout_split.csv` were assigned to a half by its own rule (SHA-256 of entity_id, even → A), which reproduces all 1,622 stored assignments.
+
+**Over H0 the Nifty 50 returned 21.19% a year** (max drawdown −39.7%; −29.9% in May–June 2006). Owning every universe stock equally returned 34.8% a year.
+
+| Strategy (all stocks) | CAGR | Max DD | Checks | May–Jun 2006 | Half A | Half B | Verdict |
+|---|---|---|---|---|---|---|---|
+| **A10** | 37.52% | −38.04% | 4/6 | −26.83% | 23.87% | 32.12% | **HOLDS UP** |
+| **C_F_A** | 35.56% | −24.58% | 5/6 | −18.31% | 20.51% | 28.89% | **HOLDS UP** |
+| **C_F_A_P3** | 27.59% | −20.87% | 4/6 | −13.89% | 16.77% | 21.96% | **HOLDS UP** |
+| A10C (reported) | 37.41% | −38.08% | 4/6 | −23.54% | 20.88% | 30.23% | — |
+| FM_C3 (reported) | 31.03% | −14.19% | 4/6 | −13.30% | 15.20% | 23.74% | — |
+| P3 (reported) | 11.66% | −15.04% | 2/6 | −7.17% | 8.49% | 7.76% | — |
+
+May–Jun 2006 is the lowest equity in May–June 2006 against the highest equity before it.
+
+**Failed checks (all stocks).**
+- A10: monthly excess t (NW3 1.70) and top-3 profit share (0.56).
+- C_F_A: monthly excess t only (1.68).
+- C_F_A_P3: monthly excess t (0.85) and "beats the equal-weight universe" (27.6% vs 34.8%).
+
+**What it means.** All three paper-trading candidates hold up on six years of history that no decision ever used, by the frozen rule. No rules change. The plain-English points:
+
+1. **The margin over the Nifty is large, but 2003–06 lifted almost every stock.** Owning everything equally made 34.8%. A10 beat that by only 2.7 points a year. C_F_A beat it by less than a point, and C_F_A_P3 trailed it. None of the three shows statistically strong excess returns in this window (t below 2).
+2. **A10's result leans on a few big winners.** The top three positions made 56% of the profit, and on half A alone it made 23.9% a year, below the equal-weight universe.
+3. **The mixes did what they were built to do.** C_F_A kept about the same return with a much smaller drawdown (−24.6% vs −38.0%) and the smallest May 2006 crash loss of the two momentum-led strategies. It beat the Nifty in all 6 years. C_F_A_P3 had the shallowest drawdown of the three.
+4. **P3 on its own lagged the Nifty badly** (11.7%), the same picture as in 2008–2026.
+5. **A10C ≈ A10** (37.41% vs 37.52%), so skipping re-buys after a stop changed little.

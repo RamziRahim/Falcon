@@ -4,8 +4,10 @@ Every 5 sessions (same scan days as tests/scan_falcon_setups.py), run classify_n
 each universe stock's last 400 adjusted sessions up to the scan day; keep REAL_PATTERN and
 UNSURE verdicts with their pivot and stop.
 
-    python tests/scan_falcon_setups_v3.py 2019-01-01 2026-10-30
-Writes data/pit/falcon_setups_v3_<start>_<end>.parquet.
+    python tests/scan_falcon_setups_v3.py 2019-01-01 2026-10-30 [data dir, default data/pit]
+Writes <data dir>/falcon_setups_v3_<start>_<end>.parquet. With another data dir (data/pit_v2,
+docs/history_2001_2006_preregistration.md) the scan days are every 5th session of that
+dir's prices from the start date, and prices after the end date are not loaded.
 """
 import sys
 sys.path.insert(0, ".")
@@ -23,14 +25,21 @@ F_SCAN_EVERY, HISTORY = 5, 400
 
 def main():
     start, end = pd.Timestamp(sys.argv[1]), pd.Timestamp(sys.argv[2])
-    tech_dates = pd.read_parquet("data/pit/technicals.parquet", columns=["Date"])["Date"]
-    sessions = np.sort(tech_dates.unique())
+    ddir = sys.argv[3] if len(sys.argv) > 3 else "data/pit"
+    if ddir == "data/pit":
+        tech_dates = pd.read_parquet("data/pit/technicals.parquet", columns=["Date"])["Date"]
+        prices = pd.read_parquet("data/pit/prices_adjusted.parquet")
+    else:
+        prices = pd.read_parquet(f"{ddir}/prices_adjusted.parquet", filters=[("Date", "<=", end)])
+        tech_dates = pd.to_datetime(prices["Date"])
+    sessions = np.sort(pd.to_datetime(tech_dates).unique())
     in_window = sessions[(sessions >= np.datetime64(start)) & (sessions <= np.datetime64(end))]
     scan_days = in_window[::F_SCAN_EVERY]
-    universe = pd.read_parquet("data/pit/universe_monthly.parquet")
+    universe = pd.read_parquet(f"{ddir}/universe_monthly.parquet")
     month_ends = np.sort(universe["month_end"].unique())
     members = {pd.Timestamp(m): set(g["entity_id"]) for m, g in universe.groupby("month_end")}
-    panel = make_panel(pd.read_parquet("data/pit/prices_adjusted.parquet"), universe)
+    panel = make_panel(prices, universe)
+    del prices
     pos = {d: k for k, d in enumerate(panel.sessions)}
     cols = {e: j for j, e in enumerate(panel.close.columns)}
     arr = {k: getattr(panel, k.lower()).to_numpy(float) for k in ("Open", "High", "Low", "Close", "Volume")}
@@ -61,7 +70,7 @@ def main():
         if n % 50 == 0:
             print(f"  {n}/{len(scan_days)} scan days, {n_calls:,} stock-days, {len(rows)} setups, {time.time() - t0:.0f}s", flush=True)
     out = pd.DataFrame(rows)
-    path = f"data/pit/falcon_setups_v3_{start.date()}_{end.date()}.parquet"
+    path = f"{ddir}/falcon_setups_v3_{start.date()}_{end.date()}.parquet"
     out.to_parquet(path, index=False)
     print(f"Saved {path}: {len(out):,} setups from {n_calls:,} stock-days in {time.time() - t0:.0f}s", flush=True)
 
