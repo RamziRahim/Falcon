@@ -11,6 +11,7 @@ Run Falcon's candidate strategies forward on live NSE data for 12 months, automa
 3. **Is forward performance inside the range the 25-year history suggests?** This is not proof of an edge: one year cannot prove or disprove it.
 4. **Is buying near the close worth the effort?** Tracks 3/4 vs 5/6 answer this.
 5. **How do IA's own discretionary pullback trades compare?** Track 8.
+6. **Does sector strength keep helping monthly momentum, as it did in 2019–26?** Track 10 vs track 1.
 
 ## Tracks
 
@@ -27,6 +28,7 @@ Each track has its own notional **₹10,00,000**. Rules are exactly as frozen in
 | 7 | Current mix, FM buy-stop (C_F_A_H) | `docs/buystop_mix_preregistration.md`, **after that test runs**; IA decides if it fails | FM on a resting buy-stop at the 20-day high |
 | 8 | IA discretionary pullbacks | Logged by IA (below) | As logged |
 | 9 | Momentum, pullback add-on (A10P) | `docs/pullback_two_ways_preregistration.md` (failed its bar; included by IA's choice, 2026-11-22) | Half at the open, half at the weekly broken high, else next rebalance |
+| 10 | Monthly momentum + sector strength (M_SEC_X10) | `docs/momentum_sector_exits_preregistration.md` (failed its bar: best in 2019–26, weaker in 2001–17; included by IA's choice, 2026-11-22) | As 1, but ranked only among stocks whose sector is strong (FM's sector rule, `backtesting/sector_strength.py`) |
 
 **Filters on every automatic track:**
 - the ethical sector filter (`data/pit_v2/ethical_exclusions.csv`, refreshed monthly for new listings, which are unbuyable until classified);
