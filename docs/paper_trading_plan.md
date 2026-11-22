@@ -1,6 +1,6 @@
 # Falcon paper trading — plan
 
-**Status: DRAFT (2026-11-22). Not frozen. Freeze before day one; after that, changes only as dated notes.**
+**Status: FROZEN on 2026-11-22 18:22 IST.** Changes only as dated notes.
 
 ## Purpose
 
@@ -62,7 +62,7 @@ Each track has its own notional **₹10,00,000**. Rules are exactly as frozen in
 | Server | Oracle Cloud Always Free, Ampere A1 if available, home region Hyderabad or Mumbai. The account is converted to Pay As You Go so idle Always Free instances are not reclaimed, at no charge while only Always Free resources are used. |
 | Record | GitHub repo `paper/` folder, committed daily (append-only ledger) |
 | Watchdog | healthchecks.io (free): alert if no ping by 9:00 pm on a trading day |
-| Alerts and reports | Telegram bot and/or email (IA to choose) |
+| Alerts and reports | **Email** (IA, 2026-11-22). Sent from IA's own email account (app password) to IA. The address and password live only in the server's secret store, never in the repo. |
 | Backup runner | GitHub Actions: if the watchdog fires, a catch-up run uses Yahoo Finance prices marked "provisional", re-checked against NSE the next day |
 | Claude | Not required. The engine, record and alerts run without it. Claude can read the weekly report if available. |
 
@@ -113,10 +113,10 @@ At each checkpoint, for each track:
 - [x] Buy-stop mix test run (track 7): holds up (2026-11-22)
 - [x] Quality gate: start without it; add it later by dated note (IA, 2026-11-22)
 - [ ] Oracle account (IA), converted to Pay As You Go
-- [ ] Alerts channel and daily-message preference (IA)
+- [x] Alerts by email (IA, 2026-11-22). Default: a daily summary plus immediate problem alerts; IA can switch to problems-only plus weekly at any time.
 - [ ] Engine built at tag `paper-v1`; replay test on the last 3 months matches the backtest exactly
 - [ ] One-week dry run on the server (may run during December; the record catches up from 2026-12-01)
-- [ ] This plan frozen
+- [x] This plan frozen (2026-11-22 18:22 IST)
 - [ ] Day one: **2026-12-01** (IA, 2026-11-22), with the first momentum ranks taken at the 2026-11-30 close
 
 ## Start-up (December 2026)
