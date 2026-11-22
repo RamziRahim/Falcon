@@ -12,6 +12,7 @@ Run Falcon's candidate strategies forward on live NSE data for 12 months, automa
 4. **Is buying near the close worth the effort?** Tracks 3/4 vs 5/6 answer this.
 5. **How do IA's own discretionary pullback trades compare?** Track 8.
 6. **Does sector strength keep helping monthly momentum, as it did in 2019–26?** Track 10 vs track 1.
+7. **How do smaller positions feel and fare in practice?** Track 11 vs track 1.
 
 ## Tracks
 
@@ -29,6 +30,7 @@ Each track has its own notional **₹10,00,000**. Rules are exactly as frozen in
 | 8 | IA discretionary pullbacks | Logged by IA (below) | As logged |
 | 9 | Momentum, pullback add-on (A10P) | `docs/pullback_two_ways_preregistration.md` (failed its bar; included by IA's choice, 2026-11-22) | Half at the open, half at the weekly broken high, else next rebalance |
 | 10 | Monthly momentum + sector strength (M_SEC_X10) | `docs/momentum_sector_exits_preregistration.md` (failed its bar: best in 2019–26, weaker in 2001–17; included by IA's choice, 2026-11-22) | As 1, but ranked only among stocks whose sector is strong (FM's sector rule, `backtesting/sector_strength.py`) |
+| 11 | Monthly momentum at 70% size (A10_70) | `docs/half_at_1to1_preregistration.md` (comparison version, about 30% cash; included by IA's choice, 2026-11-22) | As 1, each position 70% of its normal size |
 
 **Filters on every automatic track:**
 - the ethical sector filter (`data/pit_v2/ethical_exclusions.csv`, refreshed monthly for new listings, which are unbuyable until classified);
