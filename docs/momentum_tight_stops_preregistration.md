@@ -24,7 +24,13 @@ The selection (12-1 rank, top 20, monthly review, top-500 universe), the buy at 
 
 ## Variants
 
-Stops are measured from the buy price. Stops fill at the stop, or at the open if it gaps through. Targets fill at the target, or at the open if it gaps above. A target = buy + R × stop distance. Stops are checked before targets. A stopped or target-hit stock can be re-bought at a later review if it is still on the list.
+Stops are measured from the buy price. Stops fill at the stop, or at the open if it gaps through. Targets fill at the target, or at the open if it gaps above. A target = buy + R × stop distance. Stops are checked before targets. **Half-exit rules (H1 variants):**
+- The half is sold when the high reaches the 1:1 level, at that level, or at the open if it gaps above it after the buy day.
+- If the stop and the 1:1 level trade on the same day, the stop wins.
+- The break-even stop is live from the session after the half is sold.
+- Both halves count as one trade.
+
+A stopped or target-hit stock can be re-bought at a later review if it is still on the list.
 
 | Code | Stop | Target |
 |---|---|---|
@@ -36,6 +42,9 @@ Stops are measured from the buy price. Stops fill at the stop, or at the open if
 | S5_T5 | 5% | 1:5 = +25% |
 | S10_T5 | 10% | 1:5 = +50% |
 | S10_T8 | 10% | 1:8 = +80% (to see whether a very far target still costs return) |
+| S10_H1BE | 10% | **at 1:1 (+10%) sell half**; the rest's stop moves to the buy price (break-even) from the next session; the rest has no target and leaves with the list (added at IA's request, 2026-11-22) |
+| S10_H1 | 10% | at 1:1 (+10%) sell half; the rest **keeps the original 10% stop**, no target, leaves with the list |
+| S6_H1BE | 6% | at 1:1 (+6%) sell half; the rest moves to break-even, no target, leaves with the list |
 | A10 (reference) | 10% | none |
 
 The A10 reference must reproduce `data/a_stop_result.txt` (W1, W2, Y2018) and `data/history_2001_2006_result.txt` (H0) within 0.05pp before any variant runs.
@@ -59,7 +68,7 @@ S6 replaces the 10% stop only if, **in both W1 and W2**:
 - it is **clearly better on one:** CAGR at least 1.0 point **above**, or max drawdown at least 3.0 points **shallower**; **and**
 - it passes **at least 4 of the 6 checks**.
 
-The others are reported only. With 7 extra versions, the best-looking one is a lead for its own single-variant test, not a result.
+The others are reported only. With 10 extra versions, the best-looking one is a lead for its own single-variant test, not a result.
 
 ## What it means
 
