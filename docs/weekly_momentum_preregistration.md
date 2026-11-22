@@ -1,6 +1,6 @@
 # Weekly momentum: the A10 strategy reviewed every week instead of every month — pre-registration
 
-**Status: DRAFT (2026-11-22). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 17:03 IST**
 
 ## Question
 
