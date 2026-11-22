@@ -173,8 +173,15 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                  review: str = "month", lookback: int | None = None, skip: int | None = None, buffer: int | None = None,
                  allowed: pd.DataFrame | None = None, stop_mode: str = "pct", pwl: pd.DataFrame | None = None,
                  target_r: float | None = None, half_at_r: float | None = None, half_be: bool = False,
-                 trail_step: float | None = None, track_invested: bool = False):
-    """half_at_r / half_be / trail_step (docs/momentum_tight_stops_preregistration.md): when the
+                 trail_step: float | None = None, track_invested: bool = False,
+                 conf_levels: dict | None = None, risk_frac: float | None = None, max_pos: float = 0.10):
+    """stop_mode="conf" / conf_levels / risk_frac / max_pos (docs/momentum_risk_sizing_preregistration.md):
+    "conf" sets each new name's stop with backtesting.dynamic_stops.choose_stop from conf_levels
+    (dict of sessions x entities frames from conf_candidates). risk_frac: each new name gets
+    min(risk_frac x equity / ((fill - stop) / fill), max_pos x equity); if the new names together
+    exceed the cash on hand x 0.995 all are scaled down in proportion. Defaults = unchanged.
+
+    half_at_r / half_be / trail_step (docs/momentum_tight_stops_preregistration.md): when the
     high reaches buy + half_at_r x (buy - stop), sell half there (or at the open if it gaps above,
     after the buy day); stops are checked first. half_be: from the next session the rest's stop
     is the buy price. trail_step: after the half, once the high reaches that 1:1 level + k x
@@ -237,6 +244,10 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
     if score != "raw":
         vol_df = closes_ff.pct_change(fill_method=None).rolling(252, min_periods=200).std() * np.sqrt(252)
     stopped = set()
+    if stop_mode == "conf":
+        from backtesting.dynamic_stops import choose_stop
+        conf_arr = {k: v.reindex(columns=panel.close.columns).to_numpy(np.float32) for k, v in conf_levels.items()}
+        conf_col = {e: j for j, e in enumerate(panel.close.columns)}
     sup_orders = {}                                   # entity -> {"from": i, "open0": first-session open}
     adds = {}                                         # A10P: entity -> {"value", "from", "first"}
     if add_frac is not None:
@@ -343,11 +354,31 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             # equal slots of equity/MOM_HOLD, limited by the cash on hand
             # (split evenly across the new names before any is bought)
             per_name = min(equity_now * level / hold, ledger.cash / max(len(new), 1) * 0.995)
+            conf_stop, sized = {}, {}
+            if stop_mode == "conf":
+                for e in new:
+                    j = conf_col[e]
+                    stp_e, br = choose_stop(float(opens[e]), {k: conf_arr[k][i, j] for k in conf_arr})
+                    conf_stop[e] = stp_e
+                    if stats is not None:
+                        stats["branch_" + br] = stats.get("branch_" + br, 0) + 1
+                        stats["stop_dist_sum"] = stats.get("stop_dist_sum", 0.0) + (opens[e] - stp_e) / opens[e]
+            if risk_frac is not None:
+                for e in new:
+                    d = (opens[e] - conf_stop[e]) / opens[e] if e in conf_stop else stop_pct
+                    sized[e] = min(risk_frac * equity_now / d, max_pos * equity_now)
+                tot = sum(sized.values())
+                sc = min(1.0, ledger.cash * 0.995 / tot) if tot > 0 else 1.0
+                sized = {e: v * sc for e, v in sized.items()}
             for e in new:
                 first = per_name if add_frac is None else per_name * add_frac
+                if e in sized:
+                    first = sized[e]
                 meta_e = None
                 if stop_pct is not None:
                     stp = opens[e] * (1 - stop_pct)
+                    if e in conf_stop:
+                        stp = conf_stop[e]
                     if stop_mode == "pwl":
                         lw = pwl.iloc[i].get(e, np.nan)
                         if np.isfinite(lw) and lw < opens[e] and (opens[e] - lw) / opens[e] <= 0.15:
