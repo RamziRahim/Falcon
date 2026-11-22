@@ -335,6 +335,27 @@ for _k, _kn in _LV.items():
             specs.append((f"{_p}_mws_{_k.lower()}_{_fb.lower()}", f"Monthly momentum bought at weekly support: {_kn}, {_fbn}",
                           "Monthly momentum", f"Limit at the {_kn}; {_fbn}", "Fixed −10% from buy price", "None (monthly rebalance)",
                           "None", "Until it leaves the top 20", "momentum_weekly_support_result.txt", f"MWS_{_k}_{_fb}@{_s}"))
+# two more pullback approaches (docs/pullback_two_ways_preregistration.md, frozen 22 Nov 2026)
+_PB2 = {"LMR": ("Large-cap mean reversion: RSI(2) < 10 dip in an uptrend, sell the bounce (top 100)", "Other",
+                "Close after a 1-3 day dip (RSI(2) < 10, above 200-day avg)", "None", "Close above 5-day avg", "10 sessions"),
+        "LMR_O": ("Large-cap mean reversion, next-open entries and exits", "Other",
+                  "Next open after the dip signal", "None", "Next open after a close above 5-day avg", "10 sessions"),
+        "LMR_S8": ("Large-cap mean reversion with an 8% stop", "Other",
+                   "Close after a 1-3 day dip (RSI(2) < 10, above 200-day avg)", "Fixed −8% from buy price", "Close above 5-day avg", "10 sessions"),
+        "LMR_N": ("Large-cap mean reversion, only when Nifty above its 200-day average", "Other",
+                  "Close after a 1-3 day dip, Nifty above 200-day avg", "None", "Close above 5-day avg", "10 sessions"),
+        "A10P": ("Monthly momentum: half at the open, half added at the weekly broken high", "Monthly momentum",
+                 "Half at the rebalance open; half at the weekly broken prior high (else next rebalance)", "Fixed −10% from first buy",
+                 "None (monthly rebalance)", "Until it leaves the top 20"),
+        "A10P_67": ("Monthly momentum: two thirds at the open, one third added on the pullback", "Monthly momentum",
+                    "2/3 at the rebalance open; 1/3 at the weekly broken prior high (else next rebalance)", "Fixed −10% from first buy",
+                    "None (monthly rebalance)", "Until it leaves the top 20"),
+        "A10P_NF": ("Monthly momentum: half at the open, half only on the pullback", "Monthly momentum",
+                    "Half at the rebalance open; half only at the weekly broken prior high", "Fixed −10% from first buy",
+                    "None (monthly rebalance)", "Until it leaves the top 20")}
+for _c, (_n, _f, _en, _sp, _tg, _hd) in _PB2.items():
+    for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+        specs.append((f"{_p}_pb2_{_c.lower()}", _n, _f, _en, _sp, _tg, "None", _hd, "pullback_two_ways_result.txt", f"{_c}@{_s}"))
 # ethical sector filter (docs/ethical_filter_history_preregistration.md, frozen 22 Nov 2026)
 _ETH = {"A10": ("Monthly momentum, 10% stop", "Monthly momentum"),
         "A10C": ("Monthly momentum, 10% stop, no re-buy after a stop", "Monthly momentum"),
@@ -411,7 +432,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -503,6 +524,10 @@ for _p in ("all", "ha", "hb"):
         for _fb in ("ba", "cash"):
             VERDICT[f"{_p}_mws_{_k}_{_fb}"] = ("Primary variant: FAILED its frozen bar (22 Nov 2026). Not adopted."
                                               if (_p, _k, _fb) == ("all", "s4", "ba") else "Reported for information only; not judged.")
+for _p in ("all", "ha", "hb"):
+    for _c in ("lmr", "lmr_o", "lmr_s8", "lmr_n", "a10p", "a10p_67", "a10p_nf"):
+        VERDICT[f"{_p}_pb2_{_c}"] = ("Primary variant: FAILED its frozen bar (22 Nov 2026). Not adopted."
+                                    if _p == "all" and _c in ("lmr", "a10p") else "Reported for information only; not judged.")
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

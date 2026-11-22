@@ -168,8 +168,17 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                  stop_pct: float | None = None, hold: int = MOM_HOLD,
                  gauge_up=None, down_level: float = 1.0, stats: dict | None = None,
                  skip_after_stop: bool = False, score: str = "raw",
-                 support: pd.DataFrame | None = None, support_fallback: str = "BA"):
-    """support / support_fallback (docs/momentum_weekly_support_preregistration.md): support is
+                 support: pd.DataFrame | None = None, support_fallback: str = "BA",
+                 add_frac: float | None = None, add_level: pd.DataFrame | None = None, add_fallback: bool = True):
+    """add_frac / add_level / add_fallback (docs/pullback_two_ways_preregistration.md, A10P): a new
+    name gets add_frac of its slot at the rebalance open (stop = 10% below that fill, for the
+    whole position); the rest is a limit add at add_level (sessions x entities), active from the
+    next session while the position is held, filled at min(open, level) when the low reaches it.
+    At the next rebalance an unfilled add on a name still held is bought at the open
+    (add_fallback=True) or left working (False). Sold or stopped = add cancelled. None (default)
+    = unchanged behaviour.
+
+    support / support_fallback (docs/momentum_weekly_support_preregistration.md): support is
     a DataFrame (sessions x entities) of weekly support levels (backtesting.weekly_support).
     A new top-list name is not bought at the rebalance open: it gets a limit order at its
     level, active from that open until the next rebalance; it fills in a session whose low
@@ -204,6 +213,15 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
         vol_df = closes_ff.pct_change(fill_method=None).rolling(252, min_periods=200).std() * np.sqrt(252)
     stopped = set()
     sup_orders = {}                                   # entity -> {"from": i, "open0": first-session open}
+    adds = {}                                         # A10P: entity -> {"value", "from", "first"}
+    if add_frac is not None:
+        assert support is None and add_level is not None and stop_pct is not None
+        alv = add_level.reindex(columns=panel.close.columns).to_numpy(float)
+        acol = {e: j for j, e in enumerate(panel.close.columns)}
+        ast = stats if stats is not None else {}
+        for k in ("adds_total", "adds_support", "adds_fallback", "adds_cancelled", "cash_share_sum", "cash_share_n"):
+            ast.setdefault(k, 0)
+        ast.setdefault("add_vs_first", [])
     if support is not None:
         assert support_fallback in ("BA", "CASH")
         sup = support.reindex(columns=panel.close.columns).to_numpy(float)
@@ -267,6 +285,16 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             for e in [e for e in ledger.shares if e not in pending_target]:
                 if np.isfinite(opens.get(e, np.nan)):
                     ledger.sell(day, e, opens[e], _adv(panel, i, e), "REBALANCE")
+            if add_frac is not None:
+                for e in [e for e in adds if e not in ledger.shares]:
+                    adds.pop(e)
+                    ast["adds_cancelled"] += 1
+                if add_fallback:
+                    for e in [e for e in adds if np.isfinite(opens.get(e, np.nan))]:
+                        od = adds.pop(e)
+                        if ledger.buy(day, e, opens[e], min(od["value"], ledger.cash * 0.995), _adv(panel, i, e)):
+                            ast["adds_fallback"] += 1
+                            ast["add_vs_first"].append(opens[e] / od["first"] - 1)
             if gauge_up is not None and pending_level != level:
                 equity_now = ledger.cash + sum(ledger.value(e, opens) for e in ledger.shares)
                 slot = equity_now * pending_level / hold
@@ -291,9 +319,26 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
             # (split evenly across the new names before any is bought)
             per_name = min(equity_now * level / hold, ledger.cash / max(len(new), 1) * 0.995)
             for e in new:
-                ledger.buy(day, e, opens[e], per_name, _adv(panel, i, e),
-                           {"stop": opens[e] * (1 - stop_pct), "entry_idx": i} if stop_pct is not None else None)
+                first = per_name if add_frac is None else per_name * add_frac
+                ok = ledger.buy(day, e, opens[e], first, _adv(panel, i, e),
+                                {"stop": opens[e] * (1 - stop_pct), "entry_idx": i} if stop_pct is not None else None)
+                if ok and add_frac is not None and add_frac < 1:
+                    adds[e] = {"value": per_name * (1 - add_frac), "from": i + 1, "first": opens[e]}
+                    ast["adds_total"] += 1
             pending_target = None
+        if add_frac is not None and adds:
+            lows_ = panel.low.iloc[i]
+            for e in list(adds):
+                od = adds[e]
+                if od["from"] > i or e not in ledger.shares:
+                    continue
+                lv, o, lo = alv[i, acol[e]], opens.get(e, np.nan), lows_.get(e, np.nan)
+                if np.isfinite(lv) and np.isfinite(o) and np.isfinite(lo) and lo <= lv:
+                    px = min(o, lv)
+                    if ledger.buy(day, e, px, min(od["value"], ledger.cash * 0.995), _adv(panel, i, e)):
+                        adds.pop(e)
+                        ast["adds_support"] += 1
+                        ast["add_vs_first"].append(px / od["first"] - 1)
         if stop_pct is not None:
             lows = panel.low.iloc[i]
             for e in list(ledger.shares):
@@ -304,6 +349,14 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                     ledger.sell(day, e, o if gap else st, _adv(panel, i, e), "STOP")
                     stopped.add(e)
         ledger.mark(day, panel.close.iloc[i])
+        if add_frac is not None:
+            for e in [e for e in adds if e not in ledger.shares]:
+                adds.pop(e)
+                ast["adds_cancelled"] += 1
+            eq_now = ledger.cash + sum(ledger.value(x, panel.close.iloc[i]) for x in ledger.shares)
+            if eq_now > 0:
+                ast["cash_share_sum"] += ledger.cash / eq_now
+                ast["cash_share_n"] += 1
         if support is not None:
             eq_now = ledger.cash + sum(ledger.value(x, panel.close.iloc[i]) for x in ledger.shares)
             if eq_now > 0:

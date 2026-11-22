@@ -103,3 +103,57 @@ Reported: share of adds filled at S1 vs by fallback vs cancelled; average add pr
 - `data/pullback_two_ways_result.txt`
 - Runner: `tests/run_pullback_two_ways.py`
 - Dated Results section here; scorecard rows.
+
+## Implementation notes (2026-11-22, before running)
+
+- **LMR:** `backtesting/large_cap_reversion.py` (`run_lmr`).
+  - "That month's top 100" is the top-100 list in force on the signal day: the latest month-end ranking on or before it, the same point-in-time rule as `panel.universe_on`.
+  - On half A and half B it is the global top 100 restricted to that half.
+  - In LMR_O a position bought at an open can exit on the same day's close signal.
+- **A10P:** `run_momentum(..., add_frac, add_level, add_fallback)`, with S1 from `backtesting/weekly_support.py`. The add is a second `Ledger.buy` on the same position, so the stop and entry date are unchanged.
+
+## Results (2026-11-22, run once after freeze)
+
+**Reference check.** It passed: A10 on all stocks reproduced the stored results within 0.05pp in H0, W2, Y2018 and W1. Output: `data/pullback_two_ways_result.txt`.
+
+### LMR — FAILED ITS FROZEN BAR
+
+| All stocks | H0 2001–06 | W2 2008–17 | Y2018 | W1 2019–26 |
+|---|---|---|---|---|
+| Nifty | 21.19% | 5.54% | 4.11% | 10.03% |
+| **LMR (primary)** | −16.60 (−71.6) | −4.36 (−50.9) | −15.77 | **−9.25 (−57.5)**, 0/6 |
+| LMR_O (next open) | −12.99 | 0.27 | −17.46 | −8.47 |
+| LMR_S8 (8% stop) | −29.37 | −11.24 | −21.63 | −10.76 |
+| LMR_N (Nifty > 200-DMA) | −6.25 | −3.89 | −22.03 | −4.92 |
+
+W1 detail:
+- 2,967 trades; 59.3% won after costs.
+- Average win +2.12% vs average loss −3.60%; mean **−0.21% a trade after costs**.
+- Average hold 4.1 sessions; 62% invested on average.
+
+Round-trip costs for these large caps are about 0.33% (`CostModel`), so the edge before costs is only about +0.1% a trade. About 380 trades a year turn that into a large loss. The halves agree (−0.6% to −14% a year).
+
+### A10P — FAILED ITS FROZEN BAR
+
+| All stocks, CAGR % (max DD %) | H0 | W2 | Y2018 | W1 |
+|---|---|---|---|---|
+| A10 (reference) | 37.52 (−38.0) | 13.17 (−59.0) | −38.88 | 26.36 (−39.4) |
+| **A10P 50/50 (primary)** | 34.65 (−34.1) | **14.26 (−43.9)** | −30.09 | **23.61 (−31.8)** |
+| A10P_67 (67/33) | 35.79 (−35.5) | 13.95 (−49.4) | −33.14 | 24.59 (−34.5) |
+| A10P_NF (no fallback) | 31.48 (−31.3) | 13.02 (−41.5) | −27.48 | 20.72 (−29.8) |
+
+Verdict by window:
+- **W2: PASS.** +1.09pp CAGR, drawdown 15.2pp shallower, 5/6 checks.
+- **W1: FAIL.** −2.75pp CAGR (limit −1.0pp), drawdown 7.6pp shallower, 5/6 checks.
+
+How the adds behaved, A10P, W1 / W2:
+- 40% / 37% of adds filled at S1, 20% / 19% by fallback, and 40% / 43% cancelled (the position was sold or stopped first).
+- Adds filled on average **4.3% above the first buy**: a pullback to the broken high still came after a rise.
+- Average cash 29%.
+
+### What it means
+
+1. **Short-term dip buying in large caps does not survive costs.** The 59% win rate is real, but the losing dips are bigger than the bounces, and about 380 trades a year at about 0.33% each cost more than the edge.
+2. **The add-on is the best pullback variant so far, but not good enough.** It keeps every winner, cuts the worst fall by 8–15 points, and matches A10 in 2008–17. In 2019–26 it gives up 2.75 points a year, mostly because about 29% of the money waits in cash for adds that often never come.
+3. **The same lesson as before:** the drawdown benefit of pullback rules comes mostly from holding less stock.
+4. **No rule changes.** A10 keeps buying a full slot at the open. LMR is not a paper-trading candidate.
