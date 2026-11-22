@@ -1,0 +1,2048 @@
+entity_id,current_symbol,symbols,name,excluded,group,source
+I:INE552Z01027,ABDL,ABDL,Allied Blenders and Distillers Limited,True,alcohol,config.EXCLUDED_TICKERS
+S:BALAJIDIST,BALAJIDIST,BALAJIDIST,Balaji Distilleries Limited,True,alcohol,name matches \bdistiller(?:y|ies)\b
+I:INE180G01019,EDL,EDL,Empee Distilleries Limited,True,alcohol,name matches \bdistiller(?:y|ies)\b
+I:INE615I01010,GLOBUSSPR,GLOBUSSPR,Globus Spirits Limited,True,alcohol,config.EXCLUDED_TICKERS
+I:INE075D01018,GMBREW,GMBREW,GM Breweries Limited,True,alcohol,config.EXCLUDED_TICKERS
+S:JAGAJITIND,JAGAJITIND,JAGAJITIND,,True,alcohol,hand-reviewed list
+S:MCDOWELL,MCDOWELL,MCDOWELL,McDowell & Company Limited,True,alcohol,hand-reviewed list
+I:INE675G01018,PINCON,PINCON,Pincon Spirit Limited,True,alcohol,name matches \bspirit (?:ltd|limited)\b
+I:INE944F01028,RADICO,RADICO,Radico Khaitan Limited,True,alcohol,config.EXCLUDED_TICKERS
+S:RADICOKHAI,RADICOKHAI,RADICOKHAI,Radico Khaitan Limited,True,alcohol,hand-reviewed list
+I:INE480C01012,SDBL,SDBL,Som Distilleries & Breweries Limited,True,alcohol,config.EXCLUDED_TICKERS
+I:INE142Q01026,SULA,SULA,Sula Vineyards Limited,True,alcohol,config.EXCLUDED_TICKERS
+I:INE133E01013,TI,TI,Tilaknagar Industries Limited,True,alcohol,config.EXCLUDED_TICKERS
+I:INE696A01025,UBHOLDINGS,UBHOLDINGS,United Breweries (Holdings) Limited,True,alcohol,name matches \bbrewer(?:y|ies)\b
+I:INE686F01025,UBL,UBL,United Breweries Limited,True,alcohol,config.EXCLUDED_TICKERS
+I:INE854D01016,UNITDSPR,MCDOWELL-N|UNITDSPR,United Spirits Limited,True,alcohol,config.EXCLUDED_TICKERS
+S:UNITEDBREW,UNITEDBREW,UNITEDBREW,United Breweries Limited,True,alcohol,name matches \bbrewer(?:y|ies)\b
+I:INE466L01020,360ONE,360ONE|IIFLWAM,360 ONE WAM LIMITED,True,financial,sector_map: Financial Services / Asset Management
+I:INE883F01010,AADHARHFC,AADHARHFC,,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE216P01012,AAVAS,AAVAS,,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE674K01013,ABCAPITAL,ABCAPITAL,Aditya Birla Capital Limited,True,financial,sector_map: Financial Services / Financial Conglomerates
+I:INE404A01024,ABSLAMC,ABSLAMC,Aditya Birla Sun Life AMC Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE206F01022,AIIL,AIIL,Authum Investment & Infrastructure Limited,True,financial,sector_map: Financial Services / Capital Markets
+I:INE428A01015,ALBK,ALBK,Allahabad Bank,True,financial,name matches \bbank\b
+S:ALPICFIN,ALPICFIN,ALPICFIN,Alpic Finance Limited,True,financial,name matches \bfinance\b
+I:INE463V01026,ANANDRATHI,ANANDRATHI,Anand Rathi Wealth Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE434A01013,ANDHRABANK,ANDHRABANK,Andhra Bank,True,financial,name matches \bbank\b
+I:INE732I01013,ANGELONE,ANGELBRKG|ANGELONE,Angel One Limited,True,financial,sector_map: Financial Services / Capital Markets
+S:APPLECREDT,APPLECREDT,APPLECREDT,Apple Credit Corporation Limited,True,financial,name matches \bcredit\b
+S:APPLEIND,APPLEIND,APPLEIND,Apple Finance Limited,True,financial,name matches \bfinance\b
+I:INE852O01025,APTUS,APTUS,Aptus Value Housing Finance India Limited,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE549H01021,ARSSBL,ARSSBL,Anand Rathi Share and Stock Brokers Limited,True,financial,name matches \bstock ?brokers?\b
+S:ASHKLEYFIN,ASHKLEYFIN,ASHKLEYFIN,Ashok Leyland Finance Limited,True,financial,name matches \bfinance\b
+I:INE949L01017,AUBANK,AUBANK,AU Small Finance Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+S:AUTORIDFIN,AUTORIDFIN,AUTORIDFIN,Autoriders Finance Limited,True,financial,name matches \bfinance\b
+I:INE238A01026,AXISBANK,AXISBANK|UTIBANK,Axis Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE918I01018,BAJAJFINSV,BAJAJFINSV,Bajaj Finserv Limited,True,financial,sector_map: Financial Services / Financial Conglomerates
+I:INE377Y01014,BAJAJHFL,BAJAJHFL,,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE118A01012,BAJAJHLDNG,BAJAJAUTO|BAJAJHLDNG,Bajaj Holdings & Investment Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE296A01016,BAJFINANCE,BAJAUTOFIN|BAJFINANCE,Bajaj Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE545U01014,BANDHANBNK,BANDHANBNK,Bandhan Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE028A01013,BANKBARODA,BANKBARODA,Bank of Baroda,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE084A01016,BANKINDIA,BANKINDIA,Bank of India,True,financial,sector_map: Financial Services / Banks - Regional
+S:BANKMADURA,BANKMADURA,BANKMADURA,Bank of Madura Limited,True,financial,name matches \bbank\b
+S:BANKPUNJAB,BANKPUNJAB,BANKPUNJAB,Bank of Punjab Limited,True,financial,name matches \bbank\b
+S:BANKRAJAS,BANKRAJAS,BANKRAJAS,The Bank of Rajasthan Limited,True,financial,name matches \bbank\b
+I:INE878K01010,BFINVEST,BFINVEST,BF Investment Limited,True,financial,name matches \binvestments? (?:ltd|limited)\b
+S:BGFL,BGFL,BGFL,Birla Global Finance Limited,True,financial,name matches \bfinance\b
+I:INE180K01011,BHARATFIN,BHARATFIN|SKSMICRO,Bharat Financial Inclusion Limited,True,financial,name matches \bfinancial\b
+I:INE865C01022,BIRLAMONEY,APOLLOSIND|BIRLAMONEY,Aditya Birla Money Limited,True,financial,name matches \bmoney (?:ltd|limited)\b
+I:INE118H01025,BSE,BSE,BSE Limited,True,financial,sector_map: Financial Services / Financial Data & Stock Exchanges
+I:INE476A01014,CANBK,CANBK,Canara Bank,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE477A01012,CANFINHOME,CANFINHOME,Can Fin Homes Limited,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE688I01017,CAPF,CAPF|FCH,Capital First Limited,True,financial,name matches \bcapital (?:first|advisors|services)\b
+I:INE736A01011,CDSL,CDSL,Central Depository Services (India) Limited,True,financial,sector_map: Financial Services / Capital Markets
+S:CENBNK,CENTBOP,CENBNK|CENTBOP,Centurion Bank of Punjab Limited,True,financial,name matches \bbank\b
+I:INE483A01010,CENTRALBK,CENTRALBK,Central Bank of India,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE660C01027,CENTRUM,CENTRUM,Centrum Capital Limited,True,financial,name matches \bcapital (?:ltd|limited)\b
+S:CENTURION,CENTURION,CENTURION,Centurion Bank Limited,True,financial,name matches \bbank\b
+I:INE180C01018,CGCL,CGCL|MMFSL,Capri Global Capital Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE102B01014,CHOICEIN,CHOICEIN,Choice International Limited,True,financial,sector_map: Financial Services / Capital Markets
+I:INE121A01016,CHOLAFIN,CHOLADBS|CHOLAFIN|CHOLAINV,Cholamandalam Investment and Finance Company Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE149A01033,CHOLAHLDNG,CHOLAHLDNG|TIFIN,Cholamandalam Financial Holdings Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE025A01027,CONSOFINVT,CONSOFINVT,Consolidated Finvest & Holdings Limited,True,financial,name matches \bfinvest\b
+I:INE112A01015,CORPBANK,CORPBANK,Corporation Bank,True,financial,name matches \bbank\b
+I:INE521J01018,CPCAP,CAREERP|CPCAP|CPIL,CP Capital Limited,True,financial,name matches \bcapital (?:ltd|limited)\b
+I:INE218I01013,CRAMC,CRAMC,Canara Robeco Asset Management Company Limited,True,financial,name matches \basset management\b
+I:INE741K01010,CREDITACC,CREDITACC,CREDITACCESS GRAMEEN LIMITED,True,financial,sector_map: Financial Services / Credit Services
+I:INE007A01017,CRISIL,CRISIL,Crisil Limited,True,financial,sector_map: Financial Services / Financial Data & Stock Exchanges
+I:INE679A01013,CSBBANK,CSBBANK,CSB Bank Limited,True,financial,name matches \bbank\b
+I:INE491A01021,CUB,CUB,City Union Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE284H01025,DAMCAPITAL,DAMCAPITAL,Dam Capital Advisors Limited,True,financial,name matches \bcapital (?:first|advisors|services)\b
+I:INE921B01025,DBSTOCKBRO,DBSTOCKBRO,DB (International) Stock Brokers Limited,True,financial,name matches \bstock ?brokers?\b
+I:INE503A01015,DCBBANK,DCB|DCBBANK,DCB Bank Limited,True,financial,name matches \bbank\b
+I:INE891B01012,DCMFINSERV,DCMFINSERV,DCM Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE077A01010,DENABANK,DENABANK,Dena Bank,True,financial,name matches \bbank\b
+I:INE680A01011,DHANBANK,DHANBANK,Dhanlaxmi Bank Limited,True,financial,name matches \bbank\b
+I:INE202B01012,DHFL,DEWANHOUS|DHFL,Dewan Housing Finance Corporation Limited,True,financial,name matches \bfinance\b
+I:INE532F01054,EDELWEISS,EDELWEISS,Edelweiss Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE296H01011,EMKAY,EMKAY,Emkay Global Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE063P01018,EQUITASBNK,EQUITASBNK,Equitas Small Finance Bank Limited,True,financial,name matches \bbank\b
+I:INE171A01011,FEDERALBNK,FEDERALBNK,The Federal Bank  Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE492B01019,FIRSTLEASE,FIRSTLEASE,First Leasing Company of India Limited,True,financial,name matches \bleasing\b
+I:INE128S01021,FIVESTAR,FIVESTAR,Five-Star Business Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE139R01012,FUSION,FUSION,Fusion Finance Limited,True,financial,name matches \bfinance\b
+I:INE007B01023,GEOJITFSL,GEOJIT|GEOJITBNPP|GEOJITFSL,Geojit Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE289B01019,GICHSGFIN,GICHSGFIN,GIC Housing Finance Limited,True,financial,name matches \bfinance\b
+I:INE481Y01014,GICRE,GICRE,General Insurance Corporation of India,True,financial,sector_map: Financial Services / Insurance - Reinsurance
+S:GLOBLTRUST,GLOBLTRUST,GLOBLTRUST,Global Trust Bank Limited,True,financial,name matches \bbank\b
+I:INE03JT01014,GODIGIT,GODIGIT,,True,financial,sector_map: Financial Services / Insurance - Property & Casualty
+I:INE0HOQ01053,GROWW,GROWW,,True,financial,sector_map: Financial Services / Capital Markets
+I:INE580B01011,GRUH,GRUH,Gruh Finance Limited,True,financial,name matches \bfinance\b
+I:INE756I01012,HDBFS,HDBFS,HDB Financial Services Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE001A01036,HDFC,HDFC,Housing Development Finance Corporation Limited,True,financial,name matches \bfinance\b
+I:INE127D01025,HDFCAMC,HDFCAMC,HDFC Asset Management Company Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE040A01018,HDFCBANK,HDFCBANK,HDFC Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE795G01014,HDFCLIFE,HDFCLIFE,HDFC Life Insurance Company Limited,True,financial,sector_map: Financial Services / Insurance - Life
+I:INE688E01024,HERCULES,HERCULES,HERCULES INVESTMENTS LIMITED,True,financial,name matches \binvestments? (?:ltd|limited)\b
+S:HINVDIR,HINVDIR,HINVDIR|INVSTSMART,HSBC InvestDirect (India) Limited,True,financial,name matches \binvestdirect\b
+I:INE481N01025,HOMEFIRST,HOMEFIRST,Home First Finance Company India Limited,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE031A01017,HUDCO,HUDCO,Housing & Urban Development Corporation Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE346A01027,ICICIAMC,ICICIAMC,ICICI Prudential Asset Management Company Limited,True,financial,name matches \basset management\b
+I:INE090A01013,ICICIBANK,ICICIBANK,ICICI Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE765G01017,ICICIGI,ICICIGI,ICICI Lombard General Insurance Company Limited,True,financial,sector_map: Financial Services / Insurance - Diversified
+I:INE726G01019,ICICILIFE,ICICILIFE|ICICIPRULI,ICICI Prudential Life Insurance Company Limited,True,financial,sector_map: Financial Services / Insurance - Life
+I:INE008A01015,IDBI,IDBI,IDBI Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+S:IDBIBANK,IDBIBANK,IDBIBANK,IDBI Bank Limited,True,financial,name matches \bbank\b
+I:INE092T01019,IDFCFIRSTB,IDFCBANK|IDFCFIRSTB,IDFC First Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE022Q01012,IEX,IEX,Indian Energy Exchange Limited,True,financial,sector_map: Financial Services / Capital Markets
+I:INE039A01010,IFCI,IFCI,IFCI Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE530B01024,IIFL,IIFL|INDIAINFO,IIFL Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE489L01022,IIFLCAPS,IIFLCAPS|IIFLSEC,IIFL Capital Services Limited,True,financial,name matches \bcapital (?:first|advisors|services)\b
+I:INE894F01025,INDIABULLS,INDIABULLS,Indiabulls Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE562A01011,INDIANB,INDIANB,Indian Bank,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE896L01010,INDOSTAR,INDOSTAR,IndoStar Capital Finance Limited,True,financial,name matches \bfinance\b
+I:INE095A01012,INDUSINDBK,INDUSINDBK,IndusInd Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE166A01011,INGVYSYABK,INGVYSYABK|VYSYABANK,ING Vysya Bank Limited,True,financial,name matches \bbank\b
+I:INE878H01016,INVENTURE,INVENTURE,Inventure Growth & Securities Limited,True,financial,name matches \bsecurities\b
+I:INE565A01014,IOB,IOB,Indian Overseas Bank,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE202E01016,IREDA,IREDA,Indian Renewable Energy Development Agency Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE053F01010,IRFC,IRFC,Indian Railway Finance Corporation Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE763G01038,ISEC,ISEC,ICICI Securities Limited,True,financial,name matches \bsecurities\b
+I:INE050B01023,IVC,IVC,IL&FS Investment Managers Limited,True,financial,name matches \binvestment managers\b
+I:INE168A01017,J&KBANK,J&KBANK,The Jammu & Kashmir Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE758E01017,JIOFIN,JIOFIN,Jio Financial Services Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE780C01023,JMFINANCIL,JMFINANCIL,JM Financial Limited,True,financial,sector_map: Financial Services / Capital Markets
+I:INE953L01027,JSFB,JSFB,Jana Small Finance Bank Limited,True,financial,name matches \bbank\b
+I:INE036D01010,KARURVYSYA,KARURVYSYA,Karur Vysya Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE12F801023,KISSHT,KISSHT,,True,financial,hand-reviewed list
+I:INE237A01028,KOTAKBANK,KOTAKBANK|KOTAKMAH,Kotak Mahindra Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE614B01018,KTKBANK,KTKBANK,The Karnataka Bank Limited,True,financial,name matches \bbank\b
+I:INE694C01018,LAKSHVILAS,LAKSHVILAS,Lakshmi Vilas Bank Limited,True,financial,name matches \bbank\b
+I:INE115A01026,LICHSGFIN,LICHSGFIN,LIC Housing Finance Limited,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE0J1Y01017,LICI,LICI,Life Insurance Corporation Of India,True,financial,sector_map: Financial Services / Insurance - Life
+I:INE498L01015,LTF,L&TFH|LTF,L&T Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE774D01016,M&MFIN,M&MFIN,Mahindra & Mahindra Financial Services Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE457A01014,MAHABANK,MAHABANK,Bank of Maharashtra,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE522D01027,MANAPPURAM,MANAPPURAM,Manappuram Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE348L01012,MASFIN,MASFIN,MAS Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE745G01035,MCX,MCX,Multi Commodity Exchange of India Limited,True,financial,sector_map: Financial Services / Financial Data & Stock Exchanges
+I:INE180A01020,MFSL,MAX|MFSL,Max Financial Services Limited,True,financial,sector_map: Financial Services / Insurance - Life
+I:INE903D01011,MONARCH,MONARCH,Monarch Networth Capital Limited,True,financial,name matches \bcapital (?:ltd|limited)\b
+S:MORGANSTAN,MORGANSTAN,MORGANSTAN,,True,financial,hand-reviewed list
+I:INE338I01027,MOTILALOFS,MOTILALOFS,Motilal Oswal Financial Services Limited,True,financial,sector_map: Financial Services / Capital Markets
+I:INE414G01012,MUTHOOTFIN,MUTHOOTFIN,Muthoot Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE298J01013,NAM-INDIA,NAM-INDIA|RNAM,Nippon Life India Asset Management Limited,True,financial,sector_map: Financial Services / Asset Management
+S:NEDUNGBANK,NEDUNGBANK,NEDUNGBANK,Nedungadi Bank Limited,True,financial,name matches \bbank\b
+I:INE470Y01017,NIACL,NIACL,The New India Assurance Company Limited,True,financial,sector_map: Financial Services / Insurance - Diversified
+I:INE995S01015,NIVABUPA,NIVABUPA,,True,financial,sector_map: Financial Services / Insurance - Life
+I:INE850M01015,NORTHARC,NORTHARC,,True,financial,hand-reviewed list
+I:INE023A01030,NSIL,JSTRIPS|NSIL,Nalwa Sons Investments Limited,True,financial,name matches \binvestments? (?:ltd|limited)\b
+I:INE531F01015,NUVAMA,NUVAMA,Nuvama Wealth Management Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE912L01015,ONELIFECAP,ONELIFECAP,Onelife Capital Advisors Limited,True,financial,name matches \bcapital (?:first|advisors|services)\b
+I:INE141A01014,ORIENTBANK,ORIENTBANK,Oriental Bank of Commerce,True,financial,name matches \bbank\b
+I:INE134E01011,PFC,PFC,Power Finance Corporation Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE560K01014,PFS,PFS,PTC India Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE202B01038,PIRAMALFIN,PIRAMALFIN,Piramal Finance Limited,True,financial,name matches \bfinance\b
+I:INE160A01014,PNB,PNB,Punjab National Bank,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE572E01012,PNBHOUSING,PNBHOUSING,PNB Housing Finance Limited,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE417T01026,POLICYBZR,POLICYBZR,,True,financial,sector_map: Financial Services / Insurance Brokers
+I:INE511C01022,POONAWALLA,MAGMA|POONAWALLA,Poonawalla Fincorp Limited,True,financial,sector_map: Financial Services / Credit Services
+S:PRIMESEC,PRIMESEC,PRIMESEC,Prime Securities Limited,True,financial,name matches \bsecurities\b
+I:INE032B01021,PRIMESECU,PRIMESECU,Prime Securities Limited,True,financial,name matches \bsecurities\b
+I:INE608A01012,PSB,PSB,Punjab & Sind Bank,True,financial,name matches \bbank\b
+I:INE976G01028,RBLBANK,RBLBANK,RBL Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE020B01018,RECLTD,RECLTD,REC Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE013A01015,RELCAPITAL,RELCAPITAL,Reliance Capital Limited,True,financial,name matches \bcapital (?:ltd|limited)\b
+I:INE612J01015,REPCOHOME,REPCOHOME,Repco Home Finance Limited,True,financial,name matches \bfinance\b
+I:INE217K01011,RHFL,RHFL,Reliance Home Finance Limited,True,financial,name matches \bfinance\b
+I:INE148I01020,SAMMAANCAP,IBULHSGFIN|SAMMAANCAP,Sammaan Capital Limited,True,financial,sector_map: Financial Services / Mortgage Finance
+I:INE836B01017,SATIN,SATIN,Satin Creditcare Network Limited,True,financial,name matches \bcreditcare\b
+I:INE648A01026,SBBJ,SBBJ,State Bank of Bikaner and Jaipur,True,financial,name matches \bbank\b
+I:INE423Y01016,SBFC,SBFC,,True,financial,sector_map: Financial Services / Credit Services
+I:INE018E01016,SBICARD,SBICARD,SBI Cards and Payment Services Limited,True,financial,sector_map: Financial Services / Credit Services
+S:SBIHOMEFIN,SBIHOMEFIN,SBIHOMEFIN,SBI Home Finance Limited,True,financial,name matches \bfinance\b
+I:INE123W01016,SBILIFE,SBILIFE,SBI Life Insurance Company Limited,True,financial,sector_map: Financial Services / Insurance - Life
+I:INE062A01012,SBIN,SBIN,State Bank of India,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE654A01024,SBT,SBT,State Bank of Travancore,True,financial,name matches \bbank\b
+I:INE420C01034,SEINVEST,SEINVEST,S.E. Investments Limited,True,financial,name matches \binvestments? (?:ltd|limited)\b
+I:INE932X01018,SHAREINDIA,SHAREINDIA,Share India Securities Limited,True,financial,name matches \bsecurities\b
+I:INE722A01011,SHRIRAMCIT,SHRIRAMCIT,Shriram City Union Finance Limited,True,financial,name matches \bfinance\b
+I:INE721A01013,SHRIRAMFIN,SHRIRAMFIN|SRTRANSFIN,Shriram Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+S:SHRIRAMINV,SHRIRAMINV,SHRIRAMINV,Shriram Investments Limited,True,financial,name matches \binvestments? (?:ltd|limited)\b
+I:INE683A01023,SOUTHBANK,SOUTHBANK,The South Indian Bank Limited,True,financial,name matches \bbank\b
+I:INE572J01011,SPANDANA,SPANDANA,Spandana Sphoorty Financial Limited,True,financial,name matches \bfinancial\b
+I:INE872A01014,SREINFRA,SREINFRA|SREINTFIN,SREI Infrastructure Finance Limited,True,financial,name matches \bfinance\b
+I:INE575P01011,STARHEALTH,STARHEALTH,,True,financial,sector_map: Financial Services / Insurance - Life
+S:KECINFRA,SUMMIT,KECINFRA|KECINTL|SUMMIT,Summit Securities Limited,True,financial,name matches \bsecurities\b
+I:INE660A01013,SUNDARMFIN,SUNDARMFIN,Sundaram Finance Limited,True,financial,sector_map: Financial Services / Credit Services
+I:INE667A01018,SYNDIBANK,SYNDIBANK,Syndicate Bank,True,financial,name matches \bbank\b
+I:INE976I01016,TATACAP,TATACAP,Tata Capital Limited,True,financial,name matches \bcapital (?:ltd|limited)\b
+S:TATAFIN,TATAFIN,TATAFIN,Tata Finance Limited,True,financial,name matches \bfinance\b
+I:INE672A01018,TATAINVEST,INVESTCORP|TATAINVEST,Tata Investment Corporation Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE305A01015,TFCILTD,TFCILTD,Tourism Finance Corporation of India Limited,True,financial,name matches \bfinance\b
+I:INE615R01029,TRU,DHANVARSHA|TRU,TruCap Finance Limited,True,financial,name matches \bfinance\b
+I:INE691A01018,UCOBANK,UCOBANK,UCO Bank,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE334L01012,UJJIVAN,UJJIVAN,Ujjivan Financial Services Limited,True,financial,name matches \bfinancial\b
+I:INE551W01018,UJJIVANSFB,UJJIVANSFB,Ujjivan Small Finance Bank Limited,True,financial,name matches \bbank\b
+I:INE692A01016,UNIONBANK,UNIONBANK,Union Bank of India,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE695A01019,UNITEDBNK,UNITEDBNK,United Bank of India,True,financial,name matches \bbank\b
+S:UNIWESTBNK,UNIWESTBNK,UNIWESTBNK,United Western Bank Limited,True,financial,name matches \bbank\b
+I:INE094J01016,UTIAMC,UTIAMC,UTI Asset Management Company Limited,True,financial,sector_map: Financial Services / Asset Management
+I:INE735W01017,UTKARSHBNK,UTKARSHBNK,Utkarsh Small Finance Bank Limited,True,financial,name matches \bbank\b
+I:INE705A01016,VIJAYABANK,VIJAYABANK,Vijaya Bank,True,financial,name matches \bbank\b
+I:INE709A01018,VLSFINANCE,VLSFINANCE,VLS Finance Limited,True,financial,name matches \bfinance\b
+I:INE528G01019,YESBANK,YESBANK,Yes Bank Limited,True,financial,sector_map: Financial Services / Banks - Regional
+I:INE260B01010,GODFRYPHLP,GODFRYPHLP,Godfrey Phillips India Limited,True,tobacco,sector_map industry: Tobacco
+I:INE973A01010,GOLDENTOBC,GOLDENTOBC|GTCIND,Golden Tobacco Limited,True,tobacco,name matches \btobacco\b
+I:INE154A01025,ITC,ITC,ITC Limited,True,tobacco,sector_map industry: Tobacco
+I:INE710A01016,VSTIND,VSTIND,VST Industries Limited,True,tobacco,hand-reviewed list
+I:INE144J01019,20MICRONS,20MICRONS,20 Microns Limited,False,,"name, no match"
+I:INE748C01020,3IINFOTECH,3IINFOTECH,3i Infotech Limited,False,,"name, no match"
+I:INE470A01017,3MINDIA,3MINDIA|BIRLA3M,3M India Limited,False,,sector_map: Industrials / Conglomerates
+I:INE111B01023,63MOONS,63MOONS|FINANTECH,63 moons technologies limited,False,,"name, no match"
+I:INE619I01012,A2ZINFRA,A2ZINFRA|A2ZMES,A2Z Infra Engineering Limited,False,,"name, no match"
+I:INE767A01016,AARTIDRUGS,AARTIDRUGS,Aarti Drugs Limited,False,,"name, no match"
+I:INE769A01020,AARTIIND,AARTIIND,Aarti Industries Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE0LRU01027,AARTIPHARM,AARTIPHARM,Aarti Pharmalabs Limited,False,,"name, no match"
+I:INE421A01028,ABAN,ABAN|ABANLLOYD|ABANLOYD,Aban Offshore Limited,False,,"name, no match"
+I:INE117A01022,ABB,ABB,ABB India Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE358A01014,ABBOTINDIA,ABBOTINDIA,Abbott India Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE647O01011,ABFRL,ABFRL|PFRL,Aditya Birla Fashion and Retail Limited,False,,sector_map: Consumer Cyclical / Apparel Manufacturing
+S:ABGHEAVY,ABGHEAVY,ABGHEAVY,ABG Heavy Industries Limited,False,,"name, no match"
+I:INE067H01016,ABGSHIP,ABGSHIP,ABG Shipyard Limited,False,,"name, no match"
+I:INE069A01017,ABIRLANUVO,ABIRLANUVO|INDRAYON,Aditya Birla Nuvo Limited,False,,"name, no match"
+I:INE14LE01019,ABLBL,ABLBL,Aditya Birla Lifestyle Brands Limited,False,,sector_map: Consumer Cyclical / Apparel Retail
+I:INE055A01016,ABREL,ABREL|CENTURYTEX,Aditya Birla Real Estate Limited,False,,sector_map: Real Estate / Real Estate Services
+I:INE012A01025,ACC,ACC,ACC Limited,False,,sector_map: Basic Materials / Building Materials
+I:INE793A01012,ACCELYA,ACCELYA|KALECONSUL,Accelya Solutions India Limited,False,,"name, no match"
+I:INE731H01025,ACE,ACE,Action Construction Equipment Limited,False,,sector_map: Industrials / Farm & Heavy Construction Machinery
+I:INE128X01021,ACI,ACI,Archean Chemical Industries Limited,False,,"name, no match"
+I:INE152B01027,ACLGATI,ACLGATI|GATI,Allcargo Gati Limited,False,,"name, no match"
+I:INE622W01025,ACMESOLAR,ACMESOLAR,Acme Solar Holdings Limited,False,,sector_map: Utilities / Utilities - Renewable
+I:INE055L01013,ACROPETAL,ACROPETAL,Acropetal Technologies Limited,False,,"name, no match"
+I:INE00FF01017,ACUTAAS,ACUTAAS|AMIORG,Acutaas Chemicals Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE931S01010,ADANIENSOL,ADANIENSOL|ADANITRANS,Adani Energy Solutions Limited,False,,sector_map: Utilities / Utilities - Independent Power Producers
+I:INE423A01024,ADANIENT,ADANIENT|ADANIEXPO,Adani Enterprises Limited,False,,sector_map: Energy / Thermal Coal
+I:INE364U01010,ADANIGREEN,ADANIGREEN,Adani Green Energy Limited,False,,sector_map: Utilities / Utilities - Renewable
+I:INE742F01042,ADANIPORTS,ADANIPORTS|MUNDRAPORT,Adani Ports and Special Economic Zone Limited,False,,sector_map: Industrials / Marine Shipping
+I:INE814H01011,ADANIPOWER,ADANIPOWER,Adani Power Limited,False,,sector_map: Utilities / Utilities - Independent Power Producers
+I:INE982B01019,ADFFOODS,ADFFOODS,ADF Foods Limited,False,,"name, no match"
+I:INE400H01019,ADHUNIK,ADHUNIK,Adhunik Metaliks Limited,False,,"name, no match"
+I:INE045A01017,ADOR,ADOR|ADORWELD|ADVANIORLI,Ador Welding Limited,False,,"name, no match"
+I:INE737B01033,ADROITINFO,ADROITINFO|ARHAMFISCL|COLORCHIPS|SPHEREGSL,Adroit Infotech Limited,False,,"name, no match"
+I:INE102I01027,ADSL,ADSL,Allied Digital Services Limited,False,,"name, no match"
+I:INE517H01010,ADVANTA,ADVANTA,Advanta Limited,False,,"name, no match"
+I:INE837H01012,ADVENZYMES,ADVENZYMES,Advanced Enzyme Technologies Limited,False,,"name, no match"
+I:INE208C01017,AEGISLOG,AEGISCHEM|AEGISLOG,Aegis Logistics Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE0INX01018,AEGISVOPAK,AEGISVOPAK,Aegis Vopak Terminals Limited,False,,sector_map: Energy / Oil & Gas Equipment & Services
+I:INE947N01017,AEQUS,AEQUS,,False,,no name found
+I:INE024001021,AEROFLEX,AEROFLEX,Aeroflex Industries Limited,False,,sector_map: Industrials / Metal Fabrication
+I:INE0BWX01014,AETHER,AETHER,,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE101I01011,AFCONS,AFCONS,Afcons Infrastructure Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE00WC01019,AFFLE,AFFLE,Affle 3i Limited,False,,sector_map: Communication Services / Advertising Agencies
+I:INE796A01023,AFTEK,AFTEK|AFTEKINFO,Aftek Limited,False,,"name, no match"
+I:INE415A01038,AGI,AGI|HINDSANIT|HSIL,AGI Greenpac Limited,False,,sector_map: Consumer Cyclical / Packaging & Containers
+I:INE976R01017,AGIIL,AGIIL,Agi Infra Limited,False,,"name, no match"
+S:AGREVOIND,AGREVOIND,AGREVOIND,Bayer Cropscience India Limited,False,,"name, no match"
+I:INE135B01014,AGRODUTCH,AGRODUTCH,Agro Dutch Industries Limited,False,,"name, no match"
+I:INE740V01019,AGROPHOS,AGROPHOS,Agro Phos India Limited,False,,"name, no match"
+I:INE758C01029,AHLUCONT,AHLUCONT,Ahluwalia Contracts (India) Limited,False,,"name, no match"
+I:INE212H01026,AIAENG,AIAENG,AIA Engineering Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE428O01016,AIFL,AIFL,Ashapura Intimates Fashion Limited,False,,"name, no match"
+I:INE031B01015,AJANTPHARM,AJANTPHARM,Ajanta Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE298G01027,AJMERA,AJMERA|SHREE,Ajmera Realty & Infra India Limited,False,,"name, no match"
+I:INE181G01025,AJRINFRA,AJRINFRA|GAMMNINFRA,AJR INFRA AND TOLLING LIMITED,False,,"name, no match"
+I:INE523B01011,AKSHOPTFBR,AKSHOPTFBR,Aksh Optifibre Limited,False,,"name, no match"
+I:INE914E01024,ALANKIT,ALANKIT,Alankit Limited,False,,"name, no match"
+I:INE964B01033,ALCHEM,ALCHEM,Alchemist Limited,False,,"name, no match"
+I:INE426A01027,ALEMBICLTD,ALEMBICLTD,Alembic Limited,False,,"name, no match"
+I:INE427A01017,ALFALAVAL,ALFALAVAL,Alfa Laval (India) Limited,False,,"name, no match"
+I:INE773I01017,ALKALI,ALKALI,Alkali Metals Limited,False,,"name, no match"
+I:INE540L01014,ALKEM,ALKEM,Alkem Laboratories Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE150B01013,ALKYLAMINE,ALKYLAMINE,Alkyl Amines Chemicals Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE418H01029,ALLCARGO,ALLCARGO,Allcargo Logistics Limited,False,,"name, no match"
+I:INE835G01018,ALLDIGI,ALLDIGI|ALLSEC,Alldigi Tech Limited,False,,"name, no match"
+I:INE270A01029,ALOKINDS,ALOKINDS,,False,,no name found
+I:INE270A01011,ALOKTEXT,ALOKTEXT,Alok Industries Limited,False,,"name, no match"
+I:INE137C01018,ALPHAGEO,ALPHAGEO,Alphageo (India) Limited,False,,"name, no match"
+I:INE093B01015,ALPSINDUS,ALPSINDUS,Alps Industries Limited,False,,"name, no match"
+I:INE787G01011,AMAR,AMAR,Amar Remedies Limited,False,,"name, no match"
+S:AMBASARABH,AMBASARABH,AMBASARABH,,False,,no name found
+I:INE371P01015,AMBER,AMBER,Amber Enterprises India Limited,False,,"sector_map: Consumer Cyclical / Furnishings, Fixtures & Appliances"
+I:INE540G01014,AMBIKCO,AMBIKCO,Ambika Cotton Mills Limited,False,,"name, no match"
+I:INE079A01024,AMBUJACEM,AMBUJACEM|GUJAMBCEM,Ambuja Cements Limited,False,,sector_map: Basic Materials / Building Materials
+S:AMBUJARAJN,AMBUJARAJN,AMBUJARAJN|DLFCEMENT,Ambuja Cement Rajasthan Limited,False,,"name, no match"
+I:INE005I01014,AMDIND,AMDIND|AMDMET,AMD Industries Limited,False,,"name, no match"
+I:INE606A01024,AMJLAND,AMJLAND|PDUMJEPULP,Amj Land Holdings Limited,False,,"name, no match"
+I:INE098F01015,AMRUTANJAN,AMRUTANJAN,Amrutanjan Health Care Limited,False,,"name, no match"
+I:INE130C01021,AMTEKAUTO,AMTEKAUTO,Amtek Auto Limited,False,,"name, no match"
+I:INE242C01024,ANANTRAJ,ANANTRAJ,Anant Raj Limited,False,,sector_map: Real Estate / Real Estate - Development
+I:INE435A01028,ANDHRAPAP,ANDHRAPAP|ANDPAPER|APPAPER|IPAPPM,ANDHRA PAPER LIMITED,False,,"name, no match"
+I:INE715B01013,ANDHRSUGAR,ANDHRSUGAR,The Andhra Sugars Limited,False,,"name, no match"
+S:ANDRAVALLY,ANDRAVALLY,ANDRAVALLY,Andhra Valley Power Supply Company Limited,False,,"name, no match"
+I:INE238D01012,ANKURDRUGS,ANKURDRUGS,Ankur Drugs And Pharma Limited,False,,"name, no match"
+I:INE436A01026,ANSALAPI,ANSALAPI|ANSALINFRA|ANSALPROP,Ansal Properties & Infrastructure Limited,False,,"name, no match"
+I:INE880B01015,ANSALHSG,ANSALHSG,Ansal Housing Limited,False,,"name, no match"
+I:INE818A01017,ANTELOPUS,ANTELOPUS|SELAN,Antelopus Selan Energy Limited,False,,"name, no match"
+I:INE414B01021,ANTGRAPHIC,ANTGRAPHIC,Antarctica Limited,False,,"name, no match"
+I:INE0CZ201020,ANTHEM,ANTHEM,Anthem Biosciences Limited,False,,sector_map: Healthcare / Biotechnology
+I:INE930P01018,ANURAS,ANURAS,Anupam Rasayan India Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE372A01015,APARINDS,APARINDS,Apar Industries Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE116A01016,APCOTEXIND,APCOTEXIND|APCOTEXLAT,Apcotex Industries Limited,False,,"name, no match"
+I:INE346W01013,APEX,APEX,Apex Frozen Foods Limited,False,,"name, no match"
+I:INE702C01019,APLAPOLLO,APLAPOLLO,APL Apollo Tubes Limited,False,,sector_map: Basic Materials / Steel
+I:INE901L01018,APLLTD,APLLTD,Alembic Pharmaceuticals Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE713T01010,APOLLO,APOLLO,Apollo Micro Systems Limited,False,,"name, no match"
+I:INE437A01024,APOLLOHOSP,APOLLOHOSP,Apollo Hospitals Enterprise Limited,False,,sector_map: Healthcare / Medical Care Facilities
+I:INE438A01022,APOLLOTYRE,APOLLOTYRE,Apollo Tyres Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+S:APTECH,APTECH,APTECH,Aptech Limited,False,,"name, no match"
+I:INE266F01018,APTECHT,APTECHT,Aptech Limited,False,,"name, no match"
+I:INE544K01026,AQUA,AQUA,Aqua Logistics Limited,False,,"name, no match"
+I:INE731A01020,ARCHIES,ARCHIES,Archies Limited,False,,"name, no match"
+I:INE574I01027,ARCOTECH,ARCOTECH,Arcotech Limited,False,,"name, no match"
+I:INE885A01024,ARE&M,AMARAJABAT|ARE&M,Amara Raja Energy & Mobility Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE643K01018,ARIHANTSUP,ARIHANTSUP,Arihant Superstructures Limited,False,,"name, no match"
+I:INE0QRL01017,ARKADE,ARKADE,Arkade Developers Limited,False,,"name, no match"
+I:INE211C01029,ARL,ARL,Arvind Remedies Limited,False,,"name, no match"
+I:INE968D01022,ARSHIYA,ARSHIYA,Arshiya Limited,False,,"name, no match"
+I:INE267I01010,ARSSINFRA,ARSSINFRA,ARSS Infrastructure Projects Limited,False,,"name, no match"
+I:INE034A01011,ARVIND,ARVIND|ARVINDMILL,Arvind Limited,False,,"name, no match"
+I:INE955V01021,ARVINDFASN,ARVINDFASN,Arvind Fashions Limited,False,,"name, no match"
+I:INE211C01037,ARVINDREM,ARVINDREM,Arvind Remedies Limited,False,,"name, no match"
+I:INE439A01020,ASAHIINDIA,ASAHIINDIA,Asahi India Glass Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE900C01027,ASAL,ASAL|JBMT,Automotive Stampings and Assemblies Limited,False,,"name, no match"
+I:INE348A01023,ASHAPURMIN,ASHAPURMIN,Ashapura Minechem Limited,False,,"name, no match"
+I:INE440A01010,ASHIMASYN,ASHIMASYN,Ashima Limited,False,,"name, no match"
+I:INE442H01011,ASHOKA,ASHOKA,Ashoka Buildcon Limited,False,,"name, no match"
+I:INE208A01029,ASHOKLEY,ASHOKLEY,Ashok Leyland Limited,False,,sector_map: Industrials / Farm & Heavy Construction Machinery
+I:INE441A01026,ASIANELEC,ASIANELEC,Asian Electronics Limited,False,,"name, no match"
+S:ASIANHOTEL,ASIANHOTEL,ASIANHOTEL,Asian Hotels Limited,False,,"name, no match"
+I:INE021A01018,ASIANPAINT,ASIANPAINT,Asian Paints Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE022I01019,ASIANTILES,ASIANTILES,Asian Granito India Limited,False,,"name, no match"
+I:INE442A01024,ASSAMCO,ASSAMCO,Assam Company India Limited,False,,"name, no match"
+S:ASSAMFRONT,ASSAMFRONT,ASSAMFRONT,AFT Industries Limited,False,,"name, no match"
+I:INE563J01010,ASTEC,ASTEC,Astec LifeSciences Limited,False,,"name, no match"
+I:INE914M01019,ASTERDM,ASTERDM,Aster DM Quality Care Limited,False,,sector_map: Healthcare / Medical Care Facilities
+I:INE006I01020,ASTRAL,ASTRAL,Astral Limited,False,,sector_map: Industrials / Building Products & Equipment
+I:INE386C01029,ASTRAMICRO,ASTRAMICRO,Astra Microwave Products Limited,False,,"name, no match"
+I:INE203A01020,ASTRAZEN,ASTRAIDL|ASTRAZEN,AstraZeneca Pharma India Limited,False,,"name, no match"
+I:INE646X01014,ASTRON,ASTRON,Astron Paper & Board Mill Limited,False,,"name, no match"
+S:ATCOIND,ATCOM,ATCOIND|ATCOM,Atcom Technologies Limited,False,,"name, no match"
+I:INE399L01023,ATGL,ADANIGAS|ATGL,Adani Total Gas Limited,False,,sector_map: Utilities / Utilities - Regulated Gas
+I:INE0LEZ01016,ATHERENERG,ATHERENERG,,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE285H01022,ATLANTAA,ATLANTA|ATLANTAA,ATLANTAA LIMITED,False,,"name, no match"
+S:ATLASCOPCO,ATLASCOPCO,ATLASCOPCO,Atlas Copco (India) Limited,False,,"name, no match"
+I:INE446A01017,ATLASCYCLE,ATLASCYCLE,Atlas Cycles (Haryana) Limited,False,,"name, no match"
+S:ARIHANTCRE,ATNINT,ARIHANTCRE|ATNINT,ATN International Limited,False,,"name, no match"
+I:INE100A01010,ATUL,ATUL|ATULPROD,Atul Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE951D01010,ATULAUTO,ATULAUTO,Atul Auto Limited,False,,"name, no match"
+I:INE132H01018,AURIONPRO,AURIONPRO,Aurionpro Solutions Limited,False,,"name, no match"
+I:INE406A01037,AUROPHARMA,AUROPHARMA,Aurobindo Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE898S01029,AURUM,AURUM|MAJESCO,Aurum PropTech Limited,False,,"name, no match"
+I:INE455J01027,AUSTRAL,AUSTRAL,Austral Coke & Projects Limited,False,,"name, no match"
+I:INE449A01011,AUTOAXLES,AUTOAXLES,Automotive Axles Limited,False,,"name, no match"
+I:INE718H01014,AUTOIND,AUTOIND,Autoline Industries Limited,False,,"name, no match"
+I:INE448A01013,AUTOLITIND,AUTOLITIND,Autolite (India) Limited,False,,"name, no match"
+I:INE349W01017,AVADHSUGAR,AVADHSUGAR,Avadh Sugar & Energy Limited,False,,"name, no match"
+I:INE0LCL01028,AVALON,AVALON,,False,,sector_map: Technology / Electronic Components
+I:INE005B01027,AVANTEL,AVANTEL,Avantel Limited,False,,"name, no match"
+I:INE871C01012,AVANTIFEED,AVANTI|AVANTIFEED,Avanti Feeds Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE699H01024,AWL,AWL,AWL Agri Business Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE555B01013,AXISCADES,AXIS-IT&T|AXISCADES|IT&T,AXISCADES Technologies Limited,False,,"name, no match"
+I:INE02IJ01035,AZAD,AZAD,,False,,sector_map: Industrials / Specialty Industrial Machinery
+S:AZTEC,AZTECSOFT,AZTEC|AZTECSOFT,Aztecsoft Limited,False,,"name, no match"
+I:INE116D01028,BAGFILMS,BAGFILMS,B.A.G Films and Media Limited,False,,"name, no match"
+I:INE917I01010,BAJAJ-AUTO,BAJAJ-AUTO,Bajaj Auto Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE933K01021,BAJAJCON,BAJAJCON|BAJAJCORP,Bajaj Consumer Care Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE193E01025,BAJAJELEC,BAJAJELEC,Bajaj Electricals Limited,False,,"name, no match"
+I:INE411U01027,BAJAJHCARE,BAJAJHCARE,Bajaj Healthcare Limited,False,,"name, no match"
+I:INE306A01021,BAJAJHIND,BAJAJHIND,Bajaj Hindusthan Sugar Limited,False,,"name, no match"
+S:BALAJIIND,BALAJIIND,BALAJIIND,Balaji Industrial Corporation Limited,False,,"name, no match"
+I:INE794B01026,BALAJITELE,BALAJITELE,Balaji Telefilms Limited,False,,"name, no match"
+I:INE050E01027,BALAMINES,BALAMINES,Balaji Amines Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE787D01026,BALKRISIND,BALKRISIND,Balkrishna Industries Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE294A01037,BALLARPUR,BALLARPUR,Ballarpur Industries Limited,False,,"name, no match"
+I:INE164A01016,BALMLAWRIE,BALMLAWRIE,Balmer Lawrie & Company Limited,False,,"name, no match"
+I:INE083D01012,BALPHARMA,BALPHARMA,Bal Pharma Limited,False,,"name, no match"
+I:INE119A01028,BALRAMCHIN,BALRAMCHIN,Balrampur Chini Mills Limited,False,,sector_map: Consumer Defensive / Confectioners
+I:INE011E01029,BALUFORGE,BALUFORGE,Balu Forge Industries Limited,False,,sector_map: Industrials / Metal Fabrication
+I:INE459A01010,BANARISUG,BANARISUG,Bannari Amman Sugars Limited,False,,"name, no match"
+I:INE213C01025,BANCOINDIA,BANCOINDIA|BANCOPROD,Banco Products (I) Limited,False,,"name, no match"
+I:INE863I01016,BANG,BANG,Bang Overseas Limited,False,,"name, no match"
+I:INE855F01034,BARTRONICS,BARTRONICS,Bartronics India Limited,False,,"name, no match"
+I:INE373A01013,BASF,BASF,BASF India Limited,False,,"name, no match"
+I:INE186H01014,BASML,BASML,Bannari Amman Spinning Mills Limited,False,,"name, no match"
+I:INE176A01010,BATAINDIA,BATAINDIA,Bata India Limited,False,,sector_map: Consumer Cyclical / Footwear & Accessories
+S:BAUSCHLOMB,BAUSCHLOMB,BAUSCHLOMB,Rayban Sun Optics Limited,False,,"name, no match"
+S:BAYER,BAYER,BAYER,Bayer India Limited,False,,"name, no match"
+I:INE462A01022,BAYERCROP,BAYERCROP,Bayer Cropscience Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE464A01028,BBL,BARATBIJLE|BBL,Bharat Bijlee Limited,False,,"name, no match"
+I:INE676A01019,BBOX,AGCNET|AVAYAGCL|BBOX|TATATELECM,Black Box Limited,False,,sector_map: Technology / Software - Application
+I:INE050A01017,BBTC,BBTC,The Bombay Burmah Trading Corporation Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE425B01027,BCG,BCG|LYCOS,Brightcom Group Limited,False,,"name, no match"
+I:INE171Z01018,BDL,BDL,Bharat Dynamics Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE495P01012,BECTORFOOD,BECTORFOOD,Mrs. Bectors Food Specialities Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE844K01012,BEDMUTHA,BEDMUTHA,Bedmutha Industries Limited,False,,"name, no match"
+I:INE263A01016,BEL,BEL,Bharat Electronics Limited,False,,sector_map: Industrials / Aerospace & Defense
+S:BELCERAMIC,BELCERAMIC,BELCERAMIC,Bell Ceramics Limited,False,,"name, no match"
+S:BELCONTROL,BELCONTROL,BELCONTROL,Bells Controls Limited,False,,"name, no match"
+I:INE894V01022,BELRISE,BELRISE,Belrise Industries Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE258A01016,BEML,BEML,BEML Limited,False,,sector_map: Industrials / Conglomerates
+I:INE922A01025,BEPL,BEPL|BHANSALENG,Bhansali Engineering Polymers Limited,False,,"name, no match"
+I:INE463A01020,BERGEPAINT,BERGEPAINT,Berger Paints (I) Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE052T01013,BESTAGRO,BESTAGRO,Best Agrolife Limited,False,,"name, no match"
+I:INE243D01012,BFUTILITIE,BFUTILITIE,BF Utilities Limited,False,,"name, no match"
+I:INE661I01014,BGRENERGY,BGRENERGY,BGR Energy Systems Limited,False,,"name, no match"
+I:INE354C01019,BHAGERIA,BHAGERIA,Bhageria Industries Limited,False,,"name, no match"
+I:INE458B01028,BHAGYNAGAR,BAGYAMETAL|BHAGYNAGAR,Bhagyanagar India Limited,False,,"name, no match"
+I:INE05XR01022,BHARATCOAL,BHARATCOAL,,False,,no name found
+I:INE465A01025,BHARATFORG,BHARATFORG,Bharat Forge Limited,False,,sector_map: Industrials / Metal Fabrication
+I:INE561C01019,BHARATGEAR,BHARATGEAR,Bharat Gears Limited,False,,"name, no match"
+S:BHARATHOT,BHARATHOT,BHARATHOT,Bharat Hotels Limited,False,,"name, no match"
+I:INE673G01013,BHARATIDIL,BHARATIDIL|BHARTISHIP,Bharati Defence and Infrastructure Limited,False,,"name, no match"
+I:INE838B01013,BHARATRAS,BHARATRAS,Bharat Rasayan Limited,False,,"name, no match"
+I:INE316L01019,BHARATWIRE,BHARATWIRE,Bharat Wire Ropes Limited,False,,"name, no match"
+I:INE397D01024,BHARTIARTL,BHARTI|BHARTIARTL,Bharti Airtel Limited,False,,sector_map: Communication Services / Telecom Services
+I:INE343G01021,BHARTIHEXA,BHARTIHEXA,Bharti Hexacom Limited,False,,sector_map: Communication Services / Telecom Services
+I:INE257A01018,BHEL,BHEL,Bharat Heavy Electricals Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE00E101023,BIKAJI,BIKAJI,Bikaji Foods International Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE828A01016,BIL,BIL,Bhartiya International Limited,False,,"name, no match"
+I:INE952D01018,BILPOWER,BILPOWER,Bilpower  Limited,False,,"name, no match"
+S:BILT,BILT,BILT,Ballarpur Industries Limited,False,,"name, no match"
+I:INE071A01013,BILVYAPAR,BILVYAPAR|BINANIIND,BIL VYAPAR LIMITED,False,,"name, no match"
+S:BINANICEM,BINANICEM,BINANICEM,Binani Cement Limited,False,,"name, no match"
+S:BINANIZINC,BINANIZINC,BINANIZINC,Binani Industries Limited,False,,"name, no match"
+I:INE376G01013,BIOCON,BIOCON,Biocon Limited,False,,sector_map: Healthcare / Biotechnology
+I:INE829A01014,BIOFILCHEM,BIOFILCHEM,Biofil Chemicals & Pharmaceuticals Limited,False,,"name, no match"
+I:INE800A01015,BIRLACABLE,BIRLACABLE|BIRLAERIC,Birla Cable Limited,False,,"name, no match"
+I:INE340A01012,BIRLACORPN,BIRLACORPN|BIRLAJUTE,Birla Corporation Limited,False,,"name, no match"
+I:INE557A01011,BIRLANU,BIRLANU|HIL|HYDRBADIND,BirlaNu Limited,False,,"name, no match"
+I:INE224B01024,BIRLAPOWER,BIRLAPOWER|BIRLAYAMAH,Birla Power Solutions Limited,False,,"name, no match"
+I:INE0UIZ01018,BLACKBUCK,BLACKBUCK,,False,,no name found
+I:INE791A01024,BLBLIMITED,BLBLIMITED,BLB Limited,False,,"name, no match"
+I:INE416D01022,BLISSGVS,BLISSGVS,Bliss GVS Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE350H01032,BLKASHYAP,BLKASHYAP,B. L. Kashyap and Sons Limited,False,,"name, no match"
+S:BLOWPLAST,BLOWPLAST,BLOWPLAST,Blow Plast Limited,False,,"name, no match"
+I:INE153T01019,BLS,BLS,BLS International Services Limited,False,,sector_map: Industrials / Specialty Business Services
+S:BLUEBIRD,BLUEBIRD,BLUEBIRD,Blue Bird (India) Limited,False,,"name, no match"
+I:INE472B01011,BLUECOAST,BLUECOAST|MOREPENHTL,Blue Coast Hotels Limited,False,,"name, no match"
+I:INE233B01017,BLUEDART,BLUEDART,Blue Dart Express Limited,False,,sector_map: Industrials / Integrated Freight & Logistics
+I:INE0KBH01020,BLUEJET,BLUEJET,Blue Jet Healthcare Limited,False,,sector_map: Healthcare / Biotechnology
+I:INE472A01039,BLUESTARCO,BLUESTARCO,Blue Star Limited,False,,sector_map: Industrials / Building Products & Equipment
+I:INE504B01011,BLUESTINFO,BLUESTINFO,Blue Star Infotech Limited,False,,"name, no match"
+I:INE304W01038,BLUESTONE,BLUESTONE,,False,,no name found
+I:INE338D01028,BODALCHEM,BODALCHEM,Bodal Chemicals Limited,False,,"name, no match"
+I:INE032A01015,BOMDYEING,BOMDYEING,Bombay Dyeing & Mfg Company Limited,False,,"name, no match"
+S:BONGAIREFN,BONGAIREFN,BONGAIREFN,Bongaigaon Refinery & Petrochemicals Limited,False,,"name, no match"
+S:BOOTSPHARM,BOOTSPHARM,BOOTSPHARM,Abbott India Limited,False,,"name, no match"
+I:INE666D01022,BORORENEW,BORORENEW|BOROSIL,BOROSIL RENEWABLES LIMITED,False,,"name, no match"
+I:INE782A01015,BOSCH-HCIL,AMTREXAPPL|BOSCH-HCIL|HITACHIHOM|JCHAC,BOSCH HOME COMFORT INDIA LIMITED,False,,"name, no match"
+S:BOSCHCHASY,BOSCHCHASY,BOSCHCHASY|KALYANBRAK,Bosch Chassis Systems India Limited,False,,"name, no match"
+I:INE323A01026,BOSCHLTD,BOSCHLTD|MICO,Bosch Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE029A01011,BPCL,BPCL,Bharat Petroleum Corporation Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE110A01019,BPL,BPL,BPL Limited,False,,"name, no match"
+S:BPLENGG,BPLENGG,BPLENGG,BPL Engineering Limited,False,,"name, no match"
+S:BPLSANTECH,BPLSANTECH,BPLSANTECH,BST Limited,False,,"name, no match"
+S:BRABOURNE,BRABOURNE,BRABOURNE|RPGLS|SEARLEIND,Brabourne Enterprises Limited,False,,"name, no match"
+I:INE317J01011,BRANDHOUSE,BRANDHOUSE,Brandhouse Retails Limited,False,,"name, no match"
+I:INE589G01011,BRFL,BRFL,Bombay Rayon Fashions Limited,False,,"name, no match"
+I:INE791I01019,BRIGADE,BRIGADE,Brigade Enterprises Limited,False,,sector_map: Real Estate / Real Estate - Development
+I:INE216A01022,BRITANNIA,BRITANNIA,Britannia Industries Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE698H01018,BROADCAST,BROADCAST,Broadcast Initiatives Limited,False,,"name, no match"
+I:INE650L01011,BROOKS,BROOKS,Brooks Laboratories Limited,False,,"name, no match"
+I:INE395A01016,BSELINFRA,BSELINFO|BSELINFRA,BSEL Infrastructure Realty Limited,False,,"name, no match"
+I:INE594B01012,BSL,BSL,BSL Limited,False,,"name, no match"
+I:INE043K01011,BSLIMITED,BSLIMITED|BSTRANSCOM,BS Limited,False,,"name, no match"
+I:INE836A01035,BSOFT,BSOFT|KPIT,BIRLASOFT LIMITED,False,,sector_map: Technology / Information Technology Services
+I:INE817H01014,BURNPUR,BURNPUR,Burnpur Cement Limited,False,,"name, no match"
+S:BURRWELCOM,BURRWELCOM,BURRWELCOM,Burroughs Wellcome (India) Limited,False,,"name, no match"
+I:INE319B01014,BYKE,BYKE|THEBYKE,The Byke Hospitality Limited,False,,"name, no match"
+S:CABOTINDIA,CABOTINDIA,CABOTINDIA,Cabot India Limited,False,,"name, no match"
+S:CADBURY,CADBURY,CADBURY,Cadbury India Limited,False,,"name, no match"
+I:INE910H01017,CAIRN,CAIRN,Cairn India Limited,False,,"name, no match"
+I:INE526B01014,CALSOFT,CALSOFT,California Software Company Limited,False,,"name, no match"
+I:INE052I01032,CAMLINFINE,CAMLINFINE,Camlin Fine Sciences Limited,False,,"name, no match"
+I:INE278Y01022,CAMPUS,CAMPUS,Campus Activewear Limited,False,,"name, no match"
+I:INE596I01012,CAMS,CAMS,Computer Age Management Services Limited,False,,sector_map: Technology / Information Technology Services
+I:INE874H01015,CANDC,CANDC,C & C Constructions Limited,False,,"name, no match"
+I:INE068L01016,CANTABIL,CANTABIL,Cantabil Retail India Limited,False,,"name, no match"
+I:INE264T01014,CAPACITE,CAPACITE,Capacit'e Infraprojects Limited,False,,"name, no match"
+I:INE475E01018,CAPLIPOINT,CAPLIPOINT,Caplin Point Laboratories Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE120A01026,CARBORUNIV,CARBORUNIV,Carborundum Universal Limited,False,,sector_map: Industrials / Conglomerates
+I:INE752H01013,CARERATING,CARERATING,CARE Ratings Limited,False,,"name, no match"
+I:INE198A01014,CAROLINFO,CAROLINFO|WOCKLIFE,Carol Info Services Limited,False,,"name, no match"
+S:CARRIERAIR,CARRIERAIR,CARRIERAIR,Carrier Aircon Limited,False,,"name, no match"
+I:INE290S01011,CARTRADE,CARTRADE,Cartrade Tech Limited,False,,sector_map: Consumer Cyclical / Auto & Truck Dealerships
+I:INE068D01021,CASTEXTECH,AMTEKINDIA|CASTEXTECH,Castex Technologies Limited,False,,"name, no match"
+I:INE172A01019,CASTROL,CASTROL,Castrol India Limited,False,,"name, no match"
+I:INE172A01027,CASTROLIND,CASTROLIND,Castrol India Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE483S01012,CCAVENUE,CCAVENUE|INFIBEAM,AvenuesAI Limited,False,,"name, no match"
+I:INE429I01024,CCCL,CCCL,Consolidated Construction Consortium Limited,False,,"name, no match"
+I:INE421D01014,CCL,CCL,CCL Products (India) Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+S:CEAT,CEAT,CEAT,Ceat Limited,False,,"name, no match"
+I:INE482A01020,CEATLTD,CEATLTD,CEAT Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE185H01016,CELEBRITY,CELEBRITY,Celebrity Fashions Limited,False,,"name, no match"
+I:INE221I01017,CELESTIAL,CELESTIAL,Celestial Biolabs Limited,False,,"name, no match"
+I:INE0LMW01024,CELLO,CELLO,Cello World Limited,False,,"name, no match"
+I:INE686A01018,CEMPRO,CEMPRO|ITDCEM|TRAFALHSE,Cemindia Projects Limited,False,,sector_map: Industrials / Engineering & Construction
+S:CENTAKCHEM,CENTAKCHEM,CENTAKCHEM,Centak Chemicals Limited,False,,"name, no match"
+I:INE485A01015,CENTENKA,CENTENKA,Century Enka Limited,False,,"name, no match"
+I:INE320B01020,CENTUM,CENTUM,Centum Electronics Limited,False,,"name, no match"
+I:INE348B01021,CENTURYPLY,CENTURYPLY,Century Plyboards (India) Limited,False,,"name, no match"
+I:INE739E01017,CERA,CERA,Cera Sanitaryware Limited,False,,"name, no match"
+I:INE345B01019,CEREBRAINT,CEREBRAINT,Cerebra Integrated Technologies Limited,False,,"name, no match"
+I:INE486A01013,CESC,CESC,CESC Limited,False,,sector_map: Utilities / Utilities - Regulated Electric
+I:INE067A01029,CGPOWER,CGPOWER|CROMPGREAV,CG Power and Industrial Solutions Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE427F01016,CHALET,CHALET,Chalet Hotels Limited,False,,sector_map: Consumer Cyclical / Lodging
+I:INE085A01013,CHAMBLFERT,CHAMBLFERT,Chambal Fertilizers & Chemicals Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE03YM01018,CHEMCON,CHEMCON,Chemcon Speciality Chemicals Limited,False,,"name, no match"
+I:INE488A01027,CHEMPLAST,CHEMPLAST,Chemplast Sanmar Limited,False,,"name, no match"
+I:INE488A01050,CHEMPLASTS,CHEMPLASTS,,False,,no name found
+I:INE178A01016,CHENNPETRO,CHENNPETRO|MADRASREFN,Chennai Petroleum Corporation Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE217C01018,CHESLINTEX,CHESLINTEX,Cheslind Textiles Limited,False,,"name, no match"
+I:INE132B01011,CHETTINAD,CHETNADCEM|CHETTINAD,Chettinad Cement Corporation Limited,False,,"name, no match"
+S:CHICAGPNUM,CHICAGPNUM,CHICAGPNUM,Chicago Pneumatic (I) Limited,False,,"name, no match"
+I:INE662C01015,CHROMATIC,CHROMATIC,Chromatic India Limited,False,,"name, no match"
+S:CIBASPEC,CIBASPEC,CIBASPEC,Ciba Speciality Chemicals Limited,False,,"name, no match"
+I:INE536H01010,CIEINDIA,CIEINDIA|MAHINDCIE|MAHINDFORG,CIE Automotive India Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE675C01017,CIGNITITEC,CIGNITITEC,Cigniti Technologies Limited,False,,"name, no match"
+I:INE704H01014,CINEMAX,CINEMAX,Cinemax India Limited,False,,"name, no match"
+I:INE460N01011,CINEMAXIN,CINEMAXIN,Cinemax India Limited,False,,"name, no match"
+I:INE039B01026,CINEVISTA,CINEVISTA,Cinevista Limited,False,,"name, no match"
+I:INE059A01026,CIPLA,CIPLA,Cipla Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+S:CITURGIBIO,CITURGIBIO,CITURGIBIO,Citurgia Biochemicals Limited,False,,"name, no match"
+S:CLARIANT,CLARIANT,CLARIANT,Clariant (India) Limited,False,,"name, no match"
+I:INE987C01024,CLASSIC,CLASSIC,Classic Diamonds (India) Limited,False,,"name, no match"
+I:INE227W01023,CLEAN,CLEAN,Clean Science and Technology Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE647U01026,CLEANMAX,CLEANMAX,,False,,no name found
+I:INE779B01019,CLUTCHAUTO,CLUTCHAUTO,Clutch Auto Limited,False,,"name, no match"
+I:INE378J01013,CMAHENDRA,CMAHENDRA,C. Mahendra Exports Limited,False,,"name, no match"
+I:INE314A01017,CMC,CMC,CMC Limited,False,,"name, no match"
+I:INE05HV01027,CMPDI,CMPDI,Central Mine Planning & Design Institute Limited,False,,"name, no match"
+I:INE925R01014,CMSINFO,CMSINFO,CMS Info Systems Limited,False,,"name, no match"
+I:INE522F01014,COALINDIA,COALINDIA,Coal India Limited,False,,sector_map: Energy / Thermal Coal
+S:COCHINREFN,COCHINREFN,COCHINREFN,Kochi Refineries Limited,False,,"name, no match"
+I:INE704P01017,COCHINSHIP,COCHINSHIP,Cochin Shipyard Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE335K01011,COFFEEDAY,COFFEEDAY,Coffee Day Enterprises Limited,False,,"name, no match"
+I:INE591G01017,COFORGE,COFORGE|NIITTECH,Coforge Limited,False,,sector_map: Technology / Information Technology Services
+I:INE03QK01018,COHANCE,COHANCE|SUVENPHAR,Cohance Lifesciences Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+S:COLGATE,COLGATE,COLGATE,Colgate Palmolive India Limited,False,,"name, no match"
+I:INE259A01022,COLPAL,COLPAL,Colgate Palmolive (India) Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+S:COMPUDYNE,COMPUDYNE,COMPUDYNE,Compudyne Winosystems Limited,False,,"name, no match"
+S:COMPUTECH,COMPUTECH,COMPUTECH,Computech International Limited,False,,"name, no match"
+I:INE111A01017,CONCOR,CONCOR,Container Corporation of India Limited,False,,sector_map: Industrials / Railroads
+I:INE338H01029,CONCORDBIO,CONCORDBIO,Concord Biotech Limited,False,,sector_map: Healthcare / Biotechnology
+S:CORALHUB,CORALHUB,CORALHUB|VITLINFO,Coral Hub Limited,False,,"name, no match"
+I:INE247G01024,COREEDUTEC,COREEDUTEC|COREPROTEC,CORE Education & Technologies Limited,False,,"name, no match"
+S:COREPARENT,COREPARENT,COREPARENT,Core Healthcare Limited,False,,"name, no match"
+I:INE169A01031,COROMANDEL,COROMANDEL|COROMNFERT,Coromandel International Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE757A01017,COSMOFIRST,COSMOFILMS|COSMOFIRST,COSMO FIRST LIMITED,False,,"name, no match"
+I:INE008I01026,COX&KINGS,COX&KINGS,Cox & Kings Limited,False,,"name, no match"
+I:INE819V01029,CPPLUS,CPPLUS,Aditya Infotech Limited,False,,sector_map: Industrials / Building Products & Equipment
+I:INE00LO01017,CRAFTSMAN,CRAFTSMAN,Craftsman Automation Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+S:CRANESSOFT,CRANESSOFT,CRANESSOFT,Cranes Software International Limited,False,,"name, no match"
+I:INE230B01021,CREATIVEYE,CREATIVEYE,Creative Eye Limited,False,,"name, no match"
+I:INE559D01011,CREST,CREST|SHARRESLTD,Crest Ventures Limited,False,,"name, no match"
+I:INE774A01012,CRESTANI,CRESTANI|CRESTCOMM,Crest Animation Studios Limited,False,,"name, no match"
+I:INE514G01019,CREWBOS,CREWBOS,Crew B.O.S. Products Limited,False,,"name, no match"
+I:INE0S4R01014,CRIZAC,CRIZAC,Crizac Limited,False,,"name, no match"
+I:INE299U01018,CROMPTON,CROMPTON,Crompton Greaves Consumer Electricals Limited,False,,"sector_map: Consumer Cyclical / Furnishings, Fixtures & Appliances"
+I:INE627H01017,CTE,CTE,Cambridge Technology Enterprises Limited,False,,"name, no match"
+I:INE298A01020,CUMMINSIND,CUMMINSIND|KIRLOSKCUM,Cummins India Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE509F01011,CUPID,CUPID,Cupid Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE117B01012,CURATECH,CURATECH|SOFTPRO,Cura Technologies Limited,False,,"name, no match"
+I:INE278G01037,CYBERMEDIA,CYBERMEDIA,Cyber Media (India) Limited,False,,"name, no match"
+I:INE214A01019,CYBERTECH,CYBERTECH,Cybertech Systems And Software Limited,False,,"name, no match"
+I:INE136B01020,CYIENT,CYIENT|INFOTECENT,Cyient Limited,False,,sector_map: Industrials / Conglomerates
+I:INE055S01018,CYIENTDLM,CYIENTDLM,Cyient DLM Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE016A01026,DABUR,DABUR,Dabur India Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE00R701025,DALBHARAT,DALBHARAT,Dalmia Bharat Limited,False,,sector_map: Basic Materials / Building Materials
+I:INE439L01019,DALMIABHA,DALMIABEL|DALMIABHA,Dalmia Bharat Limited,False,,"name, no match"
+I:INE495A01022,DALMIASUG,DALMIACEM|DALMIASUG,Dalmia Bharat Sugar and Industries Limited,False,,"name, no match"
+I:INE365B01017,DATAMATICS,DATAMATICS|DATATECH,Datamatics Global Services Limited,False,,"name, no match"
+I:INE0IX101010,DATAPATTNS,DATAPATTNS,Data Patterns (India) Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE950I01011,DBCORP,DBCORP,D.B.Corp Limited,False,,"name, no match"
+I:INE917M01012,DBL,DBL,Dilip Buildcon Limited,False,,"name, no match"
+I:INE879I01012,DBREALTY,DBREALTY,Valor Estate Limited,False,,"name, no match"
+I:INE385W01011,DCAL,DCAL,Dishman Carbogen Amcis Limited,False,,"name, no match"
+I:INE137G01027,DCHL,DCHL,Deccan Chronicle Holdings Limited,False,,"name, no match"
+I:INE498A01018,DCM,DCM,DCM  Limited,False,,"name, no match"
+S:DCMDAEWOO,DCMDAEWOO,DCMDAEWOO,Daewoo Motors India Limited,False,,"name, no match"
+I:INE499A01024,DCMSHRIRAM,DCMSHRIRAM|DCMSRMCONS,DCM Shriram Limited,False,,sector_map: Industrials / Conglomerates
+I:INE500A01029,DCW,DCW,DCW Limited,False,,"name, no match"
+I:INE0KL801015,DCXINDIA,DCXINDIA,,False,,no name found
+I:INE583C01013,DECCANCE,DECCANCE|DECCANCEM,Deccan Cements Limited,False,,"name, no match"
+I:INE945F01025,DECNGOLD,DECNGOLD,,False,,no name found
+I:INE501A01019,DEEPAKFERT,DEEPAKFERT,Deepak Fertilizers and Petrochemicals Corporation Limited,False,,sector_map: Basic Materials / Chemicals
+I:INE288B01011,DEEPAKNTR,DEEPAKNTR,Deepak Nitrite Limited,False,,sector_map: Basic Materials / Chemicals
+I:INE677H01012,DEEPENR,DEEPENR|DEEPIND,DEEP ENERGY RESOURCES LIMITED,False,,"name, no match"
+I:INE148O01028,DELHIVERY,DELHIVERY,Delhivery Limited,False,,sector_map: Industrials / Integrated Freight & Logistics
+I:INE124G01033,DELTACORP,ARROWGROUP|DELTACORP,Delta Corp Limited,False,,"name, no match"
+I:INE947J01015,DEN,DEN,Den Networks Limited,False,,"name, no match"
+I:INE244A01016,DENORA,DENORA|TITANOCOMP,De Nora India Limited,False,,"name, no match"
+I:INE872J01023,DEVYANI,DEVYANI,Devyani International Limited,False,,sector_map: Consumer Cyclical / Restaurants
+I:INE456C01012,DFMFOODS,DFMFOODS,DFM Foods Limited,False,,"name, no match"
+I:INE041A01016,DHAMPURSUG,DHAMPURSUG,Dhampur Sugar Mills Limited,False,,"name, no match"
+I:INE274G01010,DHANI,DHANI|IBSEC|IBVENTURES,Dhani Services Limited,False,,"name, no match"
+I:INE435G01025,DHANUKA,DHANUKA,Dhanuka Agritech Limited,False,,"name, no match"
+I:INE406H01016,DHANUS,DHANUS,Dhanus Technologies Limited,False,,"name, no match"
+I:INE278R01018,DHARAN,DHARAN|KARDA|KBCGLOBAL,DHARAN INFRA-EPC LIMITED,False,,"name, no match"
+I:INE989C01020,DIACABS,DIACABS,Diamond Power Infrastructure Limited,False,,"name, no match"
+I:INE989C01012,DIAPOWER,DIAPOWER,Diamond Power Infra Ltd,False,,"name, no match"
+I:INE303A01010,DICIND,COATESIND|DICIND,DIC India Limited,False,,"name, no match"
+I:INE927C01020,DIGISPICE,DIGISPICE|SMOBILITY|SPICEMOBI|SPICEMOBIL,DiGiSPICE Technologies Limited,False,,"name, no match"
+S:DIGITALEQP,DIGITALEQP,DIGITALEQP,Digital GlobalSoft Limited,False,,"name, no match"
+I:INE353G01020,DISHMAN,DISHMAN,Dishman Pharmaceuticals and Chemicals Limited,False,,"name, no match"
+I:INE836F01026,DISHTV,DISHTV,Dish TV India Limited,False,,"name, no match"
+I:INE361B01024,DIVISLAB,DIVISLAB,Divi's Laboratories Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE935N01012,DIXON,DIXON,Dixon Technologies (India) Limited,False,,sector_map: Technology / Consumer Electronics
+I:INE271C01023,DLF,DLF,DLF Limited,False,,sector_map: Real Estate / Real Estate - Development
+I:INE250K01012,DLINKINDIA,DLINKINDIA,D-Link (India) Limited,False,,"name, no match"
+I:INE192R01011,DMART,DMART,Avenue Supermarts Limited,False,,sector_map: Consumer Defensive / Discount Stores
+I:INE920A01011,DOLPHINOFF,DOLPHINOFF,Dolphin Offshore Enterprises (India) Limited,False,,"name, no match"
+I:INE321T01012,DOMS,DOMS,DOMS Industries Limited,False,,sector_map: Industrials / Business Equipment & Supplies
+I:INE668D01028,DONEAR,DONEAR,Donear Industries Limited,False,,"name, no match"
+I:INE928K01013,DRDATSONS,AANJANEYA|DRDATSONS,Dr. Datson's Labs Limited,False,,"name, no match"
+I:INE0JS101016,DREAMFOLKS,DREAMFOLKS,Dreamfolks Services Limited,False,,"name, no match"
+I:INE506A01018,DREDGECORP,DREDGECORP,Dredging Corporation of India Limited,False,,"name, no match"
+I:INE089A01023,DRREDDY,DRREDDY,Dr. Reddy's Laboratories Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE891A01014,DSKULKARNI,DSKULKARNI,DS Kulkarni Developers Limited,False,,"name, no match"
+I:INE508A01014,DUNCANSIND,DUNCANSIND,Duncans Industries Limited,False,,"name, no match"
+I:INE366A01033,DWARKESH,DWARKESH,Dwarikesh Sugar Industries Limited,False,,"name, no match"
+S:DYNACONS,DYNACONS,DYNACONS,Dynacons Systems & Solutions Limited,False,,"name, no match"
+I:INE221B01012,DYNAMATECH,DYNAMATECH,Dynamatic Technologies Limited,False,,"name, no match"
+S:CITICORSEC,E-SERVEINT,CITICORSEC|E-SERVEINT,e-Serve International Limited,False,,"name, no match"
+I:INE255Z01019,E2E,E2E,E2E Networks Limited,False,,sector_map: Technology / Software - Infrastructure
+I:INE07O001018,EASEMYTRIP,EASEMYTRIP,Easy Trip Planners Limited,False,,"name, no match"
+I:INE962C01027,EASTSILK,EASTSILK,Eastern Silk Industries Limited,False,,"name, no match"
+I:INE268C01029,EASUNREYRL,EASUNREYRL,Easun Reyrolle Limited,False,,"name, no match"
+I:INE18JU01028,EBGNG,EBGNG,,False,,no name found
+I:INE738I01010,ECLERX,ECLERX,eClerx Services Limited,False,,sector_map: Technology / Information Technology Services
+I:INE889J01019,EDSERV,EDSERV,Edserv Softsystems Limited,False,,"name, no match"
+I:INE216H01027,EDUCOMP,EDUCOMP,Educomp Solutions Limited,False,,"name, no match"
+S:EICHERLTD,EICHERLTD,EICHERLTD,Eicher Limited,False,,"name, no match"
+I:INE066A01013,EICHERMOT,EICHERMOT,Eicher Motors Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE126A01031,EIDPARRY,EIDPARRY,EID Parry India Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE0LLY01014,EIEL,EIEL,,False,,no name found
+I:INE230A01023,EIHOTEL,EIHOTEL,EIH Limited,False,,sector_map: Consumer Cyclical / Lodging
+I:INE158B01016,EIMCOELECO,EIMCOELECO,Eimco Elecon (India) Limited,False,,"name, no match"
+I:INE184H01027,EKC,EKC,Everest Kanto Cylinder Limited,False,,"name, no match"
+I:INE311H01018,ELAND,ELAND|MUDRA,E-Land Apparel Limited,False,,"name, no match"
+I:INE975A01015,ELDERPHARM,ELDERPHARM,Elder Pharmaceuticals Limited,False,,"name, no match"
+I:INE205B01023,ELECON,ELECON|ELECONENGG,Elecon Engineering Company Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE086A01029,ELECTCAST,ELECTCAST,Electrosteel Castings Limited,False,,"name, no match"
+I:INE285A01027,ELGIEQUIP,ELGIEQUIP,Elgi Equipments Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+S:ELGIRUBBER,ELGIRUBBER,ELGIRUBBER|ELGITYRE,Elgi Rubber Company Limited,False,,"name, no match"
+I:INE548C01032,EMAMILTD,EMAMILTD,Emami Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE069I01010,EMBDL,EMBDL|IBREALEST,Embassy Developments Limited,False,,"name, no match"
+I:INE078A01026,EMCO,EMCO,Emco Limited,False,,"name, no match"
+S:EMCOTRANS,EMCOTRANS,EMCOTRANS,Emco Limited,False,,"name, no match"
+I:INE168P01015,EMCURE,EMCURE,Emcure Pharmaceuticals Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE02YR01019,EMIL,EMIL,,False,,no name found
+I:INE1C6T01020,EMMVEE,EMMVEE,Emmvee Photovoltaic Power Limited,False,,sector_map: Technology / Solar
+I:INE928B01012,EMPEESUG,EMPEESUG,Empee Sugars and Chemicals Limited,False,,"name, no match"
+I:INE0OV601013,EMSLIMITED,EMSLIMITED,EMS Limited,False,,"name, no match"
+I:INE913H01037,ENDURANCE,ENDURANCE,Endurance Technologies Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE306C01019,ENERGYDEV,ENERGYDEV,Energy Development Company Limited,False,,"name, no match"
+I:INE510A01028,ENGINERSIN,ENGINERSIN,Engineers India Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE265F01028,ENIL,ENIL,Entertainment Network (India) Limited,False,,"name, no match"
+S:ENKTEXFOOD,ENKTEXFOOD,ENKTEXFOOD,Enkay Texofood Industries Limited,False,,"name, no match"
+I:INE1NPP01017,ENRIN,ENRIN,Siemens Energy India Limited,False,,sector_map: Utilities / Utilities - Renewable
+I:INE0G5901015,EPACK,EPACK,EPACK Durable Limited,False,,"name, no match"
+I:INE0MLS01022,EPACKPEB,EPACKPEB,,False,,no name found
+I:INE071N01016,EPIGRAL,EPIGRAL|MFL,Epigral Limited,False,,"name, no match"
+I:INE255A01020,EPL,EPL|ESSELPACK,EPL Limited,False,,"name, no match"
+I:INE988K01017,EQUITAS,EQUITAS,Equitas Holdings Limited,False,,"name, no match"
+I:INE039E01020,ERAINFRA,ERACONS|ERAINFRA,Era Infra Engineering Limited,False,,"name, no match"
+I:INE406M01024,ERIS,ERIS,Eris Lifesciences Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE416L01017,EROSMEDIA,EROSMEDIA,Eros International Media Limited,False,,"name, no match"
+I:INE284A01012,ESABINDIA,ESABINDIA,Esab India Limited,False,,"name, no match"
+I:INE042A01014,ESCORTS,ESCORTS,Escorts Kubota Limited,False,,sector_map: Industrials / Farm & Heavy Construction Machinery
+I:INE481K01013,ESL,ESL,Electrosteel Steels Limited,False,,"name, no match"
+S:ESSARGUJ,ESSARGUJ,ESSARGUJ,Essar Steel Limited,False,,"name, no match"
+I:INE011A01019,ESSAROIL,ESSAROIL,Essar Oil Limited,False,,"name, no match"
+I:INE282A01024,ESSARPORTS,ESSARPORTS,Essar Ports Limited,False,,"name, no match"
+S:ESSARSHIP,ESSARSHIP,ESSARSHIP,Essar Shipping Ports & Logistics Limited,False,,"name, no match"
+I:INE825H01017,ESSDEE,ESSDEE,Ess Dee Aluminium Limited,False,,"name, no match"
+I:INE778B01029,ESTER,ESTER,Ester Industries Limited,False,,"name, no match"
+S:ESTL,ESTL,ESTL,Essar Steel Limited,False,,"name, no match"
+S:ETCNET,ETCNET,ETCNET,ETC Networks Limited,False,,"name, no match"
+S:ETCNETWORK,ETCNETWORK,ETCNETWORK,ETC Networks Limited,False,,"name, no match"
+I:INE758T01015,ETERNAL,ETERNAL|ZOMATO,,False,,sector_map: Consumer Cyclical / Internet Retail
+S:EUPHARMLAB,EUPHARMLAB,EUPHARMLAB,Eupharma Labs Limited,False,,"name, no match"
+I:INE649H01011,EUROCERA,EUROCERA,Euro Ceramics Limited,False,,"name, no match"
+S:EUROSOFTAL,EUROSOFTAL,EUROSOFTAL,European Software Alliances Limited,False,,"name, no match"
+I:INE022C01012,EUROTEXIND,EUROTEXIND,Eurotex Industries and Exports Limited,False,,"name, no match"
+I:INE128A01029,EVEREADY,EVEREADY,Eveready Industries India Limited,False,,"name, no match"
+I:INE295A01018,EVERESTIND,ETERNEVRST|EVERESTIND,Everest Industries Limited,False,,"name, no match"
+I:INE678H01010,EVERONN,EVERONN,Everonn Education Limited,False,,"name, no match"
+I:INE961H01028,EVINIX,EVINIX,Evinix Accessories Limited,False,,"name, no match"
+I:INE234A01025,EVONILE,EVONILE|NOVARTIND,Novartis India Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE223G01017,EXCELCROP,EXCELCROP,Excel Crop Care Limited,False,,"name, no match"
+S:EXCELIND,EXCELIND,EXCELIND,Excel  Industries Limited,False,,"name, no match"
+I:INE369A01029,EXCELINDUS,EXCELINDUS,Excel Industries Limited,False,,"name, no match"
+I:INE302A01020,EXIDEIND,CHLORIDIND|EXIDEIND,Exide Industries Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE201K01015,EXPLEOSOL,EXPLEOSOL|SQSBFSI|THINKSOFT,Expleo Solutions Limited,False,,"name, no match"
+I:INE188A01015,FACT,FACT,Fertilizers and Chemicals Travancore Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE886G01011,FAME,FAME|SHRINGAR,Fame India Limited,False,,"name, no match"
+I:INE890I01035,FARMAXIND,FARMAXIND,Farmax India Limited,False,,"name, no match"
+I:INE045J01018,FCL,FCL,Fineotex Chemical Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE220J01025,FCONSUMER,FCEL|FCONSUMER|FVIL,Future Consumer Limited,False,,"name, no match"
+I:INE512B01022,FCSSOFT,FCSSOFT,FCS Software Solutions Limited,False,,"name, no match"
+I:INE258B01022,FDC,FDC,FDC Limited,False,,"name, no match"
+I:INE249C01011,FEDDERELEC,FEDDERELEC|FEDDERLOYD,Fedders Electric and Engineering Limited,False,,"name, no match"
+I:INE623B01027,FEL,FEL|FRL|PANTALOONR,Future Enterprises Limited,False,,"name, no match"
+I:INE737H01014,FIEMIND,FIEMIND,Fiem Industries Limited,False,,"name, no match"
+I:INE816B01019,FILATEX,FILATEX,Filatex India Limited,False,,"name, no match"
+I:INE235A01022,FINCABLES,FINCABLES,Finolex Cables Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE686Y01026,FINEORG,FINEORG,Fine Organic Industries Limited,False,,"name, no match"
+I:INE183A01016,FINPIPE,FINPIPE,Finolex Industries Limited,False,,"name, no match"
+I:INE02RE01045,FIRSTCRY,FIRSTCRY,,False,,sector_map: Consumer Cyclical / Internet Retail
+I:INE575G01010,FKONCO,DABURPHARM|FKONCO,Fresenius Kabi Oncology Limited,False,,"name, no match"
+S:FLATPROD,FLATPROD,FLATPROD,,False,,no name found
+S:FLEXCHEM,FLEXCHEM,FLEXCHEM,FCL technologies & Products Limited,False,,"name, no match"
+S:FLEXENGG,FLEXENGG,FLEXENGG,Flex Engineering Limited,False,,"name, no match"
+I:INE060J01017,FLEXITUFF,FLEXITUFF,Flexituff Ventures International Limited,False,,"name, no match"
+I:INE452O01016,FLFL,FLFL,Future Lifestyle Fashions Limited,False,,"name, no match"
+S:FLOATGLASS,FLOATGLASS,FLOATGLASS,Floatglass (India) Limited,False,,"name, no match"
+I:INE09N301011,FLUOROCHEM,FLUOROCHEM,Gujarat Fluorochemicals Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE529A01010,FMGOETZE,FMGOETZE|GOETZEIND,Federal-Mogul Goetze (India) Limited.,False,,"name, no match"
+S:FORBESGOK,FORBESGOK,FORBESGOK,Forbes Gokak Limited,False,,"name, no match"
+I:INE451A01017,FORCEMOT,BAJAJTEMPO|FORCEMOT,FORCE MOTORS LTD,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE061F01013,FORTIS,FORTIS,Fortis Healthcare Limited,False,,sector_map: Healthcare / Medical Care Facilities
+I:INE519A01011,FOSECOIND,FOSECOIND,Foseco India Limited,False,,"name, no match"
+I:INE212S01015,FRACTAL,FRACTAL,,False,,no name found
+I:INE752P01024,FRETAIL,FRETAIL,Future Retail Limited,False,,"name, no match"
+I:INE684F01012,FSL,FSL,Firstsource Solutions Limited,False,,sector_map: Technology / Information Technology Services
+S:FSS,FSS,FSS|HUGHESSOFT,Flextronics Software Systems Limited,False,,"name, no match"
+S:FULFORD,FULFORD,FULFORD,Fulford (I) Limited,False,,"name, no match"
+I:INE220J01017,FUTUREVENT,FUTUREVENT,Future Ventures India Limited,False,,"name, no match"
+I:INE524A01029,GABRIEL,GABRIEL,Gabriel India Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE036B01022,GAEL,GAEL,Gujarat Ambuja Exports Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE129A01019,GAIL,GAIL,GAIL (India) Limited,False,,sector_map: Utilities / Utilities - Regulated Gas
+I:INE600K01018,GALAXYSURF,GALAXYSURF,Galaxy Surfactants Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE297H01019,GALLANTT,GALLANTT,Gallantt Ispat Limited,False,,sector_map: Basic Materials / Steel
+I:INE528K01011,GALLISPAT,GALLISPAT,Gallantt Ispat Limited,False,,"name, no match"
+S:GALPOWTEL,GALPOWTEL,GALPOWTEL,Galada Power & Telecommunications Limited,False,,"name, no match"
+I:INE259B01020,GAMMONIND,GAMMONIND,Gammon India Limited,False,,"name, no match"
+S:GANESHBENZ,GANESHBENZ,GANESHBENZ,Ganesh Benzoplast Limited,False,,"name, no match"
+I:INE460C01014,GANESHHOU,GANESHHOU|GANESHHOUC,GANESH HOUSING LIMITED,False,,"name, no match"
+I:INE526A01016,GARDENSILK,GARDENSILK,Garden Silk Mills Limited,False,,"name, no match"
+I:INE276A01018,GARFIBRES,GARFIBRES|GARWALLROP,Garware Technical Fibres Limited,False,,sector_map: Consumer Cyclical / Textile Manufacturing
+I:INE0JVO01026,GARUDA,GARUDA,Garuda Construction and Engineering Limited,False,,"name, no match"
+I:INE224E01028,GATECH,GATECH|STAMPEDE,GACM Technologies Limited,False,,"name, no match"
+I:INE336H01015,GAYAPROJ,GAYAPROJ,Gayatri Projects Limited,False,,"name, no match"
+I:INE199P01028,GCSL,GCSL,Gretex Corporate Services Limited,False,,"name, no match"
+I:INE852F01015,GDL,GDL,Gateway Distriparks Limited,False,,"name, no match"
+I:INE916G01016,GEECEE,GEECEE|GWALCHEM,GeeCee Ventures Limited,False,,"name, no match"
+I:INE878C01033,GEMINI,GEMINI,Gemini Communication Limited,False,,"name, no match"
+I:INE727B01026,GENESYS,GENESYS,Genesys International Corporation Limited,False,,"name, no match"
+I:INE955D01029,GENUSPOWER,GENUSOVERE|GENUSPOWER,Genus Power Infrastructures Limited,False,,"name, no match"
+I:INE371D01029,GEODESIC,GEODESIC|GEOINFO,Geodesic Limited,False,,"name, no match"
+I:INE797A01021,GEOMETRIC,GEOMETRIC,Geometric Limited,False,,"name, no match"
+S:GEORGWILIM,GEORGWILIM,GEORGWILIM,Williamson Tea Assam Limited,False,,"name, no match"
+S:GERMANREM,GERMANREM,GERMANREM,German Remedies Limited,False,,"name, no match"
+I:INE017A01032,GESHIP,GESHIP,The Great Eastern Shipping Company Limited,False,,sector_map: Industrials / Marine Shipping
+S:GESHIPPING,GESHIPPING,GESHIPPING,Great Eastern Shipping Company Limited,False,,"name, no match"
+I:INE538A01037,GFLLIMITED,GFLLIMITED|GUJFLUORO,GFL Limited,False,,"name, no match"
+I:INE539A01019,GHCL,GHCL,GHCL Limited,False,,"name, no match"
+I:INE322A01010,GILLETTE,GILLETTE|INDSHAVING,Gillette India Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE424C01010,GINNIFILA,GINNIFILA,Ginni Filaments Limited,False,,"name, no match"
+I:INE162A01010,GIPCL,GIPCL,Gujarat Industries Power Company Limited,False,,"name, no match"
+I:INE346H01014,GITANJALI,GITANJALI,Gitanjali Gems Limited,False,,"name, no match"
+S:GKW,GKW,GKW,GKW Limited,False,,"name, no match"
+I:INE068V01023,GLAND,GLAND,Gland Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE159A01016,GLAXO,GLAXO,GlaxoSmithKline Pharmaceuticals Limited,False,,sector_map: Healthcare / Drug Manufacturers - General
+I:INE935A01035,GLENMARK,GLENMARK,Glenmark Pharmaceuticals Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE792H01019,GLOBALVECT,GLOBALVECT,Global Vectra Helicorp Limited,False,,"name, no match"
+I:INE446C01013,GLOBOFFS,GARWOFFS|GLOBOFFS,Global Offshore Services Limited,False,,"name, no match"
+I:INE932G01021,GLODYNE,GLODYNE|PARADYNE,Glodyne Technoserve Limited,False,,"name, no match"
+I:INE408H01012,GLORY,GLORY,Glory Polyfilms Limited,False,,"name, no match"
+I:INE131A01031,GMDCLTD,GMDCLTD,Gujarat Mineral Development Corporation Limited,False,,sector_map: Energy / Thermal Coal
+I:INE541A01023,GMMPFAUDLR,GMMPFAUDLR,GMM Pfaudler Limited,False,,"name, no match"
+I:INE776C01039,GMRAIRPORT,GMRAIRPORT|GMRINFRA,GMR AIRPORTS LIMITED,False,,sector_map: Industrials / Airports & Air Services
+S:GMRINDSTRS,GMRINDSTRS,GMRINDSTRS|GMRVASAVI,GMR Industries Limited,False,,"name, no match"
+I:INE0CU601026,GMRP&UI,GMRP&UI,GMR Power and Urban Infra Limited,False,,"name, no match"
+I:INE934S01014,GNA,GNA,GNA Axles Limited,False,,"name, no match"
+I:INE113A01013,GNFC,GNFC,Gujarat Narmada Valley Fertilizers and Chemicals Limited,False,,sector_map: Basic Materials / Chemicals
+I:INE426D01013,GOACARBON,GOACARBON,Goa Carbon Limited,False,,"name, no match"
+I:INE0BJS01011,GOCOLORS,GOCOLORS,Go Fashion (India) Limited,False,,"name, no match"
+S:GODAVRFERT,GODAVRFERT,GODAVRFERT,Godavari Fertilisers And Chemicals Limited,False,,"name, no match"
+I:INE850D01014,GODREJAGRO,GODREJAGRO,Godrej Agrovet Limited,False,,"name, no match"
+I:INE102D01028,GODREJCP,GODREJCP,Godrej Consumer Products Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE233A01035,GODREJIND,GODREJIND,Godrej Industries Limited,False,,sector_map: Industrials / Conglomerates
+S:GODREJINDS,GODREJINDS,GODREJINDS,Godrej Industries Limited,False,,"name, no match"
+I:INE484J01019,GODREJPROP,GODREJPROP,Godrej Properties Limited,False,,sector_map: Real Estate / Real Estate - Development
+S:GODREJSOP,GODREJSOP,GODREJSOP,Godrej Soaps Limited,False,,"name, no match"
+I:INE516K01016,GOENKA,GOENKA,Goenka Diamond and Jewels Limited,False,,"name, no match"
+I:INE887G01027,GOKEX,GOKEX,Gokaldas Exports Limited,False,,"name, no match"
+I:INE020J01029,GOKUL,GOKUL,Gokul Refoils and Solvent Limited,False,,"name, no match"
+I:INE025B01017,GOLDIAM,GOLDIAM,Goldiam International Limited,False,,sector_map: Consumer Cyclical / Luxury Goods
+I:INE805A01014,GOLDTECH,GOLDTECH,AION-TECH SOLUTIONS LIMITED,False,,"name, no match"
+S:GOLDTECHNO,GOLDTECHNO,GOLDTECHNO,Goldstone Technologies Limited,False,,"name, no match"
+I:INE127I01024,GOODLUCK,GOODLUCK,Goodluck India Limited,False,,"name, no match"
+S:GOODRICKE,GOODRICKE,GOODRICKE,Goodricke Group Limited,False,,"name, no match"
+I:INE533A01012,GOODYEAR,GOODYEAR,Goodyear India Limited,False,,"name, no match"
+I:INE177H01013,GPIL,GPIL,Godawari Power And Ispat limited,False,,sector_map: Basic Materials / Steel
+I:INE517F01014,GPPL,GPPL,Gujarat Pipavav Port Limited,False,,"name, no match"
+I:INE101D01012,GRANULES,GRANULES,Granules India Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+S:GRAPHIT,GRAPHIT,GRAPHIT,Graphite India Limited,False,,"name, no match"
+I:INE371A01025,GRAPHITE,CARBEVFLOW|GRAPHITE,Graphite India Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE047A01013,GRASIM,GRASIM,Grasim Industries Limited,False,,sector_map: Basic Materials / Building Materials
+I:INE024L01019,GRAVITA,GRAVITA,Gravita India Limited,False,,sector_map: Industrials / Metal Fabrication
+I:INE224A01026,GREAVESCOT,GREAVES|GREAVESCOT,Greaves Cotton Limited,False,,"name, no match"
+I:INE08ZM01014,GREENPANEL,GREENPANEL,Greenpanel Industries Limited,False,,"name, no match"
+I:INE461C01020,GREENPLY,GREENPLY|MITTALLAMI,Greenply Industries Limited,False,,"name, no match"
+I:INE999K01014,GREENPOWER,GREENPOWER,Orient Green Power Company Limited,False,,"name, no match"
+I:INE536A01023,GRINDWELL,GRINDWELL,Grindwell Norton Limited,False,,"name, no match"
+I:INE201P01022,GRINFRA,GRINFRA,G R Infraprojects Limited,False,,"name, no match"
+I:INE192H01020,GRMOVER,GRMOVER,GRM Overseas Limited,False,,"name, no match"
+I:INE382Z01011,GRSE,GRSE,Garden Reach Shipbuilders & Engineers Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE291A01017,GRWRHITECH,GRWRHITECH,Garware Hi-Tech Films Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE026A01017,GSFC,GSFC,Gujarat State Fertilizers & Chemicals Limited,False,,"name, no match"
+I:INE264A01014,GSKCONS,GSKCONS|SMITKLBECH,GlaxoSmithKline Consumer Healthcare Limited,False,,"name, no match"
+I:INE246F01010,GSPL,GSPL,Gujarat State Petronet Limited,False,,"name, no match"
+I:INE871H01011,GSS,GSS|GSSAMERICA,GSS Infotech Limited,False,,"name, no match"
+I:INE043A01012,GTL,GLOBALTELE|GTL,GTL Limited,False,,"name, no match"
+I:INE221H01019,GTLINFRA,GTLINFRA,GTL Infrastructure Limited,False,,"name, no match"
+I:INE537A01013,GTNIND,GTNIND|GTNTEXT,GTN Industries Limited,False,,"name, no match"
+I:INE892H01017,GTOFFSHORE,GTOFFSHORE,GOL Offshore Limited,False,,"name, no match"
+I:INE742B01025,GUFICBIO,GUFICBIO,Gufic Biosciences Limited,False,,"name, no match"
+I:INE186A01019,GUJALKALI,GUJALKALI,Gujarat Alkalies and Chemicals Limited,False,,"name, no match"
+I:INE844O01022,GUJENERGY,GUJENERGY|GUJGASLTD,GUJARAT ENERGY LIMITED,False,,"name, no match"
+I:INE110D01013,GUJNRECOKE,GUJNRECOKE,Gujarat NRE Coke Limited,False,,"name, no match"
+I:INE374A01029,GUJRATGAS,GUJRATGAS,Gujarat Gas Company Limited,False,,"name, no match"
+S:GUJRATTELE,GUJRATTELE,GUJRATTELE,Gujarat Telephone Cables Limited,False,,"name, no match"
+I:INE542A01013,GUJSIDHCEM,GUJSIDHCEM,Gujarat Sidhee Cements Limited,False,,"name, no match"
+I:INE077F01027,GULFOILCOR,GULFOILCOR,Gulf Oil Corporation Limited,False,,"name, no match"
+I:INE635Q01029,GULFOILLUB,GULFOILLUB,Gulf Oil Lubricants India Limited,False,,"name, no match"
+I:INE586G01017,GULFPETRO,GULFPETRO|SAHPETRO,GP Petroleums Limited,False,,"name, no match"
+I:INE251H01024,GVKPIL,GVKPIL,GVK Power & Infrastructure Limited,False,,"name, no match"
+I:INE878A01011,GVPIL,ABBALPO|AIL|APIL|GEPIL|GVPIL,GE Power India Limited,False,,"name, no match"
+I:INE200A01026,GVT&D,ALSTOMT&D|AREVA|AREVAT&D|GECALSTHOM|GET&D|GVT&D,GE Vernova T&D India Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE066F01012,HAL,HAL,Hindustan Aeronautics Limited,False,,sector_map: Industrials / Aerospace & Defense
+S:HANILERA,HANILERA,HANILERA,Hanil Era Textiles Limited,False,,"name, no match"
+I:INE648H01013,HANUNG,HANUNG,Hanung Toys and Textiles Limited,False,,"name, no match"
+I:INE419U01012,HAPPSTMNDS,HAPPSTMNDS,Happiest Minds Technologies Limited,False,,"name, no match"
+I:INE00EV01017,HARIOMPIPE,HARIOMPIPE,Hariom Pipe Industries Limited,False,,"name, no match"
+I:INE544A01019,HARRMALAYA,HARRMALAYA,Harrisons  Malayalam Limited,False,,"name, no match"
+I:INE982F01028,HATHWAY,HATHWAY,Hathway Cable & Datacom Limited,False,,"name, no match"
+I:INE176B01026,HAVELLS,HAVELLS,Havells India Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE293B01029,HAVISHA,HAVISHA|SHAKTIGAS,Sri Havisha Hospitality and Infrastructure Limited,False,,"name, no match"
+I:INE292B01021,HBLENGINE,HBLENGINE|HBLPOWER,HBL Engineering Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE549A01026,HCC,HCC|HINDCONS,Hindustan Construction Company Limited,False,,"name, no match"
+I:INE236A01020,HCL-INSYS,HCL-HP|HCL-INSYS,HCL Infosystems Limited,False,,"name, no match"
+I:INE860A01027,HCLTECH,HCLTECH,HCL Technologies Limited,False,,sector_map: Technology / Information Technology Services
+I:INE191I01012,HDIL,HDIL,Housing Development and Infrastructure Limited,False,,"name, no match"
+I:INE545A01016,HEGAM,HEG|HEGAM,HEG Advanced Materials Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE578A01017,HEIDELBERG,HEIDELBERG|MYSORECEM,HeidelbergCement India Limited,False,,"name, no match"
+I:INE674B01012,HELIOSMATH,HELIOSMATH,Helios And Matheson Information Technology Limited,False,,"name, no match"
+I:INE0AJG01018,HEMIPROP,HEMIPROP,Hemisphere Properties India Limited,False,,"name, no match"
+I:INE694N01015,HERANBA,HERANBA,Heranba Industries Limited,False,,"name, no match"
+I:INE978A01019,HERITGFOOD,HERITGFOOD,Heritage Foods Limited,False,,"name, no match"
+I:INE158A01026,HEROMOTOCO,HEROHONDA|HEROMOTOCO,Hero MotoCorp Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE093A01033,HEXAWARE,HEXAWARE,Hexaware Technologies Limited,False,,"name, no match"
+I:INE093A01041,HEXT,HEXT,Hexaware Technologies Limited,False,,sector_map: Technology / Information Technology Services
+I:INE548A01028,HFCL,HFCL,HFCL Limited,False,,sector_map: Technology / Communication Equipment
+I:INE926X01010,HGINFRA,HGINFRA,H.G. Infra Engineering Limited,False,,"name, no match"
+I:INE596H01014,HGM,HGM|HOVS,HandsOn Global Management (HGM) Limited,False,,"name, no match"
+I:INE170I01016,HGS,HGS|HGSL|HTMTGLOBAL,Hinduja Global Solutions Limited,False,,"name, no match"
+I:INE475B01014,HIKAL,HIKAL,Hikal Limited,False,,"name, no match"
+S:HIMACHLFUT,HIMACHLFUT,HIMACHLFUT,Himachal Futuristic Communications Limited,False,,"name, no match"
+I:INE049A01027,HIMATSEIDE,HIMATSEIDE,Himatsingka Seide Limited,False,,"name, no match"
+I:INE038A01020,HINDALCO,HINDALC0|HINDALCO,Hindalco Industries Limited,False,,sector_map: Basic Materials / Aluminum
+I:INE531E01026,HINDCOPPER,HINDCOPPER,Hindustan Copper Limited,False,,sector_map: Basic Materials / Copper
+I:INE551A01022,HINDDORROL,HINDDORROL,Hindustan Dorr-Oliver Limited,False,,"name, no match"
+S:HINDLEVCHM,HINDLEVCHM,HINDLEVCHM,Hind Lever Chemicals Limited,False,,"name, no match"
+S:HINDMOTOR,HINDMOTOR,HINDMOTOR,Hindustan Motors Limited,False,,"name, no match"
+I:INE345A01011,HINDOILEXP,HINDOILEXP,Hindustan Oil Exploration Company Limited,False,,"name, no match"
+I:INE094A01015,HINDPETRO,HINDPETRO,Hindustan Petroleum Corporation Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE030A01027,HINDUNILVR,HINDLEVER|HINDUNILVR,Hindustan Unilever Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE267A01025,HINDZINC,HINDZINC,Hindustan Zinc Limited,False,,sector_map: Basic Materials / Other Industrial Metals & Mining
+S:HINPOWPLUS,HINPOWPLUS,HINPOWPLUS,Hindustan Powerplus Limited,False,,"name, no match"
+S:HITECDRIL,HITECDRIL,HITECDRIL,Hitech Drilling Services India Limited,False,,"name, no match"
+I:INE106T01017,HITECH,HITECH,Hi-Tech Pipes Limited,False,,"name, no match"
+I:INE127B01011,HITECHGEAR,HITECHGEAR,The Hi-Tech Gears Limited,False,,"name, no match"
+I:INE102A01024,HLVLTD,HLVLTD|HOTELEELA,HLV LIMITED,False,,"name, no match"
+I:INE262A01018,HMT,HMT,HMT Limited,False,,"name, no match"
+I:INE048A01011,HOCL,HOCL,Hindustan Organic Chemicals Limited,False,,"name, no match"
+S:HOGANAS,HOGANAS,HOGANAS,Hoganas India Limited,False,,"name, no match"
+I:INE0J5401028,HONASA,HONASA,Honasa Consumer Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE671A01010,HONAUT,HONAUT|TATAHONEY,Honeywell Automation India Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE634A01018,HONDAPOWER,HONDAPOWER|SHRMHONDA,Honda India Power Products Limited,False,,"name, no match"
+I:INE495S01016,HPL,HPL,HPL Electric & Power Limited,False,,"name, no match"
+I:INE019C01026,HSCL,HCIL|HIMADCHEM|HSCL,Himadri Speciality Chemical Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE501G01024,HTMEDIA,HTMEDIA,HT Media Limited,False,,"name, no match"
+S:HINDUJAFIN,HTMT,HINDUJAFIN|HTMT,Hinduja TMT Limited,False,,"name, no match"
+I:INE703H01016,HUBTOWN,ACKRUTI|AKRUTI|HUBTOWN,Hubtown Limited,False,,"name, no match"
+I:INE275B01026,HUHTAMAKI,HUHTAMAKI|PAPERPROD,Huhtamaki India Limited,False,,"name, no match"
+I:INE0V6F01027,HYUNDAI,HYUNDAI,Hyundai Motor India Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+S:IBP,IBP,IBP,IBP Company Limited,False,,"name, no match"
+I:INE126M01010,IBULLSLTD,IBULISL|IBULLSLTD|IBWSL|SORILHOLD|YAARI|YAARII,Indiabulls Limited,False,,sector_map: Real Estate / Real Estate - Development
+S:ICICI,ICICI,ICICI,ICICI Limited,False,,"name, no match"
+I:INE483B01018,ICIL,ICIL|INDOCOUNT,Indo Count Industries Limited,False,,"name, no match"
+I:INE725G01011,ICRA,ICRA,ICRA Limited,False,,"name, no match"
+I:INE306B01029,ICSA,ICSA,ICSA (India) Limited,False,,"name, no match"
+I:INE669E01016,IDEA,IDEA,Vodafone Idea Limited,False,,sector_map: Communication Services / Telecom Services
+I:INE349Y01013,IDEAFORGE,IDEAFORGE,,False,,no name found
+I:INE043D01016,IDFC,IDFC,IDFC Limited,False,,"name, no match"
+I:INE559A01017,IFBIND,IFBIND,IFB Industries Limited,False,,"name, no match"
+I:INE023B01012,IFGLREFRAC,IFGLREFRAC,IFGL Refractories Limited,False,,"name, no match"
+I:INE188B01013,IGARASHI,CGIGARSH|IGARASHI,Igarashi Motors India Limited,False,,"name, no match"
+S:IGFLFERT,IGFLFERT,IGFLFERT,Indo Gulf Fertilisers Limited,False,,"name, no match"
+I:INE0Q9301021,IGIL,IGIL,International Gemological Institute Limited,False,,sector_map: Basic Materials / Other Precious Metals & Mining
+I:INE203G01019,IGL,IGL,Indraprastha Gas Limited,False,,sector_map: Utilities / Utilities - Regulated Gas
+I:INE204A01010,IGPL,IGPETRO|IGPL,IG Petrochemicals Limited,False,,"name, no match"
+S:IGS,IGS,IGS|MASCOT,iGate Global Solutions Limited,False,,"name, no match"
+I:INE0LOJ01019,IKIO,IKIO,IKIO Technologies Limited,False,,"name, no match"
+I:INE115Q01022,IKS,IKS,,False,,sector_map: Healthcare / Health Information Services
+I:INE369I01014,IL&FSENGG,IL&FSENGG|MAYTASINFR,IL&FS Engineering and Construction Company Limited,False,,"name, no match"
+I:INE975G01012,IL&FSTRANS,IL&FSTRANS|ILFSTRANS,IL&FS Transportation Networks Limited,False,,"name, no match"
+I:INE172N01012,IMAGICAA,ADLABS|IMAGICAA,Imagicaaworld Entertainment Limited,False,,"name, no match"
+I:INE919H01018,IMFA,IMFA,Indian Metals & Ferro Alloys Limited,False,,"name, no match"
+I:INE691G01015,IMPEXFERRO,IMPEXFERRO,Impex Ferro Tech Limited,False,,"name, no match"
+S:INDAL,INDAL,INDAL,Indian Aluminium Company Limited,False,,"name, no match"
+I:INE065X01017,INDGN,INDGN,Indegene Limited,False,,sector_map: Healthcare / Health Information Services
+I:INE053A01029,INDHOTEL,INDHOTEL,The Indian Hotels Company Limited,False,,sector_map: Consumer Cyclical / Lodging
+I:INE383A01012,INDIACEM,INDIACEM,The India Cements Limited,False,,sector_map: Basic Materials / Building Materials
+S:INDIAFOILS,INDIAFOILS,INDIAFOILS,India Foils Limited,False,,"name, no match"
+I:INE560A01015,INDIAGLYCO,INDIAGLYCO,India Glycols Limited,False,,"name, no match"
+I:INE933S01016,INDIAMART,INDIAMART,Indiamart Intermesh Limited,False,,sector_map: Consumer Cyclical / Internet Retail
+I:INE061A01014,INDIANCARD,INDIANCARD,Indian Card Clothing Company Limited,False,,"name, no match"
+I:INE323C01030,INDIANHUME,INDIANHUME,Indian Hume Pipe Company Limited,False,,"name, no match"
+S:INDIAPHOTO,INDIAPHOTO,INDIAPHOTO,Kodak India Limited,False,,"name, no match"
+I:INE646L01027,INDIGO,INDIGO,InterGlobe Aviation Limited,False,,sector_map: Industrials / Airlines
+I:INE09VQ01012,INDIGOPNTS,INDIGOPNTS,Indigo Paints Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE092B01017,INDNIPPON,INDNIPPON,India Nippon Electricals Limited,False,,"name, no match"
+I:INE873D01016,INDOCO,INDOCO,Indoco Remedies Limited,False,,"name, no match"
+S:INDOGULF,INDOGULF,INDOGULF,Indo Gulf Corporation Limited,False,,"name, no match"
+I:INE156A01020,INDORAMA,INDORAMA,Indo Rama Synthetics (India) Limited,False,,"name, no match"
+S:INDORAMSYN,INDORAMSYN,INDORAMSYN,Indo Rama Synthetics (India) Limited,False,,"name, no match"
+S:INDORAMTEX,INDORAMTEX,INDORAMTEX,Indo Rama Textiles Limited,False,,"name, no match"
+I:INE332H01014,INDOTECH,INDOTECH,Indo Tech Transformers Limited,False,,"name, no match"
+I:INE227G01018,INDOWIND,INDOWIND,Indowind Energy Limited,False,,"name, no match"
+I:INE681B01017,INDRAMEDCO,INDRAMEDCO,Indraprastha Medical Corporation Limited,False,,"name, no match"
+I:INE915B01019,INDSWFTLAB,INDSWFTLAB,Ind-Swift Laboratories Limited,False,,"name, no match"
+I:INE788B01028,INDSWFTLTD,INDSWFTLTD,Ind-Swift Limited,False,,"name, no match"
+I:INE025I01012,INDUSFILA,INDUSFILA,Indus Fila Limited,False,,"name, no match"
+I:INE121J01017,INDUSTOWER,INDUSTOWER|INFRATEL,Indus Towers Limited,False,,sector_map: Communication Services / Telecom Services
+S:INFARINDIA,INFARINDIA,INFARINDIA,Infar (India) Limited,False,,"name, no match"
+I:INE486J01014,INFINITE,INFINITE,Infinite Computer Solutions (India) Limited,False,,"name, no match"
+I:INE009A01021,INFY,INFOSYSTCH|INFY,Infosys Limited,False,,sector_map: Technology / Information Technology Services
+I:INE177A01018,INGERRAND,INGERRAND,Ingersoll Rand (India) Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE510W01014,INOXGREEN,INOXGREEN,Inox Green Energy Services Limited,False,,"name, no match"
+I:INE616N01034,INOXINDIA,INOXINDIA,INOX India Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE312H01016,INOXLEISUR,INOXLEISUR,INOX Leisure Limited,False,,"name, no match"
+I:INE066P01011,INOXWIND,INOXWIND,Inox Wind Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE070I01018,INSECTICID,IILTD|INSECTICID,Insecticides (India) Limited,False,,"name, no match"
+S:INSILCO,INSILCO,INSILCO,Insilco Limited,False,,"name, no match"
+I:INE306R01017,INTELLECT,INTELLECT,Intellect Design Arena Limited,False,,sector_map: Technology / Software - Application
+I:INE00M901018,INTERARCH,INTERARCH,Interarch Building Solutions Limited,False,,"name, no match"
+S:INTLTRAVHS,INTLTRAVHS,INTLTRAVHS,International Travel House Limited,False,,"name, no match"
+S:INVELTRANS,INVELTRANS,INVELTRANS,GKN Driveshafts (India) Limited,False,,"name, no match"
+I:INE242A01010,IOC,IOC,Indian Oil Corporation Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE485C01011,IOLCP,IOLCP,IOL Chemicals and Pharmaceuticals Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE517C01011,IOLN,IOLB|IOLN,IOL Netcom Limited,False,,"name, no match"
+I:INE570A01014,IONEXCHANG,IONEXCHANG,ION Exchange (India) Limited,False,,"name, no match"
+I:INE571A01020,IPCALAB,IPCALAB,IPCA Laboratories Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+S:IPCL,IPCL,IPCL,Indian Petrochemicals Corporation Limited,False,,"name, no match"
+I:INE0D6701023,IPL,IPL,India Pesticides Limited,False,,"name, no match"
+S:IPRINGS,IPRINGS,IPRINGS,,False,,no name found
+I:INE821I01014,IRB,IRB,IRB Infrastructure Developers Limited,False,,sector_map: Industrials / Infrastructure Operations
+I:INE962Y01013,IRCON,IRCON,Ircon International Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE335Y01012,IRCTC,IRCTC,Indian Railway Catering And Tourism Corporation Limited,False,,sector_map: Consumer Cyclical / Travel Services
+I:INE566K01011,ISFT,ISFT,Intrasoft Technologies Limited,False,,"name, no match"
+I:INE858B01029,ISGEC,ISGEC,Isgec Heavy Engineering Limited,False,,"name, no match"
+I:INE732F01019,ISMTLTD,ISMTLTD,ISMT Limited,False,,"name, no match"
+S:ITCBHADRA,ITCBHADRA,ITCBHADRA,ITC Bhadrachalam Paperboards Limited,False,,"name, no match"
+S:ITCHOTEL,ITCHOTEL,ITCHOTEL,ITC Hotels Limited,False,,"name, no match"
+I:INE379A01028,ITCHOTELS,ITCHOTELS,ITC Hotels Limited,False,,sector_map: Consumer Cyclical / Resorts & Casinos
+I:INE353K01014,ITDC,ITDC,India Tourism Development Corporation Limited,False,,"name, no match"
+I:INE248A01017,ITI,ITI,ITI Limited,False,,sector_map: Technology / Communication Equipment
+S:ITIL,ITIL,ITIL,Information Technologies India Limited,False,,"name, no match"
+S:ITWSIGNODE,ITWSIGNODE,ITWSIGNODE,ITW Signode (India) Limited,False,,"name, no match"
+I:INE414I01018,IVRCLAH,IVRCLAH|IVRPRIME,IVRCL Assets & Holdings Limited,False,,"name, no match"
+I:INE875A01025,IVRCLINFRA,IVRCLINFRA,IVRCL Limited,False,,"name, no match"
+I:INE0HV901016,IXIGO,IXIGO,,False,,no name found
+I:INE199G01027,JAGRAN,JAGRAN,Jagran Prakashan Limited,False,,"name, no match"
+I:INE048B01027,JAGSNPHARM,JAGSNPHARM,Jagsonpal Pharmaceuticals Limited,False,,"name, no match"
+I:INE091G01018,JAIBALAJI,BALASPONGE|JAIBALAJI,Jai Balaji Industries Limited,False,,"name, no match"
+I:INE070D01027,JAICORPLTD,JAICORPLTD,Jai Corp Limited,False,,"name, no match"
+I:INE0YD401026,JAINREC,JAINREC,,False,,no name found
+I:INE486B01011,JAINSTUDIO,JAINSTUDIO,Jain Studios Limited,False,,"name, no match"
+I:INE039C01016,JAMNAAUTO,JAMNAAUTO,Jamna Auto Industries Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE785A01026,JAYAGROGN,JAYAGROGN,Jayant Agro Organics Limited,False,,"name, no match"
+I:INE571B01028,JAYBARMARU,JAYBARMARU,Jay Bharat Maruti Limited,False,,"name, no match"
+I:INE854B01010,JAYNECOIND,JAYNECOIND|NAGPURENG,Jayaswal Neco Industries Limited,False,,"name, no match"
+S:JAYPEEHOT,JAYPEEHOT,JAYPEEHOT,Jaypee Hotels Limited,False,,"name, no match"
+I:INE364A01020,JAYSREETEA,JAYSREETEA,Jayshree Tea & Industries Limited,False,,"name, no match"
+I:INE572A01028,JBCHEPHARM,JBCHEPHARM,JB Chemicals & Pharmaceuticals Limited,False,,"name, no match"
+I:INE187A01017,JBFIND,JBFIND,JBF Industries Limited,False,,"name, no match"
+I:INE927D01010,JBMA,JBMA|JBMAUTOCOM,JBM Auto Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+S:JCTELEC,JCTELEC,JCTELEC,JCT Electronics Limited,False,,"name, no match"
+I:INE819B01021,JENSONICOL,JENSONICOL,Jenson & Nicholson (India) Limited,False,,"name, no match"
+I:INE802G01018,JETAIRWAYS,JETAIRWAYS,Jet Airways (India) Limited,False,,"name, no match"
+S:JIKINDS,JIKINDS,JIKINDS,JIK Industries Limited,False,,"name, no match"
+S:JINDALDRIL,JINDALDRIL,JINDALDRIL,Jindal Drilling And Industries Limited,False,,"name, no match"
+S:JINDALFOTO,JINDALFOTO,JINDALFOTO,Jindal Photo Limited,False,,"name, no match"
+S:JINDALIRON,JINDALIRON,JINDALIRON,Jindal Iron & Steel Company Limited,False,,"name, no match"
+I:INE796G01012,JINDALPHOT,JINDALPHOT,Jindal Photo Limited,False,,"name, no match"
+I:INE197D01010,JINDALPOLY,JINDALPOLY,Jindal Poly Films Limited,False,,"name, no match"
+I:INE324A01024,JINDALSAW,JINDALSAW|SAWPIPES,Jindal Saw Limited,False,,sector_map: Basic Materials / Steel
+I:INE749A01030,JINDALSTEL,JINDALSTEL,JINDAL STEEL LIMITED,False,,sector_map: Basic Materials / Steel
+I:INE904J01016,JINDCOT,JINDCOT,Jindal Cotex Limited,False,,"name, no match"
+S:JINDLSTRIP,JINDLSTRIP,JINDLSTRIP,Jindal Strips Limited,False,,"name, no match"
+I:INE742C01031,JINDRILL,JINDRILL,Jindal Drilling And Industries Limited,False,,"name, no match"
+S:JINDVIJSTL,JINDVIJSTL,JINDVIJSTL,Jindal Vijayanagar Steel Limited,False,,"name, no match"
+I:INE247D01013,JINDWORLD,JINDWORLD,Jindal Worldwide Limited,False,,"name, no match"
+I:IN9175A01010,JISLDVREQS,JISLDVREQS,Jain Irrigation Systems Limited,False,,"name, no match"
+I:INE175A01038,JISLJALEQS,JISLJALEQS,Jain Irrigation Systems Limited,False,,"name, no match"
+I:INE823G01014,JKCEMENT,JKCEMENT,JK Cement Limited,False,,sector_map: Basic Materials / Building Materials
+S:JKCORP,JKCORP,JKCORP,JK Corporation Limited,False,,"name, no match"
+I:INE576I01014,JKIL,JKIL,J.Kumar Infraprojects Limited,False,,"name, no match"
+S:JKIND,JKIND,JKIND,JK Industries Limited,False,,"name, no match"
+S:JKINDUSTRY,JKINDUSTRY,JKINDUSTRY,J.K.Industries Limited,False,,"name, no match"
+I:INE786A01032,JKLAKSHMI,JKLAKSHMI,JK Lakshmi Cement Limited,False,,"name, no match"
+I:INE789E01012,JKPAPER,JKPAPER,JK Paper Limited,False,,"name, no match"
+I:INE573A01034,JKTYRE,JKTYRE,JK Tyre & Industries Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE890A01016,JMCPROJECT,JMCPROJECT,JMC Projects (India)  Limited,False,,"name, no match"
+I:INE988E01010,JMTAUTOLTD,JMTAUTOLTD,JMT Auto Limited,False,,"name, no match"
+I:INE455F01025,JPASSOCIAT,JPASSOCIAT,Jaiprakash Associates Limited,False,,"name, no match"
+S:JPIND,JPIND,JPIND,Jai Prakash Industries Limited,False,,"name, no match"
+I:INE099J01015,JPINFRATEC,JPINFRATEC,Jaypee Infratech Limited,False,,"name, no match"
+I:INE351F01018,JPPOWER,JPHYDRO|JPPOWER,Jaiprakash Power Ventures Limited,False,,sector_map: Utilities / Utilities - Independent Power Producers
+I:INE220G01021,JSL,JSL|JSTAINLESS,Jindal Stainless Limited,False,,sector_map: Basic Materials / Steel
+I:INE455T01018,JSLHISAR,JSLHISAR,Jindal Stainless (Hisar) Limited,False,,"name, no match"
+I:INE0J5801011,JSLL,JSLL,Jeena Sikho Lifecare Limited,False,,"name, no match"
+I:INE718I01012,JSWCEMENT,JSWCEMENT,JSW Cement Limited,False,,"name, no match"
+I:INE133A01011,JSWDULUX,AKZOINDIA|ICI|JSWDULUX,JSW Dulux Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE121E01018,JSWENERGY,JSWENERGY,JSW Energy Limited,False,,sector_map: Utilities / Utilities - Independent Power Producers
+I:INE824G01012,JSWHL,JINDALSWHL|JSWHL,JSW Holdings Limited,False,,"name, no match"
+I:INE880J01026,JSWINFRA,JSWINFRA,JSW Infrastructure Limited,False,,sector_map: Industrials / Marine Shipping
+I:INE136A01022,JSWISPAT,ISPATIND|JSWISPAT,JSW ISPAT Steel Limited,False,,"name, no match"
+I:INE743C01021,JSWISPL,AIONJSW|JSWISPL,JSW Ispat Special Products Limited,False,,"name, no match"
+I:INE019A01020,JSWSTEEL,JSWSTEEL|JSWSTL,JSW Steel Limited,False,,sector_map: Basic Materials / Steel
+I:INE643A01035,JTEKTINDIA,JTEKTINDIA|SONASTEER,Jtekt India Limited,False,,"name, no match"
+I:INE391J01024,JTLIND,JTLIND|JTLINFRA,JTL INDUSTRIES LIMITED,False,,"name, no match"
+I:INE797F01012,JUBLFOOD,JUBLFOOD,Jubilant Foodworks Limited,False,,sector_map: Consumer Cyclical / Restaurants
+I:INE645L01011,JUBLINDS,JUBLINDS,Jubilant Industries Limited,False,,"name, no match"
+I:INE0BY001018,JUBLINGREA,JUBLINGREA,Jubilant Ingrevia Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE700A01033,JUBLPHARMA,JUBILANT|JUBLPHARMA|VAMORGANIC,Jubilant Pharmova Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE918B01013,JUPITER,JUPITER,Jupiter Bioscience Limited,False,,"name, no match"
+I:INE599M01018,JUSTDIAL,JUSTDIAL,Just Dial Limited,False,,"name, no match"
+I:INE209L01016,JWL,CEBBCO|JWL,Jupiter Wagons Limited,False,,sector_map: Industrials / Railroads
+I:INE668F01031,JYOTHYLAB,JYOTHYLAB,Jyothy Labs Limited,False,,"name, no match"
+I:INE980O01024,JYOTICNC,JYOTICNC,,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE197A01024,JYOTISTRUC,JYOTISTRUC,Jyoti Structures Limited,False,,"name, no match"
+I:INE900B01029,KABRAEXTRU,KABRAEXTRU,Kabra Extrusion Technik Limited,False,,"name, no match"
+I:INE217B01028,KAJARIACER,KAJARIACER,Kajaria Ceramics Limited,False,,sector_map: Industrials / Building Products & Equipment
+I:INE437B01014,KAKATCEM,KAKATCEM,Kakatiya Cement Sugar & Industries Limited,False,,"name, no match"
+I:INE438K01021,KALAMANDIR,KALAMANDIR,Sai Silks (Kalamandir) Limited,False,,"name, no match"
+I:INE178D01010,KALINDEE,KALINDEE,Kalindee Rail Nirman (Engineers) Limited,False,,"name, no match"
+S:KALSTEELS,KALSTEELS,KALSTEELS|KALYANISTL,Kalyani Steels Limited,False,,"name, no match"
+I:INE303R01014,KALYANKJIL,KALYANKJIL,Kalyan Jewellers India Limited,False,,sector_map: Consumer Cyclical / Luxury Goods
+I:INE967C01018,KAMATHOTEL,KAMATHOTEL,Kamat Hotels (I) Limited,False,,"name, no match"
+I:INE390H01012,KAMDHENU,KAMDHENU|KIL,Kamdhenu Limited,False,,"name, no match"
+I:INE531A01016,KANSAINER,GOODLASNER|KANSAINER,Kansai Nerolac Paints Limited,False,,"name, no match"
+I:INE234I01010,KAUSHALYA,KAUSHALYA,Kaushalya Infrastructure Development Corporation Limited,False,,"name, no match"
+I:INE641C01019,KAVDEFENCE,KAVDEFENCE|KAVVERITEL,Kavveri Defence & Wireless Technologies Limited,False,,"name, no match"
+I:INE587G01015,KAYA,KAYA,Kaya Limited,False,,"name, no match"
+I:INE918Z01012,KAYNES,KAYNES,Kaynes Technology India Limited,False,,sector_map: Technology / Electronic Components
+S:KBL,KBL,KBL,Kirloskar Brothers Limited,False,,"name, no match"
+I:INE805C01028,KCP,KCP,KCP Limited,False,,"name, no match"
+I:INE790B01024,KCPSUGIND,KCPSUGIND,KCP Sugar and Industries Corporation Limited,False,,"name, no match"
+I:INE389H01022,KEC,KEC,KEC International Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE134B01017,KECL,KECL|KIRELECTRI,Kirloskar Electric Company Limited,False,,"name, no match"
+I:INE878B01027,KEI,KEI,KEI Industries Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE164B01022,KELLTONTEC,KELLTONTEC,Kellton Tech Solutions Limited,False,,"name, no match"
+S:KELVINATOR,KELVINATOR,KELVINATOR,Whirlpool of India Limited,False,,"name, no match"
+I:INE990B01012,KEMROCK,KEMROCK,Kemrock Industries and Exports Limited,False,,"name, no match"
+I:INE717A01029,KENNAMET,KENNAMET|WIDIA,Kennametal India Limited,False,,sector_map: Industrials / Tools & Accessories
+S:KERALACHEM,KERALACHEM,KERALACHEM,,False,,no name found
+I:INE202H01019,KERNEX,KERNEX,Kernex Microsystems (India) Limited,False,,"name, no match"
+I:INE087A01019,KESORAMIND,KESORAMIND,Kesoram Industries Limited,False,,"name, no match"
+I:INE438H01019,KFA,AIRDECCAN|KFA,Kingfisher Airlines Limited,False,,"name, no match"
+I:INE138Y01010,KFINTECH,KFINTECH,Kfin Technologies Limited,False,,sector_map: Technology / Software - Application
+I:INE299C01024,KGL,KGL|KNL,Karuturi Global Limited,False,,"name, no match"
+I:INE967H01017,KIMS,KIMS,Krishna Institute of Medical Sciences Limited,False,,sector_map: Healthcare / Medical Care Facilities
+S:KINETICENG,KINETICENG,KINETICENG,Kinetic Engineering Limited,False,,"name, no match"
+I:INE267B01015,KINETICMOT,KINETICMOT|KINHONDA,Kinetic Motor Company Limited,False,,"name, no match"
+I:INE880L01014,KIOCL,KIOCL,KIOCL Limited,False,,"name, no match"
+I:INE415I01015,KIRIINDUS,KIRIDYES|KIRIINDUS,Kiri Industries Limited,False,,"name, no match"
+I:INE884B01025,KIRLFER,KIRLFER,Kirloskar Ferrous Industries Limited,False,,"name, no match"
+I:INE732A01036,KIRLOSBROS,KIRLOSBROS,Kirloskar Brothers Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE146L01010,KIRLOSENG,KIRLOSENG,Kirloskar Oil Engines Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+S:KIRLOSOIL,KIRLOSOIL,KIRLOSOIL,Kirloskar Oil Engines Limited,False,,"name, no match"
+I:INE602G01020,KITEX,KITEX,Kitex Garments Limited,False,,"name, no match"
+I:INE147B01019,KITPLYIND,KITPLYIND,Kitply Industries Limited,False,,"name, no match"
+I:INE401H01017,KKCL,KKCL,Kewal Kiran Clothing Limited,False,,"name, no match"
+I:INE799A01019,KLGSYSTEL,KLGSYSTEL,KLG Systel Limited,False,,"name, no match"
+I:INE0CJD01011,KMEW,KMEW,Knowledge Marine & Engineering Works Limited,False,,"name, no match"
+I:INE634I01011,KNRCON,KNRCON,KNR Constructions Limited,False,,"name, no match"
+I:INE080B01012,KOHINOOR,KOHINOOR|SATNAMOVER,Kohinoor Foods Limited,False,,"name, no match"
+I:INE760A01029,KOKUYOCMLN,CAMLIN|KOKUYOCMLN,Kokuyo Camlin Limited,False,,"name, no match"
+I:INE094I01018,KOLTEPATIL,KOLTEPATIL,Kolte - Patil Developers Limited,False,,"name, no match"
+I:INE746A01010,KOPDRUGS,KOPDRUGS,KDL Biotech Limited,False,,"name, no match"
+I:INE082A01010,KOPRAN,KOPRAN,Kopran Limited,False,,"name, no match"
+I:INE419A01022,KOTARISUG,KOTARISUG,Kothari Sugars And Chemicals Limited,False,,"name, no match"
+I:INE823A01017,KOTHARIPRO,KOTHARIPRO,Kothari Products Limited,False,,"name, no match"
+I:INE406I01014,KOUTONS,KOUTONS,Koutons Retail India Limited,False,,"name, no match"
+I:INE542W01017,KPIGREEN,KPIGLOBAL|KPIGREEN,KPI Green Energy Limited,False,,"name, no match"
+I:INE220B01022,KPIL,KALPATPOWR|KPIL,Kalpataru Projects International Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE04I401011,KPITTECH,KPITTECH,KPIT Technologies Limited,False,,sector_map: Technology / Software - Application
+I:INE930H01015,KPRMILL,KPRMILL,K.P.R. Mill Limited,False,,sector_map: Consumer Cyclical / Textile Manufacturing
+I:INE001B01026,KRBL,KRBL,KRBL Limited,False,,"name, no match"
+I:INE268B01013,KREBSBIO,KREBSBIO,Krebs Biochemicals and Industries Limited,False,,"name, no match"
+I:INE524L01026,KRIDHANINF,KRIDHANINF,Kridhan Infra Limited,False,,"name, no match"
+I:INE0Q3J01015,KRN,KRN,,False,,no name found
+S:KRONECOMM,KRONECOMM,KRONECOMM,Krone Communications Limited,False,,"name, no match"
+I:INE999A01015,KSB,KSB|KSBPUMPS,Ksb Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE455I01011,KSCL,KSCL,Kaveri Seed Company Limited,False,,"name, no match"
+I:INE216D01018,KSERASERA,KSERAPRO|KSERASERA,KSS Limited,False,,"name, no match"
+I:INE987S01020,KSHINTL,KSHINTL,,False,,no name found
+I:INE143H01015,KSK,KSK,KSK Energy Ventures Limited,False,,"name, no match"
+I:INE907A01026,KSL,KSL,Kalyani Steels Limited,False,,"name, no match"
+I:INE727D01022,KSOILS,KSOILS,K S Oils Limited,False,,"name, no match"
+I:INE775B01025,KWALITY,KWALITY,kwality limited,False,,"name, no match"
+I:INE2KCE01013,KWIL,KWIL,,False,,no name found
+S:L&T,L&T,L&T,Larsen & Toubro Limited,False,,"name, no match"
+S:LAKSHAUTO,LAKSHAUTO,LAKSHAUTO,Lakshmi Auto Components Limited,False,,"name, no match"
+I:INE992B01026,LAKSHMIEFL,LAKSHMIEFL,Lakshmi Energy and Foods Limited,False,,"name, no match"
+I:INE600L01024,LALPATHLAB,LALPATHLAB,Dr. Lal Path Labs Ltd.,False,,sector_map: Healthcare / Diagnostics & Research
+I:INE112F01014,LAMBODHARA,LAMBODHARA,Lambodhara Textiles Limited,False,,"name, no match"
+I:INE688J01015,LANDSMILL,EXCEL|EXCELINFO|LANDSMILL,Landsmill Green Limited,False,,"name, no match"
+I:INE059D01012,LAOPALA,LAOPALA,La Opala RG Limited,False,,"name, no match"
+I:INE0I7C01011,LATENTVIEW,LATENTVIEW,Latent View Analytics Limited,False,,sector_map: Industrials / Consulting Services
+I:INE947Q01010,LAURUSLABS,LAURUSLABS,Laurus Labs Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE938A01021,LCCINFOTEC,LCCINFOTEC,LCC Infotech Limited,False,,"name, no match"
+I:INE245C01019,LEEL,LEEL|LLOYDELENG,LEEL Electricals Limited,False,,"name, no match"
+I:INE970X01018,LEMONTREE,LEMONTREE,Lemon Tree Hotels Limited,False,,sector_map: Consumer Cyclical / Lodging
+I:INE956O01016,LENSKART,LENSKART,,False,,no name found
+I:INE337A01034,LGBBROSLTD,LGBBROSLTD,LG Balakrishnan & Bros Limited,False,,"name, no match"
+S:LGBROS,LGBROS,LGBROS,LG Balakrishnan & Bros Limited,False,,"name, no match"
+I:INE324D01010,LGEINDIA,LGEINDIA,,False,,sector_map: Technology / Consumer Electronics
+I:INE557B01019,LIBERTSHOE,LIBERTSHOE,Liberty Shoes Limited,False,,"name, no match"
+I:INE405C01035,LINCOLN,LINCOLN,Lincoln Pharmaceuticals Limited,False,,"name, no match"
+I:INE473A01011,LINDEINDIA,BOC|IOL|LINDEINDIA,Linde India Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE785C01048,LITL,LITL,Lanco Infratech Limited,False,,"name, no match"
+I:INE093R01011,LLOYDSENGG,LLOYDSENGG|LSIL,LLOYDS ENGINEERING WORKS LIMITED,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE080I01025,LLOYDSENT,LLOYDSENT,Lloyds Enterprises Limited,False,,sector_map: Basic Materials / Steel
+I:INE281B01032,LLOYDSME,LLOYDSME,Lloyds Metals And Energy Limited,False,,sector_map: Basic Materials / Steel
+I:INE862A01015,LML,LML,LML Limited,False,,"name, no match"
+I:INE269B01029,LMW,LAXMIMACH|LMW,LMW Limited,False,,"name, no match"
+I:INE670K01029,LODHA,LODHA,Lodha Developers Limited,False,,sector_map: Real Estate / Real Estate - Development
+I:INE397H01017,LOKESHMACH,LOKESHMACH,Lokesh Machines Limited,False,,"name, no match"
+S:LOTTEINDIA,LOTTEINDIA,LOTTEINDIA|PARRYSCON,Lotte India Corporation Limited,False,,"name, no match"
+I:INE597L01014,LOVABLE,LOVABLE,Lovable Lingerie Limited,False,,"name, no match"
+I:INE018A01030,LT,LT,Larsen & Toubro Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE818H01012,LTFOODS,DAAWAT|LTFOODS,LT Foods Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE214T01019,LTM,LTI|LTIM|LTM,LTM Limited,False,,sector_map: Technology / Information Technology Services
+I:INE010V01017,LTTS,LTTS,L&T Technology Services Limited,False,,sector_map: Technology / Information Technology Services
+I:INE162B01018,LUMAXIND,LUMAXIND,Lumax Industries Limited,False,,"name, no match"
+I:INE872H01019,LUMAXTECH,LUMAXTECH,Lumax Auto Technologies Limited,False,,"name, no match"
+I:INE326A01037,LUPIN,LUPIN,Lupin Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+S:LUPINCHEM,LUPINCHEM,LUPINCHEM,Lupin Chemicals Limited,False,,"name, no match"
+I:INE150G01012,LUXIND,LUXIND,Lux Industries Limited,False,,"name, no match"
+I:INE576O01020,LXCHEM,LXCHEM,Laxmi Organic Industries Limited,False,,"name, no match"
+I:INE933A01014,LYKALABS,LYKALABS,Lyka Labs Limited,False,,"name, no match"
+I:INE101A01026,M&M,M&M,Mahindra & Mahindra Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+S:MAARSOFTW,MAARSOFTW,MAARSOFTW,Maars Software International Limited,False,,"name, no match"
+I:INE378D01032,MADHUCON,MADHUCON,Madhucon Projects Limited,False,,"name, no match"
+I:INE414A01015,MADRASFERT,MADRASFERT,Madras Fertilizers Limited,False,,"name, no match"
+S:COATVIYELA,MADURACOAT,COATVIYELA|MADURACOAT,Madura Coats Limited,False,,"name, no match"
+I:INE387I01016,MAGNUM,MAGNUM,Magnum Ventures Limited,False,,"name, no match"
+S:MAHAINTL,MAHAINTL,MAHAINTL,Electrolux Kelvinator Limited,False,,"name, no match"
+I:INE850A01010,MAHINDUGIN,MAHINDUGIN,Mahindra Ugine Steel Company Limited,False,,"name, no match"
+I:INE813A01018,MAHLIFE,GESCOCORP|MAHLIFE,Mahindra Lifespace Developers Limited,False,,"name, no match"
+I:INE766P01016,MAHLOG,MAHLOG,Mahindra Logistics Limited,False,,"name, no match"
+I:INE288A01013,MAHSCOOTER,MAHSCOOTER,Maharashtra Scooters Limited,False,,"name, no match"
+I:INE271B01025,MAHSEAMLES,MAHSEAMLES,Maharashtra Seamless Limited,False,,"name, no match"
+I:INE683C01011,MAITHANALL,MAITHANALL,Maithan Alloys Limited,False,,"name, no match"
+I:INE432P01015,MAKE,MAKE,Marico Kaya Enterprises Limited,False,,"name, no match"
+S:MADRASALMN,MALCO,MADRASALMN|MALCO,The Madras Aluminium Company Limited,False,,"name, no match"
+I:INE383H01017,MALUPAPER,MALUPAPER,Malu Paper Mills Limited,False,,"name, no match"
+I:INE272B01015,MALWACOTT,MALWACOTT,Malwa Cotton Spg. Mills Limited,False,,"name, no match"
+I:INE015D01022,MANAKSIA,MANAKSIA,Manaksia Limited,False,,"name, no match"
+S:MANALIPET,MANALIPET,MANALIPET,Manali Petrochemicals Limited,False,,"name, no match"
+I:INE201A01024,MANALIPETC,MANALIPETC,Manali Petrochemicals Limited,False,,"name, no match"
+I:INE087J01010,MANDHANA,MANDHANA,Mandhana Industries Limited,False,,"name, no match"
+I:INE584F01014,MANGALAM,MANGALAM,Mangalam Drugs And Organics Limited,False,,"name, no match"
+I:INE558B01017,MANGCHEFER,MANGCHEFER,Mangalore Chemicals & Fertilizers Limited,False,,"name, no match"
+I:INE347A01017,MANGLMCEM,MANGLMCEM,Mangalam Cement Limited,False,,"name, no match"
+I:INE805B01012,MANGTIMBER,MANGTIMBER,Mangalam Timber Products Limited,False,,"name, no match"
+I:INE993A01026,MANINDS,MANALUMN|MANINDS,Man Industries (India) Limited,False,,sector_map: Basic Materials / Steel
+I:INE949H01015,MANINFRA,MANINFRA,Man Infraconstruction Limited,False,,"name, no match"
+I:INE634S01028,MANKIND,MANKIND,Mankind Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE00VM01010,MANORAMA,MANORAMA,Manorama Industries Limited,False,,"name, no match"
+I:INE122R01018,MANPASAND,MANPASAND,Manpasand Beverages Limited,False,,"name, no match"
+I:INE867A01022,MANUGRAPH,MANUGRAPH,Manugraph India Limited,False,,"name, no match"
+I:INE825V01034,MANYAVAR,MANYAVAR,Vedant Fashions Limited,False,,sector_map: Consumer Cyclical / Apparel Manufacturing
+I:INE0BV301023,MAPMYINDIA,MAPMYINDIA,C.E. Info Systems Limited,False,,sector_map: Technology / Software - Infrastructure
+I:INE882A01013,MARALOVER,MARALOVER,Maral Overseas Limited,False,,"name, no match"
+I:INE941E01019,MARG,MARG,Marg Limited,False,,"name, no match"
+I:INE196A01026,MARICO,MARICO|MARICOIND,Marico Limited,False,,sector_map: Consumer Defensive / Household & Personal Products
+I:INE01JE01010,MARINE,MARINE,Marine Electricals (India) Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE750C01026,MARKSANS,MARKSANS|TASCPHARMA,Marksans Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - General
+I:INE415B01044,MARSONS,MARSONS,Marsons Limited,False,,"name, no match"
+I:INE585B01010,MARUTI,MARUTI,Maruti Suzuki India Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE759A01021,MASTEK,MASTEK,Mastek Limited,False,,"name, no match"
+S:MASTERSHAR,MASTERSHAR,MASTERSHAR,UTI - Master Share,False,,"name, no match"
+S:MATRIXLABS,MATRIXLABS,MATRIXLABS,Matrix Laboratories Limited,False,,"name, no match"
+S:MAWANA,MAWANA,MAWANA,Mawana Sugars Limited,False,,"name, no match"
+I:INE636A01039,MAWANASUG,MAWANASUG,Mawana Sugars Limited,False,,"name, no match"
+I:INE027H01010,MAXHEALTH,MAXHEALTH,Max Healthcare Institute Limited,False,,sector_map: Healthcare / Medical Care Facilities
+I:INE153U01017,MAXINDIA,MAXINDIA,Max India Limited,False,,"name, no match"
+I:INE154U01015,MAXVIL,MAXVIL,Max Ventures and Industries Limited,False,,"name, no match"
+I:INE040D01012,MAYURUNIQ,MAYURUNIQ,Mayur Uniquoters Ltd,False,,"name, no match"
+I:INE249Z01012,MAZDOCK,MAZDOCK,Mazagon Dock Shipbuilders Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE748A01016,MBECL,MBECL,Mcnally Bharat Engineering Company Limited,False,,"name, no match"
+I:INE912H01013,MBLINFRA,MBLINFRA,MBL Infrastructure Limited,False,,"name, no match"
+I:INE836H01014,MCDHOLDING,MCDHOLDING,McDowell Holdings Limited,False,,"name, no match"
+I:INE942G01012,MCLEODRUSS,MCLEODRUSS,Mcleod Russel India Limited,False,,"name, no match"
+I:INE613C01026,MCLOUD,MCLOUD,Magellanic Cloud Limited,False,,"name, no match"
+I:INE474Q01031,MEDANTA,MEDANTA,Global Health Limited,False,,sector_map: Healthcare / Medical Care Facilities
+S:MEDIAVIDEO,MEDIAVIDEO,MEDIAVIDEO,Media Video Limited,False,,"name, no match"
+S:MEDICOTECH,MEDICOTECH,MEDICOTECH,Medicorp Technologies Limited,False,,"name, no match"
+I:INE804L01022,MEDPLUS,MEDPLUS,,False,,no name found
+I:INE0VDM01015,MEESHO,MEESHO,,False,,sector_map: Consumer Cyclical / Internet Retail
+I:INE974H01013,MEGH,MEGH,Meghmani Organics Limited,False,,"name, no match"
+I:INE817A01019,MELSTAR,MELSTAR,Melstar Information Technologies Limited,False,,"name, no match"
+I:INE776I01010,MEP,MEP,MEP Infrastructure Developers Limited,False,,"name, no match"
+I:INE934B01028,MERCATOR,MERCATOR|MLL,Mercator Limited,False,,"name, no match"
+I:INE425A01011,METALFORGE,AHMEDFORGE|METALFORGE,Metalyst Forgings Limited,False,,"name, no match"
+I:INE317I01021,METROBRAND,METROBRAND,Metro Brands Limited,False,,"name, no match"
+I:INE112L01020,METROPOLIS,METROPOLIS,Metropolis Healthcare Limited,False,,sector_map: Healthcare / Diagnostics & Research
+I:INE002S01010,MGL,MGL,Mahanagar Gas Limited,False,,sector_map: Utilities / Utilities - Regulated Gas
+I:INE998I01010,MHRIL,MHRIL,Mahindra Holidays & Resorts India Limited,False,,"name, no match"
+I:INE287C01029,MIC,MIC,MIC Electronics Limited,False,,"name, no match"
+S:HINDINKS,MICRO,HINDINKS|MICRO,Micro Inks Limited,False,,"name, no match"
+I:INE358B01012,MICROTECH,MICROTECH,Micro Technologies (India) Limited,False,,"name, no match"
+I:INE099Z01011,MIDHANI,MIDHANI,Mishra Dhatu Nigam Limited,False,,sector_map: Basic Materials / Steel
+I:INE842C01013,MINDACORP,MINDACORP,Minda Corporation Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE018I01017,MINDTREE,MINDTREE,MindTree Limited,False,,"name, no match"
+I:INE771A01026,MIRZAINT,MIRZAINT|MIRZATAN,Mirza International Limited,False,,"name, no match"
+I:INE227C01017,MMFL,MMFL|MMFORGINGS,MM Forgings Limited,False,,"name, no match"
+I:INE123F01029,MMTC,MMTC,MMTC Limited,False,,sector_map: Industrials / Conglomerates
+I:INE0HLU01028,MOBIKWIK,MOBIKWIK,,False,,no name found
+I:INE832A01018,MODIRUBBER,MODIRUBBER,Modi Rubber Limited,False,,"name, no match"
+I:INE490G01020,MOIL,MOIL,MOIL Limited,False,,"name, no match"
+I:INE0CT101020,MOL,MOL,Meghmani Organics Limited,False,,"name, no match"
+I:INE743C01013,MONNETISPA,MONNETISPA,Monnet Ispat and Energy Limited,False,,"name, no match"
+I:INE274B01011,MONSANTO,MONSANTO,Monsanto India Limited,False,,"name, no match"
+I:INE950M01013,MONTECARLO,MONTECARLO,Monte Carlo Fashions Limited,False,,"name, no match"
+I:INE083A01026,MOREPENLAB,MOREPENLAB,Morepen Laboratories Limited,False,,"name, no match"
+I:INE935B01025,MOSCHIP,MOSCHIP,,False,,no name found
+I:INE739A01015,MOSERBAER,MOSERBAER,Moser-Baer (I) Limited,False,,"name, no match"
+I:INE775A01035,MOTHERSON,MOTHERSON|MOTHERSUMI,Samvardhana Motherson International Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE0FRK01012,MOTISONS,MOTISONS,Motisons Jewellers Limited,False,,"name, no match"
+I:INE356A01018,MPHASIS,BFLSOFTWAR|MPHASIS|MPHASISBFL,MphasiS Limited,False,,sector_map: Technology / Information Technology Services
+I:INE943D01017,MPSLTD,MACMILLAN|MPSLTD,MPS Limited,False,,"name, no match"
+I:INE883A01011,MRF,MRF,MRF Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE103A01014,MRPL,MRPL,Mangalore Refinery and Petrochemicals Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE752G01015,MSPL,MSPL,MSP Steel & Power Limited,False,,"name, no match"
+I:INE255X01014,MSTCLTD,MSTCLTD,Mstc Limited,False,,sector_map: Industrials / Conglomerates
+I:INE0FS801015,MSUMI,MSUMI,Motherson Sumi Wiring India Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE864I01014,MTARTECH,MTARTECH,Mtar Technologies Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE472M01018,MTEDUCARE,MTEDUCARE,MT Educare Limited,False,,"name, no match"
+I:INE153A01019,MTNL,MTNL,Mahanagar Telephone Nigam Limited,False,,"name, no match"
+S:MUKAND,MUKAND,MUKAND,Mukand Limited,False,,"name, no match"
+I:INE022B01014,MUKANDENGG,MUKANDENGG,Mukand Engineers Limited,False,,"name, no match"
+I:INE304A01026,MUKANDLTD,MUKANDLTD,Mukand Limited,False,,"name, no match"
+I:INE374B01019,MUKTAARTS,MUKTAARTS,Mukta Arts Limited,False,,"name, no match"
+S:MUNJALAUTO,MUNJALAUTO,MUNJALAUTO,Munjal Auto Industries Limited,False,,"name, no match"
+I:INE577A01027,MUNJALSHOW,MUNJALSHOW,Munjal Showa Limited,False,,"name, no match"
+I:INE806B01028,MURLIIND,MURLIIND,Murli Industries Limited,False,,"name, no match"
+I:INE692B01014,MURUDCERA,MURUDCERA,Murudeshwar Ceramics Limited,False,,"name, no match"
+I:INE744I01034,MVL,MVL,MVL Limited,False,,"name, no match"
+I:INE580A01013,NAGARFERT,NAGARFERT,Nagarjuna Fertilizer & Chemicals Limited,False,,"name, no match"
+I:INE453M01018,NAGAROIL,NAGAROIL,Nagarjuna Oil Refinery Limited,False,,"name, no match"
+S:NAHAREXP,NAHAREXP,NAHAREXP,Nahar Exports Limited,False,,"name, no match"
+I:INE289A01011,NAHARINDUS,NAHARINDUS,Nahar Industrial Enterprises Limited,False,,"name, no match"
+S:NAHARSPG,NAHARSPG,NAHARSPG,Nahar Spinning Mills Limited,False,,"name, no match"
+S:NAMTECHELE,NAMTECHELE,NAMTECHELE,Namtech Electronic Devices Limited,False,,"name, no match"
+I:INE875G01022,NANDAN,NANDAN,Nandan Exim Limited,False,,"name, no match"
+S:NARMDCHEMA,NARMDCHEMA,NARMDCHEMA,Narmada Chematur Petrochem Limited,False,,"name, no match"
+I:INE987B01018,NATCOPHARM,NATCOPHARM,Natco Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE448G01010,NATHBIOGEN,NATHBIOGEN,Nath Bio-Genes (India) Limited,False,,"name, no match"
+S:NATHSEEDS,NATHSEEDS,NATHSEEDS,Nath Seeds  Limited,False,,"name, no match"
+I:INE139A01034,NATIONALUM,NATIONALUM,National Aluminium Company Limited,False,,sector_map: Basic Materials / Aluminum
+I:INE088B01015,NATNLSTEEL,NATNLSTEEL,National Steel And Agro Industries Limited,False,,"name, no match"
+I:INE663F01024,NAUKRI,NAUKRI,Info Edge (India) Limited,False,,sector_map: Communication Services / Internet Content & Information
+I:INE725A01022,NAVA,NAVA|NAVBARFERO|NBVENTURES,NAVA LIMITED,False,,sector_map: Industrials / Conglomerates
+I:INE048G01018,NAVINFLUOR,NAVINFLUOR,Navin Fluorine International Limited,False,,sector_map: Basic Materials / Chemicals
+I:INE278M01019,NAVKARCORP,NAVKARCORP,Navkar Corporation Limited,False,,"name, no match"
+I:INE060A01024,NAVNETEDUL,NAVNETEDUL|NAVNETPUBL,Navneet Education Limited,False,,"name, no match"
+I:INE418L01021,NAZARA,NAZARA,Nazara Technologies Limited,False,,"name, no match"
+I:INE095N01015,NBCC,NBCC,NBCC (India) Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE868B01028,NCC,NAGARCONST|NCC,NCC Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE732C01016,NCLIND,NCLIND,NCL Industries Limited,False,,"name, no match"
+I:INE875G01030,NDL,NANDANEXIM|NDL,Nandan Denim Limited,False,,"name, no match"
+I:INE353A01023,NDLVENTURE,HINDUJATMT|HINDUJAVEN|NDLVENTURE|NXTDIGITAL,NDL Ventures Limited,False,,"name, no match"
+I:INE155G01029,NDTV,NDTV,New Delhi Television Limited,False,,"name, no match"
+I:INE023H01027,NECLIFE,NECLIFE,Nectar Lifesciences Limited,False,,"name, no match"
+I:INE874D01022,NEHAINT,NEHAINT,Neha International Limited,False,,"name, no match"
+I:INE189I01016,NELCAST,NELCAST,Nelcast Limited,False,,"name, no match"
+I:INE045B01015,NELCO,NELCO,NELCO Limited,False,,"name, no match"
+S:NEOCURTHER,NEOCURTHER,NEOCURTHER,Neocure Therapeutics Limited,False,,"name, no match"
+I:INE136S01016,NEOGEN,NEOGEN,Neogen Chemicals Limited,False,,"name, no match"
+I:INE317F01027,NESCO,NESCO,Nesco Limited,False,,"name, no match"
+S:NESTLE,NESTLE,NESTLE,Nestle India Limited,False,,"name, no match"
+I:INE239A01016,NESTLEIND,NESTLEIND,Nestle India Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE553E01012,NET4,NET4|NET4INDIA,Net 4 India Limited,False,,"name, no match"
+I:INE0NT901020,NETWEB,NETWEB,Netweb Technologies India Limited,False,,sector_map: Technology / Computer Hardware
+I:INE870H01013,NETWORK18,NETWORK18,Network18 Media & Investments Limited,False,,"name, no match"
+I:INE794A01010,NEULANDLAB,NEULANDLAB,Neuland Laboratories Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE619B01017,NEWGEN,NEWGEN,Newgen Software Technologies Limited,False,,sector_map: Technology / Software - Infrastructure
+I:INE747B01016,NEXTMEDIA,MID-DAY|NEXTMEDIA,Next Mediaworks Limited,False,,"name, no match"
+I:INE870D01012,NFL,NFL,National Fertilizers Limited,False,,"name, no match"
+I:INE410P01011,NH,NH,Narayana Hrudayalaya Ltd.,False,,sector_map: Healthcare / Medical Care Facilities
+I:INE848E01016,NHPC,NHPC,NHPC Limited,False,,sector_map: Utilities / Utilities - Renewable
+I:INE241C01026,NICCO,NICCO,Nicco Corporation Limited,False,,"name, no match"
+S:NIIT,NIIT,NIIT,NIIT Limited,False,,"name, no match"
+I:INE161A01038,NIITLTD,NIITLTD,NIIT Limited,False,,"name, no match"
+I:INE937C01029,NILAINFRA,NILAINFRA,Nila Infrastructures Limited,False,,"name, no match"
+I:INE310A01015,NILKAMAL,NILKAMAL|NILKAMPLST,Nilkamal Limited,False,,"name, no match"
+S:NIPPONDENR,NIPPONDENR,NIPPONDENR,Ispat Industries Limited,False,,"name, no match"
+S:NIPPONDENS,NIPPONDENS,NIPPONDENS,Denso India Limited,False,,"name, no match"
+S:NIRMA,NIRMA,NIRMA,Nirma Limited,False,,"name, no match"
+I:INE858F01012,NITCO,NITCO,Nitco Limited,False,,"name, no match"
+I:INE489H01020,NITINFIRE,NITINFIRE,Nitin Fire Protection Industries Limited,False,,"name, no match"
+I:INE229H01012,NITINSPIN,NITINSPIN,Nitin Spinners Limited,False,,"name, no match"
+I:INE589A01014,NLCINDIA,NEYVELILIG|NLCINDIA,NLC India Limited,False,,sector_map: Utilities / Utilities - Regulated Electric
+I:INE584A01023,NMDC,NMDC,NMDC Limited,False,,sector_map: Basic Materials / Steel
+I:INE163A01018,NOCIL,NOCIL,NOCIL Limited,False,,"name, no match"
+I:INE781B01015,NOIDATOLL,NOIDATOLL,Noida Toll Bridge Company Limited,False,,"name, no match"
+I:INE217G01019,NORTHGATE,NORTHGATE,Northgate Technologies Limited,False,,"name, no match"
+S:NOVAPETRO,NOVAPETRO,NOVAPETRO,Nova Petrochemicals Limited,False,,"name, no match"
+S:NOVARTIS,NOVARTIS,NOVARTIS,,False,,no name found
+I:INE349A01021,NRBBEARING,NRBBEARING,NRB Bearing Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE953C01018,NRC,NRC,NRC Limited,False,,"name, no match"
+I:INE0NNS01018,NSLNISP,NSLNISP,NMDC Steel Limited,False,,sector_map: Basic Materials / Steel
+I:INE733E01010,NTPC,NTPC,NTPC Limited,False,,sector_map: Utilities / Utilities - Regulated Electric
+I:INE0ONG01011,NTPCGREEN,NTPCGREEN,,False,,sector_map: Utilities / Utilities - Renewable
+I:INE096B01018,NUCLEUS,NUCLEUS,Nucleus Software Exports Limited,False,,"name, no match"
+I:INE318J01027,NUTEK,NUTEK,Nu Tek India Limited,False,,"name, no match"
+I:INE118D01016,NUVOCO,NUVOCO,,False,,sector_map: Basic Materials / Building Materials
+I:INE388Y01029,NYKAA,NYKAA,FSN E-Commerce Ventures Limited,False,,sector_map: Consumer Cyclical / Internet Retail
+I:INE093I01010,OBEROIRLTY,OBEROIREAL|OBEROIRLTY,Oberoi Realty Limited,False,,sector_map: Real Estate / Real Estate - Development
+I:INE290B01025,OCL,OCL|ORISSACEM,OCL India Limited,False,,"name, no match"
+S:OENCONNECT,OENCONNECT,OENCONNECT,FCI OEN Connectors Limited,False,,"name, no match"
+I:INE881D01027,OFSS,I-FLEX|OFSS,Oracle Financial Services Software Limited,False,,sector_map: Technology / Software - Infrastructure
+I:INE274J01014,OIL,OIL,Oil India Limited,False,,sector_map: Energy / Oil & Gas Integrated
+I:INE591A01010,OILCOUNTUB,OILCOUNTUB,Oil Country Tubular Limited,False,,"name, no match"
+I:INE0LXG01040,OLAELEC,OLAELEC,Ola Electric Mobility Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE260D01016,OLECTRA,GOLDINFRA|GOLDTELE|OLECTRA,Olectra Greentech Limited,False,,sector_map: Industrials / Farm & Heavy Construction Machinery
+I:INE090B01011,OMAXAUTO,OMAXAUTO,Omax Autos Limited,False,,"name, no match"
+I:INE800H01010,OMAXE,OMAXE,Omaxe Limited,False,,"name, no match"
+I:INE474L01016,OMKARCHEM,OMKARCHEM,Omkar Speciality Chemicals Limited,False,,"name, no match"
+I:INE0UH301010,OMNI,OMNI,,False,,no name found
+I:INE810H01019,OMNITECH,OMNITECH,Omnitech Infosolutions Limited,False,,"name, no match"
+I:INE013P01021,ONESOURCE,ONESOURCE,,False,,sector_map: Healthcare / Biotechnology
+I:INE213A01029,ONGC,ONGC,Oil & Natural Gas Corporation Limited,False,,sector_map: Energy / Oil & Gas Integrated
+I:INE831A01028,ONIDA,MIRCELECTR|ONIDA,Onida Electronics Limited,False,,"name, no match"
+I:INE809I01019,ONMOBILE,ONMOBILE,OnMobile Global Limited,False,,"name, no match"
+I:INE229A01017,ONWARDTEC,ONWARDTEC,Onward Technologies Limited,False,,"name, no match"
+I:INE808B01016,OPTOCIRCUI,OPTOCIRCUI,Opto Circuits (India) Limited,False,,"name, no match"
+I:INE628H01015,ORBITCORP,ORBITCORP,Orbit Corporation Limited,False,,"name, no match"
+I:INE191A01019,ORCHIDPHAR,ORCHIDCHEM|ORCHIDPHAR,Orchid Pharma Limited,False,,"name, no match"
+I:INE730A01022,ORICONENT,ORICONENT,Oricon Enterprises Limited,False,,"name, no match"
+I:INE876N01018,ORIENTCEM,ORIENTCEM,Orient Cement Limited,False,,"name, no match"
+I:INE142Z01019,ORIENTELEC,ORIENTELEC,Orient Electric Limited,False,,"name, no match"
+I:INE750A01020,ORIENTHOT,ORIENTHOT,Oriental Hotels Limited,False,,"name, no match"
+S:ORIENTINFO,ORIENTINFO,ORIENTINFO,Orient Information Technology Limited,False,,"name, no match"
+I:INE592A01026,ORIENTPPR,ORIENTPPR,Orient Paper & Industries Limited,False,,"name, no match"
+I:INE0PPK01015,ORIENTTECH,ORIENTTECH,Orient Technologies Limited,False,,"name, no match"
+I:INE725E01016,ORISSAMINE,ORISSAMINE,The Orissa Minerals Development Company Limited,False,,"name, no match"
+I:INE142A01012,OSWALAGRO,OSWALAGRO,Oswal Agro Mills Limited,False,,"name, no match"
+I:INE143A01010,OSWALGREEN,BINDALAGRO|OSWALGREEN,Oswal Greentech Limited,False,,"name, no match"
+I:INE0BYP01024,OSWALPUMPS,OSWALPUMPS,,False,,no name found
+S:OTIS,OTIS,OTIS,Otis Elevator Company (India) Limited,False,,"name, no match"
+I:INE594A01014,OUDHSUG,OUDHSUG,The Oudh Sugar Mills Limited,False,,"name, no match"
+I:INE0S3G01027,PACEDIGITK,PACEDIGITK,,False,,no name found
+S:PADMALAYAT,PADMALAYAT,PADMALAYAT,Padmalaya Telefilms Limited,False,,"name, no match"
+S:PADMINPOLY,PADMINPOLY,PADMINPOLY,Padmini Technologies Limited,False,,"name, no match"
+I:INE761H01022,PAGEIND,PAGEIND,Page Industries Limited,False,,sector_map: Consumer Cyclical / Apparel Manufacturing
+I:INE420C01042,PAISALO,PAISALO|SEINV,Paisalo Digital Limited,False,,"name, no match"
+I:INE218G01017,PALRED,FOURSOFT|PALRED,Palred Technologies Limited,False,,"name, no match"
+I:INE922B01023,PANACEABIO,PANACEABIO,Panacea Biotec Limited,False,,"name, no match"
+I:INE194B01029,PANORAMUNI,PANORAMUNI,Panoramic Universal Limited,False,,"name, no match"
+I:INE074B01023,PARACABLES,PARACABLES,Paramount Communications Limited,False,,"name, no match"
+I:INE088F01024,PARADEEP,PARADEEP,Paradeep Phosphates Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE883N01014,PARAGMILK,PARAGMILK,Parag Milk Foods Limited,False,,"name, no match"
+I:INE620C01013,PARAL,PARAL,Parekh Aluminex Limited,False,,"name, no match"
+I:INE702L01010,PARAPRINT,PARAPRINT,Paramount Printpackaging Limited,False,,"name, no match"
+I:INE045601015,PARAS,PARAS,Paras Defence and Space Technologies Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE598A01015,PAREKHPLAT,PAREKHPLAT,Parekh Platinum Limited,False,,"name, no match"
+S:PARKEDAVIS,PARKEDAVIS,PARKEDAVIS,Parke- Davis India Limited,False,,"name, no match"
+I:INE561H01026,PARSVNATH,PARSVNATH,Parsvnath Developers Limited,False,,"name, no match"
+I:INE619A01035,PATANJALI,PATANJALI|RUCHI,Patanjali Foods Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE244B01030,PATELENG,PATELENG,Patel Engineering Limited,False,,"name, no match"
+I:INE529D01014,PATINTLOG,PATINTLOG,Patel Integrated Logistics Limited,False,,"name, no match"
+I:INE660F01012,PATNI,PATNI,Patni Computer Systems Limited,False,,"name, no match"
+I:INE790C01014,PATSPINLTD,PATSPINLTD,Patspin India Limited,False,,"name, no match"
+S:MTAL,PAVCI,MTAL|PAVCI,Panasonic AVC Networks India Company Limited.,False,,"name, no match"
+I:INE982J01020,PAYTM,PAYTM,,False,,sector_map: Technology / Software - Infrastructure
+I:INE160H01019,PBAINFRA,PBAINFRA,PBA Infrastructure Limited,False,,"name, no match"
+I:INE602A01015,PCBL,PCBL|PHILIPCARB,PCBL Chemical Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE785M01013,PCJEWELLER,PCJEWELLER,PC Jeweller Limited,False,,"name, no match"
+I:INE600A01019,PEACOCKIND,PEACOCKIND,Peacock Industries Limited,False,,"name, no match"
+I:INE140A01024,PEL,NICOLASPIR|PEL|PIRHEALTH,Piramal Enterprises Limited,False,,"name, no match"
+I:INE932A01024,PENIND,PENIND,Pennar Industries Limited,False,,"name, no match"
+I:INE138A01028,PENINLAND,MORAREALTY|MORARJESPG|PENINLAND,Peninsula Land Limited,False,,"name, no match"
+S:PENTACOMMU,PENTACOMMU,PENTACOMMU,Pentasoft Technologies Limited,False,,"name, no match"
+S:PENTFRPROD,PENTFRPROD,PENTFRPROD,Pentafour Products Limited,False,,"name, no match"
+S:PENTFRSOLC,PENTFRSOLC,PENTFRSOLC,Pentafour Solec Technology Limited,False,,"name, no match"
+S:PENTSFWARE,PENTSFWARE,PENTSFWARE,Pentamedia Graphics Limited,False,,"name, no match"
+I:INE262H01013,PERSISTENT,PERSISTENT,Persistent Systems Limited,False,,sector_map: Technology / Information Technology Services
+I:INE742A01019,PETRONENGG,PETRONENGG,Petron Engineering Construction Limited,False,,"name, no match"
+I:INE347G01014,PETRONET,PETRONET,Petronet LNG Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE182A01018,PFIZER,PFIZER,Pfizer Limited,False,,sector_map: Healthcare / Drug Manufacturers - General
+I:INE367G01038,PFOCUS,PFOCUS,Prime Focus Limited,False,,sector_map: Communication Services / Entertainment
+I:INE457L01011,PGEL,PGEL,PG Electroplast Limited,False,,sector_map: Technology / Electronic Components
+I:INE179A01014,PGHH,P&G|PGHH,Procter & Gamble Hygiene and Health Care Limited,False,,"name, no match"
+I:INE199A01012,PGHL,EMERCK|MERCK|PGHL,Procter & Gamble Health Limited,False,,"name, no match"
+I:INE940H01014,PGIL,HOPFL|PGIL,Pearl Global Industries Limited,False,,"name, no match"
+S:ABBOTTLAB,PHARMACIA,ABBOTTLAB|PHARMACIA,Pharmacia Healthcare Limited,False,,"name, no match"
+S:PHILCORP,PHILCORP,PHILCORP,PHIL Corporation Limited,False,,"name, no match"
+S:PHILIPS,PHILIPS,PHILIPS,Philips India Limited,False,,"name, no match"
+I:INE455B01016,PHOENIXLL,HALONIX|PHOENIXLL|PHOENIXLMP,Phoenix Lamps Limited,False,,"name, no match"
+I:INE211B01039,PHOENIXLTD,PHOENIXLTD,The Phoenix Mills Limited,False,,sector_map: Real Estate / Real Estate - Diversified
+I:INE318A01026,PIDILITIND,PIDILITIND,Pidilite Industries Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE603J01014,PIIND,PIIND,PI Industries Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE15B701018,PINELABS,PINELABS,,False,,no name found
+I:INE156C01018,PIONEEREMB,PIONEEREMB,Pioneer Embroideries Limited,False,,"name, no match"
+I:INE122J01015,PIRPHYTO,PIRLIFE|PIRPHYTO,Piramal Phytocare Limited,False,,"name, no match"
+I:INE0PT501018,PLATIND,PLATIND,Platinum Industries Limited,False,,"name, no match"
+I:INE491H01018,PLETHICO,PLETHICO,Plethico Pharmaceuticals Limited,False,,"name, no match"
+I:INE859A01011,PNBGILTS,PNBGILTS,PNB Gilts Limited,False,,"name, no match"
+I:INE392B01011,PNC,PNC,PNC Media and Entertainment Limited,False,,"name, no match"
+I:INE195J01011,PNCINFRA,PNCINFRA,PNC Infratech Limited,False,,"name, no match"
+I:INE953R01016,PNGJL,PNGJL,,False,,no name found
+I:INE332G01032,POCHIRAJU,POCHIRAJU,Pochiraju Industries Limited,False,,"name, no match"
+I:INE063E01046,POCL,POCL,Pondy Oxides & Chemicals Limited,False,,"name, no match"
+I:INE763A01023,POLARIS,POLARIS,POLARIS CONSULTING & SERVICES LIMITED,False,,"name, no match"
+I:INE455K01017,POLYCAB,POLYCAB,Polycab India Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE205C01013,POLYMED,POLYMED,Poly Medicure Limited,False,,sector_map: Healthcare / Medical Instruments & Supplies
+I:INE633B01018,POLYPLEX,POLYPLEX,Polyplex Corporation Limited,False,,"name, no match"
+I:INE838E01017,PONNIERODE,PONNIERODE,Ponni Sugars (Erode) Limited,False,,"name, no match"
+I:INE752E01010,POWERGRID,POWERGRID,Power Grid Corporation of India Limited,False,,sector_map: Utilities / Utilities - Regulated Electric
+I:INE07Y701011,POWERINDIA,POWERINDIA,Hitachi Energy India Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE211R01019,POWERMECH,POWERMECH,Power Mech Projects Limited,False,,"name, no match"
+I:INE0DK501011,PPLPHARMA,PPLPHARMA,Piramal Pharma Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE302M01033,PRABHAT,PRABHAT,Prabhat Dairy Limited,False,,"name, no match"
+I:INE495J01015,PRADIP,PRADIP,Pradip Overseas Limited,False,,"name, no match"
+I:INE505C01016,PRAENG,PRAENG,Prajay Engineers Syndicate Limited,False,,"name, no match"
+I:INE074A01025,PRAJIND,PRAJIND,Praj Industries Limited,False,,"name, no match"
+I:INE603A01013,PRAKASH,PRAKASH,Prakash Industries Limited,False,,"name, no match"
+I:INE696K01016,PRAKASHSTL,PRAKASHSTL,Prakash Steelage Limited,False,,"name, no match"
+I:INE308H01022,PRATIBHA,PRATIBHA,Pratibha Industries Limited,False,,"name, no match"
+I:INE283A01014,PRECOT,PRECOT|PRECOTMILL,Precot Limited,False,,"name, no match"
+I:INE372C01011,PRECWIRE,PRECWIRE,Precision Wires India Limited,False,,"name, no match"
+I:INE863B01011,PREMEXPLN,PREMEXPLN,Premier Explosives Limited,False,,"name, no match"
+I:INE342A01018,PREMIER,PREMAUTO|PREMIER,Premier Limited,False,,"name, no match"
+I:INE0BS701011,PREMIERENE,PREMIERENE,Premier Energies Limited,False,,sector_map: Technology / Solar
+I:INE811K01011,PRESTIGE,PRESTIGE,Prestige Estates Projects Limited,False,,sector_map: Real Estate / Real Estate - Diversified
+I:INE605A01026,PRICOL,PREMINSTR|PRICOL,Pricol Limited,False,,"name, no match"
+I:INE726V01018,PRICOLLTD,PRICOLLTD,Pricol Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE689W01016,PRINCEPIPE,PRINCEPIPE,Prince Pipes And Fittings Limited,False,,"name, no match"
+I:INE700C01013,PRITHVI,PRITHVI,Prithvi Information Solutions Limited,False,,"name, no match"
+I:INE959A01019,PRIVISCL,ADI|FAIRCHEM|PRIVISCL,Privi Speciality Chemicals Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE0BX301013,PROSTARM,PROSTARM,,False,,no name found
+I:INE004A01022,PROTEAN,PROTEAN,Protean eGov Technologies Limited,False,,"name, no match"
+I:INE968G01025,PROVOGUE,PROVOGUE,Provogue (India) Limited,False,,"name, no match"
+I:INE010A01011,PRSMJOHNSN,PRISMCEM|PRSMJOHNSN,Prism Johnson Limited,False,,"name, no match"
+S:PSIDATASYS,PSIDATASYS,PSIDATASYS,PSI Data Systems Limited,False,,"name, no match"
+I:INE474B01017,PSL,PSL|PSLHOLD,PSL Limited,False,,"name, no match"
+I:INE488V01015,PSPPROJECT,PSPPROJECT,PSP Projects Limited,False,,"name, no match"
+S:PSTL,PSTL,PSTL,Pyramid Saimira Theatre Limited,False,,"name, no match"
+I:INE877F01012,PTC,PTC,PTC India Limited,False,,"name, no match"
+I:INE596F01018,PTCIL,PTCIL,,False,,sector_map: Industrials / Metal Fabrication
+S:PUNANDLAMP,PUNANDLAMP,PUNANDLAMP,Punjab Anand Lamp Industries Limited,False,,"name, no match"
+I:INE277B01014,PUNJABCHEM,PUNJABCHEM,Punjab Chemicals & Crop Protection Limited,False,,"name, no match"
+S:PUNJABTRAC,PUNJABTRAC,PUNJABTRAC,Punjab Tractors Limited,False,,"name, no match"
+S:PUNJCOMMU,PUNJCOMMU,PUNJCOMMU,Punjab Communications Limited,False,,"name, no match"
+I:INE701B01021,PUNJLLOYD,PUNJLLOYD,Punj Lloyd Limited,False,,"name, no match"
+I:INE323I01011,PURVA,PURVA,Puravankara Limited,False,,"name, no match"
+I:INE362A01016,PVP,PVP|SOFTSOLINT,PVP Ventures Limited,False,,"name, no match"
+I:INE191H01014,PVRINOX,PVR|PVRINOX,PVR INOX Limited,False,,sector_map: Communication Services / Entertainment
+I:INE0LP301011,PWL,PWL,,False,,sector_map: Consumer Defensive / Education & Training Services
+I:INE0SII01026,QPOWER,QPOWER,Quality Power Electrical Equipments Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE0LRY01011,QUADFUTURE,QUADFUTURE,,False,,no name found
+I:INE615P01015,QUESS,QUESS,Quess Corp Limited,False,,sector_map: Industrials / Staffing & Employment Services
+I:INE306L01010,QUICKHEAL,QUICKHEAL,Quick Heal Technologies Limited,False,,"name, no match"
+I:INE033B01011,QUINTEGRA,QUINTEGRA|SOFFIASOFT,Quintegra Solutions Limited,False,,"name, no match"
+I:INE874F01027,RADAAN,RADAAN,Radaan Mediaworks India Limited,False,,"name, no match"
+I:INE0DD101019,RAILTEL,RAILTEL,Railtel Corporation Of India Limited,False,,sector_map: Communication Services / Telecom Services
+I:INE855B01025,RAIN,PRIYADCEM|RAIN|RAINCOM,Rain Industries Limited,False,,"name, no match"
+I:INE961O01016,RAINBOW,RAINBOW,Rainbow Childrens Medicare Limited,False,,sector_map: Healthcare / Medical Care Facilities
+I:INE028D01025,RAINBOWPAP,RAINBOWPAP,Rainbow Papers Limited,False,,"name, no match"
+S:RAINCALCIN,RAINCALCIN,RAINCALCIN,Rain Calcining Limited,False,,"name, no match"
+I:INE343B01030,RAJESHEXPO,RAJESHEXPO,Rajesh Exports Limited,False,,"name, no match"
+I:INE294G01018,RAJOIL,RAJOIL,Raj Oil Mills Limited,False,,"name, no match"
+I:INE451D01011,RAJRATAN,RAJRATAN,Rajratan Global Wire Limited,False,,"name, no match"
+I:INE562B01019,RAJSREESUG,RAJSREESUG,Rajshree Sugars & Chemicals Limited,False,,"name, no match"
+I:INE952H01019,RAJTV,RAJTV,Raj Television Network Limited,False,,"name, no match"
+I:INE613A01012,RALLIS,RALLIS,Rallis India Limited,False,,"name, no match"
+I:INE278B01020,RAMANEWS,RAMANEWS,Shree Rama Newsprint Limited,False,,"name, no match"
+S:RAMANEWSPR,RAMANEWSPR,RAMANEWSPR,Rama Newsprint and Papers Limited,False,,"name, no match"
+I:INE230R01019,RAMASTEEL,RAMASTEEL,Rama Steel Tubes Limited,False,,"name, no match"
+I:INE331A01037,RAMCOCEM,MADRASCEM|RAMCOCEM,The Ramco Cements Limited,False,,sector_map: Basic Materials / Building Materials
+I:INE614A01028,RAMCOIND,RAMCOIND,Ramco Industries Limited,False,,"name, no match"
+I:INE246B01019,RAMCOSYS,RAMCOSYS,Ramco Systems Limited,False,,"name, no match"
+I:INE874I01013,RAMKY,RAMKY,Ramky Infrastructure Limited,False,,"name, no match"
+I:INE005D01015,RAMSARUP,RAMSARUP,Ramsarup Industries Limited,False,,"name, no match"
+I:INE625B01014,RANASUG,RANASUG,Rana Sugars Limited,False,,"name, no match"
+I:INE015A01028,RANBAXY,RANBAXY,Ranbaxy Laboratories Limited,False,,"name, no match"
+S:RANEBRAKE,RANEBRAKE,RANEBRAKE,Rane Brake Linings Limited,False,,"name, no match"
+I:INE384A01010,RANEHOLDIN,RANEHOLDIN|RANEMADRAS,Rane Holdings Limited,False,,"name, no match"
+S:RASLAMIPAK,RASLAMIPAK,RASLAMIPAK,Ras Propack Lamipack Limited,False,,"name, no match"
+I:INE904G01020,RASOYPR,RASOYPR,Rasoya Proteins Limited,False,,"name, no match"
+I:INE0CLI01024,RATEGAIN,RATEGAIN,,False,,no name found
+I:INE703B01027,RATNAMANI,RATNAMANI,Ratnamani Metals & Tubes Limited,False,,"name, no match"
+I:INE05CZ01011,RATNAVEER,RATNAVEER,Ratnaveer Precision Engineering Limited,False,,"name, no match"
+S:RAVALSUGAR,RAVALSUGAR,RAVALSUGAR,Ravalgaon Sugar Farm Limited,False,,"name, no match"
+I:INE301A01014,RAYMOND,RAYMOND,Raymond Limited,False,,"name, no match"
+I:INE02ID01020,RAYMONDLSL,RAYMONDLSL,Raymond Lifestyle Limited,False,,"name, no match"
+I:INE1SY401010,RAYMONDREL,RAYMONDREL,Raymond Realty Limited,False,,"name, no match"
+I:INE07T201019,RBA,BURGERKING|RBA,,False,,no name found
+I:INE244J01017,RBL,RBL,Rane Brake Lining Limited,False,,"name, no match"
+I:INE445K01018,RBN,RBN|RMEDIA,Reliance Broadcast Network Limited,False,,"name, no match"
+I:INE027A01015,RCF,RCF,Rashtriya Chemicals and Fertilizers Limited,False,,"name, no match"
+I:INE330H01018,RCOM,RCOM|RCVL,Reliance Communications Limited,False,,"name, no match"
+S:RECKCOLMAN,RECKCOLMAN,RECKCOLMAN,Reckitt Benckiser (India) Limited,False,,"name, no match"
+I:INE891D01026,REDINGTON,REDINGTON,Redington Limited,False,,sector_map: Technology / Information Technology Services
+I:INE277C01012,REGENCERAM,REGENCERAM,Regency Ceramics Limited,False,,"name, no match"
+S:REIAGRO,REIAGRO,REIAGRO,Rei Agro Limited,False,,"name, no match"
+I:INE385B01031,REIAGROLTD,REIAGROLTD,Rei Agro Limited,False,,"name, no match"
+I:INE131B01021,RELAXO,RELAXO,Relaxo Footwears Limited,False,,"name, no match"
+I:INE002A01018,RELIANCE,RELIANCE,Reliance Industries Limited,False,,sector_map: Energy / Oil & Gas Refining & Marketing
+I:INE621H01010,RELIGARE,RELIGARE,Religare Enterprises Limited,False,,"name, no match"
+I:INE036A01016,RELINFRA,BSES|REL|RELINFRA,Reliance Infrastructure Limited,False,,"name, no match"
+I:INE540B01015,RELMEDIA,ADLABSFILM|RELMEDIA,Reliance MediaWorks Limited,False,,"name, no match"
+S:RELPETRO,RELPETRO,RELPETRO,Reliance Petroleum Limited,False,,"name, no match"
+I:INE087H01022,RENUKA,RENUKA,Shree Renuka Sugars Limited,False,,"name, no match"
+I:INE461B01014,REPRO,REPRO,Repro India Limited,False,,"name, no match"
+I:INE688D01026,RESPONIND,RESPONIND,Responsive Industries Limited,False,,"name, no match"
+I:INE774I01023,RESURGERE,RESURGERE,Resurgere Mines & Minerals India Limited,False,,"name, no match"
+S:REVL,REVL,REVL,Rane Engine Valves Limited,False,,"name, no match"
+I:INE743M01012,RHIM,ORIENTREF|RHIM,RHI MAGNESITA INDIA LIMITED,False,,sector_map: Industrials / Metal Fabrication
+S:RHONEPOULN,RHONEPOULN,RHONEPOULN,Rhone Poulenc (India) Limited,False,,"name, no match"
+I:INE209B01025,RICOAUTO,RICOAUTO,Rico Auto Industries Limited,False,,"name, no match"
+I:INE046A01015,RIIL,RIIL,Reliance Industrial Infrastructure Limited,False,,"name, no match"
+I:INE320J01015,RITES,RITES,RITES Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE399G01015,RKFORGE,RKFORGE,Ramkrishna Forgings Limited,False,,sector_map: Industrials / Metal Fabrication
+I:INE542F01012,RNAVAL,PIPAVAVDOC|PIPAVAVYD|RDEL|RNAVAL,Reliance Naval and Engineering Limited,False,,"name, no match"
+S:RNRL,RNRL,RNRL,Reliance Natural Resources Limited,False,,"name, no match"
+I:INE248H01012,ROHITFERRO,ROHITFERRO,Rohit Ferro-Tech Limited,False,,"name, no match"
+I:INE283H01019,ROHLTD,ROHLTD,Royal Orchid Hotels Limited,False,,"name, no match"
+I:INE645S01016,ROLEXRINGS,ROLEXRINGS,Rolex Rings Limited,False,,"name, no match"
+I:INE293A01013,ROLTA,ROLTA,Rolta India Limited,False,,"name, no match"
+S:ROOFITIND,ROOFITIND,ROOFITIND,Roofit Industries Limited,False,,"name, no match"
+I:INE02A801020,ROSSARI,ROSSARI,Rossari Biotech Limited,False,,"name, no match"
+I:INE450U01017,ROUTE,ROUTE,ROUTE MOBILE LIMITED,False,,"name, no match"
+S:RPGCABLES,RPGCABLES,RPGCABLES|RPGTELECOM,RPG Cables Limited,False,,"name, no match"
+I:INE105J01010,RPGLIFE,RPGLIFE,RPG Life Sciences Limited,False,,"name, no match"
+S:RPGTLTD,RPGTLTD,RPGTLTD|SAELTD,RPG Transmission Limited,False,,"name, no match"
+S:RPL,RPL,RPL,Reliance Petroleum Limited,False,,"name, no match"
+I:INE614G01033,RPOWER,RPOWER,Reliance Power Limited,False,,sector_map: Utilities / Utilities - Independent Power Producers
+I:INE324L01013,RPPINFRA,RPPINFRA,R.P.P. Infra Projects Limited,False,,"name, no match"
+I:INE425Y01011,RPSGVENT,CESCVENT|RPSGVENT,RPSG VENTURES LIMITED,False,,"name, no match"
+I:INE0J1F01024,RPTECH,RPTECH,Rashi Peripherals Limited,False,,"name, no match"
+I:INE777K01022,RRKABEL,RRKABEL,R R Kabel Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE165B01011,RSSOFTWARE,RSSOFTWARE,R. S. Software (India) Limited,False,,"name, no match"
+I:INE611A01016,RSWM,RAJASSPG|RSWM,RSWM Limited,False,,"name, no match"
+I:INE411H01024,RSYSTEMS,RSYSTEMS,R Systems International Limited,False,,"name, no match"
+I:INE834M01019,RTNINDIA,IBIPL|RTNINDIA|RTNINFRA,RattanIndia Enterprises Limited,False,,"name, no match"
+I:INE399K01017,RTNPOWER,IBPOW|RTNPOWER,RattanIndia Power Limited,False,,"name, no match"
+I:INE506V01022,RUBICON,RUBICON,Rubicon Research Limited,False,,sector_map: Healthcare / Drug Manufacturers - General
+I:INE413B01023,RUCHINFRA,RUCHINFRA,Ruchi Infrastructure Limited,False,,"name, no match"
+I:INE619A01027,RUCHISOYA,RUCHISOYA,Ruchi Soya Industries Limited,False,,"name, no match"
+I:INE895B01021,RUPA,RUPA,Rupa & Company Limited,False,,"name, no match"
+S:RUPANGIMPX,RUPANGIMPX,RUPANGIMPX,Rupangi Impex Limited,False,,"name, no match"
+I:INE573K01017,RUSHIL,RUSHIL,Rushil Decor Limited,False,,"name, no match"
+I:INE415G01027,RVNL,RVNL,Rail Vikas Nigam Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE243A01018,SABERORGAN,SABERORGAN,Sabero Organics Gujarat Limited,False,,"name, no match"
+I:INE226H01026,SADBHAV,SADBHAV,Sadbhav Engineering Limited,False,,"name, no match"
+I:INE429E01023,SAFARI,SAFARI,Safari Industries (India) Limited,False,,"name, no match"
+I:INE0W2G01015,SAGILITY,SAGILITY,SAGILITY LIMITED,False,,sector_map: Healthcare / Health Information Services
+I:INE114A01011,SAIL,SAIL,Steel Authority of India Limited,False,,sector_map: Basic Materials / Steel
+I:INE570L01029,SAILIFE,SAILIFE,,False,,sector_map: Healthcare / Diagnostics & Research
+S:SAITELE,SAITELE,SAITELE,Sai Television Limited,False,,"name, no match"
+I:INE623A01011,SAKHTISUG,SAKHTISUG,Sakthi Sugars Limited,False,,"name, no match"
+I:INE667G01015,SAKSOFT,SAKSOFT,Saksoft Limited,False,,"name, no match"
+I:INE190H01016,SAKUMA,SAKUMA,Sakuma Exports Limited,False,,"name, no match"
+I:INE924A01013,SALORAINTL,SALORAINTL,Salora International Limited,False,,"name, no match"
+I:INE658G01014,SALSTEEL,SALSTEEL,S.A.L. Steel Limited,False,,"name, no match"
+I:INE08U801020,SAMHI,SAMHI,,False,,no name found
+I:INE381A01016,SAMTEL,SAMTEL,Samtel Color Limited,False,,"name, no match"
+I:INE583B01015,SANDESH,SANDESH,The Sandesh Limited,False,,"name, no match"
+I:INE278H01035,SANDHAR,SANDHAR,Sandhar Technologies Limited,False,,"name, no match"
+I:INE149K01016,SANDUMA,SANDUMA,Sandur Manganese & Iron Ores Limited,False,,"name, no match"
+S:SANDVIKAS,SANDVIKAS,SANDVIKAS,Sandvik Asia Limited,False,,"name, no match"
+I:INE495C01010,SANGAMIND,SANGAMIND,Sangam (India) Limited,False,,"name, no match"
+I:INE999B01013,SANGHIIND,SANGHIIND,Sanghi Industries Limited,False,,"name, no match"
+I:INE263L01013,SANGHVIFOR,SANGHVIFOR,Sanghvi Forging and Engineering Limited,False,,"name, no match"
+I:INE989A01024,SANGHVIMOV,SANGHVIMOV,Sanghvi Movers Limited,False,,"name, no match"
+I:INE058A01010,SANOFI,AVENTIS|HOECHST|SANOFI,Sanofi India Limited,False,,"name, no match"
+I:INE953O01021,SANSERA,SANSERA,Sansera Engineering Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE890C01046,SANWARIA,SANWARIA,Sanwaria Consumer Limited,False,,"name, no match"
+S:SAPL,SAPL,SAPL,South Asian Petrochem Limited,False,,"name, no match"
+I:INE806T01012,SAPPHIRE,SAPPHIRE,Sapphire Foods India Limited,False,,sector_map: Consumer Cyclical / Restaurants
+I:INE385C01013,SARDAEN,SARDAEN,Sarda Energy & Minerals Limited,False,,sector_map: Basic Materials / Steel
+I:INE979A01017,SAREGAMA,GRAMOPHONE|SAREGAMA,Saregama India Limited,False,,sector_map: Communication Services / Entertainment
+I:INE231F01020,SASKEN,SASKEN,Sasken Technologies Limited,False,,"name, no match"
+I:INE275A01028,SATYAMCOMP,SATYAMCOMP,Satyam Computer Services Limited,False,,"name, no match"
+I:INE465B01015,SB&TINTL,SB&TINTL,SB&T International Limited,False,,"name, no match"
+I:INE04AK01010,SBC,SBC,SBC Exports Limited,False,,"name, no match"
+I:INE386D01027,SBCL,SBCL,Shivalik Bimetal Controls Limited,False,,sector_map: Industrials / Metal Fabrication
+I:INE513A01014,SCHAEFFLER,FAGBEARING|FAGPRECISN|SCHAEFFLER,Schaeffler India Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE807K01035,SCHAND,SCHAND,S Chand And Company Limited,False,,"name, no match"
+I:INE839M01018,SCHNEIDER,SCHNEIDER,Schneider Electric Infrastructure Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE109A01011,SCI,SCI,Shipping Corporation Of India Limited,False,,sector_map: Industrials / Marine Shipping
+I:INE0PB301013,SCILAL,SCILAL,Shipping Corporation of India Land and Assets Limited,False,,"name, no match"
+S:SCINTSOFT,SCINTSOFT,SCINTSOFT,Scintilla Software Technology Limited,False,,"name, no match"
+I:INE497B01018,SEAMECLTD,PEERLESHIP|SEAMECLTD,Seamec Limited,False,,"name, no match"
+S:SEARCHEMIN,SEARCHEMIN,SEARCHEMIN,Search Chem Industries Limited,False,,"name, no match"
+I:INE650K01013,SECURKLOUD,8KMILES|SECURKLOUD,SECUREKLOUD TECHNOLOGIES LIMITED,False,,"name, no match"
+I:INE00XB01019,SEDEMAC,SEDEMAC,,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE105I01012,SELMCL,SELMCL,SEL Manufacturing Company Limited,False,,"name, no match"
+I:INE602W01019,SENCO,SENCO,Senco Gold Limited,False,,"name, no match"
+I:INE0RB801010,SENORES,SENORES,,False,,no name found
+I:INE964H01014,SEPC,SEPC|SHRIRAMEPC,SEPC Limited,False,,"name, no match"
+I:INE630A01016,SESHAPAPER,SESHAPAPER,Seshasayee Paper and Boards Limited,False,,"name, no match"
+I:INE878E01021,SETCO,SETCO,Setco Automotive Limited,False,,"name, no match"
+I:INE023M01019,SETUINFRA,PRAKASHCON|SETUINFRA,Setubandhan Infrastructure Limited,False,,"name, no match"
+I:INE955I01028,SEZALGLASS,SEJALGLASS|SEZALGLASS,Sezal Glass Limited,False,,"name, no match"
+I:INE916U01025,SFL,SFL,Sheela Foam Limited,False,,"name, no match"
+I:INE553K01019,SGJHL,SGJHL,Shree Ganesh Jewellery House (I) Limited,False,,"name, no match"
+I:INE12UN01015,SHADOWFAX,SHADOWFAX,,False,,sector_map: Industrials / Integrated Freight & Logistics
+I:INE640C01011,SHAHALLOYS,SHAHALLOYS,Shah Alloys Limited,False,,"name, no match"
+I:INE151G01010,SHAILY,SHAILY,Shaily Engineering Plastics Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+I:INE908D01010,SHAKTIPUMP,SHAKTIPUMP,Shakti Pumps (India) Limited,False,,"name, no match"
+I:INE597J01018,SHALBY,SHALBY,Shalby Limited,False,,"name, no match"
+I:INE849C01018,SHALPAINTS,SHALMPAINT|SHALPAINTS,Shalimar Paints Limited,False,,"name, no match"
+S:SHAMKNFAB,SHAMKNFAB,SHAMKNFAB,Shamken Multifab Limited,False,,"name, no match"
+S:SHAMKNSPIN,SHAMKNSPIN,SHAMKNSPIN,Shamken Spinners Limited,False,,"name, no match"
+I:INE274V01019,SHANKARA,SHANKARA,Shankara Building Products Limited,False,,"name, no match"
+I:INE631A01022,SHANTIGEAR,SHANTIGEAR,Shanthi Gears Limited,False,,"name, no match"
+I:INE06ZD01017,SHANTIGOLD,SHANTIGOLD,Shanti Gold International Limited,False,,"name, no match"
+I:INE221J01015,SHARDACROP,SHARDACROP,Sharda Cropchem Limited,False,,"name, no match"
+I:INE028B01011,SHARONBIO,SHARONBIO,Sharon Bio-Medicine Limited,False,,"name, no match"
+I:INE317A01028,SHASUNPHAR,SHASUNCHEM|SHASUNPHAR,Shasun Pharmaceuticals Limited,False,,"name, no match"
+I:INE790G01023,SHILPAMED,SHILPAMED,Shilpa Medicare Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE510K01019,SHILPI,SHILPI,Shilpi Cable Technologies Limited,False,,"name, no match"
+I:INE196B01016,SHIRPUR-G,AGEEGOLD|SHIRPUR-G,Shirpur Gold Refinery Limited,False,,"name, no match"
+I:INE500L01026,SHK,SHK,S H Kelkar and Company Limited,False,,"name, no match"
+I:INE851B01016,SHLAKSHMI,SHLAKSHMI,Shri Lakshmi Cotsyn Limited,False,,"name, no match"
+I:INE498B01024,SHOPERSTOP,SHOPERSTOP,Shoppers Stop Limited,False,,"name, no match"
+I:INE232A01011,SHREDIGCEM,SHREDIGCEM,Shree Digvijay Cement Co.Ltd,False,,"name, no match"
+I:INE538H01024,SHREEASHTA,SHREEASHTA,Shree Ashtavinayak Cine Vision Limited,False,,"name, no match"
+I:INE070A01015,SHREECEM,SHREECEM,SHREE CEMENT LIMITED,False,,sector_map: Basic Materials / Building Materials
+I:INE1B6101010,SHREEJISPG,SHREEJISPG,Shreeji Shipping Global Limited,False,,"name, no match"
+S:SHREEKRPET,SHREEKRPET,SHREEKRPET,Eskay K'n'IT (India) Limited,False,,"name, no match"
+S:SHREEKRPOL,SHREEKRPOL,SHREEKRPOL,Krishna Lifestyle Technologies Limited,False,,"name, no match"
+I:INE712K01011,SHREEPUSHK,SHREEPUSHK,Shree Pushkar Chemicals & Fertilisers Limited,False,,"name, no match"
+I:INE879A01019,SHREERAMA,SHREERAMA,Shree Rama Multi-Tech Limited,False,,"name, no match"
+I:INE632X01014,SHRENIK,SHRENIK,Shrenik Limited,False,,"name, no match"
+I:INE633A01028,SHRENUJ,SHRENUJ,Shrenuj & Company Limited,False,,"name, no match"
+I:INE1B3L01017,SHRINGARMS,SHRINGARMS,,False,,no name found
+I:INE526E01018,SHRIPISTON,SHRIPISTON,SPR Auto Technologies Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE217L01019,SHRIRAMPPS,SHRIRAMPPS,,False,,no name found
+I:INE810G01011,SHYAMMETL,SHYAMMETL,Shyam Metalics and Energy Limited,False,,sector_map: Basic Materials / Steel
+I:INE635A01023,SHYAMTEL,SHYAMTEL,Shyam Telecom Limited,False,,"name, no match"
+S:SHYAMTELE,SHYAMTELE,SHYAMTELE,Shyam Telecom Limited,False,,"name, no match"
+I:INE075B01012,SICAL,SICAL,Sical Logistics Limited,False,,"name, no match"
+I:INE003A01024,SIEMENS,SIEMENS,Siemens Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+S:SIERRAOPT,SIERRAOPT,SIERRAOPT,Sierra Optima Limited,False,,"name, no match"
+I:INE0D0K01014,SIGACHI,SIGACHI,Sigachi Industries Limited,False,,"name, no match"
+I:INE903U01023,SIGNATURE,SIGNATURE,,False,,sector_map: Real Estate / Real Estate - Development
+I:INE529F01019,SIGNET,SIGNET|SIGNETIND,Signet Industries Limited,False,,"name, no match"
+S:HERDILCHEM,SIGROUPIND,HERDILCHEM|SCHENHERD|SIGROUPIND,SI Group - India Limited,False,,"name, no match"
+I:INE173A01025,SIL,SIL,Standard Industries Limited,False,,"name, no match"
+S:SILTAPCHEM,SILTAPCHEM,SILTAPCHEM,Siltap Chemicals Limited,False,,"name, no match"
+S:SILVERLINE,SILVERLINE,SILVERLINE,Silverline Technologies Limited,False,,"name, no match"
+I:INE270C01017,SIMBHSUGAR,SIMBHSUGAR,Simbhaoli Sugars Limited,False,,"name, no match"
+I:INE059B01024,SIMPLEXINF,SIMPLEXCON|SIMPLEXINF,Simplex Infrastructures Limited,False,,"name, no match"
+I:INE429C01035,SINTEX,SINTEX,Sintex Industries Limited,False,,"name, no match"
+I:INE792Z01011,SIRCA,SIRCA,Sirca Paints India Limited,False,,"name, no match"
+S:SIRIS,SIRIS,SIRIS,Siris Limited,False,,"name, no match"
+I:INE202C01010,SIRPAPER,SIRPAPER,The Sirpur Paper Mills Limited,False,,"name, no match"
+I:INE285J01010,SIS,SIS,SIS LIMITED,False,,"name, no match"
+I:INE686I01011,SITASHREE,SITASHREE,Sita Shree Food Products Limited,False,,"name, no match"
+I:INE965H01011,SITINET,SITICABLE|SITINET|WWIL,Siti Networks Limited,False,,"name, no match"
+I:INE076B01010,SIYSIL,SIYARSILK|SIYSIL,Siyaram Silk Mills Limited,False,,"name, no match"
+I:INE284S01014,SJS,SJS,S.J.S. Enterprises Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE002L01015,SJVN,SJVN,SJVN Limited,False,,sector_map: Utilities / Utilities - Renewable
+I:INE640A01023,SKFINDIA,SKFBEARING|SKFINDIA,SKF India Limited,False,,"name, no match"
+I:INE439E01022,SKIPPER,SKIPPER,Skipper Limited,False,,"name, no match"
+I:INE411D01015,SKMEGGPROD,SKMEGGPROD,SKM Egg Products Export (India) Limited,False,,"name, no match"
+I:INE772A01016,SKUMARSYNF,SKUMARSYNF,S. Kumars Nationwide Limited,False,,"name, no match"
+S:SKUPOWER,SKUPOWER,SKUPOWER,Induj Enertech Limited,False,,"name, no match"
+I:INE01IU01018,SKYGOLD,SKYGOLD,SKY GOLD AND DIAMONDS LIMITED,False,,"name, no match"
+I:INE178C01020,SMARTLINK,D-LINK|SMARTLINK,Smartlink Holdings Limited,False,,"name, no match"
+S:SMITHKLPHA,SMITHKLPHA,SMITHKLPHA,Smithkline Beecham Pharmaceuticals Limited,False,,"name, no match"
+I:INE294B01019,SMLMAH,SMLISUZU|SMLMAH|SWARAJMAZD,SML Mahindra Limited,False,,"name, no match"
+I:INE812G01017,SMSPHARMA,SMSPHARMA,SMS Pharmaceuticals Limited,False,,"name, no match"
+S:SNOWCEMIND,SNOWCEMIND,SNOWCEMIND,Snowcem India Limited,False,,"name, no match"
+I:INE734N01019,SNOWMAN,SNOWMAN,Snowman Logistics Limited,False,,"name, no match"
+I:INE671H01015,SOBHA,SOBHA,Sobha Limited,False,,sector_map: Real Estate / Real Estate - Development
+I:INE863A01013,SOFTTECHGR,SOFTTECHGR,Software Technology Group International Limited,False,,"name, no match"
+I:INE624Z01016,SOLARA,SOLARA,Solara Active Pharma Sciences Limited,False,,"name, no match"
+I:INE343H01011,SOLARINDS,SOLAREX|SOLARINDS,Solar Industries India Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+S:SOLECTCENT,SOLECTCENT,SOLECTCENT,Solectron Centum Electronics Limited,False,,"name, no match"
+S:SOLPHARMA,SOLPHARMA,SOLPHARMA,SOL Pharmaceuticals Limited,False,,"name, no match"
+I:INE355A01028,SOMANYCERA,SOMANYCERA|SPLLTD,Somany Ceramics Limited,False,,"name, no match"
+I:INE314C01013,SOMATEX,SOMATEX,Soma Textiles & Industries Limited,False,,"name, no match"
+I:INE073K01018,SONACOMS,SONACOMS,Sona BLW Precision Forgings Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE269A01021,SONATSOFTW,SONATSOFTW,Sonata Software Limited,False,,sector_map: Technology / Information Technology Services
+I:INE034H01016,SORILINFRA,IBRETAILS|PIRAMYDRET|SORILINFRA|STOREONE,SORIL Infra Resources Limited,False,,"name, no match"
+I:INE035D01012,SOTL,SAVITACHEM|SOTL,Savita Oil Technologies Limited,False,,sector_map: Basic Materials / Specialty Chemicals
+S:SOUNDCRAFT,SOUNDCRAFT,SOUNDCRAFT,Soundcraft Industries Limited,False,,"name, no match"
+S:SOUTHNHERB,SOUTHNHERB,SOUTHNHERB,Southern Herbals Limited,False,,"name, no match"
+I:INE360B01026,SPANCO,SPANCO,Spanco Limited,False,,"name, no match"
+I:INE232I01014,SPARC,SPARC,Sun Pharma Advanced Research Company Limited,False,,"name, no match"
+I:INE247M01014,SPECIALITY,SPECIALITY,Speciality Restaurants Limited,False,,"name, no match"
+S:SPECIALSTL,SPECIALSTL,SPECIALSTL,Tata SSL Limited,False,,"name, no match"
+I:INE409H01028,SPECTACLE,SPECTACLE,Spectacle Ventures Limited,False,,"name, no match"
+I:INE020801028,SPENCERS,SPENCERS,Spencer's Retail Limited,False,,"name, no match"
+I:INE147A01011,SPIC,SPIC,Southern Petrochemicals Industries Corporation  Limited,False,,"name, no match"
+I:INE285B01017,SPICEJET,SPICEJET,SPICEJET LTD,False,,"name, no match"
+S:SPICELEC,SPICELEC,SPICELEC,,False,,no name found
+S:SPICETELE,SPICETELE,SPICETELE,Spice Communications Limited,False,,"name, no match"
+S:SPICFINE,SPICFINE,SPICFINE,Henkel Spic India Limited,False,,"name, no match"
+I:INE978G01016,SPLIL,SPLIL,SPL Industries Limited,False,,"name, no match"
+I:INE937A01023,SPMLINFRA,SPMLINFRA|SUBHASPROJ,SPML Infra Limited,False,,"name, no match"
+S:SPSL,SPSL,SPSL,Shree Precoated Steels Limited,False,,"name, no match"
+I:INE501W01021,SPTL,SPTL,Sintex Plastics Technology Limited,False,,"name, no match"
+S:SQRDSFWARE,SQRDSFWARE,SQRDSFWARE,DSQ Software Limited,False,,"name, no match"
+S:SQUAREDBIO,SQUAREDBIO,SQUAREDBIO,Origin Agrostar Limited,False,,"name, no match"
+I:INE647A01010,SRF,SRF,SRF Limited,False,,sector_map: Industrials / Conglomerates
+S:SRIADIKARI,SRIADIKARI,SRIADIKARI,Sri Adhikari Brothers Television Network Limited,False,,"name, no match"
+I:INE943C01027,SRIPIPES,LANCOIN|LANCOIND|SRIPIPES,Srikalahasthi Pipes Limited,False,,"name, no match"
+S:SRIVISHCEM,SRIVISHCEM,SRIVISHCEM,Sri Vishnu Cement Limited,False,,"name, no match"
+I:INE219H01039,SRSLTD,SRSLTD,SRS Limited,False,,"name, no match"
+I:INE802C01017,SSWL,SSWL,Steel Strips Wheels Limited,False,,"name, no match"
+I:INE0RYC01010,STALLION,STALLION,Stallion India Fluorochemicals Limited,False,,"name, no match"
+I:INE939A01011,STAR,STAR,Strides Pharma Science Limited,False,,"name, no match"
+I:INE733A01018,STARPAPER,STARPAPER,Star Paper Mills Limited,False,,"name, no match"
+I:INE655A01013,STCINDIA,STCINDIA,The State Trading Corporation of India Limited,False,,"name, no match"
+S:STDIND,STDIND,STDIND,Standard Industries Limited,False,,"name, no match"
+I:INE503B01013,STEELXIND,STEELXIND,STEEL EXCHANGE INDIA LIMITED,False,,"name, no match"
+I:INE268A01049,STER,STER,Sterlite Industries ( India ) Limited,False,,"name, no match"
+I:INE324C01038,STERLINBIO,STERLINBIO|STERLINTEA,Sterling Biotech Limited,False,,"name, no match"
+S:STERLITE,STERLITE,STERLITE,Sterlite Industries (India) Limited,False,,"name, no match"
+S:STERLITIND,STERLITIND,STERLITIND,Sterlite Industries (India) Limited,False,,"name, no match"
+I:INE089C01029,STLTECH,STLTECH|STROPTICAL|STRTECH,Sterlite Technologies Limited,False,,sector_map: Technology / Communication Equipment
+I:INE00IN01015,STOVEKRAFT,STOVEKRAFT,Stove Kraft Limited,False,,"name, no match"
+I:INE189B01011,STYRENIX,ABSIND|INEABS|INEOSSTYRO|LANABS|STYABS|STYRENIX,Styrenix Performance Materials Limited,False,,"name, no match"
+S:SUASHDIMON,SUASHDIMON,SUASHDIMON,Suashish Diamonds Limited,False,,"name, no match"
+I:INE754A01014,SUBEX,SUBEX,Subex Limited,False,,"name, no match"
+I:INE754A01055,SUBEXLTD,SUBEXLTD,Subex Limited,False,,"name, no match"
+I:INE287B01021,SUBROS,SUBROS,Subros Limited,False,,"name, no match"
+I:INE384L01017,SUDAR,SUDAR,Sudar Industries Limited,False,,"name, no match"
+I:INE492A01029,SUDARCOLOR,CLNINDIA|COLORCHEM|HEUBACHIND|SUDARCOLOR,Sudarshan Colorants India Limited,False,,"name, no match"
+I:INE659A01015,SUDARSCHEM,SUDARSCHEM,Sudarshan Chemical Industries Limited,False,,"name, no match"
+I:INE333I01028,SUJANATOW,SUJANATOW,Sujana Tower Limited,False,,"name, no match"
+I:INE235C01010,SUMEETINDS,SUMEETINDS,Sumeet Industries Limited,False,,"name, no match"
+I:INE258G01013,SUMICHEM,SUMICHEM,Sumitomo Chemical India Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE108E01023,SUNDARAM,SUNDARAM,Sundaram Multi Pap Limited,False,,"name, no match"
+I:INE073D01013,SUNDRMBRAK,SUNDRMBRAK,Sundaram Brake Linings Limited,False,,"name, no match"
+S:SUNDRMCLAY,SUNDRMCLAY,SUNDRMCLAY,Sundaram Clayton Limited,False,,"name, no match"
+I:INE387A01021,SUNDRMFAST,SUNDRMFAST,Sundram Fasteners Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE209A01019,SUNDROP,ATFL|ITCAGRO|SUNDROP,Sundrop Brands Limited,False,,"name, no match"
+S:SUNEARTH,SUNEARTH,SUNEARTH,Sun Earth Ceramics Limited,False,,"name, no match"
+I:INE947A01014,SUNFLAG,SUNFLAG|SUNFLAGIRN,Sunflag Iron And Steel Company Limited,False,,sector_map: Basic Materials / Steel
+I:INE305H01010,SUNILHITEC,SUNILHITEC,Sunil Hitech Engineers Limited,False,,"name, no match"
+I:INE044A01036,SUNPHARMA,SUNPHARMA,Sun Pharmaceutical Industries Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE805D01026,SUNTECK,SUNTECK,Sunteck Realty Limited,False,,"name, no match"
+I:INE424H01027,SUNTV,SUNTV,Sun TV Network Limited,False,,sector_map: Communication Services / Broadcasting
+I:INE662A01027,SUPERSPIN,SUPERSPIN,Super Spinning Mills Limited,False,,"name, no match"
+I:INE663A01017,SUPPETRO,SUPPETRO,Supreme Petrochem Limited,False,,"name, no match"
+I:INE399C01030,SUPRAJIT,SUPRAJIT,Suprajit Engineering Limited,False,,"name, no match"
+I:INE195A01028,SUPREMEIND,SUPREMEIND,Supreme Industries Limited,False,,sector_map: Industrials / Building Products & Equipment
+I:INE550H01011,SUPREMEINF,SUPREMEINF,Supreme Infrastructure India Limited,False,,"name, no match"
+I:INE07RO01027,SUPRIYA,SUPRIYA,Supriya Lifescience Limited,False,,"name, no match"
+I:INE659D01019,SURANAIND,SURANAIND,Surana Industries Limited,False,,"name, no match"
+I:INE130B01023,SURANAT&P,SURANAT&P|SURANATELE,Surana Telecom and Power Limited,False,,"name, no match"
+I:INE411C01017,SURYAJYOTI,SURYAJYOTI,Suryajyoti Spinning Mills Limited,False,,"name, no match"
+I:INE713B01026,SURYALAXMI,SURYALAXMI,Suryalakshmi Cotton Mills Limited,False,,"name, no match"
+I:INE249G01020,SURYAPHARM,SURYAPHARM,Surya Pharmaceutical Limited,False,,"name, no match"
+I:INE335A01012,SURYAROSNI,SURYAROSNI,Surya Roshni Limited,False,,"name, no match"
+S:SURYCOTMIL,SURYCOTMIL,SURYCOTMIL,Suryalakshmi Cotton Mills Limited,False,,"name, no match"
+I:INE495B01038,SUVEN,SUVEN,Suven Life Sciences Limited,False,,"name, no match"
+I:INE040H01021,SUZLON,SUZLON,Suzlon Energy Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE756B01017,SVOGL,SHIV-VANI|SVOGL,SVOGL Oil Gas And Energy Limited,False,,"name, no match"
+I:INE665A01020,SWANCORP,SWANCORP|SWANENERGY,SWAN CORP LIMITED,False,,sector_map: Industrials / Conglomerates
+I:INE277A01016,SWARAJENG,SWARAJENG,Swaraj Engines Limited,False,,"name, no match"
+I:INE00H001014,SWIGGY,SWIGGY,,False,,sector_map: Consumer Cyclical / Internet Retail
+I:INE00M201021,SWSOLAR,SWSOLAR,Sterling and Wilson Renewable Energy Limited,False,,"name, no match"
+I:INE225D01019,SYMPHONY,SYMPHONY,Symphony Limited,False,,"name, no match"
+I:INE602K01014,SYNCOM,SYNCOM,Syncom Healthcare Limited,False,,"name, no match"
+I:INE398R01022,SYNGENE,SYNGENE,Syngene International Limited,False,,sector_map: Healthcare / Diagnostics & Research
+I:INE0DYJ01015,SYRMA,SYRMA,Syrma SGS Technology Limited,False,,sector_map: Technology / Electronic Components
+I:INE586B01026,TAJGVK,TAJGVK,Taj GVK Hotels & Resorts Limited,False,,"name, no match"
+I:INE142I01023,TAKE,TAKE,TAKE Limited,False,,"name, no match"
+I:INE502K01016,TALWALKARS,TALWALKARS,Talwalkars Better Value Fitness Limited,False,,"name, no match"
+S:TANFAC,TANFAC,TANFAC,Tanfac Industries Limited,False,,"name, no match"
+I:INE483C01032,TANLA,TANLA,Tanla Platforms Limited,False,,sector_map: Technology / Software - Application
+I:INE763I01018,TARIL,TARIL|TRIL,Transformers And Rectifiers (India) Limited,False,,sector_map: Industrials / Electrical Equipment & Parts
+I:INE924H01018,TARMAT,ROMAN|TARMAT,Tarmat Limited,False,,"name, no match"
+I:INE144Z01023,TARSONS,TARSONS,Tarsons Products Limited,False,,"name, no match"
+I:INE488B01017,TASTYBITE,TASTYBITE,Tasty Bite Eatables Limited,False,,"name, no match"
+I:INE092A01019,TATACHEM,TATACHEM,Tata Chemicals Limited,False,,sector_map: Basic Materials / Chemicals
+I:INE493A01019,TATACOFFEE,CONSCOFFEE|TATACOFFEE,Tata Coffee Limited,False,,"name, no match"
+I:INE151A01013,TATACOMM,TATACOMM|VSNL,Tata Communications Limited,False,,sector_map: Communication Services / Telecom Services
+I:INE192A01025,TATACONSUM,TATACONSUM|TATAGLOBAL|TATATEA,TATA CONSUMER PRODUCTS LIMITED,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE670A01012,TATAELXSI,TATAELXSI,Tata Elxsi Limited,False,,sector_map: Technology / Software - Application
+S:TATAHYDRO,TATAHYDRO,TATAHYDRO,Tata Hydro Electric Power Supply Company Limited,False,,"name, no match"
+S:TATAINFO,TATAINFO,TATAINFO|TATAPRESS,Infomedia India Limited,False,,"name, no match"
+S:TATAINFOTE,TATAINFOTE,TATAINFOTE,Tata Infotech Limited,False,,"name, no match"
+I:INE056C01010,TATAMETALI,TATAMETALI,Tata Metaliks Limited,False,,"name, no match"
+I:IN9155A01012,TATAMTRDVR,TATAMTRDVR,Tata Motors Limited,False,,"name, no match"
+I:INE245A01013,TATAPOWER,TATAPOWER,Tata Power Company Limited,False,,sector_map: Utilities / Utilities - Independent Power Producers
+I:INE081A01012,TATASTEEL,TATASTEEL|TISCO,Tata Steel Limited,False,,sector_map: Basic Materials / Steel
+I:INE824B01021,TATASTLBSL,BHUSANSTL|TATASTLBSL,Tata Steel Bsl Limited,False,,"name, no match"
+I:INE674A01014,TATASTLLP,IPITATASPO|TATASPONGE|TATASTLLP,Tata Steel Long Products Limited,False,,"name, no match"
+I:INE142M01025,TATATECH,TATATECH,Tata Technologies Limited,False,,sector_map: Technology / Information Technology Services
+S:TATAUNISYS,TATAUNISYS,TATAUNISYS,Tata Infotech Limited,False,,"name, no match"
+S:TATAVASHIS,TATAVASHIS,TATAVASHIS,Vashisti Detergents Limited,False,,"name, no match"
+I:INE0GK401011,TATVA,TATVA,Tatva Chintan Pharma Chem Limited,False,,"name, no match"
+I:INE673O01025,TBOTEK,TBOTEK,,False,,sector_map: Consumer Cyclical / Travel Services
+I:INE760L01018,TBZ,TBZ,Tribhovandas Bhimji Zaveri Limited,False,,"name, no match"
+I:INE688A01022,TCI,TCI,Transport Corporation of India Limited,False,,"name, no match"
+I:INE586V01016,TCIEXP,TCIEXP,TCI Express Limited,False,,"name, no match"
+I:INE778U01029,TCNSBRANDS,TCNSBRANDS,TCNS Clothing Co. Limited,False,,"name, no match"
+I:INE467B01029,TCS,TCS,Tata Consultancy Services Limited,False,,sector_map: Technology / Information Technology Services
+I:INE419M01019,TDPOWERSYS,TDPOWERSYS,TD Power Systems Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE985S01024,TEAMLEASE,TEAMLEASE,Teamlease Services Limited,False,,"name, no match"
+I:INE669C01028,TECHM,TECHM,Tech Mahindra Limited,False,,sector_map: Technology / Information Technology Services
+I:INE286K01024,TECHNO,TECHNO,Techno Electric & Engineering Company Limited,False,,"name, no match"
+I:INE285K01026,TECHNOE,TECHNOE,Techno Electric & Engineering Company Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE509K01011,TECHNOFAB,TECHNOFAB,Technofab Engineering Limited,False,,"name, no match"
+I:INE904H01010,TECPRO,TECPRO,Tecpro Systems Limited,False,,"name, no match"
+I:INE011K01018,TEGA,TEGA,Tega Industries Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE010J01012,TEJASNET,TEJASNET,Tejas Networks Limited,False,,sector_map: Technology / Communication Equipment
+S:TELEDATAGL,TELEDATAGL,TELEDATAGL,Teledata Informatics Limited,False,,"name, no match"
+S:TELEDATAIN,TELEDATAIN,TELEDATAIN,Teledata Informatics Limited,False,,"name, no match"
+S:TELEPHNCAB,TELEPHNCAB,TELEPHNCAB,Telephone Cables Limited,False,,"name, no match"
+I:INE19RI01016,TENNIND,TENNIND,,False,,no name found
+I:INE435C01024,TEXINFRA,TEXINFRA|TEXMACOLTD,Texmaco Infrastructure & Holdings Limited,False,,"name, no match"
+I:INE141K01013,TEXMOPIPES,TEXMOPIPES,Texmo Pipes and Products Limited,False,,"name, no match"
+I:INE621L01012,TEXRAIL,TEXRAIL,Texmaco Rail & Engineering Limited,False,,"name, no match"
+I:INE797H01018,TGBHOTELS,BHAGWATIHO|TGBHOTELS,TGB Banquets And Hotels Limited,False,,"name, no match"
+I:INE085J01014,THANGAMAYL,THANGAMAYL,Thangamayil Jewellery Limited,False,,sector_map: Consumer Cyclical / Luxury Goods
+I:INE152A01029,THERMAX,THERMAX,Thermax Limited,False,,sector_map: Industrials / Conglomerates
+I:INE409A01015,THIRUSUGAR,THIRUSUGAR,Thiru Arooran Sugars Limited,False,,"name, no match"
+I:INE332A01027,THOMASCOOK,THOMASCOOK,Thomas Cook  (India)  Limited,False,,"name, no match"
+I:INE594H01019,THYROCARE,THYROCARE,Thyrocare Technologies Limited,False,,sector_map: Healthcare / Diagnostics & Research
+I:INE545H01011,TIIL,TIIL,Technocraft Industries (India) Limited,False,,"name, no match"
+I:INE974X01010,TIINDIA,TIINDIA,Tube Investments of India Limited,False,,sector_map: Industrials / Conglomerates
+I:INE806C01018,TIL,TIL,TIL Limited,False,,"name, no match"
+I:INE508G01029,TIMETECHNO,TIMETECHNO,Time Technoplast Limited,False,,"name, no match"
+S:TIMEXWATCH,TIMEXWATCH,TIMEXWATCH,Timex Watches Limited,False,,"name, no match"
+I:INE325A01013,TIMKEN,TATATIMKEN|TIMKEN,Timken India Limited,False,,sector_map: Industrials / Tools & Accessories
+I:INE422C01014,TINPLATE,TINPLATE,The Tinplate Company of India Limited,False,,"name, no match"
+I:INE716B01011,TIPSMUSIC,TIPSINDLTD|TIPSMUSIC,Tips Music Limited,False,,"name, no match"
+I:INE338A01016,TIRUMALCHM,TIRUMALCHM,Thirumalai Chemicals Limited,False,,"name, no match"
+I:INE615H01012,TITAGARH,TITAGARH|TWL,TITAGARH RAIL SYSTEMS LIMITED,False,,sector_map: Industrials / Railroads
+I:INE280A01010,TITAN,TITAN,Titan Company Limited,False,,sector_map: Consumer Cyclical / Luxury Goods
+I:INE1TAE01010,TMCV,TMCV,Tata Motors Limited,False,,"name, no match"
+I:INE155A01014,TMPV,TATAMOTORS|TELCO|TMPV,Tata Motors Passenger Vehicles Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE148A01019,TNPETRO,TNPETRO,Tamilnadu PetroProducts Limited,False,,"name, no match"
+I:INE107A01015,TNPL,TNPL,Tamil Nadu Newsprint & Papers Limited,False,,"name, no match"
+I:INE141D01018,TNTELE,TNTELE,Tamilnadu Telecommunication Limited,False,,"name, no match"
+I:INE944B01019,TODAYS,TODAYS,Todays Writing Instruments Limited,False,,"name, no match"
+I:INE685A01028,TORNTPHARM,TORNTPHARM,Torrent Pharmaceuticals Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE813H01021,TORNTPOWER,TORNTPOWER,Torrent Power Limited,False,,sector_map: Utilities / Utilities - Independent Power Producers
+S:TORRENGUJ,TORRENGUJ,TORRENGUJ,Torrent Gujarat Biotech Limited,False,,"name, no match"
+S:AHMEDELEC,TORRENTAEC,AHMEDELEC|TORRENTAEC,Torrent Power AEC Limited,False,,"name, no match"
+S:SURATELEC,TORRENTSEC,SURATELEC|TORRENTSEC,Torrent Power SEC Limited,False,,"name, no match"
+I:INE0HMF01019,TRACXN,TRACXN,Tracxn Technologies Limited,False,,"name, no match"
+S:TRANSCHEM,TRANSCHEM,TRANSCHEM,Transchem Limited,False,,"name, no match"
+I:INE454P01035,TRANSRAILL,TRANSRAILL,Transrail Lighting Limited,False,,"name, no match"
+I:INE757B01015,TRANSWORLD,SHREYAS|SHREYASHIP|TRANSWORLD,TRANSWORLD SHIPPING LINES LIMITED,False,,"name, no match"
+I:INE040M01013,TREEHOUSE,TREEHOUSE,Tree House Education & Accessories Limited,False,,"name, no match"
+I:INE849A01012,TRENT,LAKME|TRENT,Trent Limited,False,,sector_map: Consumer Cyclical / Apparel Retail
+I:INE391D01019,TRF,TRF,TRF Limited,False,,"name, no match"
+I:INE771B01032,TRICOM,TRICOM,Tricom India Limited,False,,"name, no match"
+I:INE064C01014,TRIDENT,ABSHEKINDS|TRIDENT,Trident Limited,False,,sector_map: Consumer Cyclical / Textile Manufacturing
+I:INE948A01012,TRIGYN,LEADEDSYS|TRIGYN,Trigyn Technologies Limited,False,,"name, no match"
+I:INE152M01016,TRITURBINE,TRITURBINE,Triveni Turbine Limited,False,,sector_map: Industrials / Specialty Industrial Machinery
+I:INE256C01024,TRIVENI,TRIVENI,Triveni Engineering & Industries Limited,False,,"name, no match"
+I:INE910C01018,TTKHLTCARE,TTKHEALTH|TTKHLTCARE,TTK Healthcare Limited,False,,"name, no match"
+I:INE690A01010,TTKPRESTIG,TTKPRESTIG,TTK Prestige Limited,False,,"name, no match"
+I:INE517B01013,TTML,HUGHESTELE|TATATELSER|TTML,Tata Teleservices (Maharashtra) Limited,False,,sector_map: Communication Services / Telecom Services
+I:INE149A01025,TUBEINVEST,TUBEINVEST,Tube Investments of India Limited,False,,"name, no match"
+I:INE122H01027,TULIP,TULIP,Tulip Telecom Limited,False,,"name, no match"
+I:INE474I01012,TULSI,TULSI,Tulsi Extrusions Limited,False,,"name, no match"
+S:TV-18,TV-18,TV-18,Television Eighteen India Limited,False,,"name, no match"
+S:TV18,TV18,TV18,Television Eighteen India Limited,False,,"name, no match"
+I:INE886H01027,TV18BRDCST,GBN|IBN18|TV18BRDCST,TV18 Broadcast Limited,False,,"name, no match"
+S:TVSELEC,TVSELEC,TVSELEC,TVS Electronics Limited,False,,"name, no match"
+I:INE236G01019,TVSELECT,TVSELECT,TVS Electronics Limited,False,,"name, no match"
+I:INE494B01023,TVSMOTOR,TVS-SUZUKI|TVSMOTOR,TVS Motor Company Limited,False,,sector_map: Consumer Cyclical / Auto Manufacturers
+I:INE395N01027,TVSSCS,TVSSCS,,False,,no name found
+I:INE421C01016,TVSSRICHAK,SRICHAKTYR|TVSSRICHAK,TVS Srichakra Limited,False,,"name, no match"
+I:INE038F01029,TVTODAY,TVTODAY,TV Today Network Limited,False,,"name, no match"
+I:INE783B01029,TWILITAKA,TWILITAKA,Twilight Litaka Pharma Limited,False,,"name, no match"
+I:INE328C01013,UBENGG,UBENGG,UB Engineering Limited,False,,"name, no match"
+I:INE139B01016,UCAL,UCAL|UCALFUEL,UCAL LIMITED,False,,"name, no match"
+I:INE382M01027,UFBL,BARBEQUE|UFBL,,False,,no name found
+I:INE516A01017,UFLEX,FLEX|UFLEX,UFLEX Limited,False,,"name, no match"
+I:INE527H01019,UFO,UFO,UFO Moviez India Limited,False,,"name, no match"
+I:INE071E01023,UGARSUGAR,UGARSUGAR,The Ugar Sugar Works Limited,False,,"name, no match"
+I:INE899L01014,UJAAS,MBSWITCH|UJAAS,Ujaas Energy Limited,False,,"name, no match"
+I:INE481G01011,ULTRACEMCO,ULTRACEMCO,UltraTech Cement Limited,False,,sector_map: Basic Materials / Building Materials
+S:UMESL,UMESL,UMESL|UMITL,Usha Martin Education & Solutions Limited,False,,"name, no match"
+I:INE398B01018,UMIYA-MRO,MRO-TEK|UMIYA-MRO,UMIYA BUILDCON LIMITED,False,,"name, no match"
+I:INE351A01035,UNICHEMLAB,UNICHEMLAB,Unichem Laboratories Limited,False,,"name, no match"
+I:INE037A01022,UNIENTER,UNIENTER,Uniphos Enterprises Limited,False,,"name, no match"
+S:UNIFLEX,UNIFLEX,UNIFLEX,Uniflex Cables Limited,False,,"name, no match"
+I:INE0U3I01011,UNIMECH,UNIMECH,,False,,sector_map: Industrials / Aerospace & Defense
+S:UNIONCARBI,UNIONCARBI,UNIONCARBI,Eveready Industries Limited,False,,"name, no match"
+I:INE244O01017,UNIPARTS,UNIPARTS,Uniparts India Limited,False,,"name, no match"
+I:INE694A01020,UNITECH,UNITECH,Unitech Limited,False,,"name, no match"
+S:UNITEDPHOS,UNITEDPHOS,UNITEDPHOS,UPL Limited,False,,"name, no match"
+I:INE466H01028,UNITY,UNITY,Unity Infraprojects Limited,False,,"name, no match"
+I:INE279A01012,UNIVCABLES,UNIVCABLES,Universal Cables Limited,False,,"name, no match"
+I:INE405E01015,UNOMINDA,MINDAIND|UNOMINDA,UNO Minda Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE018B01012,UPERGANGES,UPERGANGES,Upper Ganges Sugar & Industries Limited,False,,"name, no match"
+I:INE628A01036,UPL,UNIPHOS|UPL,UPL Limited,False,,sector_map: Basic Materials / Agricultural Inputs
+I:INE0CAZ01013,URBANCO,URBANCO,,False,,no name found
+S:USHABELTRO,USHABELTRO,USHABELTRO,Usha Beltron Limited,False,,"name, no match"
+S:USHAINDIA,USHAINDIA,USHAINDIA,Usha (India) Limited,False,,"name, no match"
+I:INE228A01035,USHAMART,USHABEL|USHAMART,Usha Martin Limited,False,,sector_map: Basic Materials / Steel
+I:INE235G01011,USHERAGRO,USHERAGRO,Usher Agro Limited,False,,"name, no match"
+S:UTIUS64-CI,UTIUS64-CI,UTIUS64-CI,Unit Trust of India-Unit Scheme-64 (Cash Income),False,,"name, no match"
+I:INE699A01011,UTTAMSTL,UTTAMSTL,Uttam Galva Steels Limited,False,,"name, no match"
+I:INE786F01031,UTTAMSUGAR,UTTAMSUGAR,Uttam Sugar Mills Limited,False,,"name, no match"
+I:INE292A01015,UTTAMVALUE,LLOYDSTEEL|UTTAMVALUE,Uttam Value Steels Limited,False,,"name, no match"
+I:INE507B01022,UTVSOF,UTVSOF,UTV Software Communications Limited,False,,"name, no match"
+I:INE945H01013,V2RETAIL,V2RETAIL|VISHALRET,V2 Retail Limited,False,,"name, no match"
+I:INE694D01016,VADILALIND,VADILALIND,Vadilal Industries Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE884A01019,VAIBHAVGBL,VAIBHAVGBL|VAIBHAVGEM,Vaibhav Global Limited,False,,"name, no match"
+I:INE051B01013,VAKRANGEE,VAKRANGEE|VAKRANSOFT,Vakrangee Limited,False,,"name, no match"
+I:INE624C01015,VALECHAENG,VALECHAENG,Valecha Engineering Limited,False,,"name, no match"
+I:INE352A01017,VALUEIND,VALUEIND|VDOCONAPPL,Value Industries Limited,False,,"name, no match"
+I:INE1CDF01017,VAML,VAML,Vedanta Aluminium Metal Limited,False,,"name, no match"
+S:VANADYCHEM,VANADYCHEM,VANADYCHEM,Vanavil Dyes & Chemicals Limited,False,,"name, no match"
+I:INE116G01013,VARDHACRLC,VARDHACRLC,Vardhman Acrylics Limited,False,,"name, no match"
+S:VARDHMNSPG,VARDHMNSPG,VARDHMNSPG,Vardhman Spinning & General Mills Limited,False,,"name, no match"
+I:INE835A01011,VARDMNPOLY,VARDMNPOLY,Vardhman Polytex Limited,False,,"name, no match"
+I:INE665L01035,VARROC,VARROC,Varroc Engineering Limited,False,,"name, no match"
+I:INE032G01012,VARUN,VARUN,Varun Industries Limited,False,,"name, no match"
+I:INE702A01013,VARUNSHIP,VARUNSHIP,Varun Shipping Company Limited,False,,"name, no match"
+I:INE893I01013,VASCONEQ,VASCONEQ,Vascon Engineers Limited,False,,"name, no match"
+S:BABABUSERV,VATSMUSC,BABABUSERV|VATSMUSC,Vatsa Music Limited,False,,"name, no match"
+I:INE200M01013,VBL,VBL,Varun Beverages Limited,False,,sector_map: Consumer Defensive / Beverages - Non-Alcoholic
+S:VDOCONINTL,VDOCONINTL,VDOCONINTL,Videocon International Limited,False,,"name, no match"
+I:INE205A01025,VEDL,SESAGOA|SSLT|VEDL,Vedanta Limited,False,,sector_map: Basic Materials / Other Industrial Metals & Mining
+I:INE694L01019,VEDPOWER,VEDPOWER,,False,,no name found
+I:INE484C01014,VEEDOL,TIDEWATER|VEEDOL,Veedol Corporation Limited,False,,"name, no match"
+I:INE398A01010,VENKEYS,VENKEYS|WESTHATCH,Venky's (India) Limited,False,,"name, no match"
+I:INE0JA001018,VENUSPIPES,VENUSPIPES,Venus Pipes & Tubes Limited,False,,"name, no match"
+I:INE411B01019,VENUSREM,VENUSREM,Venus Remedies Limited,False,,"name, no match"
+I:INE386A01015,VESUVIUS,VESUVIUS,Vesuvius India Limited,False,,"name, no match"
+I:INE918N01018,VETO,VETO,Veto Switchgears And Cables Limited,False,,"name, no match"
+I:INE273D01019,VGL,AARVEEDEN|VGL,VARVEE GLOBAL LIMITED,False,,"name, no match"
+I:INE951I01019,VGUARD,VGUARD,V-Guard Industries Limited,False,,"name, no match"
+I:INE048C01017,VICEROY,VICEROY,Viceroy Hotels Limited,False,,"name, no match"
+I:INE703A01011,VIDEOIND,VDOLEASE|VIDEOIND,Videocon Industries Limited,False,,"name, no match"
+I:INE043W01024,VIJAYA,VIJAYA,Vijaya Diagnostic Centre Limited,False,,sector_map: Healthcare / Diagnostics & Research
+I:INE806A01012,VIKASECO,VIKASECO|VIKASGLOB,Vikas EcoTech Limited,False,,"name, no match"
+I:INE161L01027,VIKASLIFE,VIKASLIFE|VIKASMCORP,Vikas Lifecare Limited,False,,"name, no match"
+I:INE706A01022,VIKASWSP,VIKASWSP,Vikas WSP Limited,False,,"name, no match"
+I:INE078V01014,VIKRAMSOLR,VIKRAMSOLR,,False,,no name found
+I:INE01R501028,VIKRAN,VIKRAN,Vikran Engineering Limited,False,,"name, no match"
+I:INE579C01029,VIMTALABS,VIMTALABS,Vimta Labs Limited,False,,"name, no match"
+I:INE410B01029,VINATIORGA,VINATIORGA,Vinati Organics Limited,False,,"name, no match"
+I:INE498Q01014,VINCOFE,VINCOFE,Vintage Coffee And Beverages Limited,False,,"name, no match"
+I:INE707A01012,VINDHYATEL,VINDHYATEL,Vindhya Telelinks Limited,False,,"name, no match"
+S:VINTAGE,VINTAGE,VINTAGE,Vintage Cards & Creations Limited,False,,"name, no match"
+S:VINYLCHEM,VINYLCHEM,VINYLCHEM,Vinyl Chemicals (India) Limited,False,,"name, no match"
+I:INE450G01024,VIPCLOTHNG,MAXWELL|VIPCLOTHNG,VIP Clothing Limited,False,,"name, no match"
+I:INE054A01019,VIPIND,VIPIND,VIP Industries Limited,False,,"name, no match"
+I:INE286H01012,VISACHROME,VISACHROME|VISASTEEL,VISA Chrome Limited,False,,"name, no match"
+I:INE392A01013,VISAKAIND,VISAKAIND,Visaka Industries Limited,False,,"name, no match"
+I:INE861A01017,VISESHINFO,VISESHINFO,Visesh Infotecnics Limited,False,,"name, no match"
+S:VISHALEXPO,VISHALEXPO,VISHALEXPO,Vishal Exports Overseas Limited,False,,"name, no match"
+I:INE430N01014,VISHWARAJ,VISHWARAJ,Vishwaraj Sugar Industries Limited,False,,"name, no match"
+S:VISIONLTD,VISIONLTD,VISIONLTD,Vision Organics Limited,False,,"name, no match"
+I:INE1CLE01013,VISL,VISL,,False,,no name found
+S:VISUALSOFT,VISUALSOFT,VISUALSOFT,VisualSoft Technologies Limited,False,,"name, no match"
+I:INE965A01016,VISUINTL,VISUINTL,Visu International Limited,False,,"name, no match"
+S:VITALCOMM,VITALCOMM,VITALCOMM,Vital Communications Limited,False,,"name, no match"
+I:INE526G01013,VIVIMEDLAB,VIVIMEDLAB,Vivimed Labs Limited,False,,"name, no match"
+I:INE807F01027,VIYASH,SEQUENT|VIYASH,Viyash Scientific Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE665J01013,VMART,VMART,V-Mart Retail Limited,False,,"name, no match"
+I:INE01EA01019,VMM,VMM,,False,,sector_map: Consumer Cyclical / Department Stores
+I:INE704J01044,VOGL,VOGL,,False,,no name found
+I:INE540H01012,VOLTAMP,VOLTAMP,Voltamp Transformers Limited,False,,"name, no match"
+I:INE226A01021,VOLTAS,VOLTAS,Voltas Limited,False,,"sector_map: Consumer Cyclical / Furnishings, Fixtures & Appliances"
+I:INE0AE001013,VPRPL,VPRPL,,False,,no name found
+I:INE366I01010,VRLLOG,VRLLOG,VRL Logistics Limited,False,,"name, no match"
+I:INE764D01017,VSTTILLERS,VSTTILLERS,V.S.T Tillers Tractors Limited,False,,"name, no match"
+I:INE825A01012,VTL,MAHAVIRSPG|VTL,Vardhman Textiles Limited,False,,sector_map: Consumer Cyclical / Textile Manufacturing
+S:VXL,VXL,VXL,Birla VXL Limited,False,,"name, no match"
+S:VXLINSTR,VXLINSTR,VXLINSTR,VXL Instruments Limited,False,,"name, no match"
+I:INE377N01017,WAAREEENER,WAAREEENER,Waaree Energies Limited,False,,sector_map: Technology / Solar
+I:INE866K01015,WAAREEINDO,INDOSOLAR|WAAREEINDO,Indosolar Limited,False,,"name, no match"
+I:INE299N01021,WAAREERTL,WAAREERTL,,False,,no name found
+I:INE956G01020,WABAG,VATECH|WABAG,VA Tech Wabag Limited,False,,sector_map: Industrials / Engineering & Construction
+I:INE711A01022,WALCHANNAG,WALCHANNAG,Walchandnagar Industries Limited,False,,"name, no match"
+S:WARRENTEA,WARRENTEA,WARRENTEA,Warren Tea Limited,False,,"name, no match"
+S:WARTDEISEL,WARTSILA,WARTDEISEL|WARTSILA,Wartsila India Limited,False,,"name, no match"
+I:INE054C01015,WATERBASE,WATERBASE,Waterbase Limited,False,,"name, no match"
+I:INE855C01015,WEBELSOLAR,WEBELSOLAR,Websol Energy System Limited,False,,"name, no match"
+I:INE191B01025,WELCORP,WELCORP|WELGUJ,Welspun Corp Limited,False,,sector_map: Basic Materials / Steel
+I:INE625G01013,WELENT,MSKPROJ|WELENT|WELPROJ,Welspun Enterprises Limited,False,,"name, no match"
+S:WELLWININD,WELLWININD,WELLWININD,Wellwin Industry Limited,False,,"name, no match"
+S:WELSPUNGUJ,WELSPUNGUJ,WELSPUNGUJ,Welspun Gujarat Stahl Rohren Limited,False,,"name, no match"
+I:INE192B01023,WELSPUNLIV,WELSPUNIND|WELSPUNLIV,Welspun Living Limited,False,,sector_map: Consumer Cyclical / Textile Manufacturing
+S:WELSPUNPOL,WELSPUNPOL,WELSPUNPOL,,False,,no name found
+I:INE274F01020,WESTLIFE,WESTLIFE,WESTLIFE FOODWORLD LIMITED,False,,"name, no match"
+I:INE715A01015,WHEELS,WHEELS,Wheels India Limited,False,,"name, no match"
+I:INE716A01013,WHIRLPOOL,WHIRLPOOL,Whirlpool of India Limited,False,,"sector_map: Consumer Cyclical / Furnishings, Fixtures & Appliances"
+S:WIMCO,WIMCO,WIMCO,Wimco Limited,False,,"name, no match"
+I:INE974C01022,WINPRO,JUMPNET|WINPRO,WinPro Industries Limited,False,,"name, no match"
+I:INE664A01015,WINSOMEDJ,SURAJDIAMN|WINSOMEDJ,Winsome Diamonds and Jewellery Limited,False,,"name, no match"
+I:INE075A01022,WIPRO,WIPRO,Wipro Limited,False,,sector_map: Technology / Information Technology Services
+I:INE049B01025,WOCKPHARMA,WOCKPHARMA,Wockhardt Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE066O01014,WONDERLA,WONDERLA,Wonderla Holidays Limited,False,,"name, no match"
+I:INE976A01021,WSTCSTPAPR,WSTCSTPAPR,West Coast Paper Mills Limited,False,,"name, no match"
+I:INE378A01012,WYETH,WYETH|WYETHLEDE,Wyeth Limited,False,,"name, no match"
+I:INE692G01013,XCHANGING,CAMBRIDGE|SCANDENT|XCHANGING,Xchanging Solutions Limited,False,,"name, no match"
+I:INE183H01011,XLENERGY,XLENERGY|XLTELENE|XLTL,XL Energy Limited,False,,"name, no match"
+I:INE0JO301016,YATHARTH,YATHARTH,Yatharth Hospital & Trauma Care Services Limited,False,,sector_map: Healthcare / Medical Care Facilities
+I:INE0JR601024,YATRA,YATRA,,False,,no name found
+S:YOKOGAWA,YOKOGAWA,YOKOGAWA,Yokogawa India Limited,False,,"name, no match"
+I:INE07K301024,ZAGGLE,ZAGGLE,Zaggle Prepaid Ocean Services Limited,False,,"name, no match"
+I:INE719A01017,ZANDUREALT,ZANDUPHARM|ZANDUREALT,Zandu Realty Limited,False,,"name, no match"
+I:INE256A01028,ZEEL,ZEEL|ZEETELE,Zee Entertainment Enterprises Limited,False,,sector_map: Communication Services / Broadcasting
+I:INE565L01011,ZEELEARN,ZEELEARN,Zee Learn Limited,False,,"name, no match"
+I:INE966H01019,ZEEMEDIA,ZEEMEDIA|ZEENEWS,Zee Media Corporation Limited,False,,"name, no match"
+I:INE598B01013,ZENITHCOMP,ZENITHCOMP,Zenith Computers Limited,False,,"name, no match"
+I:INE899A01017,ZENITHINFO,ZENITHINFO,Zenith Infotech Limited,False,,"name, no match"
+I:INE520A01019,ZENSARTECH,FUJITSICIM|ZENSARTECH,Zensar Technologies Limited,False,,sector_map: Technology / Information Technology Services
+I:INE251B01027,ZENTEC,ZENTEC,Zen Technologies Limited,False,,sector_map: Industrials / Aerospace & Defense
+I:INE342J01019,ZFCVINDIA,WABCO-TVS|WABCOINDIA|ZFCVINDIA,ZF Commercial Vehicle Control Systems India Limited,False,,sector_map: Consumer Cyclical / Auto Parts
+I:INE871B01014,ZICOM,ZICOM,Zicom Electronic Security Systems Limited,False,,"name, no match"
+I:INE206B01013,ZODIACLOTH,ZODIACLOTH,Zodiac Clothing Company Limited,False,,"name, no match"
+I:INE840M01016,ZUARI,ZUARI,Zuari Agro Chemicals Limited,False,,"name, no match"
+I:INE217A01012,ZUARIIND,ZUARIAGRO|ZUARIGLOB|ZUARIIND,ZUARI INDUSTRIES LIMITED,False,,"name, no match"
+I:INE010B01019,ZYDUSLIFE,CADILAHC|ZYDUSLIFE,Zydus Lifesciences Limited,False,,sector_map: Healthcare / Drug Manufacturers - Specialty & Generic
+I:INE768C01010,ZYDUSWELL,ZYDUSWELL,Zydus Wellness Limited,False,,sector_map: Consumer Defensive / Packaged Foods
+I:INE225I01018,ZYLOG,ZYLOG,Zylog Systems Limited,False,,"name, no match"
