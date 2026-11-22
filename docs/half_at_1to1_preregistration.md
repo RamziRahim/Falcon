@@ -1,6 +1,6 @@
 # Monthly momentum, half sold at 1:1 (rest keeps the 10% stop), vs simply holding less — pre-registration
 
-**Status: DRAFT (2026-11-22). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 17:59 IST**
 
 ## Question
 
