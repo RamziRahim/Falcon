@@ -1,6 +1,6 @@
 # Pre-registration: the shortlisted strategies on 2001-2006 (new, unseen history)
 
-**Status: DRAFT (2026-11-21). Not frozen. No test code written.**
+**Status: FROZEN on 2026-11-22 10:27 IST**
 
 ## Why
 
