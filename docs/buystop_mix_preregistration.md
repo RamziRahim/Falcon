@@ -56,3 +56,27 @@ This is the same bar the next-open mixes were held to.
 - `data/buystop_mix_result.txt`
 - Runner: `tests/run_buystop_mix.py`
 - Dated Results section here; scorecard rows.
+
+## Results (2026-11-22, run once after freeze)
+
+**References.** Passed: FM_C3, C_F_A and C_F_A_O reproduced `data/entry_realism_result.txt` exactly in all four windows. Output: `data/buystop_mix_result.txt`. The runner prints the verdict label "HOLDS UP WITH REALISTIC ENTRIES"; it is the same bar.
+
+**Verdict (C_F_A_H, all stocks): HOLDS UP WITH A BUY-STOP.**
+- It beats the Nifty in H0 (31.91% vs 21.19%), W2 (11.68% vs 5.54%) and W1 (18.23% vs 10.03%).
+- Its CAGR shortfall against C_F_A is 1.26pp in W1 and 1.78pp in W2, within the 2.0pp limit.
+
+**All stocks, CAGR % (max DD %):**
+
+| Version | H0 2001–06 | W2 2008–17 | Y2018 | W1 2019–26 |
+|---|---|---|---|---|
+| C_F_A (FM buys the close) | 35.56 (−24.6) | 13.46 (−35.9) | −26.85 | 19.49 (−25.9) |
+| **C_F_A_H (FM on a buy-stop)** | **31.91 (−29.0)** | **11.68 (−36.8)** | −29.53 | **18.23 (−24.4)** |
+| C_F_A_O (FM at the next open) | 30.05 (−26.1) | 10.79 (−34.8) | −27.95 | 17.12 (−26.6) |
+| C_F_A_P3_HO (FM buy-stop + A10 + P3 next open) | 24.50 (−23.8) | 10.10 (−26.9) | −25.02 | 15.68 (−20.1) |
+| FM_H3 alone | 24.19 (−20.5) | 9.08 (−36.4) | −19.64 | 9.45 (−28.1) |
+
+The halves agree. C_F_A_H vs C_F_A in W1 / W2: half A 19.84 / 10.82 vs 20.66 / 12.29; half B 15.75 / 13.07 vs 16.13 / 12.58.
+
+**What it means:**
+- Track 7 (current mix with FM on a resting buy-stop) joins paper trading.
+- It is the most realistic fully automatic version of the current mix: about 1.3–1.8 points a year behind buying the close, and about 0.9–1.1 ahead of buying the next open.

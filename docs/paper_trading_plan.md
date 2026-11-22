@@ -26,7 +26,7 @@ Each track has its own notional **₹10,00,000**. Rules are exactly as frozen in
 | 4 | Three-way split, close (C_F_A_P3) | same | FM and P3 at the confirming close |
 | 5 | Current mix, next open (C_F_A_O) | `docs/entry_realism_preregistration.md` | FM at the next open |
 | 6 | Three-way split, next open (C_F_A_P3O) | same | FM and P3 at the next open |
-| 7 | Current mix, FM buy-stop (C_F_A_H) | `docs/buystop_mix_preregistration.md`, **after that test runs**; IA decides if it fails | FM on a resting buy-stop at the 20-day high |
+| 7 | Current mix, FM buy-stop (C_F_A_H) | `docs/buystop_mix_preregistration.md` (held up, 2026-11-22) | FM on a resting buy-stop at the 20-day high |
 | 8 | IA discretionary pullbacks | Logged by IA (below) | As logged |
 | 9 | Momentum, pullback add-on (A10P) | `docs/pullback_two_ways_preregistration.md` (failed its bar; included by IA's choice, 2026-11-22) | Half at the open, half at the weekly broken high, else next rebalance |
 | 10 | Monthly momentum + sector strength (M_SEC_X10) | `docs/momentum_sector_exits_preregistration.md` (failed its bar: best in 2019–26, weaker in 2001–17; included by IA's choice, 2026-11-22) | As 1, but ranked only among stocks whose sector is strong (FM's sector rule, `backtesting/sector_strength.py`) |
@@ -34,9 +34,9 @@ Each track has its own notional **₹10,00,000**. Rules are exactly as frozen in
 
 **Filters on every automatic track:**
 - the ethical sector filter (`data/pit_v2/ethical_exclusions.csv`, refreshed monthly for new listings, which are unbuyable until classified);
-- Falcon's quality gate (D/E < 0.33, ROCE > 10%), once `docs/quality_gate_history_preregistration.md` has run.
-
-If that test has not run by day one, the gate is applied and its effect is reported separately.
+- **Not on day one: Falcon's quality gate** (D/E < 0.33, ROCE > 10%). IA chose (2026-11-22) to start with the sector filter only.
+  - The gate is added on a fixed date after `docs/quality_gate_history_preregistration.md` has run, recorded as a dated note here.
+  - Results before and after that date are reported separately.
 
 **Track 8 logging:**
 - IA sends a message (Telegram) such as `BUY SYMBOL` or `SELL SYMBOL`, optionally with a limit price, by 3:30 pm or after hours.
@@ -110,11 +110,20 @@ At each checkpoint, for each track:
 
 ## Before day one (checklist)
 
-- [ ] Buy-stop mix test run (track 7)
-- [ ] Quality-gate test run, or the gate's untested status accepted by IA
+- [x] Buy-stop mix test run (track 7): holds up (2026-11-22)
+- [x] Quality gate: start without it; add it later by dated note (IA, 2026-11-22)
 - [ ] Oracle account (IA), converted to Pay As You Go
 - [ ] Alerts channel and daily-message preference (IA)
 - [ ] Engine built at tag `paper-v1`; replay test on the last 3 months matches the backtest exactly
-- [ ] One-week dry run on the server
+- [ ] One-week dry run on the server (may run during December; the record catches up from 2026-12-01)
 - [ ] This plan frozen
-- [ ] Day one: **2027-01-01**, with the first momentum ranks taken at the 2026-12-31 close
+- [ ] Day one: **2026-12-01** (IA, 2026-11-22), with the first momentum ranks taken at the 2026-11-30 close
+
+## Start-up (December 2026)
+
+- **Day one is 2026-12-01.** The plan and the code tag `paper-v1` are frozen before the 2026-11-30 close.
+- **On the evening of 2026-11-30** a manual first run computes every track's orders for 1 December from NSE data downloaded on IA's laptop. The orders are committed to `paper/` with a timestamp before the 1 December open.
+- **The automatic system goes live during December:** the Oracle server, the daily job, alerts and the watchdog.
+  - When it does, it replays every session from 2026-12-01 in order.
+  - Because every fill uses only daily prices, the replayed record must match the manual first-run orders exactly. Any difference is investigated and explained in a dated note.
+- **Checkpoints:** 2027-03-01 (3 months), 2027-06-01 (6 months), 2027-12-01 (12 months).
