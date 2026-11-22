@@ -317,6 +317,18 @@ specs = [
  ('ha_f_ref_wx','Falcon patterns + wick exit','Other','Buy-stop at pattern pivot; sell at close if it closes back below','Falcon two-low stop','Measured move','None','8 weeks','wick_exit_result.txt','F_REF_WX'),
  ('ha_f_mom_wx','Falcon patterns in momentum stocks + wick exit','Other','Buy-stop at pattern pivot; sell at close if it closes back below','Falcon two-low stop','Measured move','Top 20% 6-month momentum','8 weeks','wick_exit_result.txt','F_MOM_WX'),
 ]
+# ethical sector filter (docs/ethical_filter_history_preregistration.md, frozen 22 Nov 2026)
+_ETH = {"A10": ("Monthly momentum, 10% stop", "Monthly momentum"),
+        "A10C": ("Monthly momentum, 10% stop, no re-buy after a stop", "Monthly momentum"),
+        "FM_C3": ("Falcon Momentum, clean close", "Falcon Momentum"),
+        "P3": ("v3 patterns", "Other"),
+        "C_F_A": ("FM clean close + monthly momentum (half each)", "Portfolio combination"),
+        "C_F_A_P3": ("FM clean close + monthly momentum + v3 patterns (a third each)", "Portfolio combination")}
+for _c, (_n, _f) in _ETH.items():
+    for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+        specs.append((f"{_p}_eth_{_c.lower()}", f"With ethical filter: {_n}", _f, "As already specified", "As already specified",
+                      "As already specified", "As already specified + no financial, alcohol or tobacco stocks", "As already specified",
+                      "ethical_filter_history_result.txt", f"{_c}@{_s}+ETH"))
 cache, rows = {}, []
 for sid, name, fam, entry, stop, tgt, flt, hold, f, hdr in specs:
     if f not in cache: cache[f] = parse(D + f)
@@ -381,13 +393,13 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
     r["sample"] = "Half B" if f.startswith("halfB") else ("Half A" if f.startswith(HALF_A) else "All stocks")
     if "@" in str(r.get("code", "")):                     # 2026-11-10 series: one file holds all three samples
-        r["sample"] = {"ALL": "All stocks", "A": "Half A", "B": "Half B"}[r["code"].split("@")[1]]
+        r["sample"] = {"ALL": "All stocks", "A": "Half A", "B": "Half B"}[r["code"].split("@")[1].split("+")[0]]
     r["doc"] = next((f"docs/{d}_preregistration.md" if "/" not in d else d for k, d in DOCS if f.startswith(k)), "")
     if r["id"] == "mr_orig" or r["id"] == "mr_orig_ds":
         r["doc"] = "docs/mean_reversion_preregistration.md"
@@ -456,6 +468,13 @@ for _c in ("a10", "c_f_a", "c_f_a_p3"):
     VERDICT[f"h0_{_c}"] = "HOLDS UP on 2001–06 (beat the Nifty, at least 4 of 6 checks; 22 Nov 2026)."
 for _c in ("a10c", "fm_c3", "p3"):
     VERDICT[f"h0_{_c}"] = "2001–06: reported for information only; not judged."
+for _p in ("all", "ha", "hb"):
+    for _c in ("a10c", "fm_c3", "p3"):
+        VERDICT[f"{_p}_eth_{_c}"] = "With the ethical filter: reported for information only; not judged."
+    for _c in ("a10", "c_f_a", "c_f_a_p3"):
+        VERDICT[f"{_p}_eth_{_c}"] = ("HOLDS UP WITH THE ETHICAL FILTER (beat the Nifty in 2001–06, 2008–17 and 2019–26; "
+                                     "costs ≤ 3 pt a year over 2001–26; 22 Nov 2026)." if _p == "all" else
+                                     "With the ethical filter, on this half: reported for information.")
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."
