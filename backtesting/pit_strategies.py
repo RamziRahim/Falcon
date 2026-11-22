@@ -172,8 +172,16 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                  add_frac: float | None = None, add_level: pd.DataFrame | None = None, add_fallback: bool = True,
                  review: str = "month", lookback: int | None = None, skip: int | None = None, buffer: int | None = None,
                  allowed: pd.DataFrame | None = None, stop_mode: str = "pct", pwl: pd.DataFrame | None = None,
-                 target_r: float | None = None):
-    """allowed / stop_mode / pwl / target_r (docs/momentum_sector_exits_preregistration.md):
+                 target_r: float | None = None, half_at_r: float | None = None, half_be: bool = False,
+                 trail_step: float | None = None):
+    """half_at_r / half_be / trail_step (docs/momentum_tight_stops_preregistration.md): when the
+    high reaches buy + half_at_r x (buy - stop), sell half there (or at the open if it gaps above,
+    after the buy day); stops are checked first. half_be: from the next session the rest's stop
+    is the buy price. trail_step: after the half, once the high reaches that 1:1 level + k x
+    trail_step x buy, the stop is buy x (1 + k x trail_step), live from the next session; stops
+    never move down. Defaults = unchanged behaviour.
+
+    allowed / stop_mode / pwl / target_r (docs/momentum_sector_exits_preregistration.md):
     allowed = boolean frame (sessions x entities); at a review only allowed stocks are ranked.
     stop_mode="pwl": the stop is the previous calendar week's low (pwl frame, sessions x
     entities), unless it is >= the fill or more than 15% below it (then fill x (1 - stop_pct)).
@@ -346,7 +354,9 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                             stp = lw
                         elif stats is not None:
                             stats["pwl_fallback"] = stats.get("pwl_fallback", 0) + 1
-                    meta_e = {"stop": stp, "entry_idx": i}
+                    meta_e = {"stop": stp, "entry_idx": i, "entry_px": opens[e]}
+                    if half_at_r is not None:
+                        meta_e["half_level"] = opens[e] + half_at_r * (opens[e] - stp)
                     if target_r is not None:
                         meta_e["target"] = opens[e] + target_r * (opens[e] - stp)
                 ok = ledger.buy(day, e, opens[e], first, _adv(panel, i, e), meta_e)
@@ -369,6 +379,12 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                         ast["add_vs_first"].append(px / od["first"] - 1)
         if stop_pct is not None:
             lows = panel.low.iloc[i]
+            if half_at_r is not None:                    # stop raises decided on earlier sessions go live today
+                for e in ledger.shares:
+                    m = ledger.meta.get(e) or {}
+                    if m.get("pending_stop") is not None and m.get("pending_from", i + 1) <= i:
+                        m["stop"] = max(m["stop"], m.pop("pending_stop"))
+                        m.pop("pending_from", None)
             for e in list(ledger.shares):
                 m = ledger.meta.get(e) or {}
                 st, lo, o = m.get("stop"), lows.get(e, np.nan), opens.get(e, np.nan)
@@ -384,6 +400,28 @@ def run_momentum(panel: Panel, start: pd.Timestamp, end: pd.Timestamp, cost: Cos
                     if tg is not None and np.isfinite(hi) and hi >= tg:
                         gap = m["entry_idx"] < i and np.isfinite(o) and o > tg
                         ledger.sell(day, e, o if gap else tg, _adv(panel, i, e), "TARGET")
+            if half_at_r is not None:
+                highs = panel.high.iloc[i]
+                for e in list(ledger.shares):
+                    m = ledger.meta.get(e) or {}
+                    hl, hi, o, px0 = m.get("half_level"), highs.get(e, np.nan), opens.get(e, np.nan), m.get("entry_px")
+                    if hl is None or not np.isfinite(hi):
+                        continue
+                    new_stop = None
+                    if not m.get("half_done") and hi >= hl:
+                        px = o if (m["entry_idx"] < i and np.isfinite(o) and o > hl) else hl
+                        ledger.trim(e, px, ledger.shares[e] * px / 2, _adv(panel, i, e))
+                        m["half_done"] = True
+                        if stats is not None:
+                            stats["half_exits"] = stats.get("half_exits", 0) + 1
+                        if half_be or trail_step is not None:
+                            new_stop = px0
+                    if m.get("half_done") and trail_step is not None:
+                        k = int(np.floor((hi - hl) / (trail_step * px0) + 1e-9))
+                        if k >= 1:
+                            new_stop = max(new_stop or 0.0, px0 * (1 + k * trail_step))
+                    if new_stop is not None and new_stop > max(m["stop"], m.get("pending_stop") or 0.0):
+                        m["pending_stop"], m["pending_from"] = new_stop, i + 1
         ledger.mark(day, panel.close.iloc[i])
         if add_frac is not None:
             for e in [e for e in adds if e not in ledger.shares]:

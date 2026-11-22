@@ -373,6 +373,18 @@ for _b, _bn in _BN.items():
             specs.append((f"{_p}_mse_{_b.lower()}_{_x.lower()}", f"{_bn}: stop {_sp}, target {_tg}", "Monthly momentum",
                           "Open after the review", _sp, _tg, "Sector strength" if "SEC" in _b else "None", "Until it leaves the list",
                           "momentum_sector_exits_result.txt", f"{_b}_{_x}@{_s}"))
+# tighter stops / targets / half exits / trailing (docs/momentum_tight_stops_preregistration.md, 22 Nov 2026)
+_TS = {"S6": ("Fixed −6%", "None"), "S5": ("Fixed −5%", "None"), "S7": ("Fixed −7.5%", "None"),
+       "S6_T3": ("Fixed −6%", "+18% (1:3)"), "S6_T5": ("Fixed −6%", "+30% (1:5)"), "S5_T5": ("Fixed −5%", "+25% (1:5)"),
+       "S10_T5": ("Fixed −10%", "+50% (1:5)"), "S10_T8": ("Fixed −10%", "+80% (1:8)"),
+       "S10_H1BE": ("Fixed −10%", "Half at 1:1, rest stop to cost"), "S10_H1": ("Fixed −10%", "Half at 1:1, rest keeps stop"),
+       "S6_H1BE": ("Fixed −6%", "Half at 1:1, rest stop to cost"),
+       "S5_H1TR": ("Fixed −5%", "Half at 1:1, then trail 5% per 5% rise"), "S6_H1TR": ("Fixed −6%", "Half at 1:1, then trail 5% per 5% rise"),
+       "S10_H1TR": ("Fixed −10%", "Half at 1:1, then trail 5% per 5% rise")}
+for _c, (_sp, _tg) in _TS.items():
+    for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+        specs.append((f"{_p}_ts_{_c.lower()}", f"Monthly momentum: stop {_sp}, exit {_tg}", "Monthly momentum", "Open after month end",
+                      _sp, _tg, "None", "Until it leaves the top 20", "momentum_tight_stops_result.txt", f"{_c}@{_s}"))
 # ethical sector filter (docs/ethical_filter_history_preregistration.md, frozen 22 Nov 2026)
 _ETH = {"A10": ("Monthly momentum, 10% stop", "Monthly momentum"),
         "A10C": ("Monthly momentum, 10% stop, no re-buy after a stop", "Monthly momentum"),
@@ -449,7 +461,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("momentum_tight_stops", "momentum_tight_stops"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -555,6 +567,10 @@ for _p in ("all", "ha", "hb"):
                                              if _p == "all" and _x == "x10" and _b in ("m_sec", "w_sec") else
                                              "Reference (reproduces A10/WM12)." if _x == "x10" and _b in ("m", "w") and _p == "all"
                                              else "Reported for information only; not judged.")
+for _p in ("all", "ha", "hb"):
+    for _c in ("s6", "s5", "s7", "s6_t3", "s6_t5", "s5_t5", "s10_t5", "s10_t8", "s10_h1be", "s10_h1", "s6_h1be", "s5_h1tr", "s6_h1tr", "s10_h1tr"):
+        VERDICT[f"{_p}_ts_{_c}"] = ("Judged: FAILED its frozen bar (22 Nov 2026). Not adopted."
+                                   if _p == "all" and _c in ("s6", "s5_h1tr") else "Reported for information only; not judged.")
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

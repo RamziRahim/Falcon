@@ -87,3 +87,60 @@ The others are reported only. With 12 extra versions, the best-looking one is a 
 - `data/momentum_tight_stops_result.txt`
 - Runner: `tests/run_momentum_tight_stops.py`
 - Dated Results section here; scorecard rows.
+
+## Implementation notes (2026-11-22, before running)
+
+- `run_momentum(..., half_at_r, half_be, trail_step)` sells the half with `Ledger.trim`, so both halves are one trade record.
+- Raised stops wait as "pending" and go live at the next session.
+- Checked on a synthetic path: bought at 108 with a 5% stop. The first close above the 113.4 1:1 level was 116, so half sold there. The rest's stop moved to 108 and was hit at 108. Proceeds were as expected.
+
+## Results (2026-11-22, run once after freeze)
+
+**Reference check.** It passed: A10 reproduced the stored results in all four windows. Output: `data/momentum_tight_stops_result.txt`.
+
+**Verdicts (all stocks):**
+- **S6: FAILED ITS FROZEN BAR.**
+  - W1: 24.68% vs 26.36% (−1.68pp), DD −38.0% vs −39.4%.
+  - W2: 12.06% vs 13.17% (−1.11pp), DD −52.0% vs −59.1% (7.0pp shallower).
+  - Return fell by more than 1.0pp in both windows.
+- **S5_H1TR (IA's trailing plan): FAILED ITS FROZEN BAR.**
+  - W1: 8.26% vs 26.36% (−18.1pp), DD −20.4%.
+  - W2: −2.11% vs 13.17% (−15.3pp), DD −35.7%.
+
+**All stocks, CAGR % (max DD %):**
+
+| Version | H0 2001–06 | W2 2008–17 | Y2018 | W1 2019–26 |
+|---|---|---|---|---|
+| **A10 (10% stop)** | **37.52 (−38.0)** | **13.17 (−59.0)** | −38.88 | **26.36 (−39.4)** |
+| 7.5% stop | 35.90 (−38.6) | 12.38 (−53.0) | −33.45 | 25.10 (−39.1) |
+| 6% stop | 31.34 (−39.5) | 12.06 (−52.0) | −29.01 | 24.68 (−38.0) |
+| 5% stop | 29.27 (−36.0) | 12.34 (−48.0) | −24.10 | 24.36 (−34.6) |
+| 6% stop, 1:3 (+18%) | −2.62 (−51.2) | 1.65 (−45.2) | −29.52 | 12.53 (−32.2) |
+| 6% stop, 1:5 (+30%) | 9.04 (−37.8) | 2.74 (−43.7) | −27.62 | 17.74 (−33.8) |
+| 5% stop, 1:5 (+25%) | 1.34 (−39.5) | 1.42 (−41.8) | −22.74 | 14.38 (−31.0) |
+| 10% stop, 1:5 (+50%) | 21.35 (−37.6) | 6.57 (−55.5) | −36.92 | 22.26 (−38.1) |
+| 10% stop, 1:8 (+80%) | 22.68 (−37.5) | 9.93 (−57.3) | −39.16 | 23.57 (−37.8) |
+| 10%, half at 1:1, rest break-even | 15.95 (−43.3) | 5.93 (−47.9) | −36.20 | 16.42 (−32.2) |
+| 10%, half at 1:1, rest keeps 10% | 22.07 (−35.5) | 6.99 (−49.9) | −35.14 | 18.46 (−27.4) |
+| 6%, half at 1:1, rest break-even | 8.06 (−45.6) | 4.52 (−37.5) | −25.19 | 14.70 (−25.1) |
+| **5%, half at 1:1, trail 5%/5%** | −9.89 (−49.8) | −2.11 (−35.7) | −22.66 | 8.26 (−20.4) |
+| 6%, half at 1:1, trail 5%/5% | −7.85 (−49.2) | −1.19 (−37.3) | −28.34 | 7.84 (−28.6) |
+| 10%, half at 1:1, trail 5%/5% | 0.45 (−45.7) | 0.04 (−47.4) | −36.32 | 11.41 (−38.2) |
+
+**Trades (all stocks, W1):**
+
+| Version | Win rate | Average win | Average loss | Stops a year | Average hold |
+|---|---|---|---|---|---|
+| A10 | 39.1% | +27.6% | −9.7% | 65 | 48 days |
+| 6% stop | 28.6% | +29.9% | −6.5% | 97 | 36 days |
+| 5% stop | 25.4% | +30.7% | −5.7% | 108 | 33 days |
+| 5% + half + trail | 57.2% | **+5.5%** | −5.6% | 228 | **9 days** |
+| 10% + half at 1:1 | 43.7% | +16.7% | −7.9% | 65 | 48 days |
+
+**What it means:**
+
+1. **Tighter stops trade return for a smaller drawdown, roughly one for one.** A 5% stop cut the worst fall by 5–11 points but cost 1–2 points a year in 2008–26, and 8 points in 2001–06. More trades are stopped out: 108 a year vs 65.
+2. **Fixed targets keep hurting, even at 1:5–1:8.** A +80% target still cost 2.8–3.2 points a year, because a few stocks rise far more than 80%.
+3. **Selling half at 1:1 halves every winner.** The average win drops from +27.6% to +16.7%, and losses stay large.
+4. **The step trailing stop turns momentum into short trading.** Each step leaves the stop only about 5% below a new high, and top-momentum stocks routinely dip that much. The rest is sold within about 9 days on average, so winners average only +5.5% and costs rise. The win rate looks good at 57%, but the system loses money over 2001–17.
+5. **No rule changes.** A10's 10% stop with no target remains the best. The 5% stop is the only version that came close (−0.8 and −2.0 points, with 5–13 points smaller falls), and it is a lead only.
