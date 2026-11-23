@@ -1,0 +1,32 @@
+FM_C3 trades, half A. net = return per trade after costs (%). Terciles cut on both windows pooled.
+Trades: {'W1': 460, 'W2': 498}
+All trades W2: net +2.58%  win 46%  exits {'STOP': 212, 'TIME_STOP': 187, 'TARGET': 81, 'MOMENTUM_EXIT': 11, 'OPEN_AT_END': 6, 'DELISTED': 1}
+All trades W1: net +2.46%  win 47%  exits {'STOP': 202, 'TIME_STOP': 175, 'TARGET': 69, 'MOMENTUM_EXIT': 14}
+
+close_above_20d_high  (cuts 0.74 / 2.23)
+  W2: low net +1.23% win 40% n 157 | mid net +3.67% win 51% n 165 | high net +2.76% win 48% n 176
+  W1: low net +2.33% win 45% n 162 | mid net +1.08% win 44% n 155 | high net +4.09% win 51% n 143
+
+volume_x_50d  (cuts 1.28 / 2.38)
+  W2: low net +2.99% win 46% n 165 | mid net +3.19% win 47% n 173 | high net +1.50% win 46% n 160
+  W1: low net +3.06% win 46% n 154 | mid net +1.35% win 43% n 146 | high net +2.88% win 50% n 160
+
+below_52w_high  (cuts 0.89 / 2.29)
+  W2: low net +2.87% win 49% n 146 | mid net +2.80% win 48% n 174 | high net +2.13% win 43% n 178
+  W1: low net +2.85% win 49% n 174 | mid net +2.40% win 44% n 144 | high net +2.03% win 46% n 142
+
+momentum_pct_126d  (cuts 90.55 / 96.19)
+  W2: low net +3.02% win 51% n 160 | mid net +2.43% win 45% n 162 | high net +2.32% win 44% n 176
+  W1: low net +3.51% win 49% n 160 | mid net +2.11% win 46% n 157 | high net +1.65% win 45% n 143
+
+atr3_pct_of_price  (cuts 9.62 / 12.21)
+  W2: low net +1.70% win 45% n 156 | mid net +3.36% win 48% n 162 | high net +2.64% win 47% n 180
+  W1: low net +1.89% win 44% n 164 | mid net +2.00% win 47% n 157 | high net +3.64% win 49% n 139
+
+close_in_day_range  (cuts 0.75 / 0.86)
+  W2: low net +2.60% win 48% n 168 | mid net +2.88% win 44% n 178 | high net +2.21% win 47% n 152
+  W1: low net +2.07% win 45% n 152 | mid net +3.00% win 49% n 140 | high net +2.35% win 46% n 168
+
+nifty_vs_50dma  (cuts 1.37 / 4.07)
+  W2: low net -0.37% win 36% n 137 | mid net +2.76% win 48% n 184 | high net +4.67% win 52% n 177
+  W1: low net -0.02% win 39% n 182 | mid net +2.89% win 47% n 135 | high net +5.20% win 56% n 143
