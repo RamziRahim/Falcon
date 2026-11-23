@@ -48,8 +48,16 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                    be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
                    cooldown: int = 0, levels: list | None = None, wick_exit: bool = False,
                    risk_on: float = RISK_ON, risk_soft: float = RISK_SOFT, gauge: pd.Series | None = None,
-                   slots: int = SLOTS, next_open: bool = False, conviction: str | None = None):
-    """conviction (docs/fm_conviction_sizing_preregistration.md): "full" multiplies each fill's
+                   slots: int = SLOTS, next_open: bool = False, conviction: str | None = None,
+                   slot_rule: str | None = None):
+    """slot_rule (docs/fm_conviction_slots_preregistration.md): "pick" fills each day's closing
+    signals in order of k = close / prior 20-session high - 1 (highest first, ties by FM priority);
+    "swap" also lets a clean signal with Nifty >= 4.1% above its 50-session average and k >= 2.2%
+    replace, when all slots are full, the holding (bought before today, below its fill at today's
+    close, stop and target not touched today) with the lowest return since its fill; that holding
+    is sold at today's close (SWAP_OUT). None = unchanged.
+
+    conviction (docs/fm_conviction_sizing_preregistration.md): "full" multiplies each fill's
     risk by 0.5 when Nifty is < 1.4% above its 50-session average, 1.5 when it is >= 4.1% above
     and the fill is >= 2.2% above the stock's highest high of the previous 20 sessions, else 1;
     "mkt" uses the market part only (0.5 below 1.4%, 1.5 at or above 4.1%). None = unchanged.
@@ -81,8 +89,8 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     nf = nifty.reindex(nifty.index.union(s)).ffill().reindex(s)
     n200, n50 = nf.rolling(200, min_periods=200).mean(), nf.rolling(50, min_periods=50).mean()
     n126 = nf / nf.shift(126) - 1
-    if conviction is not None:
-        assert conviction in ("full", "mkt")
+    if conviction is not None or slot_rule is not None:
+        assert conviction in (None, "full", "mkt") and slot_rule in (None, "pick", "swap")
         conv_m = (nf / n50 - 1).to_numpy(float)
         conv_hi20 = panel.high.rolling(20, min_periods=20).max().shift(1).to_numpy(float)
     if gauge is not None:
@@ -184,13 +192,36 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 ledger.sell(day, e, opens[e], _adv(panel, i, e),
                             "MOMENTUM_EXIT" if ledger.meta[e].get("rank_exit") else "TIME_STOP")
                 queued_exits.discard(e)
-        for od in sorted(orders, key=lambda o: o["priority"]):               # fills at today's prices
+        if slot_rule is None:
+            order_key = lambda o: o["priority"]
+        else:
+            def order_key(o):
+                cc, hh = closes.get(o["entity"], np.nan), conv_hi20[i, cols[o["entity"]]]
+                kk = cc / hh - 1 if np.isfinite(cc) and np.isfinite(hh) else -np.inf
+                return (-kk, o["priority"])
+        for od in sorted(orders, key=order_key):               # fills at today's prices
             e = od["entity"]
             if e not in ledger.shares and len(ledger.shares) >= slots and od["type"] == "closebuy":
                 o_, lo_, hi_, c__ = (x.get(e, np.nan) for x in (opens, lows, highs, closes))
                 if (np.isfinite(o_) and np.isfinite(hi_) and np.isfinite(c__) and np.isfinite(lo_) and hi_ > od["trig"]
                         and c__ >= od["trig"] and c__ >= o_ and hi_ > lo_ and (hi_ - max(o_, c__)) / (hi_ - lo_) < 0.5):
                     stats["slots_full_skips"] = stats.get("slots_full_skips", 0) + 1
+                    hh_ = conv_hi20[i, cols[e]] if slot_rule == "swap" else np.nan
+                    if (slot_rule == "swap" and np.isfinite(conv_m[i]) and conv_m[i] >= 0.041 and np.isfinite(hh_)
+                            and c__ / hh_ - 1 >= 0.022):
+                        victim, worst = None, 0.0
+                        for x in ledger.shares:
+                            mx = ledger.meta[x]
+                            cx, lx, hx = closes.get(x, np.nan), lows.get(x, np.nan), highs.get(x, np.nan)
+                            if (mx["entry_idx"] >= i or not (np.isfinite(cx) and np.isfinite(lx) and np.isfinite(hx))
+                                    or lx <= mx["stop"] or hx >= mx["target"]):
+                                continue
+                            rx = cx / mx["fill"] - 1
+                            if rx < worst:
+                                victim, worst = x, rx
+                        if victim is not None:
+                            ledger.sell(day, victim, closes[victim], _adv(panel, i, victim), "SWAP_OUT")
+                            stats["swaps"] = stats.get("swaps", 0) + 1
             if e in ledger.shares or len(ledger.shares) >= slots:
                 continue
             o, lo = opens.get(e, np.nan), lows.get(e, np.nan)
