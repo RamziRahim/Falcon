@@ -1,6 +1,6 @@
 # Falcon Momentum: more risk on higher-conviction breakouts — pre-registration
 
-**Status: DRAFT — awaiting IA's freeze**
+**Status: FROZEN on 2026-11-23 09:56 IST**
 
 ## Question
 
