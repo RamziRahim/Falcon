@@ -54,7 +54,21 @@ def bhavcopies(until: date):
     if start > until:
         log(f"bhavcopies: up to date ({pd.Timestamp(last).date()})")
         return
+    before = pd.read_parquet(path)
     run([PY, "tests/download_bhavcopies.py", start.isoformat(), until.isoformat()])
+    after = pd.read_parquet(path)
+    if pd.Timestamp(after["Date"].min()) > pd.Timestamp(before["Date"].min()):
+        # The downloader rebuilds the combined file from data/bhavcopy/days/. A machine seeded with
+        # the combined file only (the Oracle server) has just the new days there, so append them to
+        # the history instead of letting them replace it.
+        fresh = after[pd.to_datetime(after["Date"]) > pd.Timestamp(last)]
+        merged = pd.concat([before, fresh[before.columns]], ignore_index=True)
+        merged.to_parquet(path, index=False)
+        log(f"bhavcopies: appended {fresh['Date'].nunique()} new day(s) to the history "
+            f"({len(before):,} + {len(fresh):,} rows)")
+    final = pd.read_parquet(path, columns=["Date"])["Date"]
+    if pd.Timestamp(final.min()) > pd.Timestamp(before["Date"].min()) or len(final) < len(before):
+        raise SystemExit("bhavcopy history shrank; stopping before the build")
 
 
 def corporate_actions(until: date):
