@@ -398,6 +398,14 @@ for _c, _n, _f in (("FM_H3", "Falcon Momentum on a resting buy-stop at the 20-da
     for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
         specs.append((f"{_p}_bs_{_c.lower()}", _n, _f, "Buy-stop at the 20-day high (FM); next open (others)", "As already specified",
                       "As already specified", "As already specified", "As already specified", "buystop_mix_result.txt", f"{_c}@{_s}"))
+# FM conviction slots (docs/fm_conviction_slots_preregistration.md, frozen 23 Nov 2026)
+for _c, _n in (("FM_C3_SWAP", "FM clean close, strongest breakouts first + swap a losing holding for a high-conviction signal"),
+               ("FM_C3_PICK", "FM clean close, strongest breakouts get the free slots first"),
+               ("C_F_A_SWAP", "Combination: FM (conviction slots + swap) + A10")):
+    for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+        specs.append((f"{_p}_cs_{_c.lower()}", _n, "Portfolio combination" if _c.startswith("C_") else "Falcon Momentum",
+                      "Clean close above the trigger", "Swing low / 3 ATR", "1:3", "FM's own; slot order by breakout strength",
+                      "Up to 40 sessions", "fm_conviction_slots_result.txt", f"{_c}@{_s}"))
 # FM conviction sizing (docs/fm_conviction_sizing_preregistration.md, frozen 23 Nov 2026)
 for _c, _n in (("FM_C3_CONV", "FM clean close, conviction sizing (0.5x weak market, 1.5x strong market + strong breakout)"),
                ("FM_C3_MKT", "FM clean close, market-strength sizing only"),
@@ -490,7 +498,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("momentum_tight_stops", "momentum_tight_stops"), ("half_at_1to1", "half_at_1to1"), ("buystop_mix", "buystop_mix"), ("momentum_risk_sizing", "momentum_risk_sizing"), ("fm_conviction_sizing", "fm_conviction_sizing"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("momentum_tight_stops", "momentum_tight_stops"), ("half_at_1to1", "half_at_1to1"), ("buystop_mix", "buystop_mix"), ("momentum_risk_sizing", "momentum_risk_sizing"), ("fm_conviction_sizing", "fm_conviction_sizing"), ("fm_conviction_slots", "fm_conviction_slots"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -647,6 +655,10 @@ for _p in ("all", "ha", "hb"):
     for _c in ("fm_c3_conv", "fm_c3_mkt", "c_f_a_conv"):
         VERDICT[f"{_p}_cv_{_c}"] = ("Judged: NOT ADOPTED (−0.6 / −0.2 pt a year vs FM in 2008–17 / 2019–26; worse on half B 2008–17; 23 Nov 2026)."
                                    if (_p, _c) == ("all", "fm_c3_conv") else "Reported for information only; not judged.")
+for _p in ("all", "ha", "hb"):
+    for _c in ("fm_c3_swap", "fm_c3_pick", "c_f_a_swap"):
+        VERDICT[f"{_p}_cs_{_c}"] = ("Judged: NOT ADOPTED (−2.0 / −0.6 pt a year vs FM in 2008–17 / 2019–26; deeper 2008–17 drawdown; 23 Nov 2026)."
+                                   if (_p, _c) == ("all", "fm_c3_swap") else "Reported for information only; not judged.")
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

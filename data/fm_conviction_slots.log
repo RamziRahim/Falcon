@@ -1,0 +1,64 @@
+FM_C3@ALL H0: cagr 31.03 dd -14.19 nifty 21.19 win 52.4% net/trade +6.41% n 309 grew 50.47L checks 4/6
+FM_C3_SWAP@ALL H0: cagr 31.63 dd -13.5 nifty 21.19 win 46.1% net/trade +5.71% n 347 grew 51.89L checks 4/6
+FM_C3_PICK@ALL H0: cagr 28.44 dd -14.63 nifty 21.19 win 51.6% net/trade +5.79% n 312 grew 44.79L checks 4/6
+C_F_A@ALL H0: cagr 35.56 dd -24.58 nifty 21.19 win 40.5% net/trade +6.10% n 1048 grew 61.88L checks 5/6
+C_F_A_SWAP@ALL H0: cagr 35.89 dd -25.88 nifty 21.19 win 38.9% net/trade +5.89% n 1086 grew 62.79L checks 5/6
+  reference check FM_C3@ALL H0: file (31.03, -14.19) run (31.03, -14.19) -> MATCH
+  reference check C_F_A@ALL H0: file (35.56, -24.58) run (35.56, -24.58) -> MATCH
+FM_C3@ALL W2: cagr 12.56 dd -26.13 nifty 5.54 win 46.6% net/trade +2.67% n 521 grew 32.62L checks 5/6
+FM_C3_SWAP@ALL W2: cagr 10.56 dd -30.86 nifty 5.54 win 42.2% net/trade +2.03% n 583 grew 27.27L checks 5/6
+FM_C3_PICK@ALL W2: cagr 12.06 dd -24.9 nifty 5.54 win 46.9% net/trade +2.61% n 518 grew 31.21L checks 5/6
+C_F_A@ALL W2: cagr 13.46 dd -35.93 nifty 5.54 win 36.8% net/trade +2.55% n 1697 grew 35.33L checks 5/6
+C_F_A_SWAP@ALL W2: cagr 12.47 dd -35.94 nifty 5.54 win 35.6% net/trade +2.35% n 1759 grew 32.35L checks 5/6
+  reference check FM_C3@ALL W2: file (12.56, -26.13) run (12.56, -26.13) -> MATCH
+  reference check C_F_A@ALL W2: file (13.46, -35.93) run (13.46, -35.93) -> MATCH
+FM_C3@ALL W1: cagr 11.71 dd -23.76 nifty 10.03 win 44.0% net/trade +1.90% n 493 grew 23.79L checks 3/6
+FM_C3_SWAP@ALL W1: cagr 11.1 dd -20.41 nifty 10.03 win 38.1% net/trade +1.48% n 544 grew 22.79L checks 2/6
+FM_C3_PICK@ALL W1: cagr 12.52 dd -22.81 nifty 10.03 win 43.4% net/trade +2.02% n 488 grew 25.18L checks 2/6
+C_F_A@ALL W1: cagr 19.49 dd -25.88 nifty 10.03 win 40.7% net/trade +3.86% n 1468 grew 40.31L checks 5/6
+C_F_A_SWAP@ALL W1: cagr 19.18 dd -27.54 nifty 10.03 win 38.7% net/trade +3.65% n 1519 grew 39.49L checks 5/6
+  reference check FM_C3@ALL W1: file (11.71, -23.76) run (11.71, -23.76) -> MATCH
+  reference check C_F_A@ALL W1: file (19.49, -25.88) run (19.49, -25.88) -> MATCH
+FM_C3@A H0: cagr 15.2 dd -15.5 nifty 21.19 win 47.3% net/trade +3.85% n 273 grew 23.34L checks 2/6
+FM_C3_SWAP@A H0: cagr 19.65 dd -14.36 nifty 21.19 win 45.2% net/trade +4.64% n 294 grew 29.29L checks 3/6
+FM_C3_PICK@A H0: cagr 15.81 dd -14.94 nifty 21.19 win 47.3% net/trade +3.98% n 273 grew 24.10L checks 2/6
+C_F_A@A H0: cagr 20.51 dd -25.02 nifty 21.19 win 38.8% net/trade +4.58% n 991 grew 30.57L checks 2/6
+C_F_A_SWAP@A H0: cagr 22.82 dd -24.48 nifty 21.19 win 38.4% net/trade +4.79% n 1012 grew 34.26L checks 2/6
+  reference check FM_C3@A H0: file (15.2, -15.5) run (15.2, -15.5) -> MATCH
+  reference check C_F_A@A H0: file (20.51, -25.02) run (20.51, -25.02) -> MATCH
+FM_C3@A W2: cagr 12.04 dd -23.39 nifty 5.54 win 46.5% net/trade +2.58% n 492 grew 31.13L checks 5/6
+FM_C3_SWAP@A W2: cagr 11.04 dd -25.4 nifty 5.54 win 43.3% net/trade +2.21% n 531 grew 28.49L checks 5/6
+FM_C3_PICK@A W2: cagr 12.2 dd -22.89 nifty 5.54 win 46.3% net/trade +2.46% n 495 grew 31.60L checks 5/6
+C_F_A@A W2: cagr 12.29 dd -35.98 nifty 5.54 win 36.7% net/trade +2.77% n 1595 grew 31.84L checks 5/6
+C_F_A_SWAP@A W2: cagr 11.8 dd -35.98 nifty 5.54 win 35.9% net/trade +2.65% n 1634 grew 30.50L checks 5/6
+  reference check FM_C3@A W2: file (12.04, -23.39) run (12.04, -23.39) -> MATCH
+  reference check C_F_A@A W2: file (12.29, -35.98) run (12.29, -35.98) -> MATCH
+FM_C3@A W1: cagr 14.49 dd -17.95 nifty 10.03 win 46.5% net/trade +2.46% n 460 grew 28.84L checks 3/6
+FM_C3_SWAP@A W1: cagr 9.91 dd -22.83 nifty 10.03 win 40.3% net/trade +1.32% n 511 grew 20.95L checks 3/6
+FM_C3_PICK@A W1: cagr 13.32 dd -19.25 nifty 10.03 win 45.1% net/trade +2.27% n 470 grew 26.62L checks 3/6
+C_F_A@A W1: cagr 20.66 dd -20.89 nifty 10.03 win 42.4% net/trade +4.63% n 1310 grew 43.50L checks 5/6
+C_F_A_SWAP@A W1: cagr 18.25 dd -21.09 nifty 10.03 win 40.3% net/trade +4.12% n 1361 grew 37.14L checks 5/6
+  reference check FM_C3@A W1: file (14.49, -17.95) run (14.49, -17.95) -> MATCH
+  reference check C_F_A@A W1: file (20.66, -20.89) run (20.66, -20.89) -> MATCH
+FM_C3@B H0: cagr 23.74 dd -21.82 nifty 21.19 win 53.9% net/trade +6.15% n 271 grew 35.82L checks 3/6
+FM_C3_SWAP@B H0: cagr 24.86 dd -20.89 nifty 21.19 win 47.4% net/trade +5.57% n 310 grew 37.82L checks 3/6
+FM_C3_PICK@B H0: cagr 24.07 dd -21.7 nifty 21.19 win 54.7% net/trade +6.32% n 265 grew 36.39L checks 3/6
+C_F_A@B H0: cagr 28.89 dd -29.95 nifty 21.19 win 39.3% net/trade +5.47% n 939 grew 45.73L checks 4/6
+C_F_A_SWAP@B H0: cagr 29.45 dd -29.54 nifty 21.19 win 37.8% net/trade +5.31% n 978 grew 46.95L checks 4/6
+  reference check FM_C3@B H0: file (23.74, -21.82) run (23.74, -21.82) -> MATCH
+  reference check C_F_A@B H0: file (28.89, -29.95) run (28.89, -29.95) -> MATCH
+FM_C3@B W2: cagr 11.62 dd -24.16 nifty 5.54 win 46.2% net/trade +2.23% n 509 grew 30.01L checks 5/6
+FM_C3_SWAP@B W2: cagr 9.14 dd -22.27 nifty 5.54 win 40.5% net/trade +1.67% n 570 grew 23.96L checks 4/6
+FM_C3_PICK@B W2: cagr 8.85 dd -21.97 nifty 5.54 win 45.5% net/trade +1.96% n 510 grew 23.34L checks 4/6
+C_F_A@B W2: cagr 12.58 dd -35.98 nifty 5.54 win 38.0% net/trade +2.49% n 1619 grew 32.68L checks 5/6
+C_F_A_SWAP@B W2: cagr 11.36 dd -35.98 nifty 5.54 win 36.4% net/trade +2.29% n 1680 grew 29.31L checks 5/6
+  reference check FM_C3@B W2: file (11.62, -24.16) run (11.62, -24.16) -> MATCH
+  reference check C_F_A@B W2: file (12.58, -35.98) run (12.58, -35.98) -> MATCH
+FM_C3@B W1: cagr 8.4 dd -25.57 nifty 10.03 win 42.4% net/trade +2.06% n 462 grew 18.80L checks 2/6
+FM_C3_SWAP@B W1: cagr 14.09 dd -22.34 nifty 10.03 win 40.4% net/trade +2.60% n 500 grew 28.07L checks 4/6
+FM_C3_PICK@B W1: cagr 11.79 dd -23.02 nifty 10.03 win 43.2% net/trade +2.40% n 458 grew 23.92L checks 2/6
+C_F_A@B W1: cagr 16.13 dd -31.42 nifty 10.03 win 38.1% net/trade +4.19% n 1279 grew 32.24L checks 5/6
+C_F_A_SWAP@B W1: cagr 19.19 dd -29.17 nifty 10.03 win 37.4% net/trade +4.33% n 1317 grew 39.51L checks 5/6
+  reference check FM_C3@B W1: file (8.4, -25.57) run (8.4, -25.57) -> MATCH
+  reference check C_F_A@B W1: file (16.13, -31.42) run (16.13, -31.42) -> MATCH
+ALLDONE
