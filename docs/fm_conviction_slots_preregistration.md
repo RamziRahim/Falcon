@@ -1,6 +1,6 @@
 # Falcon Momentum: conviction decides which signal gets a slot — pre-registration
 
-**Status: DRAFT — awaiting IA's freeze**
+**Status: FROZEN on 2026-11-23 10:20 IST**
 
 ## Question
 
