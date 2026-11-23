@@ -93,3 +93,47 @@ The cut points come from half A in W1 and W2, so **half A and the all-stocks res
 - W1 is identical in both files.
 
 The reference for **all three samples** is therefore `data/buystop_mix_result.txt`, the pit_v2 file that every recent test uses. Nothing else changes.
+
+## Results (2026-11-23, run once after freeze)
+
+**References.** Passed: FM_C3 and C_F_A reproduced `data/buystop_mix_result.txt` exactly on all stocks, half A and half B, in every window present in the file. Output: `data/fm_conviction_sizing_result.txt`.
+
+**Verdict (FM_C3_CONV vs FM_C3): NOT ADOPTED.** Four of the seven conditions failed.
+
+| Condition | Result | |
+|---|---|---|
+| 1. All stocks W2, CAGR gain ≥ +1.0pp | −0.58pp (11.98% vs 12.56%) | FAIL |
+| 1. All stocks W1, CAGR gain ≥ +1.0pp | −0.18pp (11.53% vs 11.71%) | FAIL |
+| 2. All stocks W2, drawdown ≤ 2 pts deeper | 2.26 pts deeper (−28.4% vs −26.1%) | FAIL |
+| 2. All stocks W1, drawdown ≤ 2 pts deeper | 4.15 pts **shallower** (−19.6% vs −23.8%) | pass |
+| 3. Half B W2, CAGR not lower | −0.45pp | FAIL |
+| 3. Half B W1, CAGR not lower | +2.36pp | pass |
+| 4. All stocks H0, CAGR not lower | +3.59pp (34.62% vs 31.03%) | pass |
+
+**CAGR % (max DD %)**
+
+| Version | Sample | H0 2001–06 | W2 2008–17 | W1 2019–26 |
+|---|---|---|---|---|
+| FM_C3 | All | 31.03 (−14.2) | 12.56 (−26.1) | 11.71 (−23.8) |
+| **FM_C3_CONV** | All | 34.62 (−13.6) | 11.98 (−28.4) | 11.53 (−19.6) |
+| FM_C3_MKT | All | 36.63 (−17.7) | 12.62 (−25.3) | 9.49 (−20.9) |
+| C_F_A (track 3) | All | 35.56 (−24.6) | 13.46 (−35.9) | 19.49 (−25.9) |
+| C_F_A_CONV | All | 37.46 (−23.7) | 13.24 (−36.7) | 19.44 (−25.1) |
+| FM_C3 / FM_C3_CONV | Half A | 15.20 / 14.30 | 12.04 / 13.17 | 14.49 / 14.65 |
+| FM_C3 / FM_C3_CONV | Half B | 23.74 / 26.63 | 11.62 / 11.17 | 8.40 / 10.76 |
+
+**How often each multiplier was used** (all stocks): 0.5× on about 18–31% of fills, 1.5× on 12–35%, 1× on the rest. The trades themselves are identical; only their size changes.
+
+**What it means, in plain English:**
+- The strong-market facts that marked better *individual* trades in the half-A study did **not** turn into a better *portfolio* in 2008–17 or 2019–26:
+  - All stocks: −0.6 and −0.2 points a year.
+  - Half B in 2008–17: −0.45.
+- The gains appear only in the periods and samples where the rule happened to fit:
+  - 2001–06: +3.6;
+  - half B in 2019–26: +2.4;
+  - half A in 2008–17, the sample the cut points came from: +1.1.
+- The likely reasons:
+  - FM already halves its risk when the market gauge is weak, so much of the market effect was already being captured.
+  - Betting 1.5× after the market has run well above its average also means being biggest just before pullbacks. That deepened the 2008–17 drawdown.
+- On the paper track C_F_A it makes almost no difference: −0.2 and −0.05 points a year.
+- FM and the paper tracks stay as they are. IA decides.
