@@ -85,3 +85,11 @@ The cut points come from half A in W1 and W2, so **half A and the all-stocks res
 - `data/fm_conviction_sizing_result.txt`
 - Runner: `tests/run_fm_conviction_sizing.py`
 - Dated Results section here; scorecard rows.
+
+## Dated note (2026-11-23 10:00 IST, approved by IA)
+
+**Correction to the reference file.** `data/fm_risk_gauge_result.txt` was made on the older data (`data/pit`). On `data/pit_v2`, FM_C3's W2 numbers on the halves differ slightly from it.
+- Example: half A W2 is 12.04% there vs 12.69% in the old file.
+- W1 is identical in both files.
+
+The reference for **all three samples** is therefore `data/buystop_mix_result.txt`, the pit_v2 file that every recent test uses. Nothing else changes.
