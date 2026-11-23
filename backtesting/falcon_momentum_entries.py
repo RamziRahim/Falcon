@@ -48,8 +48,13 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                    be_at: float | None = None, range_max: float | None = None, vol_exit: float | None = None,
                    cooldown: int = 0, levels: list | None = None, wick_exit: bool = False,
                    risk_on: float = RISK_ON, risk_soft: float = RISK_SOFT, gauge: pd.Series | None = None,
-                   slots: int = SLOTS, next_open: bool = False):
-    """next_open (docs/entry_realism_preregistration.md, FM_C3O; closebuy modes only): a clean
+                   slots: int = SLOTS, next_open: bool = False, conviction: str | None = None):
+    """conviction (docs/fm_conviction_sizing_preregistration.md): "full" multiplies each fill's
+    risk by 0.5 when Nifty is < 1.4% above its 50-session average, 1.5 when it is >= 4.1% above
+    and the fill is >= 2.2% above the stock's highest high of the previous 20 sessions, else 1;
+    "mkt" uses the market part only (0.5 below 1.4%, 1.5 at or above 4.1%). None = unchanged.
+
+    next_open (docs/entry_realism_preregistration.md, FM_C3O; closebuy modes only): a clean
     close on day t buys nothing at the close; it becomes a market order for the open of t+1,
     skipped if that open is > MAX_GAP above day t's close. Stop = max(swing stop, fill - 3 ATR)
     with ATR as of day t; target r_mult x risk from the fill; exits checked from the fill day.
@@ -76,6 +81,10 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
     nf = nifty.reindex(nifty.index.union(s)).ffill().reindex(s)
     n200, n50 = nf.rolling(200, min_periods=200).mean(), nf.rolling(50, min_periods=50).mean()
     n126 = nf / nf.shift(126) - 1
+    if conviction is not None:
+        assert conviction in ("full", "mkt")
+        conv_m = (nf / n50 - 1).to_numpy(float)
+        conv_hi20 = panel.high.rolling(20, min_periods=20).max().shift(1).to_numpy(float)
     if gauge is not None:
         gg = gauge.reindex(gauge.index.union(s)).ffill().reindex(s)
         g, g200, g50 = gg, gg.rolling(200, min_periods=200).mean(), gg.rolling(50, min_periods=50).mean()
@@ -248,8 +257,21 @@ def run_fm_entries(panel: Panel, start, end, nifty: pd.Series, indices: pd.DataF
                 stats["too_wide"] += 1
                 continue
             equity_now = ledger.cash + sum(ledger.value(x, opens) for x in ledger.shares)
-            value = min(od["risk"] * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
-            if POS_CAP * equity_now < min(od["risk"] * equity_now / dist, ledger.cash * 0.999):
+            risk_t = od["risk"]
+            if conviction is not None:
+                m_t = conv_m[i]
+                jj = cols[e]
+                k_t = fill / conv_hi20[i, jj] - 1 if np.isfinite(conv_hi20[i, jj]) else -np.inf
+                if np.isfinite(m_t) and m_t < 0.014:
+                    mult = 0.5
+                elif np.isfinite(m_t) and m_t >= 0.041 and (conviction == "mkt" or k_t >= 0.022):
+                    mult = 1.5
+                else:
+                    mult = 1.0
+                risk_t = od["risk"] * mult
+                stats["conv_" + str(mult)] = stats.get("conv_" + str(mult), 0) + 1
+            value = min(risk_t * equity_now / dist, POS_CAP * equity_now, ledger.cash * 0.999)
+            if POS_CAP * equity_now < min(risk_t * equity_now / dist, ledger.cash * 0.999):
                 stats["cap_binds"] = stats.get("cap_binds", 0) + 1
             if value > 0 and ledger.buy(day, e, fill, value, _adv(panel, i, e),
                                         {"stop": stop, "entry_idx": i, "fill": fill, "be_from": None,
