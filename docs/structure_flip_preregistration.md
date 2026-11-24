@@ -1,6 +1,6 @@
 # Weekly and monthly structure flip (downtrend → higher high → higher low) — pre-registration
 
-**Status: DRAFT — awaiting IA's freeze**
+**Status: FROZEN on 2026-11-24 23:27 IST**
 
 ## Question
 
