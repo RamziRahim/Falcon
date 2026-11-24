@@ -89,3 +89,67 @@ A pass means "candidate for paper trading, alone or beside A10" — IA decides. 
 - Module: `backtesting/structure_flip.py`
 - Runner: `tests/run_structure_flip.py`
 - Dated Results section here; scorecard rows.
+
+## Results (2026-11-24, run once after freeze)
+
+**References.** Passed: A10 reproduced `data/buystop_mix_result.txt` exactly on all stocks, half A and half B, in H0, W2 and W1 (9 checks). Output: `data/structure_flip_result.txt`.
+
+Nifty 50 CAGR: H0 21.19%, W2 5.54%, W1 10.03%.
+
+**Verdict: 2 of the 4 primaries passed. Both monthly versions passed; both weekly versions failed.**
+
+| Primary | All W2 (≥ 8.54) | All W1 (≥ 13.03) | Half B W2 (> 5.54) | Half B W1 (> 10.03) | All H0 (> 21.19) | |
+|---|---|---|---|---|---|---|
+| SF_M_a_STR (monthly, higher-low entry) | 17.98 | 17.01 | 18.67 | 13.10 | 21.93 | **PASSES** |
+| SF_M_b_STR (monthly, breakout entry) | 23.73 | 14.84 | 18.78 | 13.32 | 26.23 | **PASSES** |
+| SF_W_a_STR (weekly, higher-low entry) | 10.87 | **8.61** | 10.44 | 10.75 | **8.95** | FAILS |
+| SF_W_b_STR (weekly, breakout entry) | 13.94 | **7.41** | 12.20 | **8.00** | **14.91** | FAILS |
+
+Four primaries were judged, so one pass in four could be luck. Two passed, both monthly, and both cleared every sample and window. That is stronger than a single lucky cell, but the H0 margins are thin: +0.7 and +5.0 points over the Nifty.
+
+**All stocks, CAGR % (max DD %)**
+
+| Version | H0 2001–06 | W2 2008–17 | W1 2019–26 |
+|---|---|---|---|
+| A10 (reference) | 37.52 (−38.0) | 13.17 (−59.0) | 26.36 (−39.4) |
+| **Monthly (a), structure exit** | 21.93 (−31.4) | 17.98 (−33.7) | 17.01 (−26.3) |
+| **Monthly (b), structure exit** | 26.23 (−31.8) | 23.73 (−29.3) | 14.84 (−23.8) |
+| Monthly (a), 1:2 / 1:3 | 14.68 / 18.66 | 5.44 / 3.38 | 8.61 / 10.12 |
+| Monthly (b), 1:2 / 1:3 | 23.12 / 25.86 | 11.36 / 11.39 | 5.66 / 8.60 |
+| Weekly (a), structure / 1:2 / 1:3 | 8.95 / 11.89 / 12.79 | 10.87 / 6.15 / 8.77 | 8.61 / 5.92 / 8.82 |
+| Weekly (b), structure / 1:2 / 1:3 | 14.91 / 22.33 / 18.71 | 13.94 / 13.20 / 17.56 | 7.41 / 11.64 / 11.35 |
+| 50/50 A10 + monthly (a) | 30.28 (−34.1) | 15.94 (−46.7) | 22.15 (−28.7) |
+| 50/50 A10 + monthly (b) | 32.58 (−34.5) | 18.88 (−36.1) | 20.95 (−27.8) |
+
+**How the monthly versions trade** (all stocks, W2 / W1):
+
+| | Monthly (a) | Monthly (b) |
+|---|---|---|
+| Entries | 247 / 210 | 145 / 152 |
+| Signals skipped for lack of a slot | 655 / 453 | 402 / 258 |
+| Average initial risk to the stop | 19.9% / 16.8% | 29.1% / 26.5% |
+| Win rate | 28% / 29% | 51% / 36% |
+| Net per trade | +29.0% / +16.7% | +53.9% / +15.8% |
+| Top-3 share of profit, W1 | 0.56 | 0.43 |
+| Average invested | 86% | 83% |
+
+**What it means, in plain English:**
+
+**The monthly structure flip works on this data.** Buying a stock whose monthly chart turns from lower highs and lower lows into a higher high and higher low, and holding while each new monthly low is higher, beat the Nifty in every period and on both halves. It also beat A10 in 2008–17 (18–24% vs 13%) with far smaller falls:
+- **Worst fall:** about −24% to −34%, against −39% to −59% for A10.
+
+**It is not better than A10 overall.** A10 is still well ahead in 2001–06 and 2019–26 (37.5 / 26.4 vs 15–26%). What makes the flip interesting is that it makes money *differently*:
+- It catches turnarounds that A10 cannot rank.
+- **Mixed 50/50 with A10:** about 21–22% a year in 2019–26 and 16–19% in 2008–17, with the worst fall cut to −28% to −47% from A10's −39% to −59%.
+
+**The weekly version does not work.** Weekly structure flips too often and fails too often: 2,000+ signals a period, roughly 28% winners. Like the daily versions tested earlier, it ends up near or below the Nifty in 2019–26.
+
+**Fixed 1:2 / 1:3 targets hurt the monthly version.** They cost 6–15 points a year in 2008–17, for the same reason as with momentum: the profit comes from the few turnarounds that keep running.
+
+**Things to know before trusting it:**
+- **The stops are very wide:** on average 17–20% below entry for (a) and 26–29% for (b). Each loss can be large even though the portfolio's falls were smaller than A10's.
+- **There are few trades:** about 15–25 entries a year. Results lean on a handful of big winners (top 3 trades = 43–56% of profit in 2019–26).
+- **Signals far exceed the 20 slots.** Which turnarounds get bought depends on the "deepest prior fall" tie-break.
+- **2001–06 was barely above the Nifty for (a):** +0.7 points.
+
+**Next step (IA decides):** paper-trade the monthly flip, alone or as a 50/50 partner to A10. It would need IA's decision to add a track; the frozen plan is otherwise unchanged.
