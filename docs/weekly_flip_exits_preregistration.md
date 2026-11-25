@@ -1,6 +1,6 @@
 # Weekly structure flip: second-flip entries and non-trailing exits — pre-registration
 
-**Status: DRAFT — awaiting IA's freeze**
+**Status: FROZEN on 2026-11-25 19:58 IST**
 
 ## Question
 
