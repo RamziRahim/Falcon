@@ -56,7 +56,11 @@ def swing_lows(panel, tf):
     return out
 
 
-def find_signals(panel, tf):
+def find_signals(panel, tf, second=False):
+    """second=True (docs/weekly_flip_exits_preregistration.md): after HL1, wait for a close above HH1
+    (highest high from the break to HL1's confirmation), then a swing low confirmed after that close
+    and above HL1 (HL2); the setup's hl / hh are then HL2 / the highest high from the HH2 close to
+    HL2's confirmation, cancelled on a close below HL2 or after EXPIRY bars."""
     k, exp, sigs = K[tf], EXPIRY[tf], []
     for e, hh, ll, cc, end in _per_entity(panel, tf):
         n = len(cc)
@@ -64,10 +68,24 @@ def find_signals(panel, tf):
         sl = {j + k: j for j in _swings(ll, k, False)}
         highs, lows = [], []                                 # confirmed swing bars, in order
         state, brk = None, None
+
+        def emit(b, hl, hhv, fall):
+            cancel = None
+            for q in range(b + 1, min(n, b + 1 + exp)):
+                if cc[q] < hl:
+                    cancel = int(end[q])
+                    break
+            if cancel is None:
+                cancel = int(end[min(n - 1, b + exp)])
+            sigs.append({"entity": e, "sig_idx": int(end[b]), "cancel_idx": cancel, "hl": hl, "hh": hhv, "fall": fall})
+
         for b in range(n):
-            if state == "broken":
-                if cc[b] < brk["L2"]:
-                    state = None
+            if state == "broken" and cc[b] < brk["L2"]:
+                state = None
+            if state in ("hl1", "hh2") and cc[b] < brk["hl1"]:
+                state = None
+            if state == "hl1" and b - brk["hl1_bar"] > 26:
+                state = None
             if b in sh:
                 highs.append(sh[b])
             if b in sl:
@@ -75,18 +93,21 @@ def find_signals(panel, tf):
                 lows.append(j)
                 if state == "broken" and j >= brk["bar"]:
                     if ll[j] > brk["L2"]:
-                        hl = float(ll[j])
-                        hhv = float(hh[brk["bar"]:b + 1].max())
-                        cancel = None
-                        for q in range(b + 1, min(n, b + 1 + exp)):
-                            if cc[q] < hl:
-                                cancel = int(end[q])
-                                break
-                        if cancel is None:
-                            cancel = int(end[min(n - 1, b + exp)])
-                        sigs.append({"entity": e, "sig_idx": int(end[b]), "cancel_idx": cancel, "hl": hl, "hh": hhv,
-                                     "fall": brk["fall"]})
+                        hl, hhv = float(ll[j]), float(hh[brk["bar"]:b + 1].max())
+                        if not second:
+                            emit(b, hl, hhv, brk["fall"])
+                            state = None
+                        else:
+                            brk.update(hl1=hl, hh1=hhv, hl1_bar=b)
+                            state = "hl1"
+                    else:
+                        state = None
+                elif state == "hh2" and j >= brk["hh2_bar"]:
+                    if ll[j] > brk["hl1"]:
+                        emit(b, float(ll[j]), float(hh[brk["hh2_bar"]:b + 1].max()), brk["fall"])
                     state = None
+            if state == "hl1" and b > brk["hl1_bar"] and cc[b] > brk["hh1"]:
+                state, brk["hh2_bar"] = "hh2", b
             if state is None and len(highs) >= 2 and len(lows) >= 2:
                 h1, h2 = hh[highs[-2]], hh[highs[-1]]
                 l1, l2 = ll[lows[-2]], ll[lows[-1]]
@@ -97,7 +118,7 @@ def find_signals(panel, tf):
 
 
 def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, stats=None):
-    assert entry in ("a", "b") and exit_rule in ("STR", "R2", "R3")
+    assert entry in ("a", "b") and exit_rule in ("STR", "R2", "R3", "T26", "LL", "H2", "H3")
     ledger = Ledger(cost or CostModel())
     sessions = panel.sessions
     st = stats if stats is not None else {}
@@ -105,12 +126,28 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
     for s_ in signals:
         by_day.setdefault(s_["sig_idx"] + 1, []).append(s_)
     pending = []                                   # (b) buy-stops alive
-    rmult = {"R2": 2.0, "R3": 3.0}.get(exit_rule)
+    rmult = {"R2": 2.0, "R3": 3.0, "H2": 2.0, "H3": 3.0}.get(exit_rule)
+    hmult = {"H2": 1.0, "H3": 1.5}.get(exit_rule)
+    per = sessions.to_period("W-SUN" if tf == "W" else "M")
+    bar_end = np.r_[per[1:] != per[:-1], True]
     for i, day in enumerate(sessions):
         if day < start or day > end:
             continue
         _delisting_exits(panel, ledger, i, day)
         opens, highs, lows_, closes = (panel.open.iloc[i], panel.high.iloc[i], panel.low.iloc[i], panel.close.iloc[i])
+        for e in list(ledger.shares):              # T26 time exit and LL exit at today's open
+            m = ledger.meta[e]
+            o = opens.get(e, np.nan)
+            if not np.isfinite(o):
+                continue
+            if exit_rule == "T26" and i - m["entry_idx"] >= 130:
+                ledger.sell(day, e, o, _adv(panel, i, e), "TIME")
+            elif exit_rule == "LL" and m.get("ll_exit"):
+                ledger.sell(day, e, o, _adv(panel, i, e), "LOWER_LOW")
+        for e in ledger.shares:                    # moved stops go live from the session after the move
+            m = ledger.meta[e]
+            if m.get("pending_stop") is not None and m["pending_from"] <= i:
+                m["stop"] = max(m["stop"], m.pop("pending_stop"))
         if exit_rule == "STR":                     # raise stops on higher swing lows confirmed before today
             for e in ledger.shares:
                 m = ledger.meta[e]
@@ -152,11 +189,15 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
             stop = s_["hl"] * (1 - STOP_BUF)
             if px <= stop:
                 continue
-            extra = {"stop": stop, "entry_idx": i, "sig_idx": s_["sig_idx"],
-                     "target": px + rmult * (px - stop) if rmult else None}
+            extra = {"stop": stop, "entry_idx": i, "sig_idx": s_["sig_idx"], "ref_low": s_["hl"], "px": px,
+                     "target": px + rmult * (px - stop) if rmult else None,
+                     "half_level": px + hmult * (px - stop) if hmult else None}
             if ledger.buy(day, e, px, min(eq_now / SLOTS, ledger.cash * 0.995), _adv(panel, i, e), extra):
                 st["entries"] = st.get("entries", 0) + 1
                 st["risk_sum"] = st.get("risk_sum", 0.0) + (px - stop) / px
+                rk = (px - stop) / px
+                band = "risk_lt5" if rk < 0.05 else ("risk_5to10" if rk < 0.10 else "risk_ge10")
+                st[band] = st.get(band, 0) + 1
         for e in list(ledger.shares):
             m = ledger.meta[e]
             lo, o = lows_.get(e, np.nan), opens.get(e, np.nan)
@@ -164,10 +205,25 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
                 gap = m["entry_idx"] < i and np.isfinite(o) and o < m["stop"]
                 ledger.sell(day, e, o if gap else m["stop"], _adv(panel, i, e), "STOP")
                 continue
-            if m.get("target") is not None:
-                hi = highs.get(e, np.nan)
-                if np.isfinite(hi) and hi >= m["target"]:
-                    gap = m["entry_idx"] < i and np.isfinite(o) and o > m["target"]
-                    ledger.sell(day, e, o if gap else m["target"], _adv(panel, i, e), "TARGET")
+            hi = highs.get(e, np.nan)
+            if m.get("half_level") is not None and not m.get("half_done") and np.isfinite(hi) and hi >= m["half_level"]:
+                gap = m["entry_idx"] < i and np.isfinite(o) and o > m["half_level"]
+                pxh = o if gap else m["half_level"]
+                ledger.trim(e, pxh, ledger.shares[e] * pxh / 2, _adv(panel, i, e))
+                m["half_done"] = True
+                m["pending_stop"], m["pending_from"] = m["px"], i + 1
+                st["half_exits"] = st.get("half_exits", 0) + 1
+            if m.get("target") is not None and np.isfinite(hi) and hi >= m["target"]:
+                gap = m["entry_idx"] < i and np.isfinite(o) and o > m["target"]
+                ledger.sell(day, e, o if gap else m["target"], _adv(panel, i, e), "TARGET")
+        if exit_rule == "LL":                      # a completed bar closing below the latest confirmed swing low
+            for e in ledger.shares:
+                m = ledger.meta[e]
+                for ci, lv in lows.get(e, ()):
+                    if m["sig_idx"] < ci <= i:
+                        m["ref_low"] = lv
+                c_ = closes.get(e, np.nan)
+                if bar_end[i] and np.isfinite(c_) and c_ < m["ref_low"]:
+                    m["ll_exit"] = True
         ledger.mark(day, closes)
     return _result(ledger)
