@@ -32,6 +32,8 @@ from backtesting.v3_scan import scan_setups
 from backtesting.weekly_support import weekly_support_levels
 from tests.run_falcon_v3_patterns import prep3
 from tests.run_portfolio_combo import combine
+from backtesting.dynamic_stops import conf_candidates
+from backtesting.structure_flip import find_signals, run_flip, swing_lows
 
 PLAN = "docs/paper_trading_plan.md"
 DATA = "data/pit_v2"
@@ -55,6 +57,9 @@ TRACKS = {
     "T09_A10P": "Monthly momentum, half at open + half on the weekly pullback",
     "T10_M_SEC": "Monthly momentum + sector strength",
     "T11_A10_70": "Monthly momentum at 70% size",
+    "T12_A10_SFM": "A10 + monthly structure flip (b), 50/50 (added 25 Nov)",
+    "T13_RS_CONF": "Momentum, confluence stop + risk sizing, no target (probation, added 25 Nov)",
+    "T14_WF_B2_LL": "Weekly flip, second breakout, weekly-close exit (probation, added 25 Nov)",
 }
 
 
@@ -134,8 +139,11 @@ def run_tracks(panel, uni, nifty, indices, end):
     st["A70"] = {}
     out["T11_A10_70"] = run_momentum(panel, RANK_DAY, endm, stop_pct=0.10, gauge_up=np.zeros(len(s), dtype=bool),
                                      down_level=0.7, stats=st["A70"])
-    if end < DAY_ONE:                                    # the ranking day itself: FM / P3 start on day one
-        for code in ("T03_C_F_A", "T04_C_F_A_P3", "T05_C_F_A_O", "T06_C_F_A_P3O", "T07_C_F_A_H"):
+    st["RS"] = {}                                        # T13 (dated note 2026-11-25 in the plan)
+    out["T13_RS_CONF"] = run_momentum(panel, RANK_DAY, endm, stop_pct=0.10, stop_mode="conf", risk_frac=0.005,
+                                      conf_levels=conf_candidates(panel), stats=st["RS"])
+    if end < DAY_ONE:                                    # the ranking day itself: FM / P3 / flips start on day one
+        for code in ("T03_C_F_A", "T04_C_F_A_P3", "T05_C_F_A_O", "T06_C_F_A_P3O", "T07_C_F_A_H", "T12_A10_SFM", "T14_WF_B2_LL"):
             out[code] = None
         return out, st, pd.DataFrame()
     fm, fmo, fmh = (run_fm_entries(panel, DAY_ONE, end, nifty, indices, mode, r_mult=3.0, **kw)[:2]
@@ -154,6 +162,9 @@ def run_tracks(panel, uni, nifty, indices, end):
     out["T05_C_F_A_O"] = combine({"F": fmo, "A": A}, "FA", True)
     out["T06_C_F_A_P3O"] = combine({"F": fmo, "A": A, "P": p3o}, "FAP", True)
     out["T07_C_F_A_H"] = combine({"F": fmh, "A": A}, "FA", True)
+    sfm = run_flip(panel, DAY_ONE, end, "M", "b", "STR", find_signals(panel, "M"), swing_lows(panel, "M"))
+    out["T12_A10_SFM"] = combine({"F": sfm, "A": A}, "FA", True)
+    out["T14_WF_B2_LL"] = run_flip(panel, DAY_ONE, end, "W", "b", "LL", find_signals(panel, "W", second=True), swing_lows(panel, "W"))
     return out, st, setups
 
 
@@ -247,7 +258,7 @@ def write(panel, out, nifty, end, st, new, setups):
         lines.append(f"| {code} {TRACKS[code]} | {e_last:,.0f} | {100 * (e_last / 1_000_000 - 1):+.2f}% | {n_open} |")
     last_i = len(panel.sessions) - 1
     orders = []
-    for code, key in (("T01_A10", "A"), ("T10_M_SEC", "SEC"), ("T11_A10_70", "A70")):
+    for code, key in (("T01_A10", "A"), ("T10_M_SEC", "SEC"), ("T11_A10_70", "A70"), ("T13_RS_CONF", "RS")):
         o = momentum_orders(panel, st.get(key, {}), out[code], last_i)
         if o is not None and len(o):
             o.insert(0, "track", code)
@@ -261,7 +272,7 @@ def write(panel, out, nifty, end, st, new, setups):
             sells = ", ".join(g.loc[g.action == "SELL", "symbol"])
             lines.append(f"- **{code}** buy: {buys or '—'}; sell: {sells or '—'}")
         lines.append("")
-        lines.append("Tracks 2, 3–7 and 9 use the T01 momentum list (T02 skips names stopped this month; T09 buys half now).")
+        lines.append("Tracks 2, 3–7, 9 and 12 use the T01 momentum list (T02 skips names stopped this month; T09 buys half now).")
     if new:
         lines += ["", f"## New listings in the universe, not yet classified ({len(new)}) — unbuyable until reviewed", "",
                   ", ".join(sym.get(e, e) for e in new)]

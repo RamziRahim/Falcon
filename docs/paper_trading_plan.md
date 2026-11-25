@@ -133,3 +133,19 @@ At each checkpoint, for each track:
 - **2026-11-22 (engine frozen):** `paper-v1` = commit `5f5eebf` on `claude/swing-low-risk`. The tag itself could not be pushed from the build environment.
   - Checks on past data, with a pretend day one of 2026-09-01: the engine matches the full-history backtest functions on all 10 automatic tracks; no look-ahead; the evening month-end orders equal the next-open fills.
   - Track 8 is logged in `paper/manual/track8_orders.csv` rather than by Telegram, since IA chose email for alerts.
+
+## Dated note (2026-11-25 20:40 IST): three tracks added on IA's decision
+
+IA asked, before day one, to add these to paper trading. All three start with the others: ranking at the 2026-11-30 close, first fills 2026-12-01. They have the same ethical filter, ₹10 lakh notional and checkpoints.
+
+| Track | What it is | Source |
+|---|---|---|
+| T12_A10_SFM | A10 (the T01 list) + monthly structure flip, entry (b), structure exit; 50/50, reset monthly | `docs/structure_flip_preregistration.md` (SF_M_b_STR passed its bar; the 50/50 mix was reported) |
+| T13_RS_CONF | Monthly momentum with the confluence stop and risk-based sizing, no target — **probation** | `docs/momentum_risk_sizing_preregistration.md` (reported only; weaker on half B) |
+| T14_WF_B2_LL | Weekly flip, second-breakout entry, exit on a weekly close below the latest swing low — **probation** | `docs/weekly_flip_exits_preregistration.md` (reported only; best of the 28 weekly combinations) |
+
+"Probation" means the backtest evidence is weaker: the strategy was reported but not judged. These tracks are watched for whether their live record supports the backtest; the same checkpoints and IA's decision apply.
+
+The engine replay check (`paper/check_engine.py 2026-08-31 2026-09-01 2026-11-20`) matched the full-history backtest exactly for all 13 automatic tracks.
+
+The engine loads history from 2022, so T12 and T14 only see flips whose swing structure formed since then; the replay check above confirms that this changed nothing over the check period.
