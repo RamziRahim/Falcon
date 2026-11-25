@@ -398,6 +398,17 @@ for _c, _n, _f in (("FM_H3", "Falcon Momentum on a resting buy-stop at the 20-da
     for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
         specs.append((f"{_p}_bs_{_c.lower()}", _n, _f, "Buy-stop at the 20-day high (FM); next open (others)", "As already specified",
                       "As already specified", "As already specified", "As already specified", "buystop_mix_result.txt", f"{_c}@{_s}"))
+# weekly flip exits (docs/weekly_flip_exits_preregistration.md, frozen 25 Nov 2026)
+_WFE = {"a": "at the first higher low", "b": "breakout above the first new high", "a2": "at the second higher low", "b2": "breakout above the second new high"}
+_WFX = {"STR": ("Trail under each higher low", "None"), "R2": ("Fixed", "1:2"), "R3": ("Fixed", "1:3"), "T26": ("Fixed; sold after 26 weeks", "None"),
+        "LL": ("Fixed; sold on a weekly close below the latest swing low", "None"), "H2": ("Fixed; to cost after half at 1R", "Half at 1R, rest 1:2"),
+        "H3": ("Fixed; to cost after half at 1.5R", "Half at 1.5R, rest 1:3")}
+for _en, _enn in _WFE.items():
+    for _ex, (_stn, _tg) in _WFX.items():
+        for _s, _p in (("ALL", "all"), ("A", "ha"), ("B", "hb")):
+            specs.append((f"{_p}_wf_{_en}_{_ex}".lower(), f"Weekly flip, entry {_en} ({_enn}), exit {_ex}", "Structure flip",
+                          f"Weekly downtrend broken; buy {_enn}", _stn, _tg, "Top-500 universe", "Until an exit",
+                          "weekly_flip_exits_result.txt", f"WF_{_en}_{_ex}@{_s}"))
 # structure flip (docs/structure_flip_preregistration.md, frozen 24 Nov 2026)
 for _tf, _tfn in (("W", "weekly"), ("M", "monthly")):
     for _en, _enn in (("a", "at the higher low (next open)"), ("b", "buy-stop at the new high")):
@@ -511,7 +522,7 @@ DOCS = [("swing_risk", "swing_low_risk"), ("s_plus", "s_plus"), ("s_sector_nifty
         ("portfolio_combo", "portfolio_combo"), ("close_entry", "close_entry"), ("retest_depth", "retest_depth"),
         ("range_breakout", "range_breakout"), ("rb_risk_combo", "rb_risk_combo"), ("pullback_result", "pullback"),
         ("mom_reversal", "pullback_diagnostics"), ("falcon_salvage", "falcon_salvage"), ("wick_exit", "wick_exit"),
-        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("momentum_tight_stops", "momentum_tight_stops"), ("half_at_1to1", "half_at_1to1"), ("buystop_mix", "buystop_mix"), ("momentum_risk_sizing", "momentum_risk_sizing"), ("fm_conviction_sizing", "fm_conviction_sizing"), ("fm_conviction_slots", "fm_conviction_slots"), ("structure_flip", "structure_flip"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
+        ("halfB", "halfB_confirmation"), ("a_exposure", "a_exposure"), ("a_stop_width", "a_stop_width"), ("a_volrank", "a_volrank"), ("fm_risk_gauge", "fm_risk_gauge"), ("fm_slots", "fm_slots"), ("wyckoff_swing", "wyckoff_swing"), ("ethical_filter_history", "ethical_filter_history"), ("entry_realism", "entry_realism"), ("momentum_weekly_support", "momentum_weekly_support"), ("pullback_two_ways", "pullback_two_ways"), ("weekly_momentum", "weekly_momentum"), ("momentum_sector_exits", "momentum_sector_exits"), ("momentum_tight_stops", "momentum_tight_stops"), ("half_at_1to1", "half_at_1to1"), ("buystop_mix", "buystop_mix"), ("momentum_risk_sizing", "momentum_risk_sizing"), ("fm_conviction_sizing", "fm_conviction_sizing"), ("fm_conviction_slots", "fm_conviction_slots"), ("structure_flip", "structure_flip"), ("weekly_flip_exits", "weekly_flip_exits"), ("structure_pullback", "structure_pullback"), ("momentum_patterns", "momentum_patterns"), ("falcon_v3_patterns", "falcon_v3_patterns"), ("falcon_v2_risk2", "falcon_v2_risk2"), ("falcon_v2_retest", "falcon_v2_retest"), ("falcon_v2", "falcon_v2"), ("a_stop", "a_stop"), ("a_topn", "a_stop"), ("exit_variants", "exit_variants"),
         ("fixed_rr", "fixed_rr"), ("final_results", "s_and_f / mean_reversion")]
 for r in rows:
     f = r.get("file", "")
@@ -684,6 +695,12 @@ for _p in ("all", "ha", "hb"):
                     VERDICT[_id] = "Reported for information only; not judged."
     for _c in ("sf_w_a_str", "sf_w_b_str", "sf_m_a_str", "sf_m_b_str"):
         VERDICT[f"{_p}_sfmix_{_c}"] = "Reported for information only; not judged."
+for _p in ("all", "ha", "hb"):
+    for _en in ("a", "b", "a2", "b2"):
+        for _ex in ("str", "r2", "r3", "t26", "ll", "h2", "h3"):
+            _id = f"{_p}_wf_{_en}_{_ex}"
+            VERDICT[_id] = ("Judged: FAILS (below the bar in 2019–26 and 2001–06; 25 Nov 2026)."
+                            if _p == "all" and _en in ("a2", "b2") and _ex in ("h2", "h3") else "Reported for information only; not judged.")
 VERDICT["all_fm_c3"] = "Reference run: first run of this strategy on all stocks (10 Nov 2026)."
 for _t in ("all", "ha", "hb"):
     VERDICT[f"{_t}_wy_wy"] = "Primary variant: FAILED its frozen bar (21 Nov 2026). Not adopted."

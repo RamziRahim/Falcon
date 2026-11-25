@@ -1,0 +1,298 @@
+A10@ALL H0: cagr 37.52 dd -38.04 nifty 21.19 win 35.5% net/trade +5.97% n 739 grew 67.42L checks 4/6
+  reference check A10@ALL H0 vs A10 in data/buystop_mix_result.txt: file (37.52, -38.04) run (37.52, -38.04) -> MATCH
+WF_a_STR@ALL H0: cagr 8.95 dd -62.76 nifty 21.19 win 28.3% net/trade +4.65% n 378 grew 16.71L checks 1/6
+  reference check WF_a_STR@ALL H0 vs SF_W_a_STR in data/structure_flip_result.txt: file (8.95, -62.76) run (8.95, -62.76) -> MATCH
+WF_a_R2@ALL H0: cagr 11.89 dd -52.2 nifty 21.19 win 46.7% net/trade +3.72% n 520 grew 19.60L checks 1/6
+WF_a_R3@ALL H0: cagr 12.79 dd -53.62 nifty 21.19 win 37.2% net/trade +4.88% n 390 grew 20.57L checks 1/6
+WF_a_T26@ALL H0: cagr 9.93 dd -59.54 nifty 21.19 win 32.0% net/trade +5.26% n 363 grew 17.63L checks 1/6
+WF_a_LL@ALL H0: cagr 23.84 dd -57.87 nifty 21.19 win 28.9% net/trade +24.91% n 270 grew 36.00L checks 1/6
+WF_a_H2@ALL H0: cagr 4.85 dd -50.6 nifty 21.19 win 55.9% net/trade +1.38% n 610 grew 13.28L checks 1/6
+WF_a_H3@ALL H0: cagr 8.47 dd -56.79 nifty 21.19 win 49.9% net/trade +2.83% n 463 grew 16.27L checks 1/6
+WF_b_STR@ALL H0: cagr 14.91 dd -48.11 nifty 21.19 win 40.2% net/trade +9.40% n 259 grew 22.99L checks 2/6
+  reference check WF_b_STR@ALL H0 vs SF_W_b_STR in data/structure_flip_result.txt: file (14.91, -48.11) run (14.91, -48.11) -> MATCH
+WF_b_R2@ALL H0: cagr 22.33 dd -38.18 nifty 21.19 win 54.7% net/trade +14.48% n 225 grew 33.44L checks 3/6
+WF_b_R3@ALL H0: cagr 18.71 dd -39.68 nifty 21.19 win 42.7% net/trade +16.68% n 171 grew 27.94L checks 2/6
+WF_b_T26@ALL H0: cagr 22.13 dd -47.95 nifty 21.19 win 53.2% net/trade +13.57% n 231 grew 33.12L checks 3/6
+WF_b_LL@ALL H0: cagr 32.82 dd -42.11 nifty 21.19 win 46.2% net/trade +36.80% n 171 grew 54.75L checks 4/6
+WF_b_H2@ALL H0: cagr 20.13 dd -28.74 nifty 21.19 win 67.6% net/trade +9.21% n 290 grew 30.01L checks 3/6
+WF_b_H3@ALL H0: cagr 14.23 dd -42.7 nifty 21.19 win 53.5% net/trade +9.69% n 198 grew 22.19L checks 2/6
+WF_a2_STR@ALL H0: cagr 14.82 dd -34.73 nifty 21.19 win 27.7% net/trade +8.64% n 278 grew 22.89L checks 2/6
+WF_a2_R2@ALL H0: cagr 11.4 dd -31.64 nifty 21.19 win 46.0% net/trade +4.54% n 391 grew 19.09L checks 2/6
+WF_a2_R3@ALL H0: cagr 14.91 dd -33.83 nifty 21.19 win 40.6% net/trade +7.48% n 325 grew 22.99L checks 2/6
+WF_a2_T26@ALL H0: cagr 14.95 dd -30.95 nifty 21.19 win 33.0% net/trade +9.52% n 270 grew 23.03L checks 2/6
+WF_a2_LL@ALL H0: cagr 33.56 dd -29.11 nifty 21.19 win 31.3% net/trade +31.68% n 211 grew 56.61L checks 4/6
+WF_a2_H2@ALL H0: cagr 8.73 dd -27.05 nifty 21.19 win 59.1% net/trade +2.88% n 452 grew 16.51L checks 2/6
+WF_a2_H3@ALL H0: cagr 13.1 dd -29.3 nifty 21.19 win 51.0% net/trade +5.49% n 353 grew 20.91L checks 2/6
+WF_b2_STR@ALL H0: cagr 16.93 dd -28.91 nifty 21.19 win 44.4% net/trade +16.94% n 162 grew 25.52L checks 2/6
+WF_b2_R2@ALL H0: cagr 20.99 dd -32.96 nifty 21.19 win 56.2% net/trade +14.51% n 203 grew 31.31L checks 3/6
+WF_b2_R3@ALL H0: cagr 25.78 dd -33.61 nifty 21.19 win 51.9% net/trade +24.54% n 154 grew 39.52L checks 3/6
+WF_b2_T26@ALL H0: cagr 19.08 dd -32.96 nifty 21.19 win 54.9% net/trade +18.12% n 153 grew 28.46L checks 3/6
+WF_b2_LL@ALL H0: cagr 35.04 dd -29.35 nifty 21.19 win 47.0% net/trade +56.72% n 117 grew 60.46L checks 5/6
+WF_b2_H2@ALL H0: cagr 10.64 dd -28.84 nifty 21.19 win 63.1% net/trade +7.02% n 225 grew 18.33L checks 2/6
+WF_b2_H3@ALL H0: cagr 19.15 dd -27.89 nifty 21.19 win 59.9% net/trade +15.93% n 167 grew 28.57L checks 3/6
+ALL H0 {'A10': np.float64(37.52), 'WF_a2_H2': np.float64(8.73), 'WF_a2_H3': np.float64(13.1), 'WF_b2_H2': np.float64(10.64), 'WF_b2_H3': np.float64(19.15)}
+A10@ALL W2: cagr 13.17 dd -59.05 nifty 5.54 win 32.4% net/trade +2.50% n 1176 grew 34.42L checks 5/6
+  reference check A10@ALL W2 vs A10 in data/buystop_mix_result.txt: file (13.17, -59.05) run (13.17, -59.05) -> MATCH
+WF_a_STR@ALL W2: cagr 10.87 dd -45.14 nifty 5.54 win 25.6% net/trade +4.90% n 667 grew 28.03L checks 5/6
+  reference check WF_a_STR@ALL W2 vs SF_W_a_STR in data/structure_flip_result.txt: file (10.87, -45.14) run (10.87, -45.14) -> MATCH
+WF_a_R2@ALL W2: cagr 6.15 dd -43.76 nifty 5.54 win 38.6% net/trade +1.96% n 848 grew 18.16L checks 4/6
+WF_a_R3@ALL W2: cagr 8.77 dd -40.58 nifty 5.54 win 31.9% net/trade +3.93% n 652 grew 23.17L checks 4/6
+WF_a_T26@ALL W2: cagr 11.95 dd -46.23 nifty 5.54 win 25.5% net/trade +5.04% n 701 grew 30.89L checks 5/6
+WF_a_LL@ALL W2: cagr 11.88 dd -47.69 nifty 5.54 win 24.0% net/trade +6.32% n 583 grew 30.70L checks 5/6
+WF_a_H2@ALL W2: cagr 1.51 dd -36.51 nifty 5.54 win 51.8% net/trade +0.47% n 1014 grew 11.62L checks 1/6
+WF_a_H3@ALL W2: cagr 5.33 dd -38.91 nifty 5.54 win 42.2% net/trade +1.79% n 735 grew 16.81L checks 3/6
+WF_b_STR@ALL W2: cagr 13.94 dd -26.95 nifty 5.54 win 40.4% net/trade +7.85% n 413 grew 36.84L checks 5/6
+  reference check WF_b_STR@ALL W2 vs SF_W_b_STR in data/structure_flip_result.txt: file (13.94, -26.95) run (13.94, -26.95) -> MATCH
+WF_b_R2@ALL W2: cagr 13.2 dd -26.24 nifty 5.54 win 48.0% net/trade +10.11% n 325 grew 34.52L checks 5/6
+WF_b_R3@ALL W2: cagr 17.56 dd -26.61 nifty 5.54 win 46.6% net/trade +18.37% n 221 grew 50.38L checks 6/6
+WF_b_T26@ALL W2: cagr 14.45 dd -24.93 nifty 5.54 win 45.7% net/trade +9.01% n 392 grew 38.51L checks 5/6
+WF_b_LL@ALL W2: cagr 17.21 dd -23.31 nifty 5.54 win 41.4% net/trade +12.14% n 324 grew 48.88L checks 5/6
+WF_b_H2@ALL W2: cagr 9.43 dd -27.39 nifty 5.54 win 58.2% net/trade +5.45% n 390 grew 24.60L checks 4/6
+WF_b_H3@ALL W2: cagr 12.52 dd -23.28 nifty 5.54 win 54.7% net/trade +9.64% n 274 grew 32.49L checks 5/6
+WF_a2_STR@ALL W2: cagr 8.65 dd -30.12 nifty 5.54 win 30.7% net/trade +4.19% n 502 grew 22.91L checks 4/6
+WF_a2_R2@ALL W2: cagr 2.22 dd -39.02 nifty 5.54 win 38.1% net/trade +0.96% n 561 grew 12.45L checks 3/6
+WF_a2_R3@ALL W2: cagr 5.2 dd -34.85 nifty 5.54 win 32.1% net/trade +2.26% n 467 grew 16.60L checks 4/6
+WF_a2_T26@ALL W2: cagr 8.27 dd -30.45 nifty 5.54 win 29.5% net/trade +3.93% n 495 grew 22.13L checks 4/6
+WF_a2_LL@ALL W2: cagr 8.7 dd -28.55 nifty 5.54 win 28.6% net/trade +5.93% n 420 grew 23.01L checks 4/6
+WF_a2_H2@ALL W2: cagr 1.55 dd -36.3 nifty 5.54 win 52.9% net/trade +0.50% n 678 grew 11.66L checks 2/6
+WF_a2_H3@ALL W2: cagr 2.41 dd -33.99 nifty 5.54 win 43.1% net/trade +0.68% n 527 grew 12.69L checks 2/6
+WF_b2_STR@ALL W2: cagr 9.07 dd -27.84 nifty 5.54 win 39.4% net/trade +6.47% n 312 grew 23.82L checks 4/6
+WF_b2_R2@ALL W2: cagr 10.06 dd -27.79 nifty 5.54 win 48.5% net/trade +7.80% n 270 grew 26.07L checks 4/6
+WF_b2_R3@ALL W2: cagr 14.9 dd -29.22 nifty 5.54 win 43.7% net/trade +14.73% n 215 grew 40.08L checks 5/6
+WF_b2_T26@ALL W2: cagr 10.7 dd -23.92 nifty 5.54 win 46.7% net/trade +6.99% n 306 grew 27.61L checks 5/6
+WF_b2_LL@ALL W2: cagr 12.05 dd -30.17 nifty 5.54 win 41.8% net/trade +10.15% n 256 grew 31.17L checks 5/6
+WF_b2_H2@ALL W2: cagr 6.51 dd -26.99 nifty 5.54 win 58.4% net/trade +4.07% n 334 grew 18.78L checks 4/6
+WF_b2_H3@ALL W2: cagr 10.63 dd -24.13 nifty 5.54 win 52.5% net/trade +8.51% n 238 grew 27.44L checks 5/6
+ALL W2 {'A10': np.float64(13.17), 'WF_a2_H2': np.float64(1.55), 'WF_a2_H3': np.float64(2.41), 'WF_b2_H2': np.float64(6.51), 'WF_b2_H3': np.float64(10.63)}
+A10@ALL W1: cagr 26.36 dd -39.44 nifty 10.03 win 39.1% net/trade +4.86% n 975 grew 62.42L checks 5/6
+  reference check A10@ALL W1 vs A10 in data/buystop_mix_result.txt: file (26.36, -39.44) run (26.36, -39.44) -> MATCH
+WF_a_STR@ALL W1: cagr 8.61 dd -31.98 nifty 10.03 win 27.7% net/trade +3.60% n 563 grew 19.09L checks 3/6
+  reference check WF_a_STR@ALL W1 vs SF_W_a_STR in data/structure_flip_result.txt: file (8.61, -31.98) run (8.61, -31.98) -> MATCH
+WF_a_R2@ALL W1: cagr 5.92 dd -31.76 nifty 10.03 win 39.7% net/trade +2.13% n 677 grew 15.69L checks 2/6
+WF_a_R3@ALL W1: cagr 8.82 dd -36.2 nifty 10.03 win 33.4% net/trade +3.90% n 491 grew 19.38L checks 3/6
+WF_a_T26@ALL W1: cagr 9.94 dd -29.22 nifty 10.03 win 29.7% net/trade +4.04% n 498 grew 21.00L checks 3/6
+WF_a_LL@ALL W1: cagr 11.02 dd -30.15 nifty 10.03 win 27.2% net/trade +4.64% n 474 grew 22.67L checks 3/6
+WF_a_H2@ALL W1: cagr 4.68 dd -30.07 nifty 10.03 win 53.2% net/trade +1.12% n 847 grew 14.30L checks 2/6
+WF_a_H3@ALL W1: cagr 6.08 dd -26.1 nifty 10.03 win 45.0% net/trade +2.17% n 582 grew 15.88L checks 3/6
+WF_b_STR@ALL W1: cagr 7.41 dd -31.09 nifty 10.03 win 38.0% net/trade +4.05% n 392 grew 17.49L checks 3/6
+  reference check WF_b_STR@ALL W1 vs SF_W_b_STR in data/structure_flip_result.txt: file (7.41, -31.09) run (7.41, -31.09) -> MATCH
+WF_b_R2@ALL W1: cagr 11.64 dd -26.63 nifty 10.03 win 49.0% net/trade +8.08% n 288 grew 23.67L checks 3/6
+WF_b_R3@ALL W1: cagr 11.35 dd -27.48 nifty 10.03 win 39.2% net/trade +10.25% n 217 grew 23.20L checks 3/6
+WF_b_T26@ALL W1: cagr 14.11 dd -24.63 nifty 10.03 win 49.0% net/trade +7.45% n 343 grew 28.10L checks 3/6
+WF_b_LL@ALL W1: cagr 12.45 dd -29.89 nifty 10.03 win 40.4% net/trade +7.46% n 322 grew 25.06L checks 3/6
+WF_b_H2@ALL W1: cagr 9.08 dd -20.0 nifty 10.03 win 61.3% net/trade +4.55% n 377 grew 19.74L checks 2/6
+WF_b_H3@ALL W1: cagr 9.06 dd -26.47 nifty 10.03 win 52.4% net/trade +6.12% n 273 grew 19.72L checks 2/6
+WF_a2_STR@ALL W1: cagr 7.92 dd -31.03 nifty 10.03 win 26.3% net/trade +1.87% n 490 grew 18.16L checks 1/6
+WF_a2_R2@ALL W1: cagr 7.81 dd -23.72 nifty 10.03 win 38.3% net/trade +2.52% n 582 grew 18.01L checks 2/6
+WF_a2_R3@ALL W1: cagr 9.02 dd -31.16 nifty 10.03 win 31.5% net/trade +3.77% n 457 grew 19.66L checks 2/6
+WF_a2_T26@ALL W1: cagr 9.93 dd -25.46 nifty 10.03 win 28.0% net/trade +3.85% n 453 grew 20.99L checks 2/6
+WF_a2_LL@ALL W1: cagr 11.29 dd -34.03 nifty 10.03 win 24.2% net/trade +4.94% n 421 grew 23.10L checks 2/6
+WF_a2_H2@ALL W1: cagr 2.28 dd -24.05 nifty 10.03 win 50.6% net/trade +0.73% n 664 grew 11.93L checks 1/6
+WF_a2_H3@ALL W1: cagr 4.36 dd -26.59 nifty 10.03 win 42.0% net/trade +1.45% n 531 grew 13.97L checks 2/6
+WF_b2_STR@ALL W1: cagr 11.74 dd -36.64 nifty 10.03 win 35.8% net/trade +6.85% n 327 grew 23.84L checks 1/6
+WF_b2_R2@ALL W1: cagr 13.15 dd -26.96 nifty 10.03 win 45.7% net/trade +8.29% n 276 grew 26.31L checks 3/6
+WF_b2_R3@ALL W1: cagr 10.64 dd -35.4 nifty 10.03 win 37.0% net/trade +9.84% n 208 grew 22.06L checks 2/6
+WF_b2_T26@ALL W1: cagr 13.47 dd -30.17 nifty 10.03 win 44.9% net/trade +9.39% n 292 grew 26.90L checks 3/6
+WF_b2_LL@ALL W1: cagr 16.98 dd -33.76 nifty 10.03 win 38.1% net/trade +14.81% n 260 grew 34.14L checks 4/6
+WF_b2_H2@ALL W1: cagr 9.14 dd -23.46 nifty 10.03 win 58.4% net/trade +4.58% n 332 grew 19.83L checks 2/6
+WF_b2_H3@ALL W1: cagr 8.51 dd -27.25 nifty 10.03 win 47.2% net/trade +6.43% n 231 grew 18.95L checks 3/6
+ALL W1 {'A10': np.float64(26.36), 'WF_a2_H2': np.float64(2.28), 'WF_a2_H3': np.float64(4.36), 'WF_b2_H2': np.float64(9.14), 'WF_b2_H3': np.float64(8.51)}
+A10@A H0: cagr 23.87 dd -42.72 nifty 21.19 win 35.7% net/trade +4.85% n 718 grew 36.06L checks 3/6
+  reference check A10@A H0 vs A10 in data/buystop_mix_result.txt: file (23.87, -42.72) run (23.87, -42.72) -> MATCH
+WF_a_STR@A H0: cagr 5.06 dd -63.36 nifty 21.19 win 26.1% net/trade +3.03% n 345 grew 13.44L checks 0/6
+  reference check WF_a_STR@A H0 vs SF_W_a_STR in data/structure_flip_result.txt: file (5.06, -63.36) run (5.06, -63.36) -> MATCH
+WF_a_R2@A H0: cagr 12.63 dd -39.38 nifty 21.19 win 44.2% net/trade +4.30% n 439 grew 20.39L checks 2/6
+WF_a_R3@A H0: cagr 15.2 dd -45.49 nifty 21.19 win 39.2% net/trade +6.50% n 344 grew 23.35L checks 2/6
+WF_a_T26@A H0: cagr 6.09 dd -61.54 nifty 21.19 win 29.4% net/trade +3.13% n 333 grew 14.25L checks 1/6
+WF_a_LL@A H0: cagr 15.39 dd -63.36 nifty 21.19 win 25.1% net/trade +10.31% n 275 grew 23.57L checks 1/6
+WF_a_H2@A H0: cagr 6.25 dd -39.94 nifty 21.19 win 55.1% net/trade +1.82% n 508 grew 14.38L checks 2/6
+WF_a_H3@A H0: cagr 7.98 dd -44.76 nifty 21.19 win 48.1% net/trade +2.91% n 395 grew 15.84L checks 2/6
+WF_b_STR@A H0: cagr 10.8 dd -45.79 nifty 21.19 win 39.6% net/trade +8.41% n 212 grew 18.48L checks 2/6
+  reference check WF_b_STR@A H0 vs SF_W_b_STR in data/structure_flip_result.txt: file (10.8, -45.79) run (10.8, -45.79) -> MATCH
+WF_b_R2@A H0: cagr 17.23 dd -35.8 nifty 21.19 win 52.9% net/trade +11.93% n 206 grew 25.92L checks 3/6
+WF_b_R3@A H0: cagr 16.75 dd -40.32 nifty 21.19 win 44.5% net/trade +15.42% n 164 grew 25.29L checks 2/6
+WF_b_T26@A H0: cagr 11.14 dd -44.95 nifty 21.19 win 48.2% net/trade +8.73% n 197 grew 18.83L checks 2/6
+WF_b_LL@A H0: cagr 15.81 dd -46.26 nifty 21.19 win 39.9% net/trade +19.84% n 163 grew 24.09L checks 2/6
+WF_b_H2@A H0: cagr 14.52 dd -30.8 nifty 21.19 win 65.7% net/trade +7.70% n 251 grew 22.53L checks 2/6
+WF_b_H3@A H0: cagr 15.29 dd -39.52 nifty 21.19 win 55.9% net/trade +10.34% n 186 grew 23.45L checks 2/6
+WF_a2_STR@A H0: cagr 8.38 dd -30.14 nifty 21.19 win 28.8% net/trade +5.57% n 198 grew 16.20L checks 1/6
+WF_a2_R2@A H0: cagr 10.32 dd -24.58 nifty 21.19 win 47.1% net/trade +6.40% n 257 grew 18.01L checks 2/6
+WF_a2_R3@A H0: cagr 12.93 dd -29.68 nifty 21.19 win 40.8% net/trade +9.15% n 233 grew 20.72L checks 2/6
+WF_a2_T26@A H0: cagr 9.83 dd -25.99 nifty 21.19 win 32.5% net/trade +7.99% n 191 grew 17.53L checks 2/6
+WF_a2_LL@A H0: cagr 28.91 dd -43.19 nifty 21.19 win 34.6% net/trade +17.50% n 156 grew 45.78L checks 3/6
+WF_a2_H2@A H0: cagr 3.29 dd -24.27 nifty 21.19 win 54.7% net/trade +2.15% n 276 grew 12.14L checks 1/6
+WF_a2_H3@A H0: cagr 7.66 dd -21.21 nifty 21.19 win 48.6% net/trade +4.86% n 247 grew 15.56L checks 2/6
+WF_b2_STR@A H0: cagr 10.06 dd -27.76 nifty 21.19 win 44.4% net/trade +9.75% n 126 grew 17.76L checks 2/6
+WF_b2_R2@A H0: cagr 16.22 dd -24.82 nifty 21.19 win 59.4% net/trade +16.01% n 143 grew 24.61L checks 2/6
+WF_b2_R3@A H0: cagr 19.41 dd -26.04 nifty 21.19 win 53.4% net/trade +25.18% n 116 grew 28.94L checks 3/6
+WF_b2_T26@A H0: cagr 10.46 dd -29.12 nifty 21.19 win 56.0% net/trade +14.78% n 116 grew 18.14L checks 2/6
+WF_b2_LL@A H0: cagr 28.36 dd -40.85 nifty 21.19 win 51.0% net/trade +30.54% n 98 grew 44.63L checks 2/6
+WF_b2_H2@A H0: cagr 8.68 dd -20.91 nifty 21.19 win 67.3% net/trade +7.90% n 156 grew 16.46L checks 2/6
+WF_b2_H3@A H0: cagr 13.71 dd -22.42 nifty 21.19 win 62.6% net/trade +14.67% n 131 grew 21.59L checks 2/6
+A H0 {'A10': np.float64(23.87), 'WF_a2_H2': np.float64(3.29), 'WF_a2_H3': np.float64(7.66), 'WF_b2_H2': np.float64(8.68), 'WF_b2_H3': np.float64(13.71)}
+A10@A W2: cagr 11.28 dd -58.9 nifty 5.54 win 32.4% net/trade +2.86% n 1103 grew 29.09L checks 5/6
+  reference check A10@A W2 vs A10 in data/buystop_mix_result.txt: file (11.28, -58.9) run (11.28, -58.9) -> MATCH
+WF_a_STR@A W2: cagr 9.09 dd -27.88 nifty 5.54 win 27.6% net/trade +3.85% n 576 grew 23.86L checks 4/6
+  reference check WF_a_STR@A W2 vs SF_W_a_STR in data/structure_flip_result.txt: file (9.09, -27.88) run (9.09, -27.88) -> MATCH
+WF_a_R2@A W2: cagr 3.7 dd -31.83 nifty 5.54 win 38.2% net/trade +1.47% n 686 grew 14.38L checks 3/6
+WF_a_R3@A W2: cagr 8.34 dd -32.14 nifty 5.54 win 31.4% net/trade +3.39% n 563 grew 22.26L checks 4/6
+WF_a_T26@A W2: cagr 10.88 dd -29.06 nifty 5.54 win 26.6% net/trade +4.41% n 576 grew 28.08L checks 5/6
+WF_a_LL@A W2: cagr 12.03 dd -28.56 nifty 5.54 win 24.9% net/trade +5.81% n 497 grew 31.13L checks 5/6
+WF_a_H2@A W2: cagr 0.96 dd -31.75 nifty 5.54 win 53.1% net/trade +0.46% n 764 grew 11.00L checks 1/6
+WF_a_H3@A W2: cagr 4.17 dd -29.56 nifty 5.54 win 42.5% net/trade +1.54% n 614 grew 15.04L checks 3/6
+WF_b_STR@A W2: cagr 11.56 dd -26.18 nifty 5.54 win 37.5% net/trade +6.73% n 352 grew 29.83L checks 5/6
+  reference check WF_b_STR@A W2 vs SF_W_b_STR in data/structure_flip_result.txt: file (11.56, -26.18) run (11.56, -26.18) -> MATCH
+WF_b_R2@A W2: cagr 14.09 dd -26.14 nifty 5.54 win 50.6% net/trade +11.28% n 271 grew 37.34L checks 5/6
+WF_b_R3@A W2: cagr 14.86 dd -31.53 nifty 5.54 win 43.5% net/trade +15.91% n 214 grew 39.94L checks 5/6
+WF_b_T26@A W2: cagr 11.08 dd -25.39 nifty 5.54 win 45.2% net/trade +7.15% n 341 grew 28.57L checks 5/6
+WF_b_LL@A W2: cagr 14.28 dd -24.92 nifty 5.54 win 38.4% net/trade +10.82% n 294 grew 37.96L checks 5/6
+WF_b_H2@A W2: cagr 9.41 dd -25.93 nifty 5.54 win 60.4% net/trade +5.81% n 333 grew 24.56L checks 3/6
+WF_b_H3@A W2: cagr 11.77 dd -17.68 nifty 5.54 win 54.9% net/trade +9.57% n 244 grew 30.41L checks 4/6
+WF_a2_STR@A W2: cagr 12.36 dd -20.57 nifty 5.54 win 30.8% net/trade +7.42% n 377 grew 32.04L checks 5/6
+WF_a2_R2@A W2: cagr 4.45 dd -25.61 nifty 5.54 win 42.1% net/trade +2.32% n 463 grew 15.45L checks 4/6
+WF_a2_R3@A W2: cagr 7.62 dd -23.32 nifty 5.54 win 35.9% net/trade +3.81% n 423 grew 20.83L checks 4/6
+WF_a2_T26@A W2: cagr 9.57 dd -24.38 nifty 5.54 win 31.0% net/trade +5.45% n 390 grew 24.92L checks 4/6
+WF_a2_LL@A W2: cagr 12.87 dd -23.05 nifty 5.54 win 28.6% net/trade +9.04% n 332 grew 33.53L checks 5/6
+WF_a2_H2@A W2: cagr 1.86 dd -19.75 nifty 5.54 win 54.2% net/trade +0.88% n 489 grew 12.02L checks 2/6
+WF_a2_H3@A W2: cagr 3.54 dd -21.67 nifty 5.54 win 45.5% net/trade +1.64% n 442 grew 14.15L checks 3/6
+WF_b2_STR@A W2: cagr 11.14 dd -18.94 nifty 5.54 win 38.5% net/trade +8.93% n 239 grew 28.73L checks 5/6
+WF_b2_R2@A W2: cagr 8.87 dd -22.8 nifty 5.54 win 48.9% net/trade +8.02% n 229 grew 23.39L checks 4/6
+WF_b2_R3@A W2: cagr 12.8 dd -26.06 nifty 5.54 win 45.6% net/trade +15.58% n 180 grew 33.32L checks 5/6
+WF_b2_T26@A W2: cagr 9.41 dd -23.62 nifty 5.54 win 47.1% net/trade +8.81% n 242 grew 24.57L checks 4/6
+WF_b2_LL@A W2: cagr 14.62 dd -18.57 nifty 5.54 win 44.5% net/trade +15.23% n 191 grew 39.11L checks 5/6
+WF_b2_H2@A W2: cagr 5.36 dd -23.98 nifty 5.54 win 59.0% net/trade +4.32% n 251 grew 16.86L checks 3/6
+WF_b2_H3@A W2: cagr 9.58 dd -19.47 nifty 5.54 win 54.7% net/trade +9.47% n 192 grew 24.94L checks 4/6
+A W2 {'A10': np.float64(11.28), 'WF_a2_H2': np.float64(1.86), 'WF_a2_H3': np.float64(3.54), 'WF_b2_H2': np.float64(5.36), 'WF_b2_H3': np.float64(9.58)}
+A10@A W1: cagr 25.93 dd -32.51 nifty 10.03 win 40.2% net/trade +5.81% n 850 grew 60.78L checks 6/6
+  reference check A10@A W1 vs A10 in data/buystop_mix_result.txt: file (25.93, -32.51) run (25.93, -32.51) -> MATCH
+WF_a_STR@A W1: cagr 11.56 dd -22.78 nifty 10.03 win 29.4% net/trade +3.97% n 486 grew 23.54L checks 3/6
+  reference check WF_a_STR@A W1 vs SF_W_a_STR in data/structure_flip_result.txt: file (11.56, -22.78) run (11.56, -22.78) -> MATCH
+WF_a_R2@A W1: cagr 9.24 dd -26.45 nifty 10.03 win 42.0% net/trade +3.04% n 591 grew 19.97L checks 3/6
+WF_a_R3@A W1: cagr 8.3 dd -27.47 nifty 10.03 win 33.4% net/trade +3.69% n 458 grew 18.67L checks 2/6
+WF_a_T26@A W1: cagr 10.78 dd -25.79 nifty 10.03 win 32.4% net/trade +5.30% n 447 grew 22.28L checks 2/6
+WF_a_LL@A W1: cagr 17.33 dd -23.28 nifty 10.03 win 30.7% net/trade +8.83% n 397 grew 34.93L checks 5/6
+WF_a_H2@A W1: cagr 6.26 dd -23.4 nifty 10.03 win 55.2% net/trade +1.60% n 706 grew 16.09L checks 2/6
+WF_a_H3@A W1: cagr 7.24 dd -21.4 nifty 10.03 win 47.0% net/trade +2.50% n 536 grew 17.28L checks 2/6
+WF_b_STR@A W1: cagr 10.78 dd -24.08 nifty 10.03 win 37.8% net/trade +5.53% n 349 grew 22.28L checks 3/6
+  reference check WF_b_STR@A W1 vs SF_W_b_STR in data/structure_flip_result.txt: file (10.78, -24.08) run (10.78, -24.08) -> MATCH
+WF_b_R2@A W1: cagr 11.85 dd -22.63 nifty 10.03 win 50.4% net/trade +8.43% n 276 grew 24.03L checks 3/6
+WF_b_R3@A W1: cagr 15.6 dd -23.85 nifty 10.03 win 44.6% net/trade +14.25% n 204 grew 31.10L checks 4/6
+WF_b_T26@A W1: cagr 14.36 dd -23.13 nifty 10.03 win 47.6% net/trade +8.83% n 315 grew 28.59L checks 3/6
+WF_b_LL@A W1: cagr 14.49 dd -25.02 nifty 10.03 win 42.6% net/trade +10.95% n 277 grew 28.84L checks 3/6
+WF_b_H2@A W1: cagr 9.72 dd -16.25 nifty 10.03 win 61.9% net/trade +4.89% n 349 grew 20.68L checks 3/6
+WF_b_H3@A W1: cagr 11.46 dd -19.95 nifty 10.03 win 55.4% net/trade +8.38% n 251 grew 23.38L checks 3/6
+WF_a2_STR@A W1: cagr 5.42 dd -26.67 nifty 10.03 win 29.5% net/trade +2.09% n 383 grew 15.11L checks 2/6
+WF_a2_R2@A W1: cagr 4.57 dd -24.22 nifty 10.03 win 37.6% net/trade +1.98% n 449 grew 14.19L checks 2/6
+WF_a2_R3@A W1: cagr 6.72 dd -26.76 nifty 10.03 win 31.2% net/trade +2.93% n 404 grew 16.64L checks 2/6
+WF_a2_T26@A W1: cagr 8.62 dd -20.28 nifty 10.03 win 30.3% net/trade +3.74% n 376 grew 19.10L checks 2/6
+WF_a2_LL@A W1: cagr 12.2 dd -21.66 nifty 10.03 win 29.9% net/trade +6.60% n 335 grew 24.63L checks 3/6
+WF_a2_H2@A W1: cagr 2.87 dd -25.51 nifty 10.03 win 50.8% net/trade +1.08% n 472 grew 12.48L checks 2/6
+WF_a2_H3@A W1: cagr 3.31 dd -26.76 nifty 10.03 win 40.8% net/trade +1.46% n 429 grew 12.91L checks 2/6
+WF_b2_STR@A W1: cagr 6.03 dd -24.87 nifty 10.03 win 40.7% net/trade +3.49% n 246 grew 15.82L checks 2/6
+WF_b2_R2@A W1: cagr 8.37 dd -28.49 nifty 10.03 win 44.4% net/trade +6.38% n 241 grew 18.76L checks 3/6
+WF_b2_R3@A W1: cagr 12.8 dd -25.61 nifty 10.03 win 39.6% net/trade +11.41% n 192 grew 25.67L checks 3/6
+WF_b2_T26@A W1: cagr 12.71 dd -19.49 nifty 10.03 win 50.0% net/trade +9.68% n 228 grew 25.52L checks 3/6
+WF_b2_LL@A W1: cagr 9.48 dd -24.22 nifty 10.03 win 43.4% net/trade +8.26% n 205 grew 20.31L checks 3/6
+WF_b2_H2@A W1: cagr 7.3 dd -21.95 nifty 10.03 win 58.9% net/trade +4.90% n 263 grew 17.36L checks 3/6
+WF_b2_H3@A W1: cagr 8.73 dd -20.84 nifty 10.03 win 49.3% net/trade +6.63% n 215 grew 19.25L checks 3/6
+A W1 {'A10': np.float64(25.93), 'WF_a2_H2': np.float64(2.87), 'WF_a2_H3': np.float64(3.31), 'WF_b2_H2': np.float64(7.3), 'WF_b2_H3': np.float64(8.73)}
+A10@B H0: cagr 32.12 dd -39.29 nifty 21.19 win 33.4% net/trade +5.19% n 668 grew 53.05L checks 3/6
+  reference check A10@B H0 vs A10 in data/buystop_mix_result.txt: file (32.12, -39.29) run (32.12, -39.29) -> MATCH
+WF_a_STR@B H0: cagr 4.66 dd -54.22 nifty 21.19 win 25.8% net/trade +3.19% n 353 grew 13.14L checks 0/6
+  reference check WF_a_STR@B H0 vs SF_W_a_STR in data/structure_flip_result.txt: file (4.66, -54.22) run (4.66, -54.22) -> MATCH
+WF_a_R2@B H0: cagr 7.44 dd -43.1 nifty 21.19 win 43.0% net/trade +2.73% n 458 grew 15.37L checks 2/6
+WF_a_R3@B H0: cagr 13.61 dd -40.02 nifty 21.19 win 39.4% net/trade +5.59% n 363 grew 21.48L checks 2/6
+WF_a_T26@B H0: cagr 9.27 dd -41.99 nifty 21.19 win 30.8% net/trade +5.59% n 344 grew 17.01L checks 2/6
+WF_a_LL@B H0: cagr 23.39 dd -43.62 nifty 21.19 win 30.1% net/trade +20.89% n 266 grew 35.23L checks 2/6
+WF_a_H2@B H0: cagr 5.06 dd -39.1 nifty 21.19 win 55.9% net/trade +1.47% n 528 grew 13.44L checks 2/6
+WF_a_H3@B H0: cagr 8.59 dd -41.52 nifty 21.19 win 51.6% net/trade +2.93% n 407 grew 16.39L checks 2/6
+WF_b_STR@B H0: cagr 13.0 dd -41.89 nifty 21.19 win 38.0% net/trade +8.91% n 234 grew 20.80L checks 2/6
+  reference check WF_b_STR@B H0 vs SF_W_b_STR in data/structure_flip_result.txt: file (13.0, -41.89) run (13.0, -41.89) -> MATCH
+WF_b_R2@B H0: cagr 18.97 dd -34.89 nifty 21.19 win 52.0% net/trade +12.37% n 227 grew 28.31L checks 2/6
+WF_b_R3@B H0: cagr 23.56 dd -34.54 nifty 21.19 win 45.5% net/trade +20.23% n 167 grew 35.52L checks 2/6
+WF_b_T26@B H0: cagr 17.84 dd -33.55 nifty 21.19 win 47.8% net/trade +12.27% n 209 grew 26.73L checks 2/6
+WF_b_LL@B H0: cagr 36.64 dd -30.76 nifty 21.19 win 46.9% net/trade +43.85% n 162 grew 64.90L checks 5/6
+WF_b_H2@B H0: cagr 16.7 dd -30.89 nifty 21.19 win 66.3% net/trade +8.00% n 279 grew 25.22L checks 2/6
+WF_b_H3@B H0: cagr 18.43 dd -30.32 nifty 21.19 win 56.5% net/trade +12.45% n 193 grew 27.55L checks 2/6
+WF_a2_STR@B H0: cagr 14.46 dd -28.38 nifty 21.19 win 29.5% net/trade +9.21% n 227 grew 22.46L checks 3/6
+WF_a2_R2@B H0: cagr 7.43 dd -28.69 nifty 21.19 win 45.4% net/trade +3.66% n 313 grew 15.37L checks 2/6
+WF_a2_R3@B H0: cagr 12.15 dd -28.01 nifty 21.19 win 39.8% net/trade +7.19% n 264 grew 19.87L checks 2/6
+WF_a2_T26@B H0: cagr 16.8 dd -28.27 nifty 21.19 win 35.3% net/trade +11.49% n 224 grew 25.35L checks 2/6
+WF_a2_LL@B H0: cagr 38.74 dd -28.75 nifty 21.19 win 34.6% net/trade +32.38% n 179 grew 71.10L checks 4/6
+WF_a2_H2@B H0: cagr 6.53 dd -22.04 nifty 21.19 win 59.3% net/trade +2.68% n 334 grew 14.61L checks 2/6
+WF_a2_H3@B H0: cagr 9.19 dd -26.13 nifty 21.19 win 50.9% net/trade +4.48% n 289 grew 16.93L checks 2/6
+WF_b2_STR@B H0: cagr 10.98 dd -27.22 nifty 21.19 win 40.8% net/trade +9.78% n 152 grew 18.67L checks 2/6
+WF_b2_R2@B H0: cagr 17.49 dd -26.8 nifty 21.19 win 54.5% net/trade +14.29% n 165 grew 26.27L checks 2/6
+WF_b2_R3@B H0: cagr 22.66 dd -29.88 nifty 21.19 win 51.1% net/trade +23.63% n 133 grew 33.99L checks 3/6
+WF_b2_T26@B H0: cagr 16.44 dd -31.49 nifty 21.19 win 48.6% net/trade +17.73% n 140 grew 24.89L checks 3/6
+WF_b2_LL@B H0: cagr 34.69 dd -31.9 nifty 21.19 win 46.7% net/trade +58.14% n 105 grew 59.53L checks 5/6
+WF_b2_H2@B H0: cagr 9.58 dd -21.09 nifty 21.19 win 63.9% net/trade +7.17% n 183 grew 17.30L checks 2/6
+WF_b2_H3@B H0: cagr 14.14 dd -21.76 nifty 21.19 win 59.2% net/trade +13.00% n 147 grew 22.08L checks 2/6
+B H0 {'A10': np.float64(32.12), 'WF_a2_H2': np.float64(6.53), 'WF_a2_H3': np.float64(9.19), 'WF_b2_H2': np.float64(9.58), 'WF_b2_H3': np.float64(14.14)}
+A10@B W2: cagr 12.15 dd -58.58 nifty 5.54 win 34.2% net/trade +2.61% n 1110 grew 31.45L checks 5/6
+  reference check A10@B W2 vs A10 in data/buystop_mix_result.txt: file (12.15, -58.58) run (12.15, -58.58) -> MATCH
+WF_a_STR@B W2: cagr 10.44 dd -43.41 nifty 5.54 win 27.6% net/trade +4.94% n 557 grew 26.97L checks 4/6
+  reference check WF_a_STR@B W2 vs SF_W_a_STR in data/structure_flip_result.txt: file (10.44, -43.41) run (10.44, -43.41) -> MATCH
+WF_a_R2@B W2: cagr 6.22 dd -47.79 nifty 5.54 win 38.5% net/trade +2.26% n 659 grew 18.28L checks 4/6
+WF_a_R3@B W2: cagr 12.97 dd -41.67 nifty 5.54 win 33.7% net/trade +5.10% n 546 grew 33.82L checks 5/6
+WF_a_T26@B W2: cagr 13.68 dd -48.11 nifty 5.54 win 29.7% net/trade +6.69% n 556 grew 36.01L checks 5/6
+WF_a_LL@B W2: cagr 12.78 dd -38.37 nifty 5.54 win 26.9% net/trade +7.30% n 479 grew 33.27L checks 5/6
+WF_a_H2@B W2: cagr 3.05 dd -42.42 nifty 5.54 win 52.9% net/trade +0.95% n 760 grew 13.50L checks 3/6
+WF_a_H3@B W2: cagr 6.67 dd -45.38 nifty 5.54 win 43.4% net/trade +2.41% n 624 grew 19.07L checks 3/6
+WF_b_STR@B W2: cagr 12.2 dd -28.92 nifty 5.54 win 43.2% net/trade +8.33% n 347 grew 31.60L checks 5/6
+  reference check WF_b_STR@B W2 vs SF_W_b_STR in data/structure_flip_result.txt: file (12.2, -28.92) run (12.2, -28.92) -> MATCH
+WF_b_R2@B W2: cagr 16.48 dd -24.93 nifty 5.54 win 50.6% net/trade +11.27% n 326 grew 45.92L checks 5/6
+WF_b_R3@B W2: cagr 13.23 dd -36.4 nifty 5.54 win 41.0% net/trade +13.15% n 222 grew 34.60L checks 5/6
+WF_b_T26@B W2: cagr 13.37 dd -37.03 nifty 5.54 win 47.0% net/trade +9.27% n 347 grew 35.05L checks 5/6
+WF_b_LL@B W2: cagr 16.66 dd -23.59 nifty 5.54 win 45.0% net/trade +12.97% n 278 grew 46.66L checks 5/6
+WF_b_H2@B W2: cagr 10.2 dd -25.53 nifty 5.54 win 61.1% net/trade +6.09% n 375 grew 26.41L checks 4/6
+WF_b_H3@B W2: cagr 9.66 dd -30.59 nifty 5.54 win 52.3% net/trade +7.62% n 260 grew 25.14L checks 4/6
+WF_a2_STR@B W2: cagr 3.53 dd -29.84 nifty 5.54 win 30.7% net/trade +2.11% n 384 grew 14.14L checks 2/6
+WF_a2_R2@B W2: cagr 5.92 dd -35.78 nifty 5.54 win 41.7% net/trade +3.03% n 420 grew 17.76L checks 3/6
+WF_a2_R3@B W2: cagr 7.0 dd -32.18 nifty 5.54 win 33.0% net/trade +4.15% n 348 grew 19.67L checks 4/6
+WF_a2_T26@B W2: cagr 4.41 dd -35.38 nifty 5.54 win 29.1% net/trade +2.80% n 374 grew 15.39L checks 3/6
+WF_a2_LL@B W2: cagr 6.93 dd -28.4 nifty 5.54 win 30.7% net/trade +4.77% n 336 grew 19.54L checks 4/6
+WF_a2_H2@B W2: cagr 2.78 dd -32.56 nifty 5.54 win 54.3% net/trade +1.21% n 449 grew 13.16L checks 2/6
+WF_a2_H3@B W2: cagr 4.86 dd -30.62 nifty 5.54 win 45.8% net/trade +2.17% n 393 grew 16.07L checks 2/6
+WF_b2_STR@B W2: cagr 4.22 dd -26.66 nifty 5.54 win 37.0% net/trade +3.06% n 230 grew 15.12L checks 1/6
+WF_b2_R2@B W2: cagr 10.06 dd -22.25 nifty 5.54 win 51.5% net/trade +10.23% n 204 grew 26.06L checks 4/6
+WF_b2_R3@B W2: cagr 10.17 dd -23.36 nifty 5.54 win 40.5% net/trade +12.33% n 173 grew 26.32L checks 4/6
+WF_b2_T26@B W2: cagr 4.23 dd -27.15 nifty 5.54 win 44.0% net/trade +4.18% n 218 grew 15.13L checks 3/6
+WF_b2_LL@B W2: cagr 7.45 dd -29.47 nifty 5.54 win 41.5% net/trade +6.84% n 207 grew 20.50L checks 4/6
+WF_b2_H2@B W2: cagr 6.23 dd -17.78 nifty 5.54 win 61.3% net/trade +5.55% n 230 grew 18.30L checks 3/6
+WF_b2_H3@B W2: cagr 7.93 dd -20.28 nifty 5.54 win 51.6% net/trade +7.80% n 192 grew 21.45L checks 4/6
+B W2 {'A10': np.float64(12.15), 'WF_a2_H2': np.float64(2.78), 'WF_a2_H3': np.float64(4.86), 'WF_b2_H2': np.float64(6.23), 'WF_b2_H3': np.float64(7.93)}
+A10@B W1: cagr 23.22 dd -41.36 nifty 10.03 win 35.6% net/trade +5.39% n 817 grew 51.25L checks 5/6
+  reference check A10@B W1 vs A10 in data/buystop_mix_result.txt: file (23.22, -41.36) run (23.22, -41.36) -> MATCH
+WF_a_STR@B W1: cagr 10.75 dd -31.25 nifty 10.03 win 28.3% net/trade +4.31% n 484 grew 22.23L checks 2/6
+  reference check WF_a_STR@B W1 vs SF_W_a_STR in data/structure_flip_result.txt: file (10.75, -31.25) run (10.75, -31.25) -> MATCH
+WF_a_R2@B W1: cagr 7.78 dd -25.29 nifty 10.03 win 41.5% net/trade +2.73% n 559 grew 17.97L checks 3/6
+WF_a_R3@B W1: cagr 8.65 dd -27.63 nifty 10.03 win 34.3% net/trade +3.59% n 446 grew 19.14L checks 3/6
+WF_a_T26@B W1: cagr 6.86 dd -30.85 nifty 10.03 win 28.3% net/trade +2.96% n 446 grew 16.81L checks 2/6
+WF_a_LL@B W1: cagr 11.03 dd -30.04 nifty 10.03 win 28.4% net/trade +5.79% n 423 grew 22.69L checks 2/6
+WF_a_H2@B W1: cagr 2.47 dd -27.76 nifty 10.03 win 52.7% net/trade +0.88% n 656 grew 12.10L checks 2/6
+WF_a_H3@B W1: cagr 6.28 dd -25.85 nifty 10.03 win 45.3% net/trade +2.44% n 501 grew 16.11L checks 3/6
+WF_b_STR@B W1: cagr 8.0 dd -29.31 nifty 10.03 win 36.6% net/trade +6.50% n 333 grew 18.27L checks 3/6
+  reference check WF_b_STR@B W1 vs SF_W_b_STR in data/structure_flip_result.txt: file (8.0, -29.31) run (8.0, -29.31) -> MATCH
+WF_b_R2@B W1: cagr 6.25 dd -28.28 nifty 10.03 win 42.4% net/trade +4.72% n 297 grew 16.08L checks 3/6
+WF_b_R3@B W1: cagr 8.08 dd -30.68 nifty 10.03 win 36.9% net/trade +7.77% n 217 grew 18.37L checks 3/6
+WF_b_T26@B W1: cagr 9.42 dd -28.53 nifty 10.03 win 41.6% net/trade +6.52% n 305 grew 20.23L checks 3/6
+WF_b_LL@B W1: cagr 7.17 dd -32.16 nifty 10.03 win 32.2% net/trade +5.49% n 298 grew 17.19L checks 1/6
+WF_b_H2@B W1: cagr 5.7 dd -23.52 nifty 10.03 win 56.2% net/trade +3.29% n 340 grew 15.43L checks 2/6
+WF_b_H3@B W1: cagr 7.13 dd -24.56 nifty 10.03 win 48.4% net/trade +5.07% n 246 grew 17.15L checks 2/6
+WF_a2_STR@B W1: cagr 11.51 dd -25.47 nifty 10.03 win 24.8% net/trade +5.17% n 363 grew 23.46L checks 1/6
+WF_a2_R2@B W1: cagr 6.13 dd -15.68 nifty 10.03 win 40.0% net/trade +2.79% n 410 grew 15.93L checks 2/6
+WF_a2_R3@B W1: cagr 7.38 dd -23.71 nifty 10.03 win 32.1% net/trade +3.83% n 352 grew 17.45L checks 2/6
+WF_a2_T26@B W1: cagr 7.32 dd -23.05 nifty 10.03 win 25.5% net/trade +4.75% n 349 grew 17.38L checks 1/6
+WF_a2_LL@B W1: cagr 14.97 dd -24.89 nifty 10.03 win 23.5% net/trade +8.71% n 324 grew 29.80L checks 3/6
+WF_a2_H2@B W1: cagr 2.74 dd -15.38 nifty 10.03 win 51.6% net/trade +1.18% n 434 grew 12.36L checks 2/6
+WF_a2_H3@B W1: cagr 5.41 dd -16.98 nifty 10.03 win 45.8% net/trade +2.42% n 384 grew 15.10L checks 2/6
+WF_b2_STR@B W1: cagr 13.14 dd -24.69 nifty 10.03 win 31.8% net/trade +9.18% n 220 grew 26.28L checks 1/6
+WF_b2_R2@B W1: cagr 6.64 dd -28.19 nifty 10.03 win 43.7% net/trade +5.92% n 206 grew 16.54L checks 2/6
+WF_b2_R3@B W1: cagr 7.22 dd -30.63 nifty 10.03 win 36.6% net/trade +8.61% n 164 grew 17.25L checks 2/6
+WF_b2_T26@B W1: cagr 8.61 dd -22.69 nifty 10.03 win 41.6% net/trade +8.34% n 219 grew 19.09L checks 1/6
+WF_b2_LL@B W1: cagr 17.2 dd -21.91 nifty 10.03 win 33.3% net/trade +14.93% n 201 grew 34.63L checks 4/6
+WF_b2_H2@B W1: cagr 5.85 dd -15.43 nifty 10.03 win 58.6% net/trade +4.12% n 237 grew 15.61L checks 2/6
+WF_b2_H3@B W1: cagr 6.81 dd -25.8 nifty 10.03 win 48.7% net/trade +6.26% n 187 grew 16.74L checks 2/6
+B W1 {'A10': np.float64(23.22), 'WF_a2_H2': np.float64(2.74), 'WF_a2_H3': np.float64(5.41), 'WF_b2_H2': np.float64(5.85), 'WF_b2_H3': np.float64(6.81)}
+ALLDONE
