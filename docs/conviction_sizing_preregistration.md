@@ -1,11 +1,6 @@
 # Pre-registration: conviction score (volume profile + delivery) for sizing up entries
 
-**Status: DRAFT, written 2026-11-28. NOT FROZEN.** (Updated 2026-11-28 in the cloud session,
-before freezing: data paths moved from `data/pit` to `data/pit_v2`, and a reference check
-added.) Code written and unit-tested; no
-returns measured. IA to confirm or change the score, the buckets and the bar, then replace
-this line with "FROZEN on <date, time>" before any run. After that: never edit; add dated
-notes.
+**Status: FROZEN on 2026-11-28 12:17 IST** (by IA; drafted 2026-11-28, data paths moved to `data/pit_v2` and a reference check added before freezing).
 
 ## Question
 
