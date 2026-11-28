@@ -1,6 +1,6 @@
 # Daily structure flip inside a weekly uptrend — pre-registration
 
-**Status: DRAFT (2026-11-28), waiting for IA's "freeze"**
+**Status: FROZEN on 2026-11-28 15:11 IST** (by IA; FR kept monthly as drafted)
 
 ## Question
 
