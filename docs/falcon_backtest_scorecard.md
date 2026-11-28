@@ -1,5 +1,5 @@
 # Falcon Backtest Scorecard
-Every NSE equity buy strategy and variant tested for Falcon, 2008–2026, after Indian trading costs: **947 rows**. Compiled 10 Nov 2026 from the result files in the Falcon repository (`data/*_result.txt`); each test's frozen rules and full write-up are in `docs/*_preregistration.md`.
+Every NSE equity buy strategy and variant tested for Falcon, 2008–2026, after Indian trading costs: **949 rows**. Compiled 10 Nov 2026 from the result files in the Falcon repository (`data/*_result.txt`); each test's frozen rules and full write-up are in `docs/*_preregistration.md`.
 ## Bottom line
 - No strategy passed all six checks in both decades.
 - **The one edge that held on every sample of stocks is monthly momentum** (top 20 by 12-month return excluding the last month, rebalanced monthly, 10% stop): about 23–26% a year in 2019–26 and 11–13% in 2008–17, on all stocks, half A and half B, but with worst drops of −33% to −41% (2019–26) and −59% (2008–17), and about −36% in 2018.

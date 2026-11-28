@@ -110,6 +110,11 @@ def top_logs(n=TOP_N):
 
 
 def part2(out, prices, uni, delivery):
+    # memory (2026-11-28: the first run was OOM-killed here): part 2 trades start in 2008 and
+    # delivery in 2007, so earlier prices and non-EQ delivery rows are not needed.
+    prices = prices[prices["Date"] >= pd.Timestamp("2006-06-01")]
+    delivery = delivery[delivery["Series"].astype(str).str.strip() == "EQ"]
+    gc.collect()
     panel = make_panel(prices, uni)
     data = make_conviction_data(panel, prices, delivery)
     out.write(f"\n{'#' * 70}\nPart 2 (reported only): top {TOP_N} committed trade logs by mean net per trade\n{'#' * 70}\n")
@@ -148,6 +153,11 @@ def main():
         out.write(f"Conviction sizing test ({PREREG}); benchmark {src}\n")
         out.write(f"Delivery data: {len(delivery):,} rows, {delivery['Date'].min()} -> {delivery['Date'].max()}\n")
         part1(out, prices, uni, delivery, half, nifty, indices)
+        out.flush()
+        prices = prices[prices["Date"] >= pd.Timestamp("2006-06-01")]
+        delivery = delivery[delivery["Series"].astype(str).str.strip() == "EQ"][["Date", "Symbol", "Series", "DelivPct"]]
+        del half
+        gc.collect()
         part2(out, prices, uni, delivery)
     print(f"wrote {OUT}")
 

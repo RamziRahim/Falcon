@@ -1,0 +1,144 @@
+Conviction sizing test (docs/conviction_sizing_preregistration.md); benchmark NSE NIFTY 50 (data/pit_sources/indices_2000_2026.parquet)
+Delivery data: 8,816,438 rows, 2007-01-02 00:00:00 -> 2026-11-27 00:00:00
+
+######################################################################
+Half A: 827 stocks
+######################################################################
+  reference check A10@A W1: file (25.93, -32.51) run (np.float64(25.93), -32.51) -> MATCH
+
+A10  half A  W1 2019-01-01 -> 2026-10-30
+    score 0    trades   374   mean net   +3.40%   win  36.6%
+    score 1    trades   329   mean net   +8.22%   win  44.1%
+    score 2-3  trades   147   mean net   +6.53%   win  40.8%
+    spread 2-3 vs 0 +3.13pp   Welch t 0.31   mean net +5.81% -> sized +6.14%   no delivery 1.5%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [PASS] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+  reference check A10@A W2: file (11.28, -58.9) run (np.float64(11.28), -58.9) -> MATCH
+
+A10  half A  W2 2008-01-01 -> 2017-12-31
+    score 0    trades   432   mean net   +0.73%   win  29.4%
+    score 1    trades   509   mean net   +3.70%   win  33.2%
+    score 2-3  trades   162   mean net   +5.89%   win  37.7%
+    spread 2-3 vs 0 +5.17pp   Welch t 1.18   mean net +2.86% -> sized +3.30%   no delivery 0.9%   no profile 0.0%
+      [PASS] mean net rises 0 <= 1 <= 2-3
+      [PASS] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+
+A10  half A  Y2018 2018-01-01 -> 2018-12-31  (reported only)
+    score 0    trades    68   mean net   -7.77%   win  10.3%
+    score 1    trades    35   mean net   -8.18%   win  14.3%
+    score 2-3  trades    15   mean net   -8.22%   win   6.7%
+    spread 2-3 vs 0 -0.45pp   Welch t -0.11   mean net -7.95% -> sized -8.00%   no delivery 0.0%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [FAIL] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [FAIL] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+  reference check FM_C3@A W1: file (14.49, -17.95) run (np.float64(14.49), -17.95) -> MATCH
+
+FM_C3  half A  W1 2019-01-01 -> 2026-10-30
+    score 0    trades    43   mean net   +3.52%   win  51.2%
+    score 1    trades   202   mean net   +2.01%   win  42.6%
+    score 2-3  trades   215   mean net   +2.66%   win  49.3%
+    spread 2-3 vs 0 -0.86pp   Welch t 0.28   mean net +2.46% -> sized +2.48%   no delivery 0.4%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [FAIL] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+  reference check FM_C3@A W2: file (12.04, -23.39) run (np.float64(12.04), -23.39) -> MATCH
+
+FM_C3  half A  W2 2008-01-01 -> 2017-12-31
+    score 0    trades    54   mean net   +0.79%   win  40.7%
+    score 1    trades   224   mean net   +1.22%   win  42.4%
+    score 2-3  trades   214   mean net   +4.45%   win  52.3%
+    spread 2-3 vs 0 +3.66pp   Welch t 2.31   mean net +2.58% -> sized +2.96%   no delivery 0.8%   no profile 0.0%
+      [PASS] mean net rises 0 <= 1 <= 2-3
+      [PASS] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [PASS] Welch t (2-3 vs rest) >= 1.5
+
+FM_C3  half A  Y2018 2018-01-01 -> 2018-12-31  (reported only)
+    score 0    trades     7   mean net   +1.32%   win  57.1%
+    score 1    trades    23   mean net   -1.91%   win  34.8%
+    score 2-3  trades    27   mean net   -4.94%   win  22.2%
+    spread 2-3 vs 0 -6.26pp   Welch t -1.27   mean net -2.95% -> sized -3.45%   no delivery 1.8%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [FAIL] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [FAIL] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+
+######################################################################
+Half B: 792 stocks
+######################################################################
+  reference check A10@B W1: file (23.22, -41.36) run (np.float64(23.22), -41.36) -> MATCH
+
+A10  half B  W1 2019-01-01 -> 2026-10-30
+    score 0    trades   361   mean net   +3.51%   win  34.6%
+    score 1    trades   315   mean net   +7.18%   win  35.9%
+    score 2-3  trades   141   mean net   +6.17%   win  37.6%
+    spread 2-3 vs 0 +2.66pp   Welch t 0.29   mean net +5.39% -> sized +5.67%   no delivery 2.8%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [PASS] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+  reference check A10@B W2: file (12.15, -58.58) run (np.float64(12.15), -58.58) -> MATCH
+
+A10  half B  W2 2008-01-01 -> 2017-12-31
+    score 0    trades   434   mean net   +0.69%   win  32.9%
+    score 1    trades   520   mean net   +2.23%   win  34.0%
+    score 2-3  trades   156   mean net   +9.21%   win  38.5%
+    spread 2-3 vs 0 +8.52pp   Welch t 1.18   mean net +2.61% -> sized +3.28%   no delivery 0.6%   no profile 0.0%
+      [PASS] mean net rises 0 <= 1 <= 2-3
+      [PASS] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+
+A10  half B  Y2018 2018-01-01 -> 2018-12-31  (reported only)
+    score 0    trades    79   mean net   -7.25%   win  12.7%
+    score 1    trades    66   mean net   -5.16%   win  16.7%
+    score 2-3  trades     9   mean net   -9.60%   win   0.0%
+    spread 2-3 vs 0 -2.35pp   Welch t -2.28   mean net -6.49% -> sized -6.48%   no delivery 1.9%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [FAIL] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [FAIL] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+  reference check FM_C3@B W1: file (8.4, -25.57) run (np.float64(8.4), -25.57) -> MATCH
+
+FM_C3  half B  W1 2019-01-01 -> 2026-10-30
+    score 0    trades    48   mean net   +1.98%   win  43.8%
+    score 1    trades   169   mean net   +1.03%   win  40.2%
+    score 2-3  trades   245   mean net   +2.79%   win  43.7%
+    spread 2-3 vs 0 +0.81pp   Welch t 1.03   mean net +2.06% -> sized +2.22%   no delivery 0.6%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [FAIL] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+  reference check FM_C3@B W2: file (11.62, -24.16) run (np.float64(11.62), -24.16) -> MATCH
+
+FM_C3  half B  W2 2008-01-01 -> 2017-12-31
+    score 0    trades    43   mean net   +0.39%   win  39.5%
+    score 1    trades   224   mean net   +2.27%   win  44.2%
+    score 2-3  trades   242   mean net   +2.53%   win  49.2%
+    spread 2-3 vs 0 +2.14pp   Welch t 0.39   mean net +2.23% -> sized +2.32%   no delivery 0.6%   no profile 0.0%
+      [PASS] mean net rises 0 <= 1 <= 2-3
+      [PASS] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [PASS] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+
+FM_C3  half B  Y2018 2018-01-01 -> 2018-12-31  (reported only)
+    score 0    trades     5   mean net   -3.23%   win  40.0%
+    score 1    trades    19   mean net   -2.93%   win  36.8%
+    score 2-3  trades    25   mean net   -4.74%   win  24.0%
+    spread 2-3 vs 0 -1.52pp   Welch t -0.56   mean net -3.88% -> sized -4.08%   no delivery 0.0%   no profile 0.0%
+      [FAIL] mean net rises 0 <= 1 <= 2-3
+      [FAIL] bucket 2-3 beats 0 by >= 1.0pp a trade
+      [FAIL] bucket 2-3 has >= 30 trades
+      [FAIL] Welch t (2-3 vs rest) >= 1.5
+
+======================================================================
+VERDICT (primary: both halves, W1 and W2, all four checks)
+======================================================================
+  A10: half A fail, half B fail -> FAILED
+  FM_C3: half A fail, half B fail -> FAILED

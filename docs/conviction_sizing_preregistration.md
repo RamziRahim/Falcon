@@ -136,3 +136,35 @@ and exits.
 
 The delivery history is downloaded on the Oracle server (which reaches NSE) and brought
 to the test machine through the `paper-data` branch.
+
+## Results (2026-11-28, run as frozen)
+
+Full output: `data/conviction_sizing_result.txt`. Per-trade scores: `data/conviction_scores_<code>_<half>_<window>.csv`.
+
+**Data and references:**
+- Delivery data: 8,816,438 rows, 2007-01-02 → 2026-11-27, from NSE MTO / sec_bhavdata_full. It was downloaded on the Oracle server and pushed to `paper-data/delivery/`, one parquet file per year.
+- All eight reference checks reproduced `data/buystop_mix_result.txt`: A10 and FM_C3, halves A and B, W1 and W2.
+
+**Verdict: both strategies FAIL the bar.** Neither half passes all four checks in both windows.
+
+| Strategy | Half | Window | Trades 0 / 1 / 2-3 | Mean net % 0 / 1 / 2-3 | Spread 2-3 vs 0 | Welch t | Checks |
+|---|---|---|---|---|---|---|---|
+| A10 | A | W1 | 374 / 329 / 147 | +3.40 / +8.22 / +6.53 | +3.13 | 0.31 | 2/4 |
+| A10 | A | W2 | 432 / 509 / 162 | +0.73 / +3.70 / +5.89 | +5.17 | 1.18 | 3/4 |
+| A10 | B | W1 | 361 / 315 / 141 | +3.51 / +7.18 / +6.17 | +2.66 | 0.29 | 2/4 |
+| A10 | B | W2 | 434 / 520 / 156 | +0.69 / +2.23 / +9.21 | +8.52 | 1.18 | 3/4 |
+| FM_C3 | A | W1 | 43 / 202 / 215 | +3.52 / +2.01 / +2.66 | −0.86 | 0.28 | 1/4 |
+| FM_C3 | A | W2 | 54 / 224 / 214 | +0.79 / +1.22 / +4.45 | +3.66 | 2.31 | **4/4** |
+| FM_C3 | B | W1 | 48 / 169 / 245 | +1.98 / +1.03 / +2.79 | +0.81 | 1.03 | 1/4 |
+| FM_C3 | B | W2 | 43 / 224 / 242 | +0.39 / +2.27 / +2.53 | +2.14 | 0.39 | 3/4 |
+
+Reading:
+- For A10 the high-score bucket earns more per trade in every cell. The difference is not statistically reliable: Welch t is 0.3–1.2, and the bar needs 1.5.
+- In 2019–26 the order breaks: score 1 beats score 2-3.
+- 2018 (reported only) was negative in every bucket for both strategies.
+- Under the frozen doc there is no sized simulation. The paper-trading shadow log (`conviction.csv` per track) keeps recording scores from 1 Dec 2026.
+
+**Dated note (2026-11-28):** Part 2 (reported only) could not be completed. Scoring the full-universe panel for 25 trade logs was killed for lack of memory, three times, in the 7 GB sandbox.
+- After the first kill, the runner was changed to flush Part 1 before Part 2 and to trim Part 2's inputs. These changes are memory-only and alter no result.
+- Part 1 and the verdict are complete and unaffected.
+- Part 2 can be run on the Oracle server (11 GB) if IA wants it.

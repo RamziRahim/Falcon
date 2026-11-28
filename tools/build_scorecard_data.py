@@ -548,6 +548,14 @@ for r in rows:
     r["name"] = r["name"].replace(" (half A)", "").replace("HALF B: ", "")
 # rows that were tested but have no comparable figures in these columns
 INFO = [
+    {"id": "conv_score_a10", "name": "Conviction score (volume profile + delivery + accumulation), judged on A10 trades", "family": "Other",
+     "entry": "A10's own", "stop": "A10's own", "target": "A10's own", "filter": "None (score only)", "hold": "A10's own",
+     "code": "Conviction sizing test, A10", "doc": "docs/conviction_sizing_preregistration.md", "sample": "Half A and half B",
+     "note": "FAILED its frozen bar (28 Nov 2026). Score 2-3 trades beat score 0 by +2.7 to +8.5 pt a trade, but Welch t 0.3-1.2 (needs 1.5) and no rising order in 2019-26. No sized simulation."},
+    {"id": "conv_score_fm_c3", "name": "Conviction score (volume profile + delivery + accumulation), judged on FM_C3 trades", "family": "Other",
+     "entry": "FM_C3's own", "stop": "FM_C3's own", "target": "FM_C3's own", "filter": "None (score only)", "hold": "FM_C3's own",
+     "code": "Conviction sizing test, FM_C3", "doc": "docs/conviction_sizing_preregistration.md", "sample": "Half A and half B",
+     "note": "FAILED its frozen bar (28 Nov 2026). Passed all four checks only on half A 2008-17; spread -0.9 to +3.7 pt a trade elsewhere. No sized simulation."},
     {"id": "ml_model", "name": "Falcon Leadership breakout model (ML-scored patterns, runs #5, #6 and refit)", "family": "Other",
      "entry": "Pattern pivot, next-open fills", "stop": "Falcon two-low stop", "target": "Measured move", "filter": "Regime suppression",
      "hold": "8 weeks", "code": "Run #5/#6/refit", "doc": "docs/run5_preregistration.md, docs/refit_preregistration.md",
