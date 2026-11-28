@@ -14,13 +14,19 @@ import pandas as pd
 
 from backtesting.pit_strategies import CostModel, Ledger, _adv, _delisting_exits, _result
 
-K = {"W": 2, "M": 1}
-EXPIRY = {"W": 13, "M": 6}
+K = {"W": 2, "M": 1, "D": 3}                 # "D": docs/daily_flip_weekly_trend_preregistration.md
+EXPIRY = {"W": 13, "M": 6, "D": 65}
 SLOTS, STOP_BUF = 20, 0.01
+
+
+def _period(sessions, tf):
+    return sessions.to_period("W-SUN" if tf == "W" else ("D" if tf == "D" else "M"))
 
 
 def _bars(panel, tf):
     s = panel.sessions
+    if tf == "D":                                  # every session is its own bar
+        return panel.high, panel.low, panel.close, np.arange(len(s))
     per = s.to_period("W-SUN" if tf == "W" else "M")
     h = panel.high.groupby(per).max()
     l = panel.low.groupby(per).min()
@@ -56,12 +62,12 @@ def swing_lows(panel, tf):
     return out
 
 
-def find_signals(panel, tf, second=False):
+def find_signals(panel, tf, second=False, expiry=None, hl1_bars=26):
     """second=True (docs/weekly_flip_exits_preregistration.md): after HL1, wait for a close above HH1
     (highest high from the break to HL1's confirmation), then a swing low confirmed after that close
     and above HL1 (HL2); the setup's hl / hh are then HL2 / the highest high from the HH2 close to
     HL2's confirmation, cancelled on a close below HL2 or after EXPIRY bars."""
-    k, exp, sigs = K[tf], EXPIRY[tf], []
+    k, exp, sigs = K[tf], (expiry if expiry is not None else EXPIRY[tf]), []
     for e, hh, ll, cc, end in _per_entity(panel, tf):
         n = len(cc)
         sh = {j + k: j for j in _swings(hh, k, True)}        # confirmation bar -> swing bar
@@ -84,7 +90,7 @@ def find_signals(panel, tf, second=False):
                 state = None
             if state in ("hl1", "hh2") and cc[b] < brk["hl1"]:
                 state = None
-            if state == "hl1" and b - brk["hl1_bar"] > 26:
+            if state == "hl1" and b - brk["hl1_bar"] > hl1_bars:
                 state = None
             if b in sh:
                 highs.append(sh[b])
@@ -117,7 +123,19 @@ def find_signals(panel, tf, second=False):
     return sigs
 
 
-def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, stats=None):
+def _first_after(lw, idx):
+    """Position of the first swing low confirmed after session idx (lw is in confirmation order)."""
+    lo, hi = 0, len(lw)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if lw[mid][0] <= idx:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo
+
+
+def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, stats=None, time_exit=130):
     assert entry in ("a", "b") and exit_rule in ("STR", "R2", "R3", "T26", "LL", "H2", "H3")
     ledger = Ledger(cost or CostModel())
     sessions = panel.sessions
@@ -128,7 +146,7 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
     pending = []                                   # (b) buy-stops alive
     rmult = {"R2": 2.0, "R3": 3.0, "H2": 2.0, "H3": 3.0}.get(exit_rule)
     hmult = {"H2": 1.0, "H3": 1.5}.get(exit_rule)
-    per = sessions.to_period("W-SUN" if tf == "W" else "M")
+    per = _period(sessions, tf)
     bar_end = np.r_[per[1:] != per[:-1], True]
     for i, day in enumerate(sessions):
         if day < start or day > end:
@@ -140,7 +158,7 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
             o = opens.get(e, np.nan)
             if not np.isfinite(o):
                 continue
-            if exit_rule == "T26" and i - m["entry_idx"] >= 130:
+            if exit_rule == "T26" and i - m["entry_idx"] >= time_exit:
                 ledger.sell(day, e, o, _adv(panel, i, e), "TIME")
             elif exit_rule == "LL" and m.get("ll_exit"):
                 ledger.sell(day, e, o, _adv(panel, i, e), "LOWER_LOW")
@@ -151,9 +169,12 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
         if exit_rule == "STR":                     # raise stops on higher swing lows confirmed before today
             for e in ledger.shares:
                 m = ledger.meta[e]
-                for ci, lv in lows.get(e, ()):
-                    if m["sig_idx"] < ci < i and lv * (1 - STOP_BUF) > m["stop"]:
-                        m["stop"] = lv * (1 - STOP_BUF)
+                lw, p_ = lows.get(e, ()), m.setdefault("p_str", _first_after(lows.get(e, ()), m["sig_idx"]))
+                while p_ < len(lw) and lw[p_][0] < i:
+                    if lw[p_][1] * (1 - STOP_BUF) > m["stop"]:
+                        m["stop"] = lw[p_][1] * (1 - STOP_BUF)
+                    p_ += 1
+                m["p_str"] = p_
         new = []
         uni_ok = lambda s_: s_["entity"] in panel.universe_on(sessions[s_["sig_idx"]])
         for s_ in by_day.get(i, []):
@@ -219,9 +240,11 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
         if exit_rule == "LL":                      # a completed bar closing below the latest confirmed swing low
             for e in ledger.shares:
                 m = ledger.meta[e]
-                for ci, lv in lows.get(e, ()):
-                    if m["sig_idx"] < ci <= i:
-                        m["ref_low"] = lv
+                lw, p_ = lows.get(e, ()), m.setdefault("p_ll", _first_after(lows.get(e, ()), m["sig_idx"]))
+                while p_ < len(lw) and lw[p_][0] <= i:
+                    m["ref_low"] = lw[p_][1]
+                    p_ += 1
+                m["p_ll"] = p_
                 c_ = closes.get(e, np.nan)
                 if bar_end[i] and np.isfinite(c_) and c_ < m["ref_low"]:
                     m["ll_exit"] = True
@@ -229,7 +252,7 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
     return _result(ledger)
 
 
-def monthly_uptrend(panel, kind):
+def monthly_uptrend(panel, kind, tf="M"):
     """docs/weekly_flip_trend_filter_preregistration.md. Returns {entity: (ends, up)}: ends = last
     session index of each completed monthly bar (ascending), up = bool array, the stock's monthly
     trend at the close of that month.
@@ -255,12 +278,13 @@ def monthly_uptrend(panel, kind):
         for e in panel.close.columns:
             out[e] = (ends, np.array([e in top[i] for i in ends], dtype=bool))
         return out
-    for e, hh, ll, cc, end in _per_entity(panel, "M"):
+    k = K[tf]
+    for e, hh, ll, cc, end in _per_entity(panel, tf):
         n = len(cc)
         up = np.zeros(n, dtype=bool)
         if kind == "FS":
-            sh = {j + 1: j for j in _swings(hh, 1, True)}
-            sl = {j + 1: j for j in _swings(ll, 1, False)}
+            sh = {j + k: j for j in _swings(hh, k, True)}
+            sl = {j + k: j for j in _swings(ll, k, False)}
             highs, lows = [], []
             for b in range(n):
                 if b in sh:
@@ -289,3 +313,9 @@ def filter_signals(signals, trend):
         if k >= 0 and up[k]:
             kept.append(s_)
     return kept
+
+
+def weekly_uptrend(panel, kind):
+    """docs/daily_flip_weekly_trend_preregistration.md: FS / FM on weekly bars (swings k = 2; 10-week
+    average rising), FR unchanged (monthly 12-1 top 100). Same output shape as monthly_uptrend."""
+    return monthly_uptrend(panel, kind, tf="M" if kind == "FR" else "W")
