@@ -66,3 +66,41 @@ A pass means "candidate for paper trading" — IA decides. No re-tuning, no extr
 - Code: `backtesting/structure_flip.py` gains `monthly_uptrend(panel, kind)` and a filter helper. Defaults are unchanged.
 - Runner: `tests/run_weekly_flip_trend_filter.py`
 - Dated Results section here; scorecard rows.
+
+## Results (2026-11-28, run as frozen)
+
+Full output: `data/weekly_flip_trend_filter_result.txt`. A10 reproduced `data/buystop_mix_result.txt`. All 28 unfiltered `WF_*` variants reproduced `data/weekly_flip_exits_result.txt` in every window and sample. There were 261 reference checks and 0 mismatches.
+
+**Signals kept by each filter** (all stocks, all history):
+
+| Filter | First flip | Second flip |
+|---|---|---|
+| FS monthly structure | 3,922 of 13,955 (28.1%) | 2,719 of 5,776 (47.1%) |
+| FR top-100 momentum | 1,200 (8.6%) | 847 (14.7%) |
+| FM rising 10-month average | 7,314 (52.4%) | 4,851 (84.0%) |
+
+**Verdict: 1 of 6 primaries passes.** Nifty CAGR is H0 21.19, W2 5.54 and W1 10.03. Each cell below is CAGR %.
+
+| Primary | ALL W2 | ALL W1 | B W2 | B W1 | ALL H0 | vs unfiltered (W2 / W1) | Result |
+|---|---|---|---|---|---|---|---|
+| TF_FS_b_LL | 11.81 | 13.17 | **4.19** | 11.12 | 26.32 | **11.81 < 17.21** / 13.17 ≥ 12.45 | FAILS |
+| TF_FS_b2_LL | 10.65 | **9.63** | **4.55** | **4.90** | 23.53 | **10.65 < 12.05** / **9.63 < 16.98** | FAILS |
+| TF_FR_b_LL | 17.25 | **12.07** | 13.39 | 14.45 | 31.49 | 17.25 ≥ 17.21 / **12.07 < 12.45** | FAILS |
+| TF_FR_b2_LL | 12.23 | 16.13 | 8.97 | 15.84 | 30.46 | 12.23 ≥ 12.05 / **16.13 < 16.98** | FAILS |
+| TF_FM_b_LL | 10.95 | **8.16** | 10.04 | 16.86 | 28.71 | **10.95 < 17.21** / **8.16 < 12.45** | FAILS |
+| **TF_FM_b2_LL** | 13.76 | 20.16 | 7.98 | 18.07 | 32.98 | 13.76 ≥ 12.05 / 20.16 ≥ 16.98 | **PASSES** |
+
+Bold marks a failed condition.
+
+**TF_FM_b2_LL** (second-flip breakout, weekly lower-low exit, monthly close above a rising 10-month average):
+- **Max drawdown, all stocks:** H0 −31.2%, W2 −28.9%, W1 −31.7%.
+- **Trades, all stocks:** H0 118, W2 228, W1 249.
+- **Win rate, all stocks:** H0 48%, W2 46%, W1 39%.
+- **Average initial risk to the stop:** 24% in H0, 19% in W2, 18% in W1. Under 5% of risk: 0% of entries. Under 10%: 3–12% of entries.
+
+Recorded for IA's decision; none of this changes the verdict:
+- **Half A 2019–26 is weak.** TF_FM_b2_LL made 9.58%, below the Nifty's 10.03. Half A is not part of the bar.
+- **All stocks beats both halves in 2019–26.** ALL made 20.16 against A 9.58 and B 18.07. Some of the gain comes from which setups win the 20 slots when the whole universe competes, not from the filter alone.
+- **The stops are still very wide.** The filter does not narrow them. This is the same practical concern as the unfiltered weekly flip (17–29% below the buy price).
+
+Per the pre-registration, a pass means "candidate for paper trading"; IA decides.

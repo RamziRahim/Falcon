@@ -227,3 +227,65 @@ def run_flip(panel, start, end, tf, entry, exit_rule, signals, lows, cost=None, 
                     m["ll_exit"] = True
         ledger.mark(day, closes)
     return _result(ledger)
+
+
+def monthly_uptrend(panel, kind):
+    """docs/weekly_flip_trend_filter_preregistration.md. Returns {entity: (ends, up)}: ends = last
+    session index of each completed monthly bar (ascending), up = bool array, the stock's monthly
+    trend at the close of that month.
+      FS  last two confirmed monthly swing highs rising and last two confirmed swing lows rising
+          (k = 1, a swing confirmed one month after its bar)
+      FR  in the top 100 of that month's PIT universe by the 12-1 score (as A10) at the month's last session
+      FM  monthly close > 10-month SMA of monthly closes, and that SMA > the previous month's"""
+    assert kind in ("FS", "FR", "FM")
+    out = {}
+    if kind == "FR":
+        from backtesting.pit_strategies import MOM_LOOKBACK, MOM_SKIP
+        s = panel.sessions
+        closes_ff = panel.close.ffill(limit=5)
+        month_end = [i for i in range(len(s)) if i + 1 == len(s) or s[i + 1].month != s[i].month]
+        top = {}
+        for i in month_end:
+            if i < MOM_LOOKBACK:
+                continue
+            members = [e for e in panel.universe_on(s[i]) if e in closes_ff.columns]
+            mom = (closes_ff.iloc[i - MOM_SKIP][members] / closes_ff.iloc[i - MOM_LOOKBACK][members] - 1).dropna()
+            top[i] = set(mom.sort_values(ascending=False).head(100).index)
+        ends = np.array(sorted(top), dtype=int)
+        for e in panel.close.columns:
+            out[e] = (ends, np.array([e in top[i] for i in ends], dtype=bool))
+        return out
+    for e, hh, ll, cc, end in _per_entity(panel, "M"):
+        n = len(cc)
+        up = np.zeros(n, dtype=bool)
+        if kind == "FS":
+            sh = {j + 1: j for j in _swings(hh, 1, True)}
+            sl = {j + 1: j for j in _swings(ll, 1, False)}
+            highs, lows = [], []
+            for b in range(n):
+                if b in sh:
+                    highs.append(hh[sh[b]])
+                if b in sl:
+                    lows.append(ll[sl[b]])
+                up[b] = len(highs) >= 2 and len(lows) >= 2 and highs[-1] > highs[-2] and lows[-1] > lows[-2]
+        else:
+            sma = pd.Series(cc).rolling(10).mean().to_numpy()
+            for b in range(10, n):
+                up[b] = cc[b] > sma[b] and sma[b] > sma[b - 1]
+        out[e] = (np.asarray(end, dtype=int), up)
+    return out
+
+
+def filter_signals(signals, trend):
+    """Keeps setups whose stock was in a monthly uptrend at the last completed month whose final
+    session is on or before the setup's sig_idx (trend from monthly_uptrend)."""
+    kept = []
+    for s_ in signals:
+        t = trend.get(s_["entity"])
+        if t is None:
+            continue
+        ends, up = t
+        k = np.searchsorted(ends, s_["sig_idx"], side="right") - 1
+        if k >= 0 and up[k]:
+            kept.append(s_)
+    return kept
