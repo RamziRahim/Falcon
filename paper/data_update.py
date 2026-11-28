@@ -115,6 +115,23 @@ def indices(until: date):
         raise SystemExit("Nifty 50 update failed")
 
 
+def delivery(until: date):
+    """NSE security-wise delivery for the conviction score (docs/conviction_sizing_preregistration.md).
+    Logged only: a failure never stops the update; the score then flags delivery as missing."""
+    path = "data/delivery/delivery_equity.parquet"
+    try:
+        last = pd.read_parquet(path, columns=["Date"])["Date"].max() if os.path.exists(path) else None
+        start = (pd.Timestamp(last) + pd.Timedelta(days=1)).date() if last is not None else until - timedelta(days=60)
+        if start > until:
+            log(f"delivery: up to date ({pd.Timestamp(last).date()})")
+            return
+        r = subprocess.run([PY, "tests/download_delivery.py", start.isoformat(), until.isoformat()],
+                           capture_output=True, text=True, timeout=1800)
+        log(f"delivery {start} -> {until}: exit {r.returncode}; {(r.stdout or '')[-300:]}{(r.stderr or '')[-300:]}")
+    except Exception as ex:                              # noqa: BLE001
+        log(f"delivery failed, score will flag it missing: {ex!r}"[:300])
+
+
 def main():
     until = datetime.strptime(sys.argv[1], "%Y-%m-%d").date() if len(sys.argv) > 1 else date.today()
     done = "data/pit_v2/update_done.txt"
@@ -128,6 +145,7 @@ def main():
     except Exception as ex:                              # noqa: BLE001 -- the build falls back to the previous list
         log(f"symbol changes failed, previous list kept: {ex!r}"[:300])
     indices(until)
+    delivery(until)
     run([PY, "tests/build_pit_v2.py", "data/bhavcopy/bhavcopy_equity.parquet", "data/pit_v2"])
     last = pd.read_parquet("data/pit_v2/prices_adjusted.parquet", columns=["Date"])["Date"].max()
     with open(done, "w", encoding="utf-8") as fh:

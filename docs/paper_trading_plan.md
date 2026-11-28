@@ -149,3 +149,12 @@ IA asked, before day one, to add these to paper trading. All three start with th
 The engine replay check (`paper/check_engine.py 2026-08-31 2026-09-01 2026-11-20`) matched the full-history backtest exactly for all 13 automatic tracks.
 
 The engine loads history from 2022, so T12 and T14 only see flips whose swing structure formed since then; the replay check above confirms that this changed nothing over the check period.
+
+## Dated note (2026-11-28): conviction score shadow-logged, decisions unchanged
+
+On IA's request (handoff spec "conviction score (volume profile + delivery)"), the engine also writes `paper/ledger/<track>/conviction.csv`. It records every paper trade's 0–3 conviction score from `scoring/conviction.py`, scored with data up to the session before the entry, with the three points, their missing flags and the inputs. Each row is joined to the trade's outcome once it closes.
+
+- **It never changes an entry, exit or size.** Every track's decisions are exactly as before.
+- The daily data update also fetches NSE's security-wise delivery file. If that fetch fails, the update and the trading run carry on; the score marks delivery as missing.
+- Review at the 3-month checkpoint: mean net per trade by score bucket, for each track.
+- The offline test of the score is `docs/conviction_sizing_preregistration.md`. It stays a draft until IA freezes it.

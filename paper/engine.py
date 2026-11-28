@@ -228,6 +228,43 @@ def momentum_orders(panel, stats, results, last_i):
     return pd.DataFrame(rows)
 
 
+CONV_COLS = ["vp", "dlv", "acc", "score", "vp_ok", "dlv_ok", "acc_ok", "poc", "vah", "overhead_share",
+             "deliv_pct", "deliv_base", "acc_up", "acc_down"]
+
+
+def conviction_log(panel, out):
+    """Shadow log (added 2026-11-28; docs/conviction_sizing_preregistration.md): the 0-3 conviction
+    score of every paper trade, scored with data to the session before its entry (t0), joined to the
+    outcome once closed. Logged only -- it never changes an entry, exit or size. Any failure is
+    reported in the log file and never stops the run."""
+    from scoring.conviction import BUCKETS, make_conviction_data, score_asof
+    try:
+        dpath = "data/delivery/delivery_equity.parquet"
+        dlv = (pd.read_parquet(dpath, filters=[("Date", ">=", LOAD_FROM)]) if os.path.exists(dpath) else None)
+        prices = pd.read_parquet(f"{DATA}/prices_adjusted.parquet", columns=["Date", "Symbol", "Series", "entity_id"],
+                                 filters=[("Date", ">=", LOAD_FROM)])
+        data = make_conviction_data(panel, prices, dlv)
+    except Exception as ex:                              # noqa: BLE001
+        return f"conviction log skipped: {ex!r}"[:200]
+    s = panel.sessions
+    for code, res in out.items():
+        if res is None or not len(res[1]):
+            continue
+        rows = []
+        for t in res[1].itertuples():
+            i0 = int(s.searchsorted(pd.Timestamp(t.entry_date), side="left")) - 1
+            sc = score_asof(data, t.entity_id, i0)
+            closed = t.exit_reason != "OPEN_AT_END"
+            rows.append({"entry_date": pd.Timestamp(t.entry_date).date(), "track": code, "entity_id": t.entity_id,
+                         "symbol": panel.symbol.get(t.entity_id, t.entity_id), "t0": s[i0].date() if i0 >= 0 else None,
+                         **{k: sc.get(k) for k in CONV_COLS}, "bucket": BUCKETS[int(sc["score"])],
+                         "exit_date": pd.Timestamp(t.exit_date).date() if closed else None,
+                         "exit_reason": t.exit_reason, "net": (t.pnl / t.cost_basis) if closed else None})
+        os.makedirs(f"{OUT}/ledger/{code}", exist_ok=True)
+        pd.DataFrame(rows).to_csv(f"{OUT}/ledger/{code}/conviction.csv", index=False)
+    return "conviction log: written" + ("" if dlv is not None else " (no delivery file: dlv/acc flagged missing)")
+
+
 def write(panel, out, nifty, end, st, new, setups):
     sym = panel.symbol
     day = end.date()
@@ -277,6 +314,7 @@ def write(panel, out, nifty, end, st, new, setups):
         lines += ["", f"## New listings in the universe, not yet classified ({len(new)}) — unbuyable until reviewed", "",
                   ", ".join(sym.get(e, e) for e in new)]
     lines += ["", f"v3 setups scanned since day one: {len(setups)}"]
+    lines += ["", conviction_log(panel, out)]
     with open(f"{OUT}/reports/{day}.md", "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
     with open(f"{OUT}/state.json", "w", encoding="utf-8") as fh:
